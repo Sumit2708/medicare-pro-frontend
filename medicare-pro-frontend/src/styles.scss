@@ -1,19 +1,76 @@
+// Angular Material theming
+// https://material.angular.dev/guide/theming
+@use "@angular/material" as mat;
 
-// Custom Theming for Angular Material
-// For more information: https://material.angular.dev/guide/theming
-@use '@angular/material' as mat;
-
+/* Material Theme */
 html {
   @include mat.theme((
     color: (
       theme-type: light,
-      primary: mat.$azure-palette,
-      tertiary: mat.$blue-palette,
+      primary: mat.$magenta-palette,
+      tertiary: mat.$violet-palette,
     ),
     typography: Roboto,
     density: 0,
   ));
-}/* You can add global styles to this file, and also import other style files */
+}
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+/* Global Reset */
+html,
+body {
+  height: 100%;
+}
+
+/* Global Body Styling */
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background: #f4f6f9;
+  color: #1f2937;
+}
+
+/* Dashboard Page Padding */
+.page-container {
+  padding: 24px;
+}
+
+/* Card Styling */
+mat-card {
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Dashboard Grid Layout */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+/* Stat Card Text */
+.stat-title {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+/* Table Styling (future doctor/patient tables) */
+.table-container {
+  margin-top: 20px;
+}
+
+/* Sidebar Active Link */
+.active-link {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+}
+
+/* Smooth hover */
+.mat-mdc-list-item:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
