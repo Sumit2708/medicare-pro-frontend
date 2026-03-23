@@ -1,0 +1,11 @@
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.center-header {
+  justify-content: center;
+  text-align: center; /* Ensures text inside is centered in older implementations */
+}
+

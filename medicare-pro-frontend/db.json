@@ -1,0 +1,16 @@
+{
+  "doctors": [
+    {
+      "id": 1,
+      "name": "Dr. Sharma",
+      "specialization": "Cardiologist",
+      "fee": 500
+    },
+    {
+      "id": 2,
+      "name": "Dr. Mehta",
+      "specialization": "Dermatologist",
+      "fee": 400
+    }
+  ]
+}
