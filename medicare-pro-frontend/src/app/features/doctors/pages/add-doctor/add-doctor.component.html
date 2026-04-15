@@ -1,1 +1,34 @@
-<p>add-doctor works!</p>
+<div class="page-container">
+<h3>Add Doctor</h3>
+<mat-card class="main-card">
+    <form [formGroup]="doctorForm" (ngSubmit)="onSubmit()">
+      <div>
+        <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name">
+      </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Specialization</mat-label>
+        <input matInput formControlName="specialization">
+      </mat-form-field>
+      </div>
+
+   <div>
+       <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Fee</mat-label>
+        <input matInput type="number" formControlName="fee">
+      </mat-form-field>
+   </div>
+
+   <span style="display: flex;justify-content: center;">
+
+     <button mat-raised-button color="primary" type="submit" >
+       Save
+     </button>
+   </span>
+    </form>
+</mat-card>
+</div>

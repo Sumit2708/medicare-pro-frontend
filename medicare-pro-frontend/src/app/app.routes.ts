@@ -5,6 +5,7 @@ import { PatientListComponent } from './features/patients/patient-list/patient-l
 import { DoctorListComponent } from './features/doctors/pages/doctor-list/doctor-list.component';
 import { InvoiceListComponent } from './features/billing/invoice-list/invoice-list.component';
 import { AppointmentListComponent } from './features/appointments/appointment-list/appointment-list.component';
+import { AddDoctorComponent } from './features/doctors/pages/add-doctor/add-doctor.component';
 
 export const routes: Routes = [
   {
@@ -16,6 +17,10 @@ export const routes: Routes = [
       { path: 'patients', component: PatientListComponent },
       { path: 'appointments', component: AppointmentListComponent },
       { path: 'billing', component: InvoiceListComponent },
+      {
+        path: 'doctors/add',
+        component: AddDoctorComponent,
+      },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],
   },

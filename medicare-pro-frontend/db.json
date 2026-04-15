@@ -1,16 +1,17 @@
 {
   "doctors": [
     {
-      "id": 1,
-      "name": "Dr. Sharma",
-      "specialization": "Cardiologist",
+      "id": "8c4a",
+      "name": "sumit",
+      "specialization": "cardiologist",
       "fee": 500
     },
     {
-      "id": 2,
-      "name": "Dr. Mehta",
-      "specialization": "Dermatologist",
-      "fee": 400
+      "id": "2b55",
+      "name": "Dr. Neha",
+      "specialization": "Orthopedics",
+      "fee": 200
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }

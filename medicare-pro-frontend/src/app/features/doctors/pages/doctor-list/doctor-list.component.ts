@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
 import {
@@ -16,7 +16,8 @@ import {
 import { DoctorService } from '../../services/doctor.service';
 import { MatButton } from '@angular/material/button';
 import { MatCard } from '@angular/material/card';
-import { NgIf } from '@angular/common';
+import { Router, RouterLink } from "@angular/router";
+import { MatIcon } from "@angular/material/icon";
 
 @Component({
   selector: 'app-doctor-list',
@@ -36,7 +37,9 @@ import { NgIf } from '@angular/common';
     MatRowDef,
     MatTableModule
     // NgIf
-  ],
+    ,
+    MatIcon
+],
   templateUrl: './doctor-list.component.html',
   styleUrl: './doctor-list.component.scss',
 })
@@ -53,7 +56,7 @@ export class DoctorListComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private doctorService: DoctorService) {}
+  constructor(private doctorService: DoctorService,private router: Router) {}
 
   ngOnInit() {
     this.getDoctors();
@@ -88,5 +91,11 @@ export class DoctorListComponent {
     this.doctorService.deleteDoctor(id).subscribe(() => {
       this.getDoctors();
     });
+  }
+
+  navToAddDoctor(){
+    this.router.navigate(['doctors/add'])
+    // debugger
+    console.log('checking routes')
   }
 }
