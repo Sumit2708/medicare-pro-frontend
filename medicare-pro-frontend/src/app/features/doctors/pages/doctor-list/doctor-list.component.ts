@@ -16,8 +16,8 @@ import {
 import { DoctorService } from '../../services/doctor.service';
 import { MatButton } from '@angular/material/button';
 import { MatCard } from '@angular/material/card';
-import { Router, RouterLink } from "@angular/router";
-import { MatIcon } from "@angular/material/icon";
+import { Router, RouterLink } from '@angular/router';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-doctor-list',
@@ -35,11 +35,10 @@ import { MatIcon } from "@angular/material/icon";
     MatPaginator,
     MatHeaderRowDef,
     MatRowDef,
-    MatTableModule
+    MatTableModule,
     // NgIf
-    ,
-    MatIcon
-],
+    MatIcon,
+  ],
   templateUrl: './doctor-list.component.html',
   styleUrl: './doctor-list.component.scss',
 })
@@ -56,22 +55,17 @@ export class DoctorListComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private doctorService: DoctorService,private router: Router) {}
+  constructor(
+    private doctorService: DoctorService,
+    private router: Router,
+  ) {}
 
   ngOnInit() {
     this.getDoctors();
     // console.log(this.dataSource.data);
     // debugger;
-        console.log('FINAL DATA:', this.dataSource);
-
+    // console.log('FINAL DATA:', this.dataSource);
   }
-   ngAfterViewInit() {
-        // this.getDoctors();
-
-    // this.dataSource.paginator = this.paginator;
-    // this.dataSource.sort = this.sort;
-  }
-
 
   getDoctors() {
     this.doctorService.getDoctors().subscribe((data: any) => {
@@ -79,12 +73,10 @@ export class DoctorListComponent {
       // this.dataSource = new MatTableDataSource(data);
       this.dataSource.data = data;
 
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
     });
     //  console.log(this.dataSource.data,'1');
-     
   }
 
   deleteDoctor(id: number) {
@@ -93,9 +85,8 @@ export class DoctorListComponent {
     });
   }
 
-  navToAddDoctor(){
-    this.router.navigate(['doctors/add'])
-    // debugger
-    console.log('checking routes')
+  navToAddDoctor(data: any) {
+    this.router.navigate(['doctors/edit'], { queryParams: { id: data.id } });
+    console.log(data.id, 'data of docInfo');
   }
 }

@@ -6,6 +6,7 @@ import { DoctorListComponent } from './features/doctors/pages/doctor-list/doctor
 import { InvoiceListComponent } from './features/billing/invoice-list/invoice-list.component';
 import { AppointmentListComponent } from './features/appointments/appointment-list/appointment-list.component';
 import { AddDoctorComponent } from './features/doctors/pages/add-doctor/add-doctor.component';
+import { EditDoctorComponent } from './features/doctors/pages/edit-doctor/edit-doctor.component';
 
 export const routes: Routes = [
   {
@@ -20,6 +21,10 @@ export const routes: Routes = [
       {
         path: 'doctors/add',
         component: AddDoctorComponent,
+      },
+       {
+        path: 'doctors/edit',
+        component: EditDoctorComponent,
       },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],
