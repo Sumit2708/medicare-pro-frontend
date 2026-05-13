@@ -1,10 +1,10 @@
 <h3>Edit Doctor</h3>
 
 <mat-card>
-  <form (ngSubmit)="onSubmit()">
+  <form [formGroup]="doctorForm" (ngSubmit)="onSubmit()">
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Name11</mat-label>
-      <input matInput formControlName="name" value="doctorForm.name" />
+      <input matInput  formControlName="name"/>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">

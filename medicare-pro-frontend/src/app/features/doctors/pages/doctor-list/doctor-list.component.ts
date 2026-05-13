@@ -18,6 +18,7 @@ import { MatButton } from '@angular/material/button';
 import { MatCard } from '@angular/material/card';
 import { Router, RouterLink } from '@angular/router';
 import { MatIcon } from '@angular/material/icon';
+import { MatFormField, MatLabel } from "@angular/material/form-field";
 
 @Component({
   selector: 'app-doctor-list',
@@ -38,7 +39,9 @@ import { MatIcon } from '@angular/material/icon';
     MatTableModule,
     // NgIf
     MatIcon,
-  ],
+    MatFormField,
+    MatLabel
+],
   templateUrl: './doctor-list.component.html',
   styleUrl: './doctor-list.component.scss',
 })
@@ -85,8 +88,18 @@ export class DoctorListComponent {
     });
   }
 
-  navToAddDoctor(data: any) {
+  navToEditDoctor(data: any) {
     this.router.navigate(['doctors/edit'], { queryParams: { id: data.id } });
     console.log(data.id, 'data of docInfo');
   }
+
+  //   navToAddDoctor() {
+  //   this.router.navigate(['doctors/add']);
+  // }
+
+  applyFilter(event: Event) {
+  const filterValue = (event.target as HTMLInputElement).value;
+
+  this.dataSource.filter = filterValue.trim().toLowerCase();
+}
 }

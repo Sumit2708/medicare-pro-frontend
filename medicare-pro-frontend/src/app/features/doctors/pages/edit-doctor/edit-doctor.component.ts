@@ -13,7 +13,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-edit-doctor',
-  imports: [MatCard, MatFormField, MatLabel, MatInput],
+  imports: [MatCard, MatFormField, MatLabel, MatInput,ReactiveFormsModule],
   templateUrl: './edit-doctor.component.html',
   styleUrl: './edit-doctor.component.scss',
 })
@@ -37,7 +37,9 @@ export class EditDoctorComponent {
     this.route.queryParams.subscribe((params) => {
       this.doctorId = params['id'];
     });
-    this.getDoctorById();
+     if (this.doctorId) {
+      this.getDoctorById();
+    }
   }
 
   getDoctorById() {
@@ -45,10 +47,23 @@ export class EditDoctorComponent {
       const doctor = data.find((d: any) => d.id == this.doctorId);
 
       if (doctor) {
-        this.doctorForm.patchValue(doctor);
+        console.log(doctor,'doctor');
+        
+       this.doctorForm.patchValue({
+        name: doctor.name,
+        specialization: doctor.specialization,
+        fee: doctor.fee
+      });
+     console.log(this.doctorForm.value);
       }
     });
   }
 
-  onSubmit() {}
+  onSubmit() {
+    if(this.doctorForm.valid){
+      this.doctorService.updateDoctor(this.doctorId,this.doctorForm.value).subscribe(()=>{
+        this.router.navigate(['/doctors'])
+      })
+    }
+  }
 }
