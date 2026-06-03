@@ -13,12 +13,16 @@ import {
   MatRowDef,
   MatTableModule,
 } from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
 import { DoctorService } from '../../services/doctor.service';
 import { MatButton } from '@angular/material/button';
 import { MatCard } from '@angular/material/card';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, ɵEmptyOutletComponent } from '@angular/router';
 import { MatIcon } from '@angular/material/icon';
-import { MatFormField, MatLabel } from "@angular/material/form-field";
+import { MatFormField, MatFormFieldControl, MatFormFieldModule, MatLabel } from "@angular/material/form-field";
+import { MatActionList } from "@angular/material/list";
+import { MatInputModule } from '@angular/material/input';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-doctor-list',
@@ -40,7 +44,13 @@ import { MatFormField, MatLabel } from "@angular/material/form-field";
     // NgIf
     MatIcon,
     MatFormField,
-    MatLabel
+    MatLabel,
+    MatActionList,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    CommonModule,
+    ɵEmptyOutletComponent
 ],
   templateUrl: './doctor-list.component.html',
   styleUrl: './doctor-list.component.scss',
@@ -52,6 +62,7 @@ export class DoctorListComponent {
     'specialization',
     'fee',
     'actions',
+    'status'
   ];
   dataSource = new MatTableDataSource<any>();
 
@@ -93,9 +104,9 @@ export class DoctorListComponent {
     console.log(data.id, 'data of docInfo');
   }
 
-  //   navToAddDoctor() {
-  //   this.router.navigate(['doctors/add']);
-  // }
+    navToAddDoctor() {
+    this.router.navigate(['doctors/add']);
+  }
 
   applyFilter(event: Event) {
   const filterValue = (event.target as HTMLInputElement).value;

@@ -1,0 +1,12 @@
+{
+  "doctors": [
+    {
+      "name": "Sumit",
+      "specialization": "Cardiologist",
+      "fee": 500,
+      "id": "iUZTqtBJZc8",
+       "status": "Active"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

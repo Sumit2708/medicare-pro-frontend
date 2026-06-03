@@ -1,0 +1,68 @@
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.center-header {
+  justify-content: center;
+  text-align: center; /* Ensures text inside is centered in older implementations */
+}
+
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.search-field {
+  width: 320px;
+  margin-bottom: 20px;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+}
+
+mat-card {
+  padding: 16px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #6b7280;
+}
+
+.status-active {
+  background: #dcfce7;
+  color: #166534;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.actions-column {
+  text-align: center;
+  justify-content: center;
+}
+
+.mat-column-actions {
+  justify-content: center;
+}
+
+.mat-mdc-header-cell.mat-column-actions {
+  justify-content: center;
+  text-align: center;
+}
+.mat-column-actions {
+  text-align: center;
+  justify-content: center;
+}

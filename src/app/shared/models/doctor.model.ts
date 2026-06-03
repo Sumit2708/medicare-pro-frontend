@@ -3,4 +3,5 @@ export interface Doctor {
   name: string;
   specialization: string;
   fee: number;
+  status: string;
 }
