@@ -19,10 +19,16 @@ import { MatButton } from '@angular/material/button';
 import { MatCard } from '@angular/material/card';
 import { Router, RouterLink, ɵEmptyOutletComponent } from '@angular/router';
 import { MatIcon } from '@angular/material/icon';
-import { MatFormField, MatFormFieldControl, MatFormFieldModule, MatLabel } from "@angular/material/form-field";
-import { MatActionList } from "@angular/material/list";
+import {
+  MatFormField,
+  MatFormFieldControl,
+  MatFormFieldModule,
+  MatLabel,
+} from '@angular/material/form-field';
+import { MatActionList } from '@angular/material/list';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-doctor-list',
@@ -50,8 +56,7 @@ import { CommonModule } from '@angular/common';
     MatInputModule,
     MatIconModule,
     CommonModule,
-    ɵEmptyOutletComponent
-],
+  ],
   templateUrl: './doctor-list.component.html',
   styleUrl: './doctor-list.component.scss',
 })
@@ -62,7 +67,7 @@ export class DoctorListComponent {
     'specialization',
     'fee',
     'actions',
-    'status'
+    'status',
   ];
   dataSource = new MatTableDataSource<any>();
 
@@ -72,6 +77,7 @@ export class DoctorListComponent {
   constructor(
     private doctorService: DoctorService,
     private router: Router,
+    private snackbar: MatSnackBar,
   ) {}
 
   ngOnInit() {
@@ -83,7 +89,7 @@ export class DoctorListComponent {
 
   getDoctors() {
     this.doctorService.getDoctors().subscribe((data: any) => {
-      // console.log('API DATA:', data); // 👈 IMPORTANT
+      console.log('API DATA:', data); // 👈 IMPORTANT
       // this.dataSource = new MatTableDataSource(data);
       this.dataSource.data = data;
 
@@ -94,8 +100,18 @@ export class DoctorListComponent {
   }
 
   deleteDoctor(id: number) {
-    this.doctorService.deleteDoctor(id).subscribe(() => {
-      this.getDoctors();
+    this.doctorService.deleteDoctor(id).subscribe({
+      next: () => {
+        this.snackbar.open('Doctor deleted successfully', 'Close', {
+          duration: 3000,
+        });
+        this.getDoctors();
+      },
+      error: () => {
+        this.snackbar.open('Failed to delete doctor', 'Close', {
+          duration: 3000,
+        });
+      },
     });
   }
 
@@ -104,13 +120,13 @@ export class DoctorListComponent {
     console.log(data.id, 'data of docInfo');
   }
 
-    navToAddDoctor() {
+  navToAddDoctor() {
     this.router.navigate(['doctors/add']);
   }
 
   applyFilter(event: Event) {
-  const filterValue = (event.target as HTMLInputElement).value;
+    const filterValue = (event.target as HTMLInputElement).value;
 
-  this.dataSource.filter = filterValue.trim().toLowerCase();
-}
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
 }
