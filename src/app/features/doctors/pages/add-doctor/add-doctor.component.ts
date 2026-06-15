@@ -13,6 +13,7 @@ import { DoctorService } from '../../services/doctor.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NotificationService } from '../../../../core/services/notification.service';
+import { Doctor } from '../../../../shared/models/doctor.model';
 
 @Component({
   selector: 'app-add-doctor',
@@ -45,7 +46,12 @@ export class AddDoctorComponent {
 
   onSubmit() {
     if (this.doctorForm.valid) {
-      this.doctorService.addDoctor(this.doctorForm.value).subscribe({
+      const doctor: Doctor = {
+        ...this.doctorForm.value,
+        status: 'Active',
+      };
+
+      this.doctorService.addDoctor(doctor).subscribe({
         next: (res: any) => {
           this.notificationService.success(
             `Doctor ${res.name} added successfully`,

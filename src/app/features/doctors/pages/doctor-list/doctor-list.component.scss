@@ -10,12 +10,12 @@
 }
 
 
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
+// .page-header {
+//   display: flex;
+//   justify-content: space-between;
+//   // align-items: center;
+//   margin-bottom: 20px;
+// }
 
 .search-field {
   width: 320px;
@@ -40,9 +40,27 @@ mat-card {
   color: #6b7280;
 }
 
+// .status-active {
+//   background: #dcfce7;
+//   color: #166534;
+//   padding: 4px 10px;
+//   border-radius: 20px;
+//   font-size: 12px;
+//   font-weight: 500;
+// }
+
 .status-active {
-  background: #dcfce7;
-  color: #166534;
+  background-color: #dcfce7;   // Light green
+  color: #166534;              // Dark green
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-inactive {
+  background-color: #fee2e2;   // Light red
+  color: #991b1b;              // Dark red
   padding: 4px 10px;
   border-radius: 20px;
   font-size: 12px;

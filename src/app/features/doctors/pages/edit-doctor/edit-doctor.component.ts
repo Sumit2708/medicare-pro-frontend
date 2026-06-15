@@ -10,10 +10,11 @@ import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { DoctorService } from '../../services/doctor.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-edit-doctor',
-  imports: [MatCard, MatFormField, MatLabel, MatInput,ReactiveFormsModule],
+  imports: [MatCard, MatFormField, MatLabel, MatInput,ReactiveFormsModule, MatButtonModule],
   templateUrl: './edit-doctor.component.html',
   styleUrl: './edit-doctor.component.scss',
 })
@@ -30,6 +31,7 @@ export class EditDoctorComponent {
       name: ['', Validators.required],
       specialization: ['', Validators.required],
       fee: ['', Validators.required],
+      status: ['', Validators.required],
     });
   }
 
@@ -52,7 +54,8 @@ export class EditDoctorComponent {
        this.doctorForm.patchValue({
         name: doctor.name,
         specialization: doctor.specialization,
-        fee: doctor.fee
+        fee: doctor.fee,
+        status: doctor.status ? 'Active' : 'Inactive',
       });
      console.log(this.doctorForm.value);
       }

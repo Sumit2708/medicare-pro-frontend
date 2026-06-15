@@ -17,7 +17,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { DoctorService } from '../../services/doctor.service';
 import { MatButton } from '@angular/material/button';
 import { MatCard } from '@angular/material/card';
-import { Router, RouterLink, ɵEmptyOutletComponent } from '@angular/router';
+import { Router } from '@angular/router';
 import { MatIcon } from '@angular/material/icon';
 import {
   MatFormField,
@@ -29,6 +29,9 @@ import { MatActionList } from '@angular/material/list';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { NotificationService } from '../../../../core/services/notification.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-doctor-list',
@@ -78,6 +81,8 @@ export class DoctorListComponent {
     private doctorService: DoctorService,
     private router: Router,
     private snackbar: MatSnackBar,
+    private notificationService: NotificationService,
+    private dialog: MatDialog,
   ) {}
 
   ngOnInit() {
@@ -100,18 +105,26 @@ export class DoctorListComponent {
   }
 
   deleteDoctor(id: number) {
-    this.doctorService.deleteDoctor(id).subscribe({
-      next: () => {
-        this.snackbar.open('Doctor deleted successfully', 'Close', {
-          duration: 3000,
-        });
-        this.getDoctors();
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Delete Doctor',
+        message: 'Are you sure you want to delete this doctor?',
       },
-      error: () => {
-        this.snackbar.open('Failed to delete doctor', 'Close', {
-          duration: 3000,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.doctorService.deleteDoctor(id).subscribe({
+          next: () => {
+            this.notificationService.success('Doctor deleted successfully');
+            this.getDoctors();
+          },
+          error: () => {
+            this.notificationService.error('Failed to delete doctor');
+          },
         });
-      },
+      }
     });
   }
 
