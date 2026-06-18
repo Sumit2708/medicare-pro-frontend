@@ -74,5 +74,13 @@ mat-card {
 .mat-mdc-list-item:hover {
   background: rgba(0, 0, 0, 0.04);
 }
+
+button {
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+}
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

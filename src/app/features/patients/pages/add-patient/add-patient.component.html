@@ -1,0 +1,49 @@
+<div class="page-container">
+  <h3>Add Patient</h3>
+  <mat-card class="main-card">
+    <form [formGroup]="patientForm" (ngSubmit)="onSubmit()">
+      <div>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name" />
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Age</mat-label>
+          <input matInput type="number" formControlName="age" />
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Gender</mat-label>
+          <mat-select formControlName="gender">
+            <mat-option value="Male">Male</mat-option>
+            <mat-option value="Female">Female</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Mobile</mat-label>
+          <input matInput formControlName="mobile" />
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Address</mat-label>
+          <input matInput formControlName="address" />
+          <mat-hint>Optional</mat-hint>
+        </mat-form-field>
+      </div>
+
+      <span style="display: flex; justify-content: center">
+        <button mat-raised-button color="primary" type="submit">Save</button>
+      </span>
+    </form>
+  </mat-card>
+</div>

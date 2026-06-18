@@ -25,10 +25,8 @@ import {
   MatFormFieldModule,
   MatLabel,
 } from '@angular/material/form-field';
-import { MatActionList } from '@angular/material/list';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
@@ -50,11 +48,9 @@ import { ConfirmDialogComponent } from '../../../../shared/components/confirm-di
     MatHeaderRowDef,
     MatRowDef,
     MatTableModule,
-    // NgIf
     MatIcon,
     MatFormField,
     MatLabel,
-    MatActionList,
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
@@ -80,7 +76,6 @@ export class DoctorListComponent {
   constructor(
     private doctorService: DoctorService,
     private router: Router,
-    private snackbar: MatSnackBar,
     private notificationService: NotificationService,
     private dialog: MatDialog,
   ) {}

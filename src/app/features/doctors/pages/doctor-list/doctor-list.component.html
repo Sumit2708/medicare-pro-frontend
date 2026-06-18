@@ -1,7 +1,5 @@
 <div class="page-container">
-  <div>
     <h3>Doctors</h3>
-  </div>
 </div>
 
 <div class="page-header">
@@ -92,7 +90,8 @@
         </td>
       </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <!-- <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr> -->
+       <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
   </div>
