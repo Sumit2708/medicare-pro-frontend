@@ -2,10 +2,87 @@
   "doctors": [
     {
       "name": "Sumit",
-      "specialization": "Cardiologist",
+      "specialization": "Dentist",
       "fee": 500,
-      "id": "iUZTqtBJZc8",
-       "status": "Active"
+      "status": "Active",
+      "id": "UZarKM-BH_E"
+    },
+    {
+      "name": "Neha",
+      "specialization": "cardiologist",
+      "fee": 800,
+      "status": "Active",
+      "id": "Hp5U32kkfm4"
+    },
+    {
+      "name": "tipri",
+      "specialization": "yedi",
+      "fee": 2,
+      "status": "Active",
+      "id": "-LZu0dF8PJk"
+    },
+    {
+      "name": "dd",
+      "specialization": "hbh",
+      "fee": 100,
+      "status": "Active",
+      "id": "buEvv1qTZ_U"
+    },
+    {
+      "name": "vn",
+      "specialization": "nmbm,",
+      "fee": 656,
+      "status": "Active",
+      "id": "xu4qxHsGJJ4"
+    }
+  ],
+  "patients": [
+    {
+      "name": "Rahul Sharma",
+      "age": 35,
+      "gender": "Male",
+      "mobile": "9876543210",
+      "address": "",
+      "status": "Active",
+      "id": "1"
+    },
+    {
+      "name": "Sumit sonawane",
+      "age": 29,
+      "gender": "Male",
+      "mobile": "07057281276",
+      "address": "midc road",
+      "status": "Active",
+      "id": "u2sfm-e_Iqk"
+    },
+    {
+      "name": "Vijay pandit sonawane",
+      "age": 56,
+      "gender": "Male",
+      "mobile": "07057281276",
+      "address": "midc road",
+      "status": "Active",
+      "id": "psG93ijLZWw"
+    }
+  ],
+  "appointments": [
+    {
+      "patientId": "u2sfm-e_Iqk",
+      "doctorId": "-LZu0dF8PJk",
+      "date": "2026-06-23T18:30:00.000Z",
+      "time": "2026-06-20T20:00:00.000Z",
+      "notes": "",
+      "status": "Scheduled",
+      "id": "Jthve6HTY1E"
+    },
+    {
+      "patientId": "psG93ijLZWw",
+      "doctorId": "buEvv1qTZ_U",
+      "date": "2026-06-24T18:30:00.000Z",
+      "time": "2026-06-22T13:00:00.000Z",
+      "notes": "",
+      "status": "Scheduled",
+      "id": "8a43-F0HhwE"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

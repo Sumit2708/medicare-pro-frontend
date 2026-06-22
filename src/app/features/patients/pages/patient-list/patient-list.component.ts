@@ -10,14 +10,6 @@ import { MatCard } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import {
   MatTableDataSource,
-  MatTable,
-  MatColumnDef,
-  MatHeaderCell,
-  MatHeaderCellDef,
-  MatCell,
-  MatCellDef,
-  MatHeaderRowDef,
-  MatRowDef,
   MatTableModule,
 } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
@@ -39,6 +31,8 @@ import { MatButton, MatButtonModule } from '@angular/material/button';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatButtonModule,
+    
    ],
   templateUrl: './patient-list.component.html',
   styleUrl: './patient-list.component.scss',

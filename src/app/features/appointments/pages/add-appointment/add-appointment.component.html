@@ -1,0 +1,89 @@
+<h3>Add Appointment</h3>
+
+<mat-card class="main-card p-2 m-2 fs-5">
+  <form [formGroup]="appointmentForm" (ngSubmit)="onSubmit()">
+    <div>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Patient</mat-label>
+        <mat-select formControlName="patientId">
+          <mat-option *ngFor="let patient of patients" [value]="patient.id">
+            {{ patient.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field appearance="outline" class="full-width ">
+        <mat-label>Doctor</mat-label>
+        <mat-select formControlName="doctorId">
+          <mat-option *ngFor="let doctor of doctors" [value]="doctor.id">
+            {{ doctor.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field>
+        <mat-label>Appointment Date</mat-label>
+
+        <input
+          matInput
+          [matDatepicker]="datePicker"
+          formControlName="date"
+          [matDatepickerFilter]="myFilter"
+          [min]="minDate"
+        />
+
+        <mat-datepicker-toggle matSuffix [for]="datePicker">
+        </mat-datepicker-toggle>
+
+        <mat-datepicker #datePicker></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field>
+        <mat-label>Appointment Time</mat-label>
+
+        <input matInput [matTimepicker]="timePicker" formControlName="time" />
+
+        <mat-timepicker-toggle matSuffix [for]="timePicker">
+        </mat-timepicker-toggle>
+
+        <mat-timepicker #timePicker></mat-timepicker>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Notes</mat-label>
+        <textarea matInput rows="3" formControlName="notes"> </textarea>
+      </mat-form-field>
+      <mat-hint>Optional</mat-hint>
+    </div>
+
+    <div>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Status</mat-label>
+        <mat-select formControlName="status">
+          <mat-option value="Scheduled">Scheduled</mat-option>
+          <mat-option value="Completed">Completed</mat-option>
+          <mat-option value="Cancelled">Cancelled</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <span style="display: flex; justify-content: center">
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="appointmentForm.invalid"
+      >
+        Save Appointment
+      </button>
+    </span>
+  </form>
+</mat-card>
