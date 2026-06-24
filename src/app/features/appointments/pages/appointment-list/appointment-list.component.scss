@@ -1,0 +1,49 @@
+.badge-scheduled {
+  background-color: #2196f3;
+
+  // color: #dcfce7;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.badge-completed {
+  background-color: #4caf50;
+
+  // -color: #dcfce7;   // Light green
+  //   color: #166534;              // Dark green
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.badge-cancelled {
+  background-color: #ff5252;
+
+  // color: #dcfce7;   // Light green
+  //   color: #166534;              // Dark green
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+// .status-active {
+//   background-color: #dcfce7;   // Light green
+//   color: #166534;              // Dark green
+//   padding: 4px 10px;
+//   border-radius: 20px;
+//   font-size: 12px;
+//   font-weight: 500;
+// }
+
+// .status-inactive {
+//   background-color: #fee2e2;   // Light red
+//   color: #991b1b;              // Dark red
+//   padding: 4px 10px;
+//   border-radius: 20px;
+//   font-size: 12px;
+//   font-weight: 500;
+// }

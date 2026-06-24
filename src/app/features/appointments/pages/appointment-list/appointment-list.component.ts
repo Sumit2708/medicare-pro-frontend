@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, ViewChild } from '@angular/core';
 import { Router, ɵEmptyOutletComponent } from '@angular/router';
 import { AppointmentService } from '../../services/appointment.service';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -18,6 +18,7 @@ import { Doctor } from '../../../../shared/models/doctor.model';
 import { Appointment } from '../../../../shared/models/appointment.model';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { MatBadgeModule } from '@angular/material/badge';
 
 @Component({
   selector: 'app-appointment-list',
@@ -30,12 +31,13 @@ import { ConfirmDialogComponent } from '../../../../shared/components/confirm-di
     DatePipe,
     CommonModule,
     MatTableModule,
-    MatPaginator,
     MatButtonModule,
     MatInputModule,
+    MatBadgeModule,
   ],
   templateUrl: './appointment-list.component.html',
   styleUrl: './appointment-list.component.scss',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppointmentListComponent {
   dataSource = new MatTableDataSource<any>();
@@ -71,7 +73,6 @@ export class AppointmentListComponent {
         this.dataSource.data = appointments;
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
-
       },
       error: (error) => {
         this.notificationService.error('Failed to load appointments');
@@ -84,7 +85,10 @@ export class AppointmentListComponent {
 
   navEditAppointment(appointmentId: number) {
     // Implement logic to navigate to the update appointment page
-    this.router.navigate(['/appointments/update', appointmentId]);
+    this.router.navigate(['/appointments/edit'], {
+      queryParams: { id: appointmentId },
+    });
+    console.log(appointmentId, 'appointmentId');
   }
 
   deleteAppointment(appointmentId: any) {
@@ -171,5 +175,31 @@ export class AppointmentListComponent {
     }
 
     return this.paginator.pageIndex * this.paginator.pageSize + index + 1;
+  }
+
+  getStatusColor(status: string): string {
+    switch (status) {
+      case 'Scheduled':
+        return 'primary';
+      case 'Completed':
+        return 'success';
+      case 'Cancelled':
+        return 'warn';
+      default:
+        return 'default';
+    }
+  }
+
+  getStatusClass(status: string): string {
+    switch (status) {
+      case 'Scheduled':
+        return 'badge-scheduled';
+      case 'Completed':
+        return 'badge-completed';
+      case 'Cancelled':
+        return 'badge-cancelled';
+      default:
+        return '';
+    }
   }
 }
