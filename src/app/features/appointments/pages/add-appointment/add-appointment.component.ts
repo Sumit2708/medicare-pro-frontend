@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
-import { MatFormField, MatLabel, MatHint, MatFormFieldModule } from '@angular/material/form-field';
+import {
+  MatFormField,
+  MatLabel,
+  MatHint,
+  MatFormFieldModule,
+} from '@angular/material/form-field';
 import { MatSelect, MatOption } from '@angular/material/select';
 import { MatCard } from '@angular/material/card';
 import {
@@ -16,7 +21,13 @@ import { DoctorService } from '../../../doctors/services/doctor.service';
 import { MatInput, MatInputModule } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
-import { MatDatepickerModule, MatDatepickerToggle, MatDatepickerActions, MatDatepicker, MatDatepickerInput } from '@angular/material/datepicker';
+import {
+  MatDatepickerModule,
+  MatDatepickerToggle,
+  MatDatepickerActions,
+  MatDatepicker,
+  MatDatepickerInput,
+} from '@angular/material/datepicker';
 import { MatTimepickerModule } from '@angular/material/timepicker';
 import { MatIcon } from '@angular/material/icon';
 
@@ -38,8 +49,10 @@ import { MatIcon } from '@angular/material/icon';
     MatDatepickerActions,
     MatDatepicker,
     MatDatepickerInput,
-    MatFormFieldModule, MatTimepickerModule, MatIcon
-],
+    MatFormFieldModule,
+    MatTimepickerModule,
+    MatIcon,
+  ],
   templateUrl: './add-appointment.component.html',
   styleUrl: './add-appointment.component.scss',
 })
@@ -47,7 +60,31 @@ export class AddAppointmentComponent {
   appointmentForm: FormGroup;
   doctors: any[] = [];
   patients: any[] = [];
-minDate = new Date();
+  minDate = new Date();
+
+  maxDate = new Date(new Date().setDate(new Date().getDate() + 7));
+
+  timeSlots = [
+    '09:00 AM',
+    '09:30 AM',
+    '10:00 AM',
+    '10:30 AM',
+    '11:00 AM',
+    '11:30 AM',
+    '12:00 PM',
+    '12:30 PM',
+    '01:00 PM',
+    '01:30 PM',
+    '02:00 PM',
+    '02:30 PM',
+    '03:00 PM',
+    '03:30 PM',
+    '04:00 PM',
+    '04:30 PM',
+    '05:00 PM',
+    '05:30 PM',
+  ];
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -61,7 +98,7 @@ minDate = new Date();
       doctorId: ['', { validators: [Validators.required] }],
       date: ['', { validators: [Validators.required] }],
       time: ['', { validators: [Validators.required] }],
-      notes: [''],
+      notes: ['', Validators.maxLength(250)],
       status: ['Scheduled'],
     });
   }
@@ -71,7 +108,7 @@ minDate = new Date();
     this.getPatients();
   }
 
-    myFilter = (d: Date | null): boolean => {
+  myFilter = (d: Date | null): boolean => {
     const day = (d || new Date()).getDay();
     // Prevent Saturday and Sunday from being selected.
     return day !== 0 && day !== 6;
@@ -101,17 +138,41 @@ minDate = new Date();
   }
 
   onSubmit() {
-    if (this.appointmentForm.valid) {
-      const appointmentData = this.appointmentForm.value;
-      this.appointmentService.createAppointment(appointmentData).subscribe({
-        next: () => {
-          this.notificationService.success('Appointment created successfully');
-          this.router.navigate(['/appointments']);
-        },
-        error: (error) => {
-          this.notificationService.error('Failed to create appointment');
-        },
-      });
-    }
+    // Existing Appointment slot validation
+    this.appointmentService.getAppointments().subscribe({
+      next: (appointments: any) => {
+        const form = this.appointmentForm.value;
+
+        const existingAppointment = appointments.some(
+          (a: any) =>
+            a.doctorId === form.doctorId &&
+            new Date(a.date).toDateString() ===
+              new Date(form.date!).toDateString() &&
+            a.time === form.time,
+        );
+
+        if (existingAppointment) {
+          this.notificationService.error(
+            'Doctor is already booked for the selected date and time.',
+          );
+          return;
+        }
+
+        this.appointmentService.createAppointment(form).subscribe({
+          next: () => {
+            this.notificationService.success(
+              'Appointment created successfully',
+            );
+            this.router.navigate(['/appointments']);
+          },
+          error: () => {
+            this.notificationService.error('Failed to create appointment');
+          },
+        });
+      },
+    });
   }
+  // getExistingAppointment() {
+
+  // }
 }

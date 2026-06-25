@@ -56,6 +56,27 @@ export class EditAppointmentComponent {
   patients: any[] = [];
   minDate = new Date();
   appointmentId: any;
+  timeSlots = [
+    '09:00 AM',
+    '09:30 AM',
+    '10:00 AM',
+    '10:30 AM',
+    '11:00 AM',
+    '11:30 AM',
+    '12:00 PM',
+    '12:30 PM',
+    '01:00 PM',
+    '01:30 PM',
+    '02:00 PM',
+    '02:30 PM',
+    '03:00 PM',
+    '03:30 PM',
+    '04:00 PM',
+    '04:30 PM',
+    '05:00 PM',
+    '05:30 PM',
+  ];
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -134,23 +155,65 @@ export class EditAppointmentComponent {
     });
   }
 
+  // onSubmit() {
+  //   if (this.appointmentForm.valid) {
+  //     const appointmentData = this.appointmentForm.value;
+  //     // const appointmentId: any = localStorage.getItem('appointmentId');
+  //     this.appointmentService
+  //       .updateAppointment(this.appointmentId, appointmentData)
+  //       .subscribe({
+  //         next: () => {
+  //           this.notificationService.success(
+  //             'Appointment Information updated successfully',
+  //           );
+  //           this.router.navigate(['/appointments']);
+  //         },
+  //         error: (error) => {
+  //           this.notificationService.error('Failed to update appointment');
+  //         },
+  //       });
+  //   }
+  // }
+
   onSubmit() {
-    if (this.appointmentForm.valid) {
-      const appointmentData = this.appointmentForm.value;
-      // const appointmentId: any = localStorage.getItem('appointmentId');
-      this.appointmentService
-        .updateAppointment(this.appointmentId, appointmentData)
-        .subscribe({
-          next: () => {
-            this.notificationService.success(
-              'Appointment Information updated successfully',
-            );
-            this.router.navigate(['/appointments']);
-          },
-          error: (error) => {
-            this.notificationService.error('Failed to update appointment');
-          },
-        });
-    }
+    // Existing Appointment slot validation
+    this.appointmentService.getAppointments().subscribe({
+      next: (appointments: any) => {
+        const form = this.appointmentForm.value;
+
+        const existingAppointment = appointments.some(
+          (a: any) =>
+            a.doctorId === form.doctorId &&
+            new Date(a.date).toDateString() ===
+              new Date(form.date!).toDateString() &&
+            a.time === form.time,
+        );
+
+        if (existingAppointment) {
+          this.notificationService.error(
+            'Doctor is already booked for the selected date and time.',
+          );
+          return;
+        }
+
+        if (this.appointmentForm.valid) {
+          const appointmentData = this.appointmentForm.value;
+          // const appointmentId: any = localStorage.getItem('appointmentId');
+          this.appointmentService
+            .updateAppointment(this.appointmentId, appointmentData)
+            .subscribe({
+              next: () => {
+                this.notificationService.success(
+                  'Appointment Information updated successfully',
+                );
+                this.router.navigate(['/appointments']);
+              },
+              error: () => {
+                this.notificationService.error('Failed to update appointment');
+              },
+            });
+        }
+      },
+    });
   }
 }
