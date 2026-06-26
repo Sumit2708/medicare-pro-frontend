@@ -82,9 +82,6 @@ export class DoctorListComponent {
 
   ngOnInit() {
     this.getDoctors();
-    // console.log(this.dataSource.data);
-    // debugger;
-    // console.log('FINAL DATA:', this.dataSource);
   }
 
   getDoctors() {

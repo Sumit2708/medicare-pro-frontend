@@ -95,5 +95,7 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
   </div>
-  <mat-paginator [pageSize]="5"></mat-paginator>
-</mat-card>
+<mat-paginator
+  [pageSize]="5"
+  [pageSizeOptions]="[5, 10, 20]">
+</mat-paginator></mat-card>

@@ -56,6 +56,8 @@ export class EditAppointmentComponent {
   patients: any[] = [];
   minDate = new Date();
   appointmentId: any;
+    maxDate = new Date(new Date().setDate(new Date().getDate() + 7));
+
   timeSlots = [
     '09:00 AM',
     '09:30 AM',
@@ -186,7 +188,7 @@ export class EditAppointmentComponent {
             a.doctorId === form.doctorId &&
             new Date(a.date).toDateString() ===
               new Date(form.date!).toDateString() &&
-            a.time === form.time,
+            a.time === form.time && a.id !== this.appointmentId,
         );
 
         if (existingAppointment) {

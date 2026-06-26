@@ -34,16 +34,28 @@ import { MatBadgeModule } from '@angular/material/badge';
     MatButtonModule,
     MatInputModule,
     MatBadgeModule,
+    MatPaginator,
+    MatSort,
   ],
   templateUrl: './appointment-list.component.html',
   styleUrl: './appointment-list.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppointmentListComponent {
-  dataSource = new MatTableDataSource<any>();
+  displayedColumns: string[] = [
+    'id',
+    'patient',
+    'doctor',
+    'date',
+    'time',
+    'status',
+    'actions',
+  ]
+   dataSource = new MatTableDataSource<any>();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+
 
   appointments: Appointment[] = [];
   doctors: Doctor[] = [];
@@ -65,10 +77,33 @@ export class AppointmentListComponent {
     this.loadDoctors();
   }
 
+  ngAfterViewInit() {
+  this.dataSource.paginator = this.paginator;
+  this.dataSource.sort = this.sort;
+
+  this.dataSource.sortingDataAccessor = (item, property) => {
+
+  switch (property) {
+
+    case 'doctor':
+      return item.doctorName;
+
+    case 'patient':
+      return item.patientName;
+
+    default:
+      return item[property];
+
+  }
+
+};
+}
+
   getAppointments() {
     // Implement logic to fetch appointments from the backend or service
     this.appointmentService.getAppointments().subscribe({
       next: (appointments: any) => {
+        // this.appointmentList = appointments.map(...this.dataSource.data);
         // Handle the fetched appointments
         this.dataSource.data = appointments;
         this.dataSource.paginator = this.paginator;
