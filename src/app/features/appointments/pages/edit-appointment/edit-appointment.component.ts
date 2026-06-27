@@ -15,7 +15,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { AppointmentService } from '../../services/appointment.service';
-import { NotificationService } from '../../../../core/services/notification.service';
+import { NotificationService } from '../../../../core/services/notification/notification.service';
 import { DoctorService } from '../../../doctors/services/doctor.service';
 import { PatientService } from '../../../patients/services/patient.service';
 import {

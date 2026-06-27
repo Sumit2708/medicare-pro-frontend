@@ -4,11 +4,11 @@ import { MatCard } from "@angular/material/card";
 import { MatListOption, MatSelectionList } from '@angular/material/list';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators,ReactiveFormsModule } from '@angular/forms';
-import { NotificationService } from '../../../../core/services/notification.service';
 import { PatientService } from '../../services/patient.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { NotificationService } from '../../../../core/services/notification/notification.service';
 
 @Component({
   selector: 'app-add-patient',
@@ -24,7 +24,7 @@ export class AddPatientComponent {
     private router: Router, 
     private fb: FormBuilder,
     private patientService: PatientService,
-    private notificationService: NotificationService 
+    private notificationService: NotificationService
   ) {
     this.patientForm = this.fb.group({
       name: ['', Validators.required],

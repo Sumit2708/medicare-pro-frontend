@@ -15,7 +15,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AppointmentService } from '../../services/appointment.service';
-import { NotificationService } from '../../../../core/services/notification.service';
+import { NotificationService } from '../../../../core/services/notification/notification.service';
 import { PatientService } from '../../../patients/services/patient.service';
 import { DoctorService } from '../../../doctors/services/doctor.service';
 import { MatInput, MatInputModule } from '@angular/material/input';

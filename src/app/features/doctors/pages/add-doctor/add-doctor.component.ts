@@ -11,8 +11,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { DoctorService } from '../../services/doctor.service';
 import { Router } from '@angular/router';
-import { NotificationService } from '../../../../core/services/notification.service';
 import { Doctor } from '../../../../shared/models/doctor.model';
+import { NotificationService } from '../../../../core/services/notification/notification.service';
 
 @Component({
   selector: 'app-add-doctor',

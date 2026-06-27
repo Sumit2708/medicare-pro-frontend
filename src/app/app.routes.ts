@@ -11,8 +11,13 @@ import { AddPatientComponent } from './features/patients/pages/add-patient/add-p
 import { AppointmentListComponent } from './features/appointments/pages/appointment-list/appointment-list.component';
 import { AddAppointmentComponent } from './features/appointments/pages/add-appointment/add-appointment.component';
 import { EditAppointmentComponent } from './features/appointments/pages/edit-appointment/edit-appointment.component';
+import { LoginComponent } from './features/auth/pages/login/login.component';
 
 export const routes: Routes = [
+  {
+    path: 'login',
+    component: LoginComponent,
+  },
   {
     path: '',
     component: AdminLayoutComponent,
@@ -20,13 +25,13 @@ export const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'doctors', component: DoctorListComponent },
       { path: 'patients', component: PatientListComponent },
-      {path :'appointments',component: AppointmentListComponent},
+      { path: 'appointments', component: AppointmentListComponent },
       { path: 'billing', component: InvoiceListComponent },
       {
         path: 'doctors/add',
         component: AddDoctorComponent,
       },
-       {
+      {
         path: 'doctors/edit',
         component: EditDoctorComponent,
       },
@@ -38,7 +43,7 @@ export const routes: Routes = [
         path: 'patients/edit',
         component: EditPatientComponent,
       },
-       {
+      {
         path: 'appointments/add',
         component: AddAppointmentComponent,
       },
@@ -46,7 +51,11 @@ export const routes: Routes = [
         path: 'appointments/edit',
         component: EditAppointmentComponent,
       },
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: '', redirectTo: 'login', pathMatch: 'full' },
     ],
+  },
+  {
+    path: '**',
+    redirectTo: 'login',
   },
 ];

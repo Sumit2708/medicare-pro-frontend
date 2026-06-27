@@ -1,7 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { PatientService } from '../../services/patient.service';
 import { Router, ɵEmptyOutletComponent } from '@angular/router';
-import { NotificationService } from '../../../../core/services/notification.service';
 import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSort } from '@angular/material/sort';
@@ -17,6 +16,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { MatButton, MatButtonModule } from '@angular/material/button';
+import { NotificationService } from '../../../../core/services/notification/notification.service';
 
 @Component({
   selector: 'app-patient-list',

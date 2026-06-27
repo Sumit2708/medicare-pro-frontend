@@ -3,11 +3,11 @@ import { MatFormField, MatLabel, MatHint } from '@angular/material/form-field';
 import { MatSelect, MatOption } from '@angular/material/select';
 import { MatCard } from '@angular/material/card';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { NotificationService } from '../../../../core/services/notification.service';
 import { PatientService } from '../../services/patient.service';
 import { Router } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { NotificationService } from '../../../../core/services/notification/notification.service';
 
 @Component({
   selector: 'app-edit-patient',
@@ -22,7 +22,7 @@ export class EditPatientComponent {
     private router: Router,
     private fb: FormBuilder,
     private patientService: PatientService,
-    private notificationService: NotificationService,
+    private notificationService: NotificationService
   ) {
     this.patientForm = this.fb.group({
       name: ['', Validators.required],

@@ -1,4 +1,27 @@
 {
+   "users": [
+    {
+      "id": 1,
+      "name": "Admin User",
+      "email": "admin@medicare.com",
+      "password": "Admin@123",
+      "role": "ADMIN"
+    },
+    {
+      "id": 2,
+      "name": "Reception User",
+      "email": "reception@medicare.com",
+      "password": "Reception@123",
+      "role": "RECEPTIONIST"
+    },
+    {
+      "id": 3,
+      "name": "Doctor User",
+      "email": "doctor@medicare.com",
+      "password": "Doctor@123",
+      "role": "DOCTOR"
+    }
+  ],
   "doctors": [
     {
       "name": "Sumit",
@@ -63,26 +86,35 @@
       "address": "midc road",
       "status": "Active",
       "id": "psG93ijLZWw"
+    },
+    {
+      "name": "Raman Vaishnav",
+      "age": 28,
+      "gender": "Male",
+      "mobile": "7057281276",
+      "address": "Kota, Rajsthan",
+      "status": "Active",
+      "id": "AxDvqyM3gKc"
     }
   ],
   "appointments": [
     {
-      "patientId": "u2sfm-e_Iqk",
-      "doctorId": "-LZu0dF8PJk",
-      "date": "2026-06-23T18:30:00.000Z",
-      "time": "2026-06-20T20:00:00.000Z",
+      "patientId": "1",
+      "doctorId": "UZarKM-BH_E",
+      "date": "2026-06-25T18:30:00.000Z",
+      "time": "09:30 AM",
       "notes": "",
       "status": "Scheduled",
-      "id": "Jthve6HTY1E"
+      "id": "JMgD5vgNuMI"
     },
     {
-      "patientId": "psG93ijLZWw",
-      "doctorId": "buEvv1qTZ_U",
-      "date": "2026-06-24T18:30:00.000Z",
-      "time": "2026-06-22T13:00:00.000Z",
+      "patientId": "u2sfm-e_Iqk",
+      "doctorId": "UZarKM-BH_E",
+      "date": "2026-06-25T18:30:00.000Z",
+      "time": "09:00 AM",
       "notes": "",
-      "status": "Scheduled",
-      "id": "8a43-F0HhwE"
+      "status": "Cancelled",
+      "id": "su_Xt6d2z6o"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
