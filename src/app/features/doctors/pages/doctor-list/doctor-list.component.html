@@ -1,9 +1,17 @@
-<div class="page-container">
+<!-- <div class="page-container">
     <h3>Doctors</h3>
-</div>
+</div> -->
+<app-page-header
+  title="Doctors"
+  subtitle="Manage all doctors"
+   buttonLabel="Add Doctor"
+    buttonIcon="add"
+    (buttonClick)="openAddDoctor()"
+>
+</app-page-header>
 
-<div class="page-header">
-  <mat-form-field appearance="outline" class="search-field">
+<!-- <div class="page-header"> -->
+  <!-- <mat-form-field appearance="outline" class="search-field">
     <mat-label>Search Doctor</mat-label>
     <input
       matInput
@@ -11,11 +19,19 @@
       placeholder="Search doctors"
     />
     <mat-icon matSuffix>search</mat-icon>
-  </mat-form-field>
-   <button mat-raised-button color="primary" (click)="navToAddDoctor()">
+  </mat-form-field> -->
+
+  <app-search-box
+    placeholder="Search doctors..."
+    (search)="applyFilter($event)"
+  >
+  </app-search-box>
+
+  <!-- <button mat-raised-button color="primary" (click)="navToAddDoctor()">
       Add Doctor
-    </button>
-</div>
+    </button> -->
+
+<!-- </div> -->
 
 <mat-card>
   <div class="table-container">
@@ -91,11 +107,9 @@
       </ng-container>
 
       <!-- <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr> -->
-       <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
   </div>
-<mat-paginator
-  [pageSize]="5"
-  [pageSizeOptions]="[5, 10, 20]">
-</mat-paginator></mat-card>
+  <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"> </mat-paginator
+></mat-card>

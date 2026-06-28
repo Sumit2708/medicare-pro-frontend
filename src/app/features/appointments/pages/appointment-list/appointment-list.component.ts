@@ -19,6 +19,8 @@ import { Appointment } from '../../../../shared/models/appointment.model';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { MatBadgeModule } from '@angular/material/badge';
+import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
+import { SearchBoxComponent } from "../../../../shared/components/search-box/search-box.component";
 
 @Component({
   selector: 'app-appointment-list',
@@ -36,7 +38,9 @@ import { MatBadgeModule } from '@angular/material/badge';
     MatBadgeModule,
     MatPaginator,
     MatSort,
-  ],
+    PageHeaderComponent,
+    SearchBoxComponent
+],
   templateUrl: './appointment-list.component.html',
   styleUrl: './appointment-list.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -164,10 +168,8 @@ export class AppointmentListComponent {
     this.router.navigate(['/appointments/add']);
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  applyFilter(value: string) {
+    this.dataSource.filter = value.trim().toLowerCase();
   }
 
   loadPatients() {

@@ -13,6 +13,7 @@ import { DoctorService } from '../../services/doctor.service';
 import { Router } from '@angular/router';
 import { Doctor } from '../../../../shared/models/doctor.model';
 import { NotificationService } from '../../../../core/services/notification/notification.service';
+import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
 
 @Component({
   selector: 'app-add-doctor',
@@ -22,7 +23,8 @@ import { NotificationService } from '../../../../core/services/notification/noti
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-  ],
+    PageHeaderComponent
+],
   templateUrl: './add-doctor.component.html',
   styleUrl: './add-doctor.component.scss',
 })

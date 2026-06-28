@@ -30,6 +30,8 @@ import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { NotificationService } from '../../../../core/services/notification/notification.service';
+import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
+import { SearchBoxComponent } from '../../../../shared/components/search-box/search-box.component';
 
 @Component({
   selector: 'app-doctor-list',
@@ -55,6 +57,8 @@ import { NotificationService } from '../../../../core/services/notification/noti
     MatInputModule,
     MatIconModule,
     CommonModule,
+    PageHeaderComponent,
+    SearchBoxComponent,
   ],
   templateUrl: './doctor-list.component.html',
   styleUrl: './doctor-list.component.scss',
@@ -129,9 +133,17 @@ export class DoctorListComponent {
     this.router.navigate(['doctors/add']);
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
+  // applyFilter(value: string) {
+  //   // const filterValue = (event.target as HTMLInputElement).value;
 
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  //   this.dataSource.filter = value.trim().toLowerCase();
+  // }
+
+  applyFilter(value: string) {
+    this.dataSource.filter = value.trim().toLowerCase();
+  }
+
+  openAddDoctor() {
+    this.router.navigate(['doctors/add']);
   }
 }

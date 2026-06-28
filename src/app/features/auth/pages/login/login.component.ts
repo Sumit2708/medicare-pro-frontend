@@ -14,6 +14,8 @@ import { Router } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIcon } from "@angular/material/icon";
+import { NotificationService } from '../../../../core/services/notification/notification.service';
 
 @Component({
   selector: 'app-login',
@@ -25,17 +27,20 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatDivider,
     ReactiveFormsModule,
     MatInputModule,
-    MatButtonModule
-  ],
+    MatButtonModule,
+    MatIcon
+],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
   loginForm: FormGroup;
+   hidePassword = true;
 
   constructor(
     private router: Router,
     private fb: FormBuilder,
+    private notificationService:NotificationService
   ) {
     this.loginForm = this.fb.group({
       email: ['', Validators.required],
@@ -44,11 +49,40 @@ export class LoginComponent {
     });
   }
 
+  ngOnInit(): void {
+    console.log(`email === admin@medicare.com
+      password === admin123`);
+  }
+
   onSubmit() {
-    if (this.loginForm.valid) {
-      console.log(this.loginForm.value);
-      
+     if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
+      return;
+    }
+
+    const { email, password } = this.loginForm.value;
+
+    // Temporary static login
+    if (
+      email === 'admin@medicare.com' &&
+      password === 'admin123'
+    ) {
+
+      if (this.loginForm.value.rememberMe) {
+        localStorage.setItem('isLoggedIn', 'true');
+      } else {
+        sessionStorage.setItem('isLoggedIn', 'true');
+      }
+
+      this.notificationService.success('Login Successful');
       this.router.navigate(['/dashboard']);
+
+    } else {
+
+      this.notificationService.error('Invalid email or password');
+
     }
   }
+
+
 }

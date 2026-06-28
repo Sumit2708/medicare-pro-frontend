@@ -17,6 +17,8 @@ import { MatInputModule } from '@angular/material/input';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { MatButton, MatButtonModule } from '@angular/material/button';
 import { NotificationService } from '../../../../core/services/notification/notification.service';
+import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
+import { SearchBoxComponent } from "../../../../shared/components/search-box/search-box.component";
 
 @Component({
   selector: 'app-patient-list',
@@ -32,8 +34,9 @@ import { NotificationService } from '../../../../core/services/notification/noti
     MatInputModule,
     MatButtonModule,
     MatButtonModule,
-    
-   ],
+    PageHeaderComponent,
+    SearchBoxComponent
+],
   templateUrl: './patient-list.component.html',
   styleUrl: './patient-list.component.scss',
 })
@@ -71,11 +74,9 @@ export class PatientListComponent {
     });
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+   applyFilter(value: string) {    
+    this.dataSource.filter = value.trim().toLowerCase();
   }
-
   navAddPatient() {
     this.router.navigate(['/patients/add']);
   }
