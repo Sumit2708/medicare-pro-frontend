@@ -14,8 +14,9 @@ import { Router } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatIcon } from "@angular/material/icon";
+import { MatIcon } from '@angular/material/icon';
 import { NotificationService } from '../../../../core/services/notification/notification.service';
+import { AuthService } from '../../../../core/services/auth/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -28,19 +29,20 @@ import { NotificationService } from '../../../../core/services/notification/noti
     ReactiveFormsModule,
     MatInputModule,
     MatButtonModule,
-    MatIcon
-],
+    MatIcon,
+  ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
   loginForm: FormGroup;
-   hidePassword = true;
+  hidePassword = true;
 
   constructor(
     private router: Router,
     private fb: FormBuilder,
-    private notificationService:NotificationService
+    private notificationService: NotificationService,
+    private authService: AuthService,
   ) {
     this.loginForm = this.fb.group({
       email: ['', Validators.required],
@@ -55,34 +57,21 @@ export class LoginComponent {
   }
 
   onSubmit() {
-     if (this.loginForm.invalid) {
+    if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
       return;
     }
 
-    const { email, password } = this.loginForm.value;
-
-    // Temporary static login
-    if (
-      email === 'admin@medicare.com' &&
-      password === 'admin123'
-    ) {
-
-      if (this.loginForm.value.rememberMe) {
-        localStorage.setItem('isLoggedIn', 'true');
-      } else {
-        sessionStorage.setItem('isLoggedIn', 'true');
-      }
-
-      this.notificationService.success('Login Successful');
-      this.router.navigate(['/dashboard']);
-
-    } else {
-
-      this.notificationService.error('Invalid email or password');
-
-    }
+    this.authService.login(this.loginForm.value).subscribe({
+      next: (isLoggedin) => {
+        console.log(isLoggedin,'isLoggedIn');
+        
+        if (isLoggedin) {
+          this.router.navigate(['/dashboard']);
+        } else {
+          this.notificationService.error('Invalid email or password');
+        }
+      },
+    });
   }
-
-
 }

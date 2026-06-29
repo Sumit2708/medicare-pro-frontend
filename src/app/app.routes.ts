@@ -12,6 +12,7 @@ import { AppointmentListComponent } from './features/appointments/pages/appointm
 import { AddAppointmentComponent } from './features/appointments/pages/add-appointment/add-appointment.component';
 import { EditAppointmentComponent } from './features/appointments/pages/edit-appointment/edit-appointment.component';
 import { LoginComponent } from './features/auth/pages/login/login.component';
+import { authGuard } from './core/guards/auth/auth.guard';
 
 export const routes: Routes = [
   {
@@ -21,6 +22,7 @@ export const routes: Routes = [
   {
     path: '',
     component: AdminLayoutComponent,
+     canActivate: [authGuard],
     children: [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'doctors', component: DoctorListComponent },

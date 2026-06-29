@@ -1,25 +1,28 @@
 {
-   "users": [
+  "users": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Admin User",
       "email": "admin@medicare.com",
       "password": "Admin@123",
-      "role": "ADMIN"
+      "role": "ADMIN",
+      "token": "admin-token"
     },
     {
       "id": 2,
       "name": "Reception User",
       "email": "reception@medicare.com",
       "password": "Reception@123",
-      "role": "RECEPTIONIST"
+      "role": "RECEPTIONIST",
+      "token": "reception-token"
     },
     {
       "id": 3,
       "name": "Doctor User",
       "email": "doctor@medicare.com",
       "password": "Doctor@123",
-      "role": "DOCTOR"
+      "role": "DOCTOR",
+      "token": "doctor-token"
     }
   ],
   "doctors": [
