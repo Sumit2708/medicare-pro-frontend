@@ -5,19 +5,26 @@ import { AuthService } from '../../../core/services/auth/auth.service';
 import { NotificationService } from '../../../core/services/notification/notification.service';
 import { Router } from '@angular/router';
 import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
+import { User } from '../../models/user.model';
 
 @Component({
   selector: 'app-navbar',
-  imports: [MatToolbarModule, MatIconModule,MatMenuModule,MatMenuTrigger],
+  imports: [MatToolbarModule, MatIconModule, MatMenuModule, MatMenuTrigger],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
 })
 export class NavbarComponent {
+  currentUser!: User | null;
   constructor(
     private authService: AuthService,
     private notificationService: NotificationService,
     private router: Router,
   ) {}
+
+  ngOnInit() {
+    this.currentUser = this.authService.getCurrentUser();
+    console.log(this.currentUser);
+  }
 
   logout() {
     this.authService.logout();
@@ -28,6 +35,5 @@ export class NavbarComponent {
   navProfile() {
     // this.router.navigate(['/profile']);
     console.log('Comming Soon');
-    
   }
 }
