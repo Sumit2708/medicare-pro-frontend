@@ -1,10 +1,24 @@
 <mat-toolbar color="primary">
-<span>MediCare Pro</span>
+  <span>MediCare Pro</span>
 
-<span class="spacer"></span>
+  <span class="spacer"></span>
 
-<button mat-icon-button>
-     <mat-icon>account_circle</mat-icon>
+  <!-- <button mat-icon-button > -->
+  <mat-icon [matMenuTriggerFor]="profileMenu" class="profile-avatar"
+    >account_circle</mat-icon
+  >
+  <!-- </button> -->
 
-</button>
+  <mat-menu #profileMenu="matMenu">
+    <button mat-menu-item (click)="navProfile()">
+      <mat-icon>person</mat-icon>
+
+      Profile
+    </button>
+    <button mat-menu-item (click)="logout()">
+      <mat-icon>logout</mat-icon>
+
+      Logout
+    </button>
+  </mat-menu>
 </mat-toolbar>

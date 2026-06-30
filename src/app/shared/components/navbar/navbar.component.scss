@@ -1,3 +1,22 @@
 .spacer{
     flex: 1;
 }
+
+.profile-avatar {
+//   width: 10px;
+//   height: 10px;
+//   border-radius: 50%;
+//   background: #1976d2;
+//   color: white;
+//   font-weight: 600;
+//   font-size: 15px;
+//   border: none;
+  cursor: pointer;
+  transition: 0.2s;
+
+  &:hover {
+    // background: #1565c0;
+    transform: scale(1.20);
+  }
+
+}
