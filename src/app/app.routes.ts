@@ -13,6 +13,7 @@ import { AddAppointmentComponent } from './features/appointments/pages/add-appoi
 import { EditAppointmentComponent } from './features/appointments/pages/edit-appointment/edit-appointment.component';
 import { LoginComponent } from './features/auth/pages/login/login.component';
 import { authGuard } from './core/guards/auth/auth.guard';
+import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 
 export const routes: Routes = [
   {
@@ -58,6 +59,6 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'login',
+    component: PageNotFoundComponent,
   },
 ];
