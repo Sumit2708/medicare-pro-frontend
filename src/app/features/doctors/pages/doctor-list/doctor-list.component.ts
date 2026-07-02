@@ -129,9 +129,9 @@ export class DoctorListComponent {
     console.log(data.id, 'data of docInfo');
   }
 
-  navToAddDoctor() {
-    this.router.navigate(['doctors/add']);
-  }
+  // navToAddDoctor() {
+  //   this.router.navigate(['doctors/add']);
+  // }
 
   // applyFilter(value: string) {
   //   // const filterValue = (event.target as HTMLInputElement).value;

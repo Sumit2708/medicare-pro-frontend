@@ -14,49 +14,104 @@ import { EditAppointmentComponent } from './features/appointments/pages/edit-app
 import { LoginComponent } from './features/auth/pages/login/login.component';
 import { authGuard } from './core/guards/auth/auth.guard';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
+import { roleGuard } from './core/guards/role/role.guard';
+import { UserRole } from './core/enums/user-role.enum';
+import { AccessDeniedComponent } from './shared/components/access-denied/access-denied.component';
 
 export const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
   },
+   {
+    path: 'access-denied',
+    component:AccessDeniedComponent
+  },
   {
     path: '',
     component: AdminLayoutComponent,
-     canActivate: [authGuard],
+    canActivate: [authGuard],
     children: [
-      { path: 'dashboard', component: DashboardComponent },
-      { path: 'doctors', component: DoctorListComponent },
-      { path: 'patients', component: PatientListComponent },
-      { path: 'appointments', component: AppointmentListComponent },
-      { path: 'billing', component: InvoiceListComponent },
+      { path: 'dashboard', component: DashboardComponent, canActivate: [roleGuard], data: {
+          roles: [UserRole.ADMIN, UserRole.RECEPTIONIST],
+        }, },
+      { path: 'doctors', component: DoctorListComponent, canActivate: [roleGuard], data: {
+          roles: [UserRole.ADMIN, UserRole.RECEPTIONIST],
+        }, },
+      { path: 'patients', component: PatientListComponent, canActivate: [roleGuard], data: {
+          roles: [UserRole.DOCTOR, UserRole.RECEPTIONIST],
+        }, },
+      { path: 'appointments', component: AppointmentListComponent, canActivate: [roleGuard], data: {
+          roles: [UserRole.DOCTOR, UserRole.RECEPTIONIST],
+        }, },
+      {
+        path: 'billing',
+        component: InvoiceListComponent,
+        canActivate: [roleGuard],
+        data: {
+          roles: [UserRole.ADMIN, UserRole.RECEPTIONIST],
+        },
+      },
       {
         path: 'doctors/add',
         component: AddDoctorComponent,
+        canActivate: [roleGuard],
+        data: {
+          roles: [UserRole.ADMIN],
+        },
       },
       {
         path: 'doctors/edit',
         component: EditDoctorComponent,
+        canActivate: [roleGuard],
+        data: {
+          roles: [UserRole.ADMIN],
+        },
       },
       {
         path: 'patients/add',
         component: AddPatientComponent,
+        canActivate: [roleGuard],
+        data: {
+          roles: [UserRole.RECEPTIONIST, UserRole.DOCTOR],
+        },
       },
       {
         path: 'patients/edit',
         component: EditPatientComponent,
+        canActivate: [roleGuard],
+        data: {
+          roles: [UserRole.RECEPTIONIST, UserRole.DOCTOR],
+        },
       },
       {
         path: 'appointments/add',
         component: AddAppointmentComponent,
+        canActivate: [roleGuard],
+        data: {
+          roles: [UserRole.RECEPTIONIST, UserRole.DOCTOR],
+        },
       },
       {
         path: 'appointments/edit',
         component: EditAppointmentComponent,
+        canActivate: [roleGuard],
+        data: {
+          roles: [UserRole.RECEPTIONIST, UserRole.DOCTOR],
+        },
       },
-      { path: '', redirectTo: 'login', pathMatch: 'full' },
+      {
+        path: 'appointments/edit/:id',
+        component: EditAppointmentComponent,
+        canActivate: [roleGuard],
+        data: {
+          roles: [UserRole.RECEPTIONIST, UserRole.DOCTOR],
+        },
+      },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],
   },
+ 
   {
     path: '**',
     component: PageNotFoundComponent,

@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { MatIcon } from '@angular/material/icon';
 import { AuthService } from '../../../core/services/auth/auth.service';
 import { User } from '../../models/user.model';
+import { UserRole } from '../../../core/enums/user-role.enum';
 
 @Component({
   selector: 'app-sidebar',
@@ -14,6 +15,7 @@ import { User } from '../../models/user.model';
 export class SidebarComponent {
 
   currentUser: User | null = null;
+  userRole = UserRole;
 
   constructor(private authService: AuthService) {}
 
