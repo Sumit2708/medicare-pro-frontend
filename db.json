@@ -9,7 +9,7 @@
       "token": "admin-token"
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Reception User",
       "email": "reception@medicare.com",
       "password": "Reception@123",
@@ -17,7 +17,7 @@
       "token": "reception-token"
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "Doctor User",
       "email": "doctor@medicare.com",
       "password": "Doctor@123",
@@ -29,7 +29,7 @@
     {
       "name": "Sumit",
       "specialization": "Dentist",
-      "fee": 500,
+      "fee": 300,
       "status": "Active",
       "id": "UZarKM-BH_E"
     },

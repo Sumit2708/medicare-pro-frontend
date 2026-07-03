@@ -1,5 +1,10 @@
 <div class="page-container">
-  <h3>Edit Doctor</h3>
+<app-page-header
+title="Edit Doctor"
+subtitle="Edit doctor details"
+[showButton]="false"
+></app-page-header>
+
   <mat-card class="main-card">
     <form [formGroup]="doctorForm" (ngSubmit)="onSubmit()">
       <mat-form-field appearance="outline" class="full-width">

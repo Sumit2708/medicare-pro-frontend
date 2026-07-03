@@ -11,10 +11,11 @@ import { MatInput } from '@angular/material/input';
 import { DoctorService } from '../../services/doctor.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
+import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
 
 @Component({
   selector: 'app-edit-doctor',
-  imports: [MatCard, MatFormField, MatLabel, MatInput,ReactiveFormsModule, MatButtonModule],
+  imports: [MatCard, MatFormField, MatLabel, MatInput, ReactiveFormsModule, MatButtonModule, PageHeaderComponent],
   templateUrl: './edit-doctor.component.html',
   styleUrl: './edit-doctor.component.scss',
 })
