@@ -1,10 +1,27 @@
-.loading-overlay {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.55);
-  backdrop-filter: blur(2px);
-  z-index: 99999;
+.loading-overlay{
+    position:fixed;
+    inset:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:rgba(255,255,255,.55);
+    backdrop-filter:blur(3px);
+    z-index:99999;
+}
+
+.spinner-card{
+    background:white;
+    padding:32px;
+    border-radius:16px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:18px;
+    min-width:180px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+p{
+    margin:0;
+    color:#616161;
 }

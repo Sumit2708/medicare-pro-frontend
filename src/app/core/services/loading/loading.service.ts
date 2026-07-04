@@ -8,14 +8,21 @@ export class LoadingService {
   constructor() {}
 
   private loadingsubject = new BehaviorSubject<boolean>(false);
+  private totalRequest = 0;
 
   loading$ = this.loadingsubject.asObservable();
 
   show() {
+    this.totalRequest++;
     this.loadingsubject.next(true);
   }
 
   hide() {
-    this.loadingsubject.next(false);
+    if (this.totalRequest > 0) {
+      this.totalRequest--;
+    }
+    if (this.totalRequest == 0) {
+      this.loadingsubject.next(false);
+    }
   }
 }
