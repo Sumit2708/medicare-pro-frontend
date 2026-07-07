@@ -1,3 +1,5 @@
+import { PaymentMethod, PaymentStatus } from "../../../core/enums/payment-status.enum";
+
 export interface Invoice {
   id: number;
   invoiceNumber: string;
@@ -9,7 +11,7 @@ export interface Invoice {
   gstPercentage: number;
   gstAmount: number;
   totalAmount: number;
-  paymentMethod: 'Cash' | 'UPI' | 'Card' | 'Insurance';
-  paymentStatus: 'Pending' | 'Paid' | 'Cancelled';
+  paymentMethod: PaymentMethod;
+  paymentStatus: PaymentStatus;
   createdDate: string;
 }

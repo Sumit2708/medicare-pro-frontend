@@ -10,4 +10,6 @@ export const API_ENDPOINTS = {
   PATIENTS: '/patients',
 
   APPOINTMENTS: '/appointments',
+
+  INVOICES:'/invoices'
 };
