@@ -118,8 +118,17 @@
       "notes": "",
       "status": "Cancelled",
       "id": "su_Xt6d2z6o"
+    },
+    {
+      "patientId": "u2sfm-e_Iqk",
+      "doctorId": "Hp5U32kkfm4",
+      "date": "2026-07-08T18:30:00.000Z",
+      "time": "09:30 AM",
+      "notes": "",
+      "status": "Completed",
+      "id": "OYYVx7rQNWQ"
     }
   ],
-  "invoices":[],
+  "invoices": [],
   "$schema": "./node_modules/json-server/schema.json"
 }

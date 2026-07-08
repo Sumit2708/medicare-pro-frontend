@@ -1,3 +1,5 @@
+import { AppointmentStatus } from "../../core/enums/appointment-status.enum";
+
 export interface Appointment {
   id: number;
   patientId: number;
@@ -5,5 +7,5 @@ export interface Appointment {
   appointmentDate: string;
   appointmentTime: string;
   notes: string;
-  status: string;
+  status: AppointmentStatus;
 }

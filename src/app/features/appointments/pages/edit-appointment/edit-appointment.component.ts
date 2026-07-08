@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatCard } from '@angular/material/card';
-import { MatFormField, MatLabel, MatHint } from '@angular/material/form-field';
+import { MatFormField, MatLabel, MatHint, MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelect, MatOption } from '@angular/material/select';
 import {
   MatTimepickerInput,
@@ -19,13 +19,18 @@ import { NotificationService } from '../../../../core/services/notification/noti
 import { DoctorService } from '../../../doctors/services/doctor.service';
 import { PatientService } from '../../../patients/services/patient.service';
 import {
-  MatDatepicker,
   MatDatepickerToggle,
+  MatDatepickerActions,
+  MatDatepicker,
   MatDatepickerInput,
+  MatDatepickerModule,
 } from '@angular/material/datepicker';
-import { MatInput } from '@angular/material/input';
+import { MatInput, MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
+import { MatTimepickerModule } from '@angular/material/timepicker';
+
+
 
 @Component({
   selector: 'app-edit-appointment',
@@ -38,14 +43,14 @@ import { CommonModule } from '@angular/common';
     MatDatepickerToggle,
     MatDatepicker,
     MatDatepickerInput,
-    MatTimepickerInput,
-    MatTimepickerToggle,
-    MatTimepicker,
     MatHint,
     ReactiveFormsModule,
     MatInput,
     MatButtonModule,
     CommonModule,
+    MatTimepickerModule,
+    MatDatepickerModule,
+    MatFormFieldModule, MatInputModule
   ],
   templateUrl: './edit-appointment.component.html',
   styleUrl: './edit-appointment.component.scss',
@@ -56,7 +61,8 @@ export class EditAppointmentComponent {
   patients: any[] = [];
   minDate = new Date();
   appointmentId: any;
-    maxDate = new Date(new Date().setDate(new Date().getDate() + 7));
+  maxDate = new Date(new Date().setDate(new Date().getDate() + 7));
+  
 
   timeSlots = [
     '09:00 AM',
@@ -188,7 +194,8 @@ export class EditAppointmentComponent {
             a.doctorId === form.doctorId &&
             new Date(a.date).toDateString() ===
               new Date(form.date!).toDateString() &&
-            a.time === form.time && a.id !== this.appointmentId,
+            a.time === form.time &&
+            a.id !== this.appointmentId,
         );
 
         if (existingAppointment) {

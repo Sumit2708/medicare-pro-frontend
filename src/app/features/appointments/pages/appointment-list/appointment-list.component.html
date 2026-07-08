@@ -6,10 +6,11 @@
   (buttonClick)="navAddAppointment()"
 ></app-page-header>
 
-<app-search-box placeholder="Search appointments..." (search)="applyFilter($event)">
+<app-search-box
+  placeholder="Search appointments..."
+  (search)="applyFilter($event)"
+>
 </app-search-box>
-
-
 
 <mat-card class="main-card p-2 m-2">
   <div class="table-container">
@@ -97,6 +98,19 @@
             (click)="deleteAppointment(element.id)"
           >
             <mat-icon>delete</mat-icon>
+          </button>
+
+          <button
+            mat-button
+            color="primary"
+            (click)="generateInvoice(element)"
+            [matTooltip]="
+              element.status === 'Completed'
+                ? 'Generate Invoice'
+                : 'Invoice can only be generated for completed appointments'
+            "
+          >
+            <mat-icon>receipt_long</mat-icon>
           </button>
         </td>
       </ng-container>

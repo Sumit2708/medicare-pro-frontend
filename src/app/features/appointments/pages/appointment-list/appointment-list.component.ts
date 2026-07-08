@@ -21,6 +21,7 @@ import { ConfirmDialogComponent } from '../../../../shared/components/confirm-di
 import { MatBadgeModule } from '@angular/material/badge';
 import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
 import { SearchBoxComponent } from "../../../../shared/components/search-box/search-box.component";
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-appointment-list',
@@ -39,7 +40,8 @@ import { SearchBoxComponent } from "../../../../shared/components/search-box/sea
     MatPaginator,
     MatSort,
     PageHeaderComponent,
-    SearchBoxComponent
+    SearchBoxComponent,
+    MatTooltipModule
 ],
   templateUrl: './appointment-list.component.html',
   styleUrl: './appointment-list.component.scss',
@@ -238,5 +240,18 @@ export class AppointmentListComponent {
       default:
         return '';
     }
+  }
+
+  generateInvoice(appointment:any):void{
+
+    console.log(appointment);
+
+    if(appointment.status !== 'Completed'){
+      this.notificationService.error('Invoice can only be generated for completed appointments');
+      return;
+    }
+    this.router.navigate(['/billing/create'],{
+      queryParams: { data: appointment.id },
+    });
   }
 }

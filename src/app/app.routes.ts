@@ -17,6 +17,8 @@ import { roleGuard } from './core/guards/role/role.guard';
 import { UserRole } from './core/enums/user-role.enum';
 import { AccessDeniedComponent } from './shared/components/access-denied/access-denied.component';
 import { InvoiceListComponent } from './features/billing/pages/invoice-list/invoice-list.component';
+import { CreateInvoiceComponent } from './features/billing/pages/create-invoice/create-invoice.component';
+import { InvoiceDetailsComponent } from './features/billing/pages/invoice-details/invoice-details.component';
 
 const ADMIN = [UserRole.ADMIN];
 
@@ -73,7 +75,7 @@ export const routes: Routes = [
       },
 
       {
-        path: 'doctors/edit/:id',
+        path: 'doctors/edit',
         component: EditDoctorComponent,
         canActivate: [roleGuard],
         data: {
@@ -100,7 +102,7 @@ export const routes: Routes = [
       },
 
       {
-        path: 'patients/edit/:id',
+        path: 'patients/edit/',
         component: EditPatientComponent,
         canActivate: [roleGuard],
         data: {
@@ -127,7 +129,7 @@ export const routes: Routes = [
       },
 
       {
-        path: 'appointments/edit/:id',
+        path: 'appointments/edit',
         component: EditAppointmentComponent,
         canActivate: [roleGuard],
         data: {
@@ -142,6 +144,14 @@ export const routes: Routes = [
           roles: ADMIN_RECEPTION,
         },
       },
+      {
+        path:'billing/create',
+        component: CreateInvoiceComponent,
+        canActivate: [roleGuard],
+        data: {
+          roles: ADMIN_RECEPTION,
+        },
+      }
     ],
   },
 
