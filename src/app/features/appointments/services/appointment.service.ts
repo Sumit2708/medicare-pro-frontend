@@ -28,4 +28,8 @@ export class AppointmentService {
   deleteAppointment(appointmentId: string) {
     return this.http.delete(`${this.API_URL}/${appointmentId}`);
   }
+
+  getAppointmentById(appointmentId: number) {
+    return this.http.get(`${this.API_URL}/${appointmentId}`);
+  }
 }
