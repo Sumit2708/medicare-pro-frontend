@@ -12,14 +12,39 @@ import {
   Validators,
 } from '@angular/forms';
 import { InvoiceService } from '../../services/invoice.service';
-import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
-import { MatFormField, MatLabel } from "@angular/material/form-field";
-import { MatCard } from "@angular/material/card";
-import { MatOption } from "@angular/material/core";
+import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
+import {
+  MatFormField,
+  MatFormFieldControl,
+  MatFormFieldModule,
+  MatLabel,
+} from '@angular/material/form-field';
+import { MatCard, MatCardModule } from '@angular/material/card';
+import { MatOption } from '@angular/material/core';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { CommonModule, DatePipe } from '@angular/common';
+import { MatTimepickerModule } from '@angular/material/timepicker';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatSelect } from '@angular/material/select';
 
 @Component({
   selector: 'app-create-invoice',
-  imports: [ReactiveFormsModule, PageHeaderComponent, MatFormField, MatLabel, MatCard, MatOption],
+  imports: [
+    ReactiveFormsModule,
+    PageHeaderComponent,
+    MatCardModule,
+    MatOption,
+    MatInputModule,
+    MatButtonModule,
+    CommonModule,
+    MatFormField,
+    MatTimepickerModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatSelect,
+    DatePipe,
+  ],
   templateUrl: './create-invoice.component.html',
   styleUrl: './create-invoice.component.scss',
 })
@@ -33,8 +58,6 @@ export class CreateInvoiceComponent {
     private router: Router,
     private notificationService: NotificationService,
     private route: ActivatedRoute,
-    private doctorService: DoctorService,
-    private patientService: PatientService,
     private appointmentService: AppointmentService,
     private fb: FormBuilder,
     private invoiceService: InvoiceService,
@@ -42,6 +65,7 @@ export class CreateInvoiceComponent {
     this.invoiceForm = this.fb.group({
       patientName: [''],
       doctorName: [''],
+      appointmentDate: [''],
       consultationFee: [0],
       discount: [0],
       gst: [{ value: 0, disabled: true }],
@@ -68,10 +92,17 @@ export class CreateInvoiceComponent {
   loadInvoiceData(appointmentId: number): void {
     this.invoiceService.loadInvoiceData(appointmentId).subscribe({
       next: (data) => {
+        console.log(data, 'data');
         this.invoiceForm.patchValue({
           patientName: data.patient.name,
 
           doctorName: data.doctor.name,
+
+          appointmentDate:
+            new DatePipe('en-US').transform(
+              data.appointment.date,
+              'dd-MM-yyyy',
+            ) || data.appointment.date,
 
           consultationFee: data.doctor.fee,
 

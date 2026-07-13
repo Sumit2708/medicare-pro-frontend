@@ -42,7 +42,6 @@ import { MatIcon } from '@angular/material/icon';
     MatHint,
     ReactiveFormsModule,
     MatInputModule,
-    MatSelect,
     MatButton,
     CommonModule,
     MatDatepickerToggle,
