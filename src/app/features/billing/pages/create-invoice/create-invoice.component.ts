@@ -66,7 +66,7 @@ export class CreateInvoiceComponent {
       patientName: [''],
       doctorName: [''],
       appointmentDate: [''],
-      consultationFee: [0],
+      consultationFee: [{ value: 0, disabled: true }],
       discount: [0],
       gst: [{ value: 0, disabled: true }],
       total: [{ value: 0, disabled: true }],
