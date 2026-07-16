@@ -27,6 +27,9 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { MatTimepickerModule } from '@angular/material/timepicker';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelect } from '@angular/material/select';
+import { PaymentMethod, PaymentStatus } from '../../../../core/enums/payment-status.enum';
+import { MatDivider } from "@angular/material/divider";
+import { InvoiceViewModel } from '../../../../shared/models/invoice-view.model';
 
 @Component({
   selector: 'app-create-invoice',
@@ -44,7 +47,8 @@ import { MatSelect } from '@angular/material/select';
     MatFormFieldModule,
     MatSelect,
     DatePipe,
-  ],
+    MatDivider
+],
   templateUrl: './create-invoice.component.html',
   styleUrl: './create-invoice.component.scss',
 })
@@ -53,6 +57,9 @@ export class CreateInvoiceComponent {
   doctors: any;
   patients: any;
   invoiceForm: FormGroup;
+  PaymentMethod = PaymentMethod;
+PaymentStatus = PaymentStatus;
+invoiceData!: InvoiceViewModel;
 
   constructor(
     private router: Router,
@@ -63,15 +70,15 @@ export class CreateInvoiceComponent {
     private invoiceService: InvoiceService,
   ) {
     this.invoiceForm = this.fb.group({
-      patientName: [''],
-      doctorName: [''],
-      appointmentDate: [''],
+      patientName: [{ value: '', disabled: true }],
+      doctorName: [{ value: '', disabled: true }],
+      appointmentDate: [{ value: '', disabled: true }],
       consultationFee: [{ value: 0, disabled: true }],
       discount: [0],
       gst: [{ value: 0, disabled: true }],
       total: [{ value: 0, disabled: true }],
-      paymentMethod: ['Cash'],
-      paymentStatus: ['Pending'],
+      paymentMethod: [PaymentMethod.CASH],
+      paymentStatus: [PaymentStatus.PENDING],
     });
   }
 
@@ -90,9 +97,11 @@ export class CreateInvoiceComponent {
   }
 
   loadInvoiceData(appointmentId: number): void {
+    
     this.invoiceService.loadInvoiceData(appointmentId).subscribe({
       next: (data) => {
         console.log(data, 'data');
+        this.invoiceData = data;
         this.invoiceForm.patchValue({
           patientName: data.patient.name,
 
@@ -112,6 +121,7 @@ export class CreateInvoiceComponent {
         });
 
         this.calculateTotal();
+        
       },
     });
   }
@@ -133,4 +143,8 @@ export class CreateInvoiceComponent {
       total,
     });
   }
+
+  saveInvoice(): void {
+
+}
 }

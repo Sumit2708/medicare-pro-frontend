@@ -1,163 +1,227 @@
 <app-page-header
-    title="Create Invoice"
-    subtitle="Generate invoice for completed appointment"
-    [showButton]="false">
+  title="Create Invoice"
+  subtitle="Generate invoice for completed appointment"
+  buttonLabel="Back">
 </app-page-header>
 
-<mat-card class="invoice-card p-4">
+<mat-card class="summary-card">
 
-<form [formGroup]="invoiceForm">
+    <mat-card-title>
 
-    <h3 class="my-4">Appointment Information</h3>
+        Appointment Summary
 
-    <div class="row">
+    </mat-card-title>
 
-        <mat-form-field appearance="outline">
+    <mat-divider class="mt-2"></mat-divider>
 
-            <mat-label>Patient</mat-label>
+    <div class="summary-grid">
 
-            <input
-                matInput
-                formControlName="patientName">
+        <div>
 
-        </mat-form-field>
+            <strong>Patient</strong>
 
-        <mat-form-field appearance="outline">
+            <p>{{invoiceData?.patient?.name}}</p>
 
-            <mat-label>Doctor</mat-label>
+        </div>
 
-            <input
-                matInput
-                formControlName="doctorName">
+        <div>
 
-        </mat-form-field>
+            <strong>Doctor</strong>
 
-    </div>
+            <p>{{invoiceData?.doctor?.name}}</p>
 
-    <div class="row ">
+        </div>
 
-        <mat-form-field appearance="outline">
+        <div>
 
-            <mat-label>Appointment Date</mat-label>
+            <strong>Appointment Date</strong>
 
-            <input
-                matInput
-                formControlName="appointmentDate">
+            <p>{{invoiceForm.get('appointmentDate')?.value}}</p>
 
-        </mat-form-field>
+        </div>
 
-    </div>
+        <div>
 
-    <h3 class="my-4">Billing Information</h3>
+            <strong>Consultation Fee</strong>
 
-    <div class="row ">
+            <p>
 
-        <mat-form-field appearance="outline">
+                ₹{{invoiceData?.doctor?.fee}}
 
-            <mat-label>Consultation Fee</mat-label>
+            </p>
 
-            <input
-                matInput
-                type="number"
-                formControlName="consultationFee">
-
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-
-            <mat-label>Discount</mat-label>
-
-            <input
-                matInput
-                type="number"
-                formControlName="discount">
-
-        </mat-form-field>
+        </div>
 
     </div>
 
-    <div class="row">
+</mat-card>
 
-        <mat-form-field appearance="outline">
+<mat-card class="billing-card">
 
-            <mat-label>GST</mat-label>
+<form
+    [formGroup]="invoiceForm">
 
-            <input
-                matInput
-                formControlName="gst">
+<h3>
 
-        </mat-form-field>
+Billing Information
 
-        <mat-form-field appearance="outline">
+</h3>
 
-            <mat-label>Total</mat-label>
+<div class="row">
 
-            <input
-                matInput
-                formControlName="total"
-                >
+<mat-form-field appearance="outline">
 
-        </mat-form-field>
+<mat-label>
 
-    </div>
+Discount
 
-    <div class="row">
+</mat-label>
 
-        <mat-form-field appearance="outline">
+<input
+matInput
+type="number"
+formControlName="discount">
 
-            <mat-label>Payment Method</mat-label>
+</mat-form-field>
 
-            <mat-select formControlName="paymentMethod">
+<mat-form-field appearance="outline">
 
-                <mat-option value="Cash">Cash</mat-option>
+<mat-label>
 
-                <mat-option value="UPI">UPI</mat-option>
+GST (18%)
 
-                <mat-option value="Card">Card</mat-option>
+</mat-label>
 
-                <mat-option value="Insurance">Insurance</mat-option>
+<input
+matInput
+formControlName="gst">
 
-            </mat-select>
+</mat-form-field>
 
-        </mat-form-field>
+</div>
 
-        <mat-form-field appearance="outline">
+<div class="row">
 
-            <mat-label>Payment Status</mat-label>
+<mat-form-field appearance="outline">
 
-            <mat-select formControlName="paymentStatus">
+<mat-label>
 
-                <mat-option value="Pending">Pending</mat-option>
+Grand Total
 
-                <mat-option value="Paid">Paid</mat-option>
+</mat-label>
 
-                <mat-option value="Cancelled">Cancelled</mat-option>
+<input
+matInput
+formControlName="total">
 
-            </mat-select>
+</mat-form-field>
 
-        </mat-form-field>
+<mat-form-field appearance="outline">
 
-    </div>
+<mat-label>
 
-    <div class="actions">
+Payment Method
 
-        <button
-            mat-stroked-button
-            routerLink="/billing">
+</mat-label>
 
-            Cancel
+<mat-select
+formControlName="paymentMethod">
 
-        </button>
+<mat-option
+[value]="PaymentMethod.CASH">
 
-        <button
-            mat-raised-button
-            color="primary">
+Cash
 
-            Generate Invoice
+</mat-option>
 
-        </button>
+<mat-option
+[value]="PaymentMethod.UPI">
 
-    </div>
+UPI
+
+</mat-option>
+
+<mat-option
+[value]="PaymentMethod.CARD">
+
+Card
+
+</mat-option>
+
+<mat-option
+[value]="PaymentMethod.INSURANCE">
+
+Insurance
+
+</mat-option>
+
+</mat-select>
+
+</mat-form-field>
+
+</div>
+
+<div class="row">
+
+<mat-form-field appearance="outline">
+
+<mat-label>
+
+Payment Status
+
+</mat-label>
+
+<mat-select
+formControlName="paymentStatus">
+
+<mat-option
+[value]="PaymentStatus.PENDING">
+
+Pending
+
+</mat-option>
+
+<mat-option
+[value]="PaymentStatus.PAID">
+
+Paid
+
+</mat-option>
+
+<mat-option
+[value]="PaymentStatus.CANCELLED">
+
+Cancelled
+
+</mat-option>
+
+</mat-select>
+
+</mat-form-field>
+
+</div>
+
+<div class="actions">
+
+<button
+mat-stroked-button
+routerLink="/billing">
+
+Cancel
+
+</button>
+
+<button
+mat-raised-button
+color="primary"
+(click)="saveInvoice()"
+>
+
+Generate Invoice
+
+</button>
+
+</div>
 
 </form>
 
