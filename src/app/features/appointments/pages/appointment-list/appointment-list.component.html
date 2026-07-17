@@ -92,13 +92,18 @@
           >
             <mat-icon>edit</mat-icon>
           </button>
-          <button
+          <!-- <button
             mat-button
             color="warn"
-            (click)="deleteAppointment(element.id)"
+            [matTooltip]="
+              element.status == 'Cancelled'
+                ? 'Appointment already cancelled'
+                : 'Cancel Appointment'
+            "
+            (click)="cancelAppointment(element.id)"
           >
-            <mat-icon>delete</mat-icon>
-          </button>
+            <mat-icon>cancel</mat-icon>
+          </button> -->
 
           <button
             mat-button

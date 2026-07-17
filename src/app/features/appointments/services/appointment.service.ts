@@ -32,4 +32,9 @@ export class AppointmentService {
   getAppointmentById(appointmentId: number) {
     return this.http.get(`${this.API_URL}/${appointmentId}`);
   }
+
+  // cancelAppointment(appointmentId: string) {
+  //   return this.http.patch(`${this.API_URL}/${appointmentId}/cancel`, {});
+  // }
 }
+

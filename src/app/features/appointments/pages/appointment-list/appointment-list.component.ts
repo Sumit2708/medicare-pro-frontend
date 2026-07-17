@@ -254,4 +254,36 @@ export class AppointmentListComponent {
       queryParams: { data: appointment.id },
     });
   }
+
+  // cancelAppointment(appointmentId: any) {
+  //   // Implement logic to cancel the appointment
+  //   this.appointmentService.getAppointmentById(appointmentId).subscribe({
+
+  //     next: () => {
+
+
+        
+        
+  //       // Handle successful cancellation
+  //       this.notificationService.success(
+  //         'Appointment Cancelled successfully',
+  //       );
+  //       console.log('Appointment Cancelled successfully');
+  //       this.getAppointments();
+  //     },
+  //     error: (error: any) => {
+  //       // Handle any errors
+  //       this.notificationService.error('Error cancelling appointment ');
+
+  //       console.error('Error deleting appointment:', error);
+  //     },
+  //   });
+  // }
+
+  viewInvoice(appointmentId: any) {
+    this.router.navigate(['/billing/view'], {
+      queryParams: { data: appointmentId },
+    }); 
+  }
+    
 }
