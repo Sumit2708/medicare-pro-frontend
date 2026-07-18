@@ -27,9 +27,13 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { MatTimepickerModule } from '@angular/material/timepicker';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelect } from '@angular/material/select';
-import { PaymentMethod, PaymentStatus } from '../../../../core/enums/payment-status.enum';
-import { MatDivider } from "@angular/material/divider";
+import {
+  PaymentMethod,
+  PaymentStatus,
+} from '../../../../core/enums/payment-status.enum';
+import { MatDivider } from '@angular/material/divider';
 import { InvoiceViewModel } from '../../../../shared/models/invoice-view.model';
+import { Invoice } from '../../models/invoice.model';
 
 @Component({
   selector: 'app-create-invoice',
@@ -47,8 +51,8 @@ import { InvoiceViewModel } from '../../../../shared/models/invoice-view.model';
     MatFormFieldModule,
     MatSelect,
     DatePipe,
-    MatDivider
-],
+    MatDivider,
+  ],
   templateUrl: './create-invoice.component.html',
   styleUrl: './create-invoice.component.scss',
 })
@@ -58,8 +62,9 @@ export class CreateInvoiceComponent {
   patients: any;
   invoiceForm: FormGroup;
   PaymentMethod = PaymentMethod;
-PaymentStatus = PaymentStatus;
-invoiceData!: InvoiceViewModel;
+  PaymentStatus = PaymentStatus;
+  invoiceData!: InvoiceViewModel;
+  invoiceExists = false;
 
   constructor(
     private router: Router,
@@ -90,6 +95,7 @@ invoiceData!: InvoiceViewModel;
     });
 
     this.loadInvoiceData(this.appointmentId);
+    this.checkInvoiceExists(this.appointmentId);
 
     this.invoiceForm.get('discount')?.valueChanges.subscribe(() => {
       this.calculateTotal();
@@ -97,7 +103,6 @@ invoiceData!: InvoiceViewModel;
   }
 
   loadInvoiceData(appointmentId: number): void {
-    
     this.invoiceService.loadInvoiceData(appointmentId).subscribe({
       next: (data) => {
         console.log(data, 'data');
@@ -121,7 +126,20 @@ invoiceData!: InvoiceViewModel;
         });
 
         this.calculateTotal();
-        
+      },
+    });
+  }
+
+  checkInvoiceExists(appointmentId: number): void {
+    this.invoiceService.checkInvoiceExists(appointmentId).subscribe({
+      next: (exists) => {
+        this.invoiceExists = exists;
+
+        if (exists) {
+          this.notificationService.error(
+            'Invoice already exists for this appointment.',
+          );
+        }
       },
     });
   }
@@ -145,6 +163,51 @@ invoiceData!: InvoiceViewModel;
   }
 
   saveInvoice(): void {
+    if (this.invoiceExists) {
+      this.notificationService.error('Invoice already exists.');
 
-}
+      return;
+    }
+
+    this.invoiceService.generateInvoiceNumber().subscribe({
+      next: (invoiceNumber) => {
+        const invoice: Invoice = {
+          invoiceNumber,
+
+          appointmentId: this.invoiceData.appointment.id,
+
+          patientId: this.invoiceData.patient.id,
+
+          doctorId: this.invoiceData.doctor.id,
+
+          consultationFee: this.invoiceData.doctor.fee,
+
+          discount: Number(this.invoiceForm.value.discount),
+ 
+          gst: Number(this.invoiceForm.getRawValue().gst),
+
+          total: Number(this.invoiceForm.getRawValue().total),
+
+          paymentMethod: this.invoiceForm.value.paymentMethod!,
+
+          paymentStatus: this.invoiceForm.value.paymentStatus!,
+
+          createdDate: new Date().toISOString(),
+
+        };
+
+        this.createInvoice(invoice);
+      },
+    });
+  }
+
+  private createInvoice(invoice: Invoice): void {
+    this.invoiceService.createInvoice(invoice).subscribe({
+      next: () => {
+        this.notificationService.success('Invoice generated successfully.');
+
+        this.router.navigate(['/billing']);
+      },
+    });
+  }
 }

@@ -51,4 +51,28 @@ export class InvoiceService {
     );
   }
 
+  checkInvoiceExists(appointmentId: number): Observable<boolean> {
+    return this.http
+      .get<Invoice[]>(`${this.apiUrl}?appointmentId=${appointmentId}`)
+      .pipe(map((invoices) => invoices.length > 0));
+  }
+
+  generateInvoiceNumber(): Observable<string> {
+
+  return this.getInvoices().pipe(
+
+    map(invoices => {
+
+      const nextNumber = invoices.length + 1;
+
+      const year = new Date().getFullYear();
+
+      return `INV-${year}-${nextNumber.toString().padStart(5, '0')}`;
+
+    })
+
+  );
+
+}
+
 }

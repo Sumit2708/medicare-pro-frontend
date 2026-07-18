@@ -215,6 +215,7 @@ Cancel
 mat-raised-button
 color="primary"
 (click)="saveInvoice()"
+[disabled]="invoiceExists"
 >
 
 Generate Invoice
