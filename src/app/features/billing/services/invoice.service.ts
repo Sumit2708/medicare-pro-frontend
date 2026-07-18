@@ -58,21 +58,14 @@ export class InvoiceService {
   }
 
   generateInvoiceNumber(): Observable<string> {
+    return this.getInvoices().pipe(
+      map((invoices) => {
+        const nextNumber = invoices.length + 1;
 
-  return this.getInvoices().pipe(
+        const year = new Date().getFullYear();
 
-    map(invoices => {
-
-      const nextNumber = invoices.length + 1;
-
-      const year = new Date().getFullYear();
-
-      return `INV-${year}-${nextNumber.toString().padStart(5, '0')}`;
-
-    })
-
-  );
-
-}
-
+        return `INV-${year}-${nextNumber.toString().padStart(5, '0')}`;
+      }),
+    );
+  }
 }

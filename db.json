@@ -129,6 +129,21 @@
       "id": "OYYVx7rQNWQ"
     }
   ],
-  "invoices": [],
+  "invoices": [
+    {
+      "invoiceNumber": "INV-2026-00001",
+      "appointmentId": "OYYVx7rQNWQ",
+      "patientId": "u2sfm-e_Iqk",
+      "doctorId": "Hp5U32kkfm4",
+      "consultationFee": 800,
+      "discount": 50,
+      "gst": 135,
+      "total": 885,
+      "paymentMethod": "UPI",
+      "paymentStatus": "Paid",
+      "createdDate": "2026-07-18T11:34:43.702Z",
+      "id": "8iTo2orL8OM"
+    }
+  ],
   "$schema": "./node_modules/json-server/schema.json"
 }

@@ -70,7 +70,6 @@ export class CreateInvoiceComponent {
     private router: Router,
     private notificationService: NotificationService,
     private route: ActivatedRoute,
-    private appointmentService: AppointmentService,
     private fb: FormBuilder,
     private invoiceService: InvoiceService,
   ) {
@@ -171,6 +170,8 @@ export class CreateInvoiceComponent {
 
     this.invoiceService.generateInvoiceNumber().subscribe({
       next: (invoiceNumber) => {
+        console.log(invoiceNumber);
+        console.log(this.invoiceForm.getRawValue(), 'raw form value');
         const invoice: Invoice = {
           invoiceNumber,
 
@@ -195,6 +196,8 @@ export class CreateInvoiceComponent {
           createdDate: new Date().toISOString(),
 
         };
+
+        console.log(invoice,'invoice');
 
         this.createInvoice(invoice);
       },
