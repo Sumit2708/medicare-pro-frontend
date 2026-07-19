@@ -8,6 +8,7 @@ import { InvoiceViewModel } from '../../../shared/models/invoice-view.model';
 import { DoctorService } from '../../doctors/services/doctor.service';
 import { PatientService } from '../../patients/services/patient.service';
 import { AppointmentService } from '../../appointments/services/appointment.service';
+import { InvoiceTable } from '../models/invoice-table.model';
 
 @Injectable({
   providedIn: 'root',
@@ -65,6 +66,42 @@ export class InvoiceService {
         const year = new Date().getFullYear();
 
         return `INV-${year}-${nextNumber.toString().padStart(5, '0')}`;
+      }),
+    );
+  }
+
+  getInvoiceTableData(): Observable<InvoiceTable[]> {
+    return forkJoin({
+      invoices: this.getInvoices(),
+
+      patients: this.patientService.getPatients(),
+
+      doctors: this.doctorService.getDoctors(),
+    }).pipe(
+      map(({ invoices, patients, doctors }) => {
+        return invoices.map((invoice) => {
+          const patient = patients.find((p) => p.id === invoice.patientId);
+
+          const doctor = doctors.find((d) => d.id === invoice.doctorId);
+
+          return {
+            id: invoice.id!,
+
+            invoiceNumber: invoice.invoiceNumber,
+
+            patientName: patient?.name ?? '-',
+
+            doctorName: doctor?.name ?? '-',
+
+            total: invoice.total,
+
+            paymentMethod: invoice.paymentMethod,
+
+            paymentStatus: invoice.paymentStatus,
+
+            createdDate: invoice.createdDate,
+          };
+        });
       }),
     );
   }
