@@ -1,0 +1,36 @@
+.filter-card {
+  margin-bottom: 20px;
+}
+
+.filter-row {
+  display: flex;
+
+  gap: 20px;
+}
+
+.filter-row mat-form-field {
+  flex: 1;
+}
+
+table {
+  width: 100%;
+}
+
+mat-card {
+  padding: 20px;
+}
+
+mat-chip {
+  min-width: 90px;
+
+  justify-content: center;
+}
+
+// .mat-column-actions {
+//   width: 120px;
+// }
+
+.actions-column {
+  text-align: center;
+  justify-content: center;
+}

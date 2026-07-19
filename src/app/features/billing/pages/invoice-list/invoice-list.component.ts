@@ -3,13 +3,18 @@ import { PageHeaderComponent } from '../../../../shared/components/page-header/p
 import { Router } from '@angular/router';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { InvoiceTable } from '../../models/invoice-table.model';
 import { InvoiceService } from '../../services/invoice.service';
 import { MatOption } from '@angular/material/core';
-import { MatSelect, MatLabel, MatFormField } from '@angular/material/select';
+import { MatSelect, MatLabel, MatFormField, MatSelectModule } from '@angular/material/select';
 import { MatCard } from '@angular/material/card';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { CurrencyPipe, DatePipe } from '@angular/common';
+import { MatIcon } from "@angular/material/icon";
+import { MatChipsModule } from '@angular/material/chips';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-invoice-list',
@@ -21,7 +26,16 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatFormField,
     MatCard,
     ReactiveFormsModule,
-  ],
+    MatTableModule,
+    MatInputModule,
+    MatSelectModule,
+    CurrencyPipe,
+    MatIcon,
+    DatePipe,
+    MatPaginator,
+    MatChipsModule,
+    MatButtonModule,
+],
   templateUrl: './invoice-list.component.html',
   styleUrl: './invoice-list.component.scss',
 })
