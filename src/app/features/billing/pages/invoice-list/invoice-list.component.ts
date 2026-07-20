@@ -7,12 +7,17 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { InvoiceTable } from '../../models/invoice-table.model';
 import { InvoiceService } from '../../services/invoice.service';
 import { MatOption } from '@angular/material/core';
-import { MatSelect, MatLabel, MatFormField, MatSelectModule } from '@angular/material/select';
+import {
+  MatSelect,
+  MatLabel,
+  MatFormField,
+  MatSelectModule,
+} from '@angular/material/select';
 import { MatCard } from '@angular/material/card';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { CurrencyPipe, DatePipe } from '@angular/common';
-import { MatIcon } from "@angular/material/icon";
+import { MatIcon } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatButtonModule } from '@angular/material/button';
 
@@ -35,12 +40,11 @@ import { MatButtonModule } from '@angular/material/button';
     MatPaginator,
     MatChipsModule,
     MatButtonModule,
-],
+    FormsModule,
+  ],
   templateUrl: './invoice-list.component.html',
   styleUrl: './invoice-list.component.scss',
 })
-
-
 export class InvoiceListComponent {
   displayedColumns: string[] = [
     'invoiceNumber',
@@ -53,7 +57,7 @@ export class InvoiceListComponent {
     'actions',
   ];
 
-   dataSource = new MatTableDataSource<any>();
+  dataSource = new MatTableDataSource<any>();
 
   loading = false;
 
@@ -62,6 +66,12 @@ export class InvoiceListComponent {
 
   @ViewChild(MatSort)
   sort!: MatSort;
+
+  searchText = '';
+
+  selectedStatus = '';
+
+  selectedPaymentMethod = '';
 
   ngOnInit(): void {
     this.loadInvoices();
@@ -94,6 +104,36 @@ export class InvoiceListComponent {
       error: () => {
         this.loading = false;
       },
+    });
+    this.configureFilter();
+  }
+
+  private configureFilter(): void {
+    this.dataSource.filterPredicate = (data, filter) => {
+      const filters = JSON.parse(filter);
+
+      const matchesSearch =
+        !filters.search ||
+        data.invoiceNumber.toLowerCase().includes(filters.search) ||
+        data.patientName.toLowerCase().includes(filters.search);
+
+      const matchesStatus =
+        !filters.status || data.paymentStatus === filters.status;
+
+      const matchesMethod =
+        !filters.method || data.paymentMethod === filters.method;
+
+      return matchesSearch && matchesStatus && matchesMethod;
+    };
+  }
+
+  applyFilters(): void {
+    this.dataSource.filter = JSON.stringify({
+      search: this.searchText.trim().toLowerCase(),
+
+      status: this.selectedStatus,
+
+      method: this.selectedPaymentMethod,
     });
   }
 

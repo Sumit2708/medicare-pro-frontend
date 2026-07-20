@@ -34,3 +34,21 @@ mat-chip {
   text-align: center;
   justify-content: center;
 }
+
+.paid {
+  background: #e8f5e9 !important;
+
+  color: #2e7d32 !important;
+}
+
+.pending {
+  background: #fff8e1 !important;
+
+  color: #f9a825 !important;
+}
+
+.cancelled {
+  background: #ffebee !important;
+
+  color: #c62828 !important;
+}

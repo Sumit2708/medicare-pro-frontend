@@ -143,6 +143,20 @@
       "paymentStatus": "Paid",
       "createdDate": "2026-07-18T11:34:43.702Z",
       "id": "8iTo2orL8OM"
+    },
+    {
+      "invoiceNumber": "INV-2026-00002",
+      "appointmentId": "su_Xt6d2z6o",
+      "patientId": "u2sfm-e_Iqk",
+      "doctorId": "UZarKM-BH_E",
+      "consultationFee": 300,
+      "discount": 0,
+      "gst": 54,
+      "total": 354,
+      "paymentMethod": "Cash",
+      "paymentStatus": "Pending",
+      "createdDate": "2026-07-19T14:01:22.812Z",
+      "id": "859Cl02ztOs"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
