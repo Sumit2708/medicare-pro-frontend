@@ -9,6 +9,7 @@ import { DoctorService } from '../../doctors/services/doctor.service';
 import { PatientService } from '../../patients/services/patient.service';
 import { AppointmentService } from '../../appointments/services/appointment.service';
 import { InvoiceTable } from '../models/invoice-table.model';
+import { InvoiceDetails } from '../models/invoice-details.model';
 
 @Injectable({
   providedIn: 'root',
@@ -104,5 +105,25 @@ export class InvoiceService {
         });
       }),
     );
+  }
+
+  loadInvoiceDetails(id: number): Observable<InvoiceDetails> {
+    return this.getInvoiceById(id).pipe(
+        switchMap((invoice) => {
+          return forkJoin({
+            patient: this.patientService.getPatientById(invoice.patientId),
+
+            doctor: this.doctorService.getDoctorById(invoice.doctorId),
+          }).pipe(
+            map(({ patient, doctor }) => ({
+              invoice,
+
+              patient,
+
+              doctor,
+            })),
+          );
+        }),
+      );
   }
 }
