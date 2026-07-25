@@ -11,7 +11,6 @@ import { InvoiceService } from '../../services/invoice.service';
 })
 export class InvoiceDetailsComponent {
   invoiceDetails!: InvoiceDetails;
-
   loading = true;
 
   constructor(
