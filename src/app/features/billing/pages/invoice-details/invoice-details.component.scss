@@ -1,0 +1,97 @@
+.details-container {
+
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 24px;
+
+    margin-bottom: 24px;
+
+}
+
+mat-card {
+
+    padding: 24px;
+
+}
+
+.info-row,
+.summary-row {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 14px 0;
+
+    border-bottom: 1px solid #eeeeee;
+
+}
+
+.summary-row:last-child,
+.info-row:last-child {
+
+    border-bottom: none;
+
+}
+
+.total {
+
+    font-size: 18px;
+
+    font-weight: 600;
+
+}
+
+.billing-card {
+
+    margin-bottom: 24px;
+
+}
+
+.actions {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 12px;
+
+}
+
+.paid {
+
+    background: #E8F5E9 !important;
+
+    color: #2E7D32 !important;
+
+}
+
+.pending {
+
+    background: #FFF8E1 !important;
+
+    color: #F9A825 !important;
+
+}
+
+.cancelled {
+
+    background: #FFEBEE !important;
+
+    color: #C62828 !important;
+
+}
+
+@media (max-width: 768px) {
+
+    .details-container {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}

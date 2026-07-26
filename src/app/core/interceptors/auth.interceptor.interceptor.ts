@@ -20,12 +20,13 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   let authRequest = req;
 
-  if (token || !isLoginRequest) {
-    authRequest = req.clone({
-      setHeaders: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+  if (token && !isLoginRequest) {
+  authRequest = req.clone({
+    setHeaders: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
   }
 
   // return next(authRequest).pipe(

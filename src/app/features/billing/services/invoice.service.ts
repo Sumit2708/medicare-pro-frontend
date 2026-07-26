@@ -126,4 +126,8 @@ export class InvoiceService {
         }),
       );
   }
+
+  updateInvoice(invoice: Invoice): Observable<Invoice> {
+    return this.http.put<Invoice>(`${this.apiUrl}/${invoice.id}`, invoice);
+  }
 }

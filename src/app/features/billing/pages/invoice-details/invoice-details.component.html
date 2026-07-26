@@ -1,1 +1,149 @@
-<p>invoice-details works!</p>
+<app-page-header title="Invoice Details" subtitle="View generated invoice">
+</app-page-header>
+
+@if (invoiceDetails) {
+  <div class="details-container">
+    <!-- Patient Card -->
+
+    <mat-card>
+      <mat-card-title> Patient Information </mat-card-title>
+
+      <mat-divider></mat-divider>
+
+      <div class="info-row">
+        <span>Name</span>
+
+        <strong>{{ invoiceDetails.patient.name }}</strong>
+      </div>
+
+      <div class="info-row">
+        <span>Gender</span>
+
+        <strong>{{ invoiceDetails.patient.gender }}</strong>
+      </div>
+
+      <div class="info-row">
+        <span>Mobile</span>
+
+        <strong>{{ invoiceDetails.patient.mobile }}</strong>
+      </div>
+    </mat-card>
+
+    <!-- Doctor Card -->
+
+    <mat-card>
+      <mat-card-title> Doctor Information </mat-card-title>
+
+      <mat-divider></mat-divider>
+
+      <div class="info-row">
+        <span>Name</span>
+
+        <strong>{{ invoiceDetails.doctor.name }}</strong>
+      </div>
+
+      <div class="info-row">
+        <span>Specialization</span>
+
+        <strong>{{ invoiceDetails.doctor.specialization }}</strong>
+      </div>
+
+      <div class="info-row">
+        <span>Consultation Fee</span>
+
+        <strong>
+          {{ invoiceDetails.doctor.fee | currency: "INR" }}
+        </strong>
+      </div>
+    </mat-card>
+  </div>
+
+  <mat-card class="billing-card">
+    <mat-card-title> Billing Summary </mat-card-title>
+
+    <mat-divider></mat-divider>
+
+    <div class="summary-row">
+      <span>Invoice Number</span>
+
+      <strong>{{ invoiceDetails.invoice.invoiceNumber }}</strong>
+    </div>
+
+    <div class="summary-row">
+      <span>Consultation Fee</span>
+
+      <strong>
+        {{ invoiceDetails.invoice.consultationFee | currency: "INR" }}
+      </strong>
+    </div>
+
+    <div class="summary-row">
+      <span>Discount</span>
+
+      <strong>
+        {{ invoiceDetails.invoice.discount | currency: "INR" }}
+      </strong>
+    </div>
+
+    <div class="summary-row">
+      <span>GST (18%)</span>
+
+      <strong>
+        {{ invoiceDetails.invoice.gst | currency: "INR" }}
+      </strong>
+    </div>
+
+    <div class="summary-row total">
+      <span>Grand Total</span>
+
+      <strong>
+        {{ invoiceDetails.invoice.total | currency: "INR" }}
+      </strong>
+    </div>
+
+    <div class="summary-row">
+      <span>Payment Method</span>
+
+      <strong>{{ invoiceDetails.invoice.paymentMethod }}</strong>
+    </div>
+
+    <div class="summary-row">
+      <span>Payment Status</span>
+
+      <mat-chip
+        [class.paid]="invoiceDetails.invoice.paymentStatus === 'Paid'"
+        [class.pending]="invoiceDetails.invoice.paymentStatus === 'Pending'"
+        [class.cancelled]="invoiceDetails.invoice.paymentStatus === 'Cancelled'"
+      >
+        {{ invoiceDetails.invoice.paymentStatus }}
+      </mat-chip>
+    </div>
+
+    <div class="summary-row">
+      <span>Created Date</span>
+
+      <strong>
+        {{ invoiceDetails.invoice.createdDate | date: "dd MMM yyyy" }}
+      </strong>
+    </div>
+  </mat-card>
+
+  <div class="actions">
+    <button mat-stroked-button routerLink="/billing">Back</button>
+
+    <button mat-raised-button color="accent" (click)="printInvoice()">
+      <mat-icon>print</mat-icon>
+
+      Print Invoice
+    </button>
+
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="markAsPaid()"
+      [disabled]="invoiceDetails.invoice.paymentStatus === 'Paid'"
+    >
+      Mark Paid
+    </button>
+  </div>
+}

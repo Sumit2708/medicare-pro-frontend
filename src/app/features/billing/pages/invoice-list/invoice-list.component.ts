@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
-import { Router } from '@angular/router';
+import { Router, RouterLink  } from '@angular/router';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -41,6 +41,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatChipsModule,
     MatButtonModule,
     FormsModule,
+    RouterLink
   ],
   templateUrl: './invoice-list.component.html',
   styleUrl: './invoice-list.component.scss',

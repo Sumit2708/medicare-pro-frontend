@@ -152,6 +152,14 @@ export const routes: Routes = [
           roles: ADMIN_RECEPTION,
         },
       }
+      ,  {
+        path:'billing/:id',
+        component: InvoiceDetailsComponent,
+        canActivate: [roleGuard],
+        data: {
+          roles: ADMIN_RECEPTION,
+        },
+      }
     ],
   },
 
