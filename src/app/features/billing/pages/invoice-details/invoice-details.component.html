@@ -111,9 +111,9 @@
       <span>Payment Status</span>
 
       <mat-chip
-        [class.paid]="invoiceDetails.invoice.paymentStatus === 'Paid'"
-        [class.pending]="invoiceDetails.invoice.paymentStatus === 'Pending'"
-        [class.cancelled]="invoiceDetails.invoice.paymentStatus === 'Cancelled'"
+        [class.paid]="invoiceDetails.invoice.paymentStatus === PaymentStatus.PAID"
+        [class.pending]="invoiceDetails.invoice.paymentStatus === PaymentStatus.PENDING"
+        [class.cancelled]="invoiceDetails.invoice.paymentStatus === PaymentStatus.CANCELLED"
       >
         {{ invoiceDetails.invoice.paymentStatus }}
       </mat-chip>
@@ -128,7 +128,7 @@
     </div>
   </mat-card>
 
-  <div class="actions">
+  <div class="actions pb-3">
     <button mat-stroked-button routerLink="/billing">Back</button>
 
     <button mat-raised-button color="accent" (click)="printInvoice()">
@@ -141,7 +141,7 @@
       mat-raised-button
       color="primary"
       (click)="markAsPaid()"
-      [disabled]="invoiceDetails.invoice.paymentStatus === 'Paid'"
+      [disabled]="invoiceDetails.invoice.paymentStatus === PaymentStatus.PAID"
     >
       Mark Paid
     </button>

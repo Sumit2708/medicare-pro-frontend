@@ -10,6 +10,7 @@ import { PatientService } from '../../patients/services/patient.service';
 import { AppointmentService } from '../../appointments/services/appointment.service';
 import { InvoiceTable } from '../models/invoice-table.model';
 import { InvoiceDetails } from '../models/invoice-details.model';
+import { PaymentStatus } from '../../../core/enums/payment-status.enum';
 
 @Injectable({
   providedIn: 'root',
@@ -109,25 +110,31 @@ export class InvoiceService {
 
   loadInvoiceDetails(id: number): Observable<InvoiceDetails> {
     return this.getInvoiceById(id).pipe(
-        switchMap((invoice) => {
-          return forkJoin({
-            patient: this.patientService.getPatientById(invoice.patientId),
+      switchMap((invoice) => {
+        return forkJoin({
+          patient: this.patientService.getPatientById(invoice.patientId),
 
-            doctor: this.doctorService.getDoctorById(invoice.doctorId),
-          }).pipe(
-            map(({ patient, doctor }) => ({
-              invoice,
+          doctor: this.doctorService.getDoctorById(invoice.doctorId),
+        }).pipe(
+          map(({ patient, doctor }) => ({
+            invoice,
 
-              patient,
+            patient,
 
-              doctor,
-            })),
-          );
-        }),
-      );
+            doctor,
+          })),
+        );
+      }),
+    );
   }
 
   updateInvoice(invoice: Invoice): Observable<Invoice> {
     return this.http.put<Invoice>(`${this.apiUrl}/${invoice.id}`, invoice);
+  }
+
+  markInvoiceAsPaid(id: number): Observable<Invoice> {
+    return this.http.patch<Invoice>(`${this.apiUrl}/${id}`, {
+      paymentStatus: PaymentStatus.PAID,
+    });
   }
 }
