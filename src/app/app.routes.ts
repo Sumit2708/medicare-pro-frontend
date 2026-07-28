@@ -19,6 +19,7 @@ import { AccessDeniedComponent } from './shared/components/access-denied/access-
 import { InvoiceListComponent } from './features/billing/pages/invoice-list/invoice-list.component';
 import { CreateInvoiceComponent } from './features/billing/pages/create-invoice/create-invoice.component';
 import { InvoiceDetailsComponent } from './features/billing/pages/invoice-details/invoice-details.component';
+import { PrintInvoiceComponent } from './features/billing/pages/print-invoice/print-invoice.component';
 
 const ADMIN = [UserRole.ADMIN];
 
@@ -145,21 +146,29 @@ export const routes: Routes = [
         },
       },
       {
-        path:'billing/create',
+        path: 'billing/create',
         component: CreateInvoiceComponent,
         canActivate: [roleGuard],
         data: {
           roles: ADMIN_RECEPTION,
         },
-      }
-      ,  {
-        path:'billing/:id',
+      },
+      {
+        path: 'billing/:id',
         component: InvoiceDetailsComponent,
         canActivate: [roleGuard],
         data: {
           roles: ADMIN_RECEPTION,
         },
-      }
+      },
+      {
+        path: 'billing/print/:id',
+        component: PrintInvoiceComponent,
+        canActivate: [roleGuard],
+        data: {
+          roles: ADMIN_RECEPTION,
+        },
+      },
     ],
   },
 

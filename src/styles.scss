@@ -108,3 +108,24 @@ button:hover {
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+// Print PDF
+@media print {
+
+  app-sidebar,
+  app-header,
+  app-navbar,
+  mat-sidenav,
+  mat-toolbar {
+
+    display: none !important;
+
+  }
+
+  app-print-invoice {
+
+    display: block !important;
+
+  }
+
+}

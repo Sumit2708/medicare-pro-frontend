@@ -1,0 +1,146 @@
+@if (!loading && invoiceDetails) {
+  <div id="invoice-content" class="invoice-container">
+    <!-- Header -->
+
+    <div class="invoice-header">
+      <h1>{{ clinicInfo.name }}</h1>
+      <p>{{ clinicInfo.tagline }}</p>
+      <p>{{ clinicInfo.address }}</p>
+      <p>{{ clinicInfo.phone }}</p>
+
+      <h2>TAX INVOICE</h2>
+    </div>
+
+    <hr />
+
+    <!-- Invoice Information -->
+
+    <div class="invoice-info">
+      <div>
+        <strong>Invoice Number</strong>
+
+        <p>{{ invoiceDetails.invoice.invoiceNumber }}</p>
+      </div>
+
+      <div>
+        <strong>Invoice Date</strong>
+
+        <p>
+          {{ invoiceDetails.invoice.createdDate | date: "dd MMM yyyy" }}
+        </p>
+      </div>
+    </div>
+
+    <hr />
+
+    <!-- Bill To -->
+
+    <div class="section">
+      <h3>Bill To</h3>
+
+      <p>
+        <strong>Patient :</strong>
+
+        {{ invoiceDetails.patient.name }}
+      </p>
+
+      <p>
+        <strong>Doctor :</strong>
+
+        {{ invoiceDetails.doctor.name }}
+      </p>
+
+      <p>
+        <strong>Specialization :</strong>
+
+        {{ invoiceDetails.doctor.specialization }}
+      </p>
+    </div>
+
+    <!-- Invoice Table -->
+
+    <table>
+      <thead>
+        <tr>
+          <th>Description</th>
+
+          <th class="right">Amount</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td>Consultation Fee</td>
+
+          <td class="right">
+            {{ invoiceDetails.invoice.consultationFee | currency: "INR" }}
+          </td>
+        </tr>
+
+        <tr>
+          <td>Discount</td>
+
+          <td class="right">
+            -{{ invoiceDetails.invoice.discount | currency: "INR" }}
+          </td>
+        </tr>
+
+        <tr>
+          <td>GST (18%)</td>
+
+          <td class="right">
+            {{ invoiceDetails.invoice.gst | currency: "INR" }}
+          </td>
+        </tr>
+      </tbody>
+
+      <tfoot>
+        <tr>
+          <td>
+            <strong>Grand Total</strong>
+          </td>
+
+          <td class="right">
+            <strong>
+              {{ invoiceDetails.invoice.total | currency: "INR" }}
+            </strong>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <!-- Payment -->
+
+    <div class="payment-section">
+      <div>
+        <strong>Payment Method</strong>
+
+        <p>
+          {{ invoiceDetails.invoice.paymentMethod }}
+        </p>
+      </div>
+
+      <div>
+        <strong>Payment Status</strong>
+
+        <p>
+          {{ invoiceDetails.invoice.paymentStatus }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Footer -->
+
+    <div class="footer">
+      <p>Thank you for choosing ABC Clinic.</p>
+
+      <div class="signature">
+        _______________________
+
+        <br />
+
+        Authorized Signature
+      </div>
+    </div>
+  </div>
+}

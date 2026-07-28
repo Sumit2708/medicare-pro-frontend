@@ -104,10 +104,10 @@
     {
       "patientId": "1",
       "doctorId": "UZarKM-BH_E",
-      "date": "2026-06-25T18:30:00.000Z",
+      "date": "2026-07-29T18:30:00.000Z",
       "time": "09:30 AM",
       "notes": "",
-      "status": "Scheduled",
+      "status": "Completed",
       "id": "JMgD5vgNuMI"
     },
     {
@@ -157,6 +157,20 @@
       "paymentStatus": "Paid",
       "createdDate": "2026-07-19T14:01:22.812Z",
       "id": "859Cl02ztOs"
+    },
+    {
+      "invoiceNumber": "INV-2026-00003",
+      "appointmentId": "JMgD5vgNuMI",
+      "patientId": "1",
+      "doctorId": "UZarKM-BH_E",
+      "consultationFee": 300,
+      "discount": 0,
+      "gst": 54,
+      "total": 354,
+      "paymentMethod": "UPI",
+      "paymentStatus": "Pending",
+      "createdDate": "2026-07-28T16:04:58.973Z",
+      "id": "eq1vEO3aKIQ"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

@@ -108,7 +108,7 @@ export class InvoiceService {
     );
   }
 
-  loadInvoiceDetails(id: number): Observable<InvoiceDetails> {
+  loadInvoiceDetails(id: any): Observable<InvoiceDetails> {
     return this.getInvoiceById(id).pipe(
       switchMap((invoice) => {
         return forkJoin({

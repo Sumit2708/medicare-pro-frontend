@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { InvoiceDetails } from '../../models/invoice-details.model';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { InvoiceService } from '../../services/invoice.service';
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
 import { MatCard, MatCardTitle } from '@angular/material/card';
@@ -10,6 +10,8 @@ import { MatIcon } from '@angular/material/icon';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { PaymentStatus } from '../../../../core/enums/payment-status.enum';
+import { NotificationService } from '../../../../core/services/notification/notification.service';
+import { BillingPdfService } from '../../services/pdf/billing-pdf.service';
 
 @Component({
   selector: 'app-invoice-details',
@@ -23,7 +25,7 @@ import { PaymentStatus } from '../../../../core/enums/payment-status.enum';
     CurrencyPipe,
     DatePipe,
     MatButtonModule,
-    RouterLink
+    RouterLink,
   ],
   templateUrl: './invoice-details.component.html',
   styleUrl: './invoice-details.component.scss',
@@ -36,6 +38,9 @@ export class InvoiceDetailsComponent {
   constructor(
     private route: ActivatedRoute,
     private invoiceService: InvoiceService,
+    private router: Router,
+    private notificationService: NotificationService,
+    private billingPdfService: BillingPdfService,
   ) {}
 
   ngOnInit() {
@@ -54,8 +59,24 @@ export class InvoiceDetailsComponent {
     });
   }
 
+  //in-build pdf print
+  // printInvoice(): void {
+  //   this.billingPdfService.generateInvoice(this.invoiceDetails);
+  // }
+
+  //Manual window print with css
   printInvoice(): void {
-    // Next sprint
+    this.notificationService.success('Preparing invoice for printing...');
+
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree([
+        '/billing',
+        'print',
+        this.invoiceDetails.invoice.id,
+      ]),
+    );
+
+    window.open(url, '_blank');
   }
 
   markAsPaid(): void {
