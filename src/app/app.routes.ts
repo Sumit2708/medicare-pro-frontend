@@ -43,17 +43,25 @@ export const routes: Routes = [
     component: AdminLayoutComponent,
     canActivate: [authGuard],
     children: [
+      // {
+      //   path: '',
+      //   redirectTo: 'dashboard',
+      //   pathMatch: 'full',
+      // },
+      // {
+      //   path: 'dashboard',
+      //   component: DashboardComponent,
+      //   canActivate: [roleGuard],
+      //   data: {
+      //     roles: ALL_USERS,
+      //   },
+      // },
       {
         path: '',
-        redirectTo: 'dashboard',
-        pathMatch: 'full',
-      },
-      {
-        path: 'dashboard',
         component: DashboardComponent,
         canActivate: [roleGuard],
         data: {
-          roles: ALL_USERS,
+          roles: ADMIN_RECEPTION,
         },
       },
 
