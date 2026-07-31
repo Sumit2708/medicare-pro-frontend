@@ -9,10 +9,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { NotificationService } from '../../../../core/services/notification/notification.service';
+import { MatIcon } from "@angular/material/icon";
 
 @Component({
   selector: 'app-add-patient',
-  imports: [MatSelectModule, MatFormField, MatLabel, MatHint, MatCard, ReactiveFormsModule, MatInputModule, MatButtonModule],
+  imports: [MatSelectModule, MatFormField, MatLabel, MatHint, MatCard, ReactiveFormsModule, MatInputModule, MatButtonModule, MatIcon],
   templateUrl: './add-patient.component.html',
   styleUrl: './add-patient.component.scss'
 })

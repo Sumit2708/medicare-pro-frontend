@@ -48,14 +48,14 @@ export const routes: Routes = [
       //   redirectTo: 'dashboard',
       //   pathMatch: 'full',
       // },
-      // {
-      //   path: 'dashboard',
-      //   component: DashboardComponent,
-      //   canActivate: [roleGuard],
-      //   data: {
-      //     roles: ALL_USERS,
-      //   },
-      // },
+      {
+        path: 'dashboard',
+        component: DashboardComponent,
+        canActivate: [roleGuard],
+        data: {
+          roles: ADMIN_RECEPTION,
+        },
+      },
       {
         path: '',
         component: DashboardComponent,
@@ -97,7 +97,8 @@ export const routes: Routes = [
         component: PatientListComponent,
         canActivate: [roleGuard],
         data: {
-          roles: DOCTOR_RECEPTION,
+          // roles: DOCTOR_RECEPTION,
+          roles: ALL_USERS,
         },
       },
 
@@ -106,7 +107,8 @@ export const routes: Routes = [
         component: AddPatientComponent,
         canActivate: [roleGuard],
         data: {
-          roles: DOCTOR_RECEPTION,
+          // roles: DOCTOR_RECEPTION,
+          roles: ALL_USERS,
         },
       },
 
@@ -115,7 +117,8 @@ export const routes: Routes = [
         component: EditPatientComponent,
         canActivate: [roleGuard],
         data: {
-          roles: DOCTOR_RECEPTION,
+          // roles: DOCTOR_RECEPTION,
+          roles: ALL_USERS,
         },
       },
 

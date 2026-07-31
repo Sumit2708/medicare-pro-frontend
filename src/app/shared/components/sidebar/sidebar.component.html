@@ -10,7 +10,7 @@
       <span>Dashboard</span>
     </a>
 
-    @if(currentUser?.role == userRole.ADMIN){
+    <!-- @if(currentUser?.role == userRole.ADMIN){ -->
       <!-- <a mat-list-item routerLink="/admin">
         <mat-icon>admin_panel_settings</mat-icon>
         <span>Admin</span>
@@ -23,6 +23,11 @@
       <span>Doctors</span>
     </a>
 
+    <a mat-list-item routerLink="/patients">
+      <mat-icon>groups</mat-icon>
+      <span>Patients</span>
+    </a>
+
      <a mat-list-item routerLink="/appointments">
       <mat-icon>event</mat-icon>
       <span>Appointments</span>
@@ -33,23 +38,20 @@
       <span>Billing</span>
     </a>
   
-  }
-  @else if(currentUser?.role == userRole.DOCTOR){
+  <!-- }
+  @else if(currentUser?.role == userRole.DOCTOR){ -->
 
-    <a mat-list-item routerLink="/patients">
-      <mat-icon>groups</mat-icon>
-      <span>Patients</span>
-    </a>
-    <a mat-list-item routerLink="/appointments">
+    
+    <!-- <a mat-list-item routerLink="/appointments">
       <mat-icon>event</mat-icon>
       <span>Appointments</span>
-    </a>
+    </a> -->
 
-  }
+  <!-- }
 
-  @else if(currentUser?.role == userRole.RECEPTIONIST){
+  @else if(currentUser?.role == userRole.RECEPTIONIST){ -->
 
-    <a mat-list-item routerLink="/patients">
+    <!-- <a mat-list-item routerLink="/patients">
       <mat-icon>groups</mat-icon>
       <span>Patients</span>
     </a>
@@ -61,10 +63,10 @@
   <a mat-list-item routerLink="/billing">
       <mat-icon>receipt_long</mat-icon>
       <span>Billing</span>
-    </a>
+    </a> -->
 
 
-  }
+  <!-- } -->
   </mat-nav-list>
 
 </div>

@@ -1,18 +1,10 @@
-<div class="dashboard">
+<app-page-header title="Dashboard" subtitle="Clinic Overview" [showButton]="false">
+</app-page-header>
 
-  <mat-card class="stat-card">
-    <h3>Total Patients</h3>
-    <p>124</p>
-  </mat-card>
+@if (dashboard$ | async; as dashboard) {
 
-  <mat-card class="stat-card">
-    <h3>Appointments Today</h3>
-    <p>18</p>
-  </mat-card>
+    <app-summary-cards
+        [dashboard]="dashboard">
+    </app-summary-cards>
 
-  <mat-card class="stat-card" color="secondary">
-    <h3>Monthly Revenue</h3>
-    <p>₹48,000</p>
-  </mat-card>
-
-</div>
+}
