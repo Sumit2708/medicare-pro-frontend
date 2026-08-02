@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Appointment } from '../../../shared/models/appointment.model';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +15,8 @@ export class AppointmentService {
    API_URL = 'http://localhost:3000/appointments';
 
 
-  getAppointments() {
-    return this.http.get(`${this.API_URL}`);
+  getAppointments(): Observable<Appointment[]> {
+    return this.http.get<Appointment[]>(`${this.API_URL}`);
   }
 
   createAppointment(appointmentData: any) {

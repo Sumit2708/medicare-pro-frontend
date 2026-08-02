@@ -91,6 +91,15 @@
       "address": "Kota, Rajsthan",
       "status": "Active",
       "id": "AxDvqyM3gKc"
+    },
+    {
+      "name": "xyz",
+      "age": 53,
+      "gender": "Female",
+      "mobile": "7856134582",
+      "address": "somnath nagar, pune",
+      "status": "Active",
+      "id": "02e57fk0oec"
     }
   ],
   "appointments": [
@@ -120,6 +129,15 @@
       "notes": "",
       "status": "Completed",
       "id": "OYYVx7rQNWQ"
+    },
+    {
+      "patientId": "psG93ijLZWw",
+      "doctorId": "-LZu0dF8PJk",
+      "date": "2026-08-02T18:30:00.000Z",
+      "time": "09:30 AM",
+      "notes": "",
+      "status": "Completed",
+      "id": "hksTCihguDY"
     }
   ],
   "invoices": [
@@ -161,9 +179,23 @@
       "gst": 54,
       "total": 354,
       "paymentMethod": "UPI",
-      "paymentStatus": "Pending",
+      "paymentStatus": "Paid",
       "createdDate": "2026-07-28T16:04:58.973Z",
       "id": "eq1vEO3aKIQ"
+    },
+    {
+      "invoiceNumber": "INV-2026-00004",
+      "appointmentId": "hksTCihguDY",
+      "patientId": "psG93ijLZWw",
+      "doctorId": "-LZu0dF8PJk",
+      "consultationFee": 2,
+      "discount": 0,
+      "gst": 0.36,
+      "total": 2.36,
+      "paymentMethod": "Cash",
+      "paymentStatus": "Pending",
+      "createdDate": "2026-08-02T08:37:21.170Z",
+      "id": "N04qvTs5_vw"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

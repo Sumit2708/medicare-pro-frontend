@@ -1,95 +1,51 @@
 <div class="cards">
+  <mat-card class="card">
+    <mat-card-content>
+      <mat-icon color="primary"> groups </mat-icon>
 
-    <mat-card class="card">
+      <div>
+        <span>Total Patients</span>
 
-        <mat-card-content>
+        <h2>{{ dashboard.totalPatients }}</h2>
+      </div>
+    </mat-card-content>
+  </mat-card>
 
-            <mat-icon color="primary">
+  <mat-card class="card">
+    <mat-card-content>
+      <mat-icon color="accent"> medical_services </mat-icon>
 
-                groups
+      <div>
+        <span>Total Doctors</span>
 
-            </mat-icon>
+        <h2>{{ dashboard.totalDoctors }}</h2>
+      </div>
+    </mat-card-content>
+  </mat-card>
 
-            <div>
+  <mat-card class="card">
+    <mat-card-content>
+      <mat-icon color="primary"> event </mat-icon>
 
-                <span>Total Patients</span>
+      <div>
+        <span>Today's Appointments</span>
 
-                <h2>{{ dashboard.totalPatients }}</h2>
+        <h2>{{ dashboard.todayAppointments }}</h2>
+      </div>
+    </mat-card-content>
+  </mat-card>
 
-            </div>
+  <mat-card class="card">
+    <mat-card-content>
+      <mat-icon color="warn"> payments </mat-icon>
 
-        </mat-card-content>
+      <div>
+        <span>Revenue Today</span>
 
-    </mat-card>
-
-    <mat-card class="card">
-
-        <mat-card-content>
-
-            <mat-icon color="accent">
-
-                medical_services
-
-            </mat-icon>
-
-            <div>
-
-                <span>Total Doctors</span>
-
-                <h2>{{ dashboard.totalDoctors }}</h2>
-
-            </div>
-
-        </mat-card-content>
-
-    </mat-card>
-
-    <mat-card class="card">
-
-        <mat-card-content>
-
-            <mat-icon color="primary">
-
-                event
-
-            </mat-icon>
-
-            <div>
-
-                <span>Today's Appointments</span>
-
-                <h2>{{ dashboard.todayAppointments }}</h2>
-
-            </div>
-
-        </mat-card-content>
-
-    </mat-card>
-
-    <mat-card class="card">
-
-        <mat-card-content>
-
-            <mat-icon color="warn">
-
-                payments
-
-            </mat-icon>
-
-            <div>
-
-                <span>Revenue Today</span>
-
-                <h2>
-
-                    {{ dashboard.todayRevenue | currency:'INR' }}
-
-                </h2>
-
-            </div>
-
-        </mat-card-content>
-
-    </mat-card>
-
+        <h2>
+          {{ dashboard.todayRevenue | currency: "INR" }}
+        </h2>
+      </div>
+    </mat-card-content>
+  </mat-card>
 </div>

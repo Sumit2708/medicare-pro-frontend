@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-appointments-chart',
@@ -7,5 +7,8 @@ import { Component } from '@angular/core';
   styleUrl: './appointments-chart.component.scss'
 })
 export class AppointmentsChartComponent {
+
+  @Input({ required: true })
+  data: any[] = [];
 
 }

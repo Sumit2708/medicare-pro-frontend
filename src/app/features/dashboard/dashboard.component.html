@@ -1,10 +1,137 @@
-<app-page-header title="Dashboard" subtitle="Clinic Overview" [showButton]="false">
+<app-page-header
+  title="Dashboard"
+  subtitle="Clinic Overview"
+  [showButton]="false"
+>
 </app-page-header>
 
 @if (dashboard$ | async; as dashboard) {
+  <!-- KPI Cards -->
+  <app-summary-cards [dashboard]="dashboard"> </app-summary-cards>
 
-    <app-summary-cards
-        [dashboard]="dashboard">
-    </app-summary-cards>
+  <!-- Charts -->
+<div class="dashboard-layout">
+
+    <!-- Revenue -->
+
+    <mat-card>
+
+        <mat-card-header>
+
+            <mat-card-title>
+
+                Monthly Revenue
+
+            </mat-card-title>
+
+        </mat-card-header>
+
+        <mat-card-content>
+
+            <app-revenue-chart
+                [data]="dashboard.monthlyRevenue ?? []">
+            </app-revenue-chart>
+
+        </mat-card-content>
+
+    </mat-card>
+
+    <!-- Payment -->
+
+    <mat-card>
+
+        <mat-card-header>
+
+            <mat-card-title>
+
+                Payment Status
+
+            </mat-card-title>
+
+        </mat-card-header>
+
+        <mat-card-content>
+
+            <app-payment-chart
+                [data]="dashboard.paymentSummary ?? []">
+            </app-payment-chart>
+
+        </mat-card-content>
+
+    </mat-card>
+
+    <!-- Appointment -->
+
+    <mat-card class="full-width">
+
+        <mat-card-header>
+
+            <mat-card-title>
+
+                Monthly Appointments
+
+            </mat-card-title>
+
+        </mat-card-header>
+
+        <mat-card-content>
+
+            <!-- <app-appointment-chart
+                [data]="dashboard.monthlyAppointments">
+            </app-appointment-chart> -->
+
+        </mat-card-content>
+
+    </mat-card>
+
+    <!-- Recent -->
+
+    <mat-card>
+
+        <mat-card-header>
+
+            <mat-card-title>
+
+                Recent Appointments
+
+            </mat-card-title>
+
+        </mat-card-header>
+
+        <mat-card-content>
+
+            <!-- <app-recent-appointments
+                [appointments]="dashboard.recentAppointments">
+            </app-recent-appointments> -->
+
+        </mat-card-content>
+
+    </mat-card>
+
+    <!-- Pending -->
+
+    <mat-card>
+
+        <mat-card-header>
+
+            <mat-card-title>
+
+                Pending Payments
+
+            </mat-card-title>
+
+        </mat-card-header>
+
+        <mat-card-content>
+
+            <!-- <app-pending-payments
+                [invoices]="dashboard.pendingInvoices">
+            </app-pending-payments> -->
+
+        </mat-card-content>
+
+    </mat-card>
+
+</div>
 
 }
