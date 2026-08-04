@@ -1,0 +1,41 @@
+.table {
+  width: 100%;
+}
+
+.empty {
+  padding: 40px;
+
+  text-align: center;
+
+  color: #9e9e9e;
+}
+
+.mat-mdc-header-row {
+  background: #fafafa;
+}
+
+.mat-mdc-header-cell {
+  font-weight: 600;
+}
+
+.mat-mdc-row {
+  height: 52px;
+}
+
+.completed {
+  background: #e8f5e9 !important;
+
+  color: #2e7d32 !important;
+}
+
+.pending {
+  background: #fff8e1 !important;
+
+  color: #f57c00 !important;
+}
+
+.cancelled {
+  background: #ffebee !important;
+
+  color: #c62828 !important;
+}

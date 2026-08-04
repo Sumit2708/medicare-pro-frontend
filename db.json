@@ -43,7 +43,7 @@
     {
       "name": "tipri",
       "specialization": "yedi",
-      "fee": 2,
+      "fee": 500,
       "status": "Active",
       "id": "-LZu0dF8PJk"
     },
@@ -138,6 +138,33 @@
       "notes": "",
       "status": "Completed",
       "id": "hksTCihguDY"
+    },
+    {
+      "patientId": "u2sfm-e_Iqk",
+      "doctorId": "-LZu0dF8PJk",
+      "date": "2026-08-02T18:30:00.000Z",
+      "time": "10:00 AM",
+      "notes": "",
+      "status": "Completed",
+      "id": "n5V8PBZgmho"
+    },
+    {
+      "patientId": "AxDvqyM3gKc",
+      "doctorId": "Hp5U32kkfm4",
+      "date": "2026-08-03T18:30:00.000Z",
+      "time": "10:00 AM",
+      "notes": "",
+      "status": "Completed",
+      "id": "3oApa9TFE8g"
+    },
+    {
+      "patientId": "1",
+      "doctorId": "Hp5U32kkfm4",
+      "date": "2026-08-04T18:30:00.000Z",
+      "time": "11:00 AM",
+      "notes": "",
+      "status": "Completed",
+      "id": "DnHryjnEEt8"
     }
   ],
   "invoices": [
@@ -193,9 +220,37 @@
       "gst": 0.36,
       "total": 2.36,
       "paymentMethod": "Cash",
-      "paymentStatus": "Pending",
+      "paymentStatus": "Paid",
       "createdDate": "2026-08-02T08:37:21.170Z",
       "id": "N04qvTs5_vw"
+    },
+    {
+      "invoiceNumber": "INV-2026-00005",
+      "appointmentId": "3oApa9TFE8g",
+      "patientId": "AxDvqyM3gKc",
+      "doctorId": "Hp5U32kkfm4",
+      "consultationFee": 800,
+      "discount": 0,
+      "gst": 144,
+      "total": 944,
+      "paymentMethod": "UPI",
+      "paymentStatus": "Paid",
+      "createdDate": "2026-08-02T09:24:47.452Z",
+      "id": "_kY3f4EUJoQ"
+    },
+    {
+      "invoiceNumber": "INV-2026-00006",
+      "appointmentId": "DnHryjnEEt8",
+      "patientId": "1",
+      "doctorId": "Hp5U32kkfm4",
+      "consultationFee": 800,
+      "discount": 0,
+      "gst": 144,
+      "total": 944,
+      "paymentMethod": "Cash",
+      "paymentStatus": "Pending",
+      "createdDate": "2026-08-02T09:28:59.375Z",
+      "id": "0Lu1UjEImGk"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

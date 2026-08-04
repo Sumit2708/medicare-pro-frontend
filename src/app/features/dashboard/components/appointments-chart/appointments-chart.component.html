@@ -1,1 +1,15 @@
-<p>appointments-chart works!</p>
+@if (chartOptions) {
+  <apx-chart
+    [series]="chartOptions.series!"
+    [chart]="chartOptions.chart!"
+    [plotOptions]="chartOptions.plotOptions!"
+    [xaxis]="chartOptions.xaxis!"
+    [yaxis]="chartOptions.yaxis!"
+    [tooltip]="chartOptions.tooltip!"
+    [grid]="chartOptions.grid!"
+    [colors]="chartOptions.colors!"
+    [legend]="chartOptions.legend!"
+    [dataLabels]="chartOptions.dataLabels!"
+  >
+  </apx-chart>
+}

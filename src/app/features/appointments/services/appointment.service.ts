@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Appointment } from '../../../shared/models/appointment.model';
 import { Observable } from 'rxjs';
+import { RecentAppointmentViewModel } from '../../dashboard/components/recent-appointments/model/recent-appointment.viewmodel';
 
 @Injectable({
   providedIn: 'root'

@@ -1,0 +1,63 @@
+.chart-card {
+  border-radius: 18px;
+
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+
+  transition: 0.25s ease;
+
+  overflow: hidden;
+}
+
+.chart-card:hover {
+  transform: translateY(-2px);
+
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.12);
+}
+
+.header {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  width: 100%;
+}
+
+.left {
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+}
+
+.left mat-icon {
+  width: 42px;
+
+  height: 42px;
+
+  font-size: 42px;
+
+  color: var(--mat-sys-primary);
+}
+
+h3 {
+  margin: 0;
+
+  font-size: 18px;
+
+  font-weight: 600;
+}
+
+p {
+  margin: 4px 0 0;
+
+  color: #757575;
+
+  font-size: 13px;
+}
+
+mat-card-content {
+  padding-top: 16px;
+}

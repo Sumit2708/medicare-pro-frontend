@@ -1,11 +1,21 @@
-@if (chartOptions) {
-  <apx-chart
+@if(chartOptions){
+
+<apx-chart
+
     [series]="chartOptions.series!"
+
     [chart]="chartOptions.chart!"
+
     [labels]="chartOptions.labels!"
+
     [legend]="chartOptions.legend!"
+
     [responsive]="chartOptions.responsive!"
-    [dataLabels]="chartOptions.dataLabels!"
-  >
-  </apx-chart>
+
+    [colors]="chartOptions.colors!"
+
+    [dataLabels]="chartOptions.dataLabels!">
+
+</apx-chart>
+
 }

@@ -12,6 +12,7 @@ import { Invoice } from '../../../../shared/models/invoice.model';
 import { Appointment } from '../../../../shared/models/appointment.model';
 import { AppointmentChartModel } from '../../models/appointment-chart.model';
 import { PaymentChartModel } from '../../models/payment-summary.model';
+import { DashboardFilter } from '../../../../core/enums/dashboard-filter.enum';
 
 @Injectable({
   providedIn: 'root',
@@ -45,20 +46,6 @@ export class DashboardService {
           (appointment: any) => appointment.appointmentDate === today,
         ).length;
 
-        // const todayRevenue = data.invoices
-
-        //   .filter(
-        //     (invoice) =>
-        //       invoice.paymentStatus === PaymentStatus.PAID &&
-        //       invoice.createdDate === today,
-        //   )
-
-        //   .reduce(
-        //     (total, invoice) => total + invoice.total,
-
-        //     0,
-        //   );
-
         const todayCollectedRevenue = data.invoices
           .filter(
             (invoice) =>
@@ -67,17 +54,82 @@ export class DashboardService {
           )
           .reduce((sum, invoice) => sum + invoice.total, 0);
 
+        // const recentAppointments = [...data.appointments]
+        //   .sort(
+        //     (a, b) =>
+        //       new Date(b.appointmentDate).getTime() -
+        //       new Date(a.appointmentDate).getTime(),
+        //   )
+        //   .slice(0, 5);
+
         const recentAppointments = [...data.appointments]
           .sort(
             (a, b) =>
               new Date(b.appointmentDate).getTime() -
               new Date(a.appointmentDate).getTime(),
           )
-          .slice(0, 5);
+          .slice(0, 5)
+          .map((appointment) => {
+            const doctor = data.doctors.find(
+              (d) => d.id === appointment.doctorId,
+            );
 
-        const pendingInvoices = data.invoices.filter(
-          (invoice) => invoice.paymentStatus === PaymentStatus.PENDING,
-        );
+            const patient = data.patients.find(
+              (p) => p.id === appointment.patientId,
+            );
+
+            return {
+              appointmentDate: appointment.appointmentDate
+                ? appointment.appointmentDate
+                : appointment.date,
+
+              appointmentTime: appointment.appointmentTime
+                ? appointment.appointmentTime
+                : appointment.time,
+
+              doctorName: doctor?.name ?? 'Unknown',
+
+              patientName: patient?.name ?? 'Unknown',
+
+              status: appointment.status,
+            };
+          });
+
+        // const pendingInvoices = data.invoices.filter(
+        //   (invoice) => invoice.paymentStatus === PaymentStatus.PENDING,
+        // );
+
+        const pendingInvoices = data.invoices
+
+          .filter((invoice) => invoice.paymentStatus === PaymentStatus.PENDING)
+
+          .map((invoice) => {
+            const patient = data.patients.find(
+              (p) => p.id === invoice.patientId,
+            );
+
+            return {
+              invoiceNumber: invoice.invoiceNumber,
+
+              patientName: patient?.name ?? 'Unknown',
+
+              amount: invoice.total,
+
+              paymentStatus: invoice.paymentStatus,
+            };
+          });
+
+        //     const filteredInvoices =
+        // this.filterInvoices(
+        //     data.invoices,
+        //     filter
+        // );
+
+        // const filteredAppointments =
+        // this.filterAppointments(
+        //     data.appointments,
+        //     filter
+        // );
 
         return {
           totalPatients,
@@ -97,6 +149,8 @@ export class DashboardService {
           recentAppointments,
 
           pendingInvoices,
+
+          data: data,
         };
       }),
     );
@@ -150,7 +204,6 @@ export class DashboardService {
       'Apr',
       'May',
       'Jun',
-
       'Jul',
       'Aug',
       'Sep',
@@ -162,7 +215,10 @@ export class DashboardService {
     return months.map((month, index) => ({
       month,
       appointments: appointments.filter(
-        (a) => new Date(a.appointmentDate).getMonth() === index,
+        (a) =>
+          new Date(
+            a.appointmentDate ? a.appointmentDate : a.date,
+          ).getMonth() === index,
       ).length,
     }));
   }
@@ -184,4 +240,38 @@ export class DashboardService {
       count,
     }));
   }
+
+  //   private filterInvoices(
+
+  //     invoices:Invoice[],
+
+  //     filter:DashboardFilter
+
+  // ):Invoice[]{
+
+  //     switch(filter){
+
+  //         case DashboardFilter.TODAY:
+
+  //             ...
+
+  //         case DashboardFilter.WEEK:
+
+  //             ...
+
+  //         case DashboardFilter.MONTH:
+
+  //             ...
+
+  //         case DashboardFilter.YEAR:
+
+  //             ...
+
+  //         default:
+
+  //             return invoices;
+
+  //     }
+
+  // }
 }

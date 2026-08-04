@@ -24,6 +24,8 @@ export type PaymentChartOptions = {
   legend: ApexLegend;
 
   dataLabels: ApexDataLabels;
+
+  colors: string[];
 };
 
 @Component({
@@ -59,6 +61,14 @@ export class PaymentChartComponent {
       legend: {
         position: 'bottom',
       },
+
+       colors: [
+
+        '#4CAF50',
+
+        '#FFC107'
+
+      ],
 
       dataLabels: {
         enabled: true,

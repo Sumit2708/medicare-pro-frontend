@@ -1,33 +1,33 @@
-import { Appointment } from "../../../shared/models/appointment.model";
-import { Invoice } from "../../billing/models/invoice.model";
-import { AppointmentChartModel } from "./appointment-chart.model";
-import { PaymentChartModel } from "./payment-summary.model";
-import { RevenueChartModel } from "./revenue-chart.model";
+import { Appointment } from '../../../shared/models/appointment.model';
+import { Invoice } from '../../billing/models/invoice.model';
+import { RecentAppointmentViewModel } from '../components/recent-appointments/model/recent-appointment.viewmodel';
+import { AppointmentChartModel } from './appointment-chart.model';
+import { PaymentChartModel } from './payment-summary.model';
+import { PendingPaymentViewModel } from './pending-payment.viewmodel';
+import { RevenueChartModel } from './revenue-chart.model';
 
 export interface DashboardViewModel {
+  // Summary
 
-    // Summary
+  totalPatients?: number;
 
-    totalPatients?: number;
+  totalDoctors?: number;
 
-    totalDoctors?: number;
+  todayAppointments?: number;
 
-    todayAppointments?: number;
+  todayCollectedRevenue?: number;
 
-    todayRevenue?: number;
+  // Charts
 
-    // Charts
+  monthlyRevenue?: RevenueChartModel[];
 
-    monthlyRevenue?: RevenueChartModel[];
+  monthlyAppointments?: AppointmentChartModel[];
 
-    monthlyAppointments?: AppointmentChartModel[];
+  paymentSummary?: PaymentChartModel[];
 
-    paymentSummary?: PaymentChartModel[];
+  // Tables
 
-    // Tables
+  recentAppointments?: RecentAppointmentViewModel[];
 
-    recentAppointments?: Appointment[];
-
-    pendingInvoices?: Invoice[];
-
+  pendingInvoices: PendingPaymentViewModel[];
 }

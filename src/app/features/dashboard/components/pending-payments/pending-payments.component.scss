@@ -1,0 +1,25 @@
+.table {
+  width: 100%;
+}
+
+.empty {
+  padding: 40px;
+
+  text-align: center;
+
+  color: #9e9e9e;
+}
+
+.pending {
+  background: #fff8e1 !important;
+
+  color: #f57c00 !important;
+}
+
+.mat-mdc-header-row {
+  background: #fafafa;
+}
+
+.mat-mdc-row {
+  height: 52px;
+}

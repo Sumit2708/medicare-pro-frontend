@@ -1,51 +1,139 @@
-<div class="cards">
-  <mat-card class="card">
-    <mat-card-content>
-      <mat-icon color="primary"> groups </mat-icon>
+<div class="cards-grid">
 
-      <div>
-        <span>Total Patients</span>
+    <!-- Patients -->
 
-        <h2>{{ dashboard.totalPatients }}</h2>
-      </div>
-    </mat-card-content>
-  </mat-card>
+    <mat-card class="dashboard-card patient">
 
-  <mat-card class="card">
-    <mat-card-content>
-      <mat-icon color="accent"> medical_services </mat-icon>
+        <div class="icon">
 
-      <div>
-        <span>Total Doctors</span>
+            <mat-icon>
 
-        <h2>{{ dashboard.totalDoctors }}</h2>
-      </div>
-    </mat-card-content>
-  </mat-card>
+                groups
 
-  <mat-card class="card">
-    <mat-card-content>
-      <mat-icon color="primary"> event </mat-icon>
+            </mat-icon>
 
-      <div>
-        <span>Today's Appointments</span>
+        </div>
 
-        <h2>{{ dashboard.todayAppointments }}</h2>
-      </div>
-    </mat-card-content>
-  </mat-card>
+        <div class="content">
 
-  <mat-card class="card">
-    <mat-card-content>
-      <mat-icon color="warn"> payments </mat-icon>
+            <span>Total Patients</span>
 
-      <div>
-        <span>Revenue Today</span>
+            <h2>
 
-        <h2>
-          {{ dashboard.todayRevenue | currency: "INR" }}
-        </h2>
-      </div>
-    </mat-card-content>
-  </mat-card>
+                {{ dashboard.totalPatients }}
+
+            </h2>
+
+            <small>
+
+                Registered Patients
+
+            </small>
+
+        </div>
+
+    </mat-card>
+
+    <!-- Doctors -->
+
+    <mat-card class="dashboard-card doctor">
+
+        <div class="icon">
+
+            <mat-icon>
+
+                medical_services
+
+            </mat-icon>
+
+        </div>
+
+        <div class="content">
+
+            <span>Total Doctors</span>
+
+            <h2>
+
+                {{ dashboard.totalDoctors }}
+
+            </h2>
+
+            <small>
+
+                Active Doctors
+
+            </small>
+
+        </div>
+
+    </mat-card>
+
+    <!-- Appointments -->
+
+    <mat-card class="dashboard-card appointment">
+
+        <div class="icon">
+
+            <mat-icon>
+
+                event
+
+            </mat-icon>
+
+        </div>
+
+        <div class="content">
+
+            <span>Today's Appointments</span>
+
+            <h2>
+
+                {{ dashboard.todayAppointments }}
+
+            </h2>
+
+            <small>
+
+                Scheduled Today
+
+            </small>
+
+        </div>
+
+    </mat-card>
+
+    <!-- Revenue -->
+
+    <mat-card class="dashboard-card revenue">
+
+        <div class="icon">
+
+            <mat-icon>
+
+                payments
+
+            </mat-icon>
+
+        </div>
+
+        <div class="content">
+
+            <span>Revenue Today</span>
+
+            <h2>
+
+                {{ dashboard.todayCollectedRevenue | currency:'INR':'symbol':'1.0-0' }}
+
+            </h2>
+
+            <small>
+
+                Collected Revenue
+
+            </small>
+
+        </div>
+
+    </mat-card>
+
 </div>
