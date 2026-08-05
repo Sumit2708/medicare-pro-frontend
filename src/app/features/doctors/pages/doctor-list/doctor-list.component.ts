@@ -32,6 +32,7 @@ import { ConfirmDialogComponent } from '../../../../shared/components/confirm-di
 import { NotificationService } from '../../../../core/services/notification/notification.service';
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
 import { SearchBoxComponent } from '../../../../shared/components/search-box/search-box.component';
+import { DialogService } from '../../../../core/services/dialog/dialog.service';
 
 @Component({
   selector: 'app-doctor-list',
@@ -82,6 +83,7 @@ export class DoctorListComponent {
     private router: Router,
     private notificationService: NotificationService,
     private dialog: MatDialog,
+    private dialogService: DialogService
   ) {}
 
   ngOnInit() {
@@ -100,17 +102,47 @@ export class DoctorListComponent {
     //  console.log(this.dataSource.data,'1');
   }
 
-  deleteDoctor(id: number) {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '400px',
-      data: {
-        title: 'Delete Doctor',
-        message: 'Are you sure you want to delete this doctor?',
-      },
-    });
+  // deleteDoctor(id: number) {
+  //   const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+  //     width: '400px',
+  //     data: {
+  //       title: 'Delete Doctor',
+  //       message: 'Are you sure you want to delete this doctor?',
+  //     },
+  //   });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
+  //   dialogRef.afterClosed().subscribe((result) => {
+  //     if (result) {
+  //       this.doctorService.deleteDoctor(id).subscribe({
+  //         next: () => {
+  //           this.notificationService.success('Doctor deleted successfully');
+  //           this.getDoctors();
+  //         },
+  //         error: () => {
+  //           this.notificationService.error('Failed to delete doctor');
+  //         },
+  //       });
+  //     }
+  //   });
+  // }
+
+
+
+deleteDoctor(id: number): void {
+
+  this.dialogService.confirm({
+
+    title: 'Delete Doctor',
+
+    message: 'Are you sure you want to delete this doctor?',
+
+    confirmText: 'Delete',
+
+    cancelText: 'Cancel'
+
+  }).subscribe(result => {
+
+     if (result) {
         this.doctorService.deleteDoctor(id).subscribe({
           next: () => {
             this.notificationService.success('Doctor deleted successfully');
@@ -121,8 +153,18 @@ export class DoctorListComponent {
           },
         });
       }
-    });
-  }
+
+  });
+
+}
+
+
+
+
+
+
+
+
 
   navToEditDoctor(data: any) {
     this.router.navigate(['doctors/edit'], { queryParams: { id: data.id } });
