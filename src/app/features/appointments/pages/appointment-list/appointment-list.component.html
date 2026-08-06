@@ -85,38 +85,35 @@
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef>Actions</th>
         <td mat-cell *matCellDef="let element">
-          <button
-            mat-button
-            color="primary"
-            (click)="navEditAppointment(element.id)"
-          >
-            <mat-icon>edit</mat-icon>
-          </button>
-          <!-- <button
-            mat-button
-            color="warn"
-            [matTooltip]="
-              element.status == 'Cancelled'
-                ? 'Appointment already cancelled'
-                : 'Cancel Appointment'
-            "
-            (click)="cancelAppointment(element.id)"
-          >
-            <mat-icon>cancel</mat-icon>
-          </button> -->
+          @if (element.status !== "Completed") {
+            <button
+              mat-button
+              color="primary"
+              (click)="navEditAppointment(element.id)"
+              [matTooltip]="
+                element.status !== 'Completed'
+                  ? 'Edit Appointment'
+                  : 'Can not edit completed appointments'
+              "
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+          }
 
-          <button
-            mat-button
-            color="primary"
-            (click)="generateInvoice(element)"
-            [matTooltip]="
-              element.status === 'Completed'
-                ? 'Generate Invoice'
-                : 'Invoice can only be generated for completed appointments'
-            "
-          >
-            <mat-icon>receipt_long</mat-icon>
-          </button>
+          @if (element.status == "Completed") {
+            <button
+              mat-button
+              color="primary"
+              (click)="generateInvoice(element)"
+              [matTooltip]="
+                element.status === 'Completed'
+                  ? 'Generate Invoice'
+                  : 'Invoice can only be generated for completed appointments'
+              "
+            >
+              <mat-icon>receipt_long</mat-icon>
+            </button>
+          }
         </td>
       </ng-container>
 

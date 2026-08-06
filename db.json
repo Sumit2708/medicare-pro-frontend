@@ -48,11 +48,11 @@
       "id": "-LZu0dF8PJk"
     },
     {
-      "name": "dd",
-      "specialization": "hbh",
-      "fee": 100,
+      "name": "Vaibhav Patil",
+      "specialization": "Dentist",
+      "fee": 500,
       "status": "Active",
-      "id": "buEvv1qTZ_U"
+      "id": "4yNbyGPbw6k"
     }
   ],
   "patients": [
@@ -100,6 +100,15 @@
       "address": "somnath nagar, pune",
       "status": "Active",
       "id": "02e57fk0oec"
+    },
+    {
+      "name": "Mayur Chaudhari",
+      "age": 31,
+      "gender": "Male",
+      "mobile": "8462834617",
+      "address": "Pune",
+      "status": "Active",
+      "id": "z2N0cOkDur8"
     }
   ],
   "appointments": [
@@ -165,6 +174,51 @@
       "notes": "",
       "status": "Completed",
       "id": "DnHryjnEEt8"
+    },
+    {
+      "patientId": "z2N0cOkDur8",
+      "doctorId": "4yNbyGPbw6k",
+      "date": "2026-08-04T18:30:00.000Z",
+      "time": "12:00 PM",
+      "notes": "root canel",
+      "status": "Completed",
+      "id": "7HYrM-szN-c"
+    },
+    {
+      "patientId": "u2sfm-e_Iqk",
+      "doctorId": "Hp5U32kkfm4",
+      "date": "2026-08-05T18:30:00.000Z",
+      "time": "10:30 AM",
+      "notes": "",
+      "status": "Scheduled",
+      "id": "JDHrz8HJpE0"
+    },
+    {
+      "patientId": "u2sfm-e_Iqk",
+      "doctorId": "-LZu0dF8PJk",
+      "date": "2026-08-05T18:30:00.000Z",
+      "time": "04:30 PM",
+      "notes": "",
+      "status": "Scheduled",
+      "id": "fqnNx-dkLWc"
+    },
+    {
+      "patientId": "z2N0cOkDur8",
+      "doctorId": "4yNbyGPbw6k",
+      "date": "2026-08-05T18:30:00.000Z",
+      "time": "05:30 PM",
+      "notes": "",
+      "status": "Scheduled",
+      "id": "ftORwS0xXhM"
+    },
+    {
+      "patientId": "AxDvqyM3gKc",
+      "doctorId": "UZarKM-BH_E",
+      "date": "2026-08-05T18:30:00.000Z",
+      "time": "09:00 AM",
+      "notes": "",
+      "status": "Scheduled",
+      "id": "J_PsxWVoOsQ"
     }
   ],
   "invoices": [
@@ -251,6 +305,20 @@
       "paymentStatus": "Pending",
       "createdDate": "2026-08-02T09:28:59.375Z",
       "id": "0Lu1UjEImGk"
+    },
+    {
+      "invoiceNumber": "INV-2026-00007",
+      "appointmentId": "7HYrM-szN-c",
+      "patientId": "z2N0cOkDur8",
+      "doctorId": "4yNbyGPbw6k",
+      "consultationFee": 500,
+      "discount": 120,
+      "gst": 68.39999999999999,
+      "total": 448.4,
+      "paymentMethod": "Cash",
+      "paymentStatus": "Pending",
+      "createdDate": "2026-08-05T06:43:45.299Z",
+      "id": "jlhlq2NdN8s"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

@@ -30,7 +30,20 @@ mat-chip {
 //   width: 120px;
 // }
 
-.actions-column {
+actions-column {
+  text-align: center;
+  justify-content: center;
+}
+
+.mat-column-actions {
+  justify-content: center;
+}
+
+.mat-mdc-header-cell.mat-column-actions {
+  justify-content: center;
+  text-align: center;
+}
+.mat-column-actions {
   text-align: center;
   justify-content: center;
 }
@@ -51,4 +64,22 @@ mat-chip {
   background: #ffebee !important;
 
   color: #c62828 !important;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+}
+
+mat-card {
+  padding: 16px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #6b7280;
 }

@@ -62,8 +62,7 @@ export class InvoiceListComponent {
 
   loading = false;
 
-  @ViewChild(MatPaginator)
-  paginator!: MatPaginator;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   @ViewChild(MatSort)
   sort!: MatSort;

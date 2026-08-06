@@ -159,27 +159,11 @@ deleteDoctor(id: number): void {
 }
 
 
-
-
-
-
-
-
-
   navToEditDoctor(data: any) {
     this.router.navigate(['doctors/edit'], { queryParams: { id: data.id } });
     console.log(data.id, 'data of docInfo');
   }
 
-  // navToAddDoctor() {
-  //   this.router.navigate(['doctors/add']);
-  // }
-
-  // applyFilter(value: string) {
-  //   // const filterValue = (event.target as HTMLInputElement).value;
-
-  //   this.dataSource.filter = value.trim().toLowerCase();
-  // }
 
   applyFilter(value: string) {
     this.dataSource.filter = value.trim().toLowerCase();

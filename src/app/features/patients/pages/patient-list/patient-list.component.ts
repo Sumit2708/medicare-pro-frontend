@@ -7,18 +7,16 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatCard } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
-import {
-  MatTableDataSource,
-  MatTableModule,
-} from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { MatButton, MatButtonModule } from '@angular/material/button';
 import { NotificationService } from '../../../../core/services/notification/notification.service';
-import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
-import { SearchBoxComponent } from "../../../../shared/components/search-box/search-box.component";
+import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
+import { SearchBoxComponent } from '../../../../shared/components/search-box/search-box.component';
+import { DialogService } from '../../../../core/services/dialog/dialog.service';
 
 @Component({
   selector: 'app-patient-list',
@@ -35,8 +33,8 @@ import { SearchBoxComponent } from "../../../../shared/components/search-box/sea
     MatButtonModule,
     MatButtonModule,
     PageHeaderComponent,
-    SearchBoxComponent
-],
+    SearchBoxComponent,
+  ],
   templateUrl: './patient-list.component.html',
   styleUrl: './patient-list.component.scss',
 })
@@ -50,8 +48,7 @@ export class PatientListComponent {
     private patientService: PatientService,
     private router: Router,
     private notificationService: NotificationService,
-    private http: HttpClient,
-    private dialog: MatDialog,
+    private dialogService: DialogService,
   ) {}
 
   ngOnInit() {
@@ -61,7 +58,7 @@ export class PatientListComponent {
   loadPatients() {
     this.patientService.getPatients().subscribe({
       next: (patients) => {
-        this.dataSource.data = patients;
+        this.dataSource.data = patients.reverse();
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       },
@@ -74,7 +71,7 @@ export class PatientListComponent {
     });
   }
 
-   applyFilter(value: string) {    
+  applyFilter(value: string) {
     this.dataSource.filter = value.trim().toLowerCase();
   }
   navAddPatient() {
@@ -82,26 +79,29 @@ export class PatientListComponent {
   }
 
   deletePatient(id: number) {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '400px',
-      data: {
+    this.dialogService
+      .confirm({
         title: 'Delete Patient',
+
         message: 'Are you sure you want to delete this patient?',
-      },
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.patientService.deletePatient(id).subscribe({
-          next: () => {
-            this.notificationService.success('Patient deleted successfully');
-            this.loadPatients();
-          },
-          error: (error) => {
-            this.notificationService.error('Failed to delete patient');
-          },
-        });
-      }
-    });
+
+        confirmText: 'Delete',
+
+        cancelText: 'Cancel',
+      })
+      .subscribe((result: any) => {
+        if (result) {
+          this.patientService.deletePatient(id).subscribe({
+            next: () => {
+              this.notificationService.success('Patient deleted successfully');
+              this.loadPatients();
+            },
+            error: (error) => {
+              this.notificationService.error('Failed to delete patient');
+            },
+          });
+        }
+      });
   }
 
   navToEditPatient(data: any) {

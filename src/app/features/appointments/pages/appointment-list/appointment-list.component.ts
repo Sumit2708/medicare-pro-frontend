@@ -19,8 +19,8 @@ import { Appointment } from '../../../../shared/models/appointment.model';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { MatBadgeModule } from '@angular/material/badge';
-import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
-import { SearchBoxComponent } from "../../../../shared/components/search-box/search-box.component";
+import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
+import { SearchBoxComponent } from '../../../../shared/components/search-box/search-box.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
@@ -41,8 +41,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatSort,
     PageHeaderComponent,
     SearchBoxComponent,
-    MatTooltipModule
-],
+    MatTooltipModule,
+  ],
   templateUrl: './appointment-list.component.html',
   styleUrl: './appointment-list.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -56,12 +56,11 @@ export class AppointmentListComponent {
     'time',
     'status',
     'actions',
-  ]
-   dataSource = new MatTableDataSource<any>();
+  ];
+  dataSource = new MatTableDataSource<any>();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-
 
   appointments: Appointment[] = [];
   doctors: Doctor[] = [];
@@ -84,44 +83,94 @@ export class AppointmentListComponent {
   }
 
   ngAfterViewInit() {
-  this.dataSource.paginator = this.paginator;
-  this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
 
-  this.dataSource.sortingDataAccessor = (item, property) => {
+    this.dataSource.sortingDataAccessor = (item, property) => {
+      switch (property) {
+        case 'doctor':
+          return item.doctorName;
 
-  switch (property) {
+        case 'patient':
+          return item.patientName;
 
-    case 'doctor':
-      return item.doctorName;
-
-    case 'patient':
-      return item.patientName;
-
-    default:
-      return item[property];
-
+        default:
+          return item[property];
+      }
+    };
   }
 
-};
-}
+  // getAppointments() {
+  //   // Implement logic to fetch appointments from the backend or service
+  //   this.appointmentService.getAppointments().subscribe({
+  //     next: (appointments: any) => {
+  //       // this.appointmentList = appointments.map(...this.dataSource.data);
+  //       // Handle the fetched appointments
+  //       this.dataSource.data = appointments;
+  //       this.dataSource.paginator = this.paginator;
+  //       this.dataSource.sort = this.sort;
+  //     },
+  //     error: (error) => {
+  //       this.notificationService.error('Failed to load appointments');
+  //     },
+  //     complete: () => {
+  //       console.log('Appointments loaded successfully', this.dataSource.data);
+  //     },
+  //   });
+  // }
 
   getAppointments() {
-    // Implement logic to fetch appointments from the backend or service
     this.appointmentService.getAppointments().subscribe({
-      next: (appointments: any) => {
-        // this.appointmentList = appointments.map(...this.dataSource.data);
-        // Handle the fetched appointments
+      next: (appointments: Appointment[]) => {
+        appointments.sort((a, b) => {
+          const now = new Date().getTime();
+          const dateA = this.getAppointmentDateTime(a).getTime();
+          const dateB = this.getAppointmentDateTime(b).getTime();
+
+          const aUpcoming = dateA >= now;
+          const bUpcoming = dateB >= now;
+
+          // Upcoming appointments first
+          if (aUpcoming !== bUpcoming) {
+            return aUpcoming ? -1 : 1;
+          }
+
+          // Upcoming: nearest first
+          if (aUpcoming) {
+            return dateA - dateB;
+          }
+
+          // Past: latest first
+          return dateB - dateA;
+        });
         this.dataSource.data = appointments;
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       },
-      error: (error) => {
+
+      error: () => {
         this.notificationService.error('Failed to load appointments');
       },
-      complete: () => {
-        console.log('Appointments loaded successfully', this.dataSource.data);
-      },
     });
+  }
+
+  private getAppointmentDateTime(appointment: any): Date {
+    const date = new Date(appointment.date);
+
+    const [time, period] = appointment.time.split(' ');
+    let [hours, minutes] = time.split(':').map(Number);
+
+    if (period === 'PM' && hours !== 12) {
+      hours += 12;
+    }
+
+    if (period === 'AM' && hours === 12) {
+      hours = 0;
+    }
+
+    date.setHours(hours, minutes, 0, 0);
+
+    return date;
   }
 
   navEditAppointment(appointmentId: number) {
@@ -242,15 +291,16 @@ export class AppointmentListComponent {
     }
   }
 
-  generateInvoice(appointment:any):void{
-
+  generateInvoice(appointment: any): void {
     console.log(appointment);
 
-    if(appointment.status !== 'Completed'){
-      this.notificationService.error('Invoice can only be generated for completed appointments');
+    if (appointment.status !== 'Completed') {
+      this.notificationService.error(
+        'Invoice can only be generated for completed appointments',
+      );
       return;
     }
-    this.router.navigate(['/billing/create'],{
+    this.router.navigate(['/billing/create'], {
       queryParams: { data: appointment.id },
     });
   }
@@ -261,9 +311,6 @@ export class AppointmentListComponent {
 
   //     next: () => {
 
-
-        
-        
   //       // Handle successful cancellation
   //       this.notificationService.success(
   //         'Appointment Cancelled successfully',
@@ -283,7 +330,6 @@ export class AppointmentListComponent {
   viewInvoice(appointmentId: any) {
     this.router.navigate(['/billing/view'], {
       queryParams: { data: appointmentId },
-    }); 
+    });
   }
-    
 }
