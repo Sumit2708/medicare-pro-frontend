@@ -20,6 +20,10 @@ import { InvoiceListComponent } from './features/billing/pages/invoice-list/invo
 import { CreateInvoiceComponent } from './features/billing/pages/create-invoice/create-invoice.component';
 import { InvoiceDetailsComponent } from './features/billing/pages/invoice-details/invoice-details.component';
 import { PrintInvoiceComponent } from './features/billing/pages/print-invoice/print-invoice.component';
+import { DoctorPerformanceReportComponent } from './features/reports/pages/doctor-performance-report/doctor-performance-report.component';
+import { AppointmentReportComponent } from './features/reports/pages/appointment-report/appointment-report.component';
+import { RevenueReportComponent } from './features/reports/pages/revenue-report/revenue-report.component';
+import { ReportsDashboardComponent } from './features/reports/pages/reports-dashboard/reports-dashboard.component';
 
 const ADMIN = [UserRole.ADMIN];
 
@@ -113,7 +117,7 @@ export const routes: Routes = [
       },
 
       {
-        path: 'patients/edit/',
+        path: 'patients/edit',
         component: EditPatientComponent,
         canActivate: [roleGuard],
         data: {
@@ -178,6 +182,38 @@ export const routes: Routes = [
         canActivate: [roleGuard],
         data: {
           roles: ADMIN_RECEPTION,
+        },
+      },
+      {
+        path: 'reports',
+        component: ReportsDashboardComponent,
+        canActivate: [roleGuard],
+        data: {
+          roles: [UserRole.ADMIN],
+        },
+      },
+      {
+        path: 'reports/revenue',
+        component: RevenueReportComponent,
+        canActivate: [roleGuard],
+        data: {
+          roles: [UserRole.ADMIN],
+        },
+      },
+      {
+        path: 'reports/appointments',
+        component: AppointmentReportComponent,
+        canActivate: [roleGuard],
+        data: {
+          roles: [UserRole.ADMIN],
+        },
+      },
+      {
+        path: 'reports/doctors',
+        component: DoctorPerformanceReportComponent,
+        canActivate: [roleGuard],
+        data: {
+          roles: [UserRole.ADMIN],
         },
       },
     ],

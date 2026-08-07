@@ -1,24 +1,20 @@
 <div class="sidebar">
+  <div class="logo">🏥 MediCare Pro</div>
 
-  <div class="logo">
-    🏥 MediCare Pro
-  </div>
-
-  <mat-nav-list>
-    <a mat-list-item routerLink="/dashboard">
+  <!-- <mat-nav-list> -->
+  <!-- <a mat-list-item routerLink="/dashboard">
       <mat-icon>dashboard</mat-icon>
       <span>Dashboard</span>
-    </a>
+    </a> -->
 
-    <!-- @if(currentUser?.role == userRole.ADMIN){ -->
-      <!-- <a mat-list-item routerLink="/admin">
+  <!-- @if(currentUser?.role == userRole.ADMIN){ -->
+  <!-- <a mat-list-item routerLink="/admin">
         <mat-icon>admin_panel_settings</mat-icon>
         <span>Admin</span>
       </a>
      -->
 
-
-    <a mat-list-item routerLink="/doctors">
+  <!-- <a mat-list-item routerLink="/doctors">
       <mat-icon>medical_services</mat-icon>
       <span>Doctors</span>
     </a>
@@ -36,13 +32,12 @@
       <a mat-list-item routerLink="/billing">
       <mat-icon>receipt_long</mat-icon>
       <span>Billing</span>
-    </a>
-  
+    </a> -->
+
   <!-- }
   @else if(currentUser?.role == userRole.DOCTOR){ -->
 
-    
-    <!-- <a mat-list-item routerLink="/appointments">
+  <!-- <a mat-list-item routerLink="/appointments">
       <mat-icon>event</mat-icon>
       <span>Appointments</span>
     </a> -->
@@ -51,7 +46,7 @@
 
   @else if(currentUser?.role == userRole.RECEPTIONIST){ -->
 
-    <!-- <a mat-list-item routerLink="/patients">
+  <!-- <a mat-list-item routerLink="/patients">
       <mat-icon>groups</mat-icon>
       <span>Patients</span>
     </a>
@@ -65,8 +60,14 @@
       <span>Billing</span>
     </a> -->
 
-
   <!-- } -->
-  </mat-nav-list>
 
+  @for (item of menuItems; track item.route) {
+    <a mat-list-item [routerLink]="item.route" routerLinkActive="active">
+      <mat-icon>{{ item.icon }}</mat-icon>
+
+      <span>{{ item.label }}</span>
+    </a>
+  }
+  <!-- </mat-nav-list> -->
 </div>

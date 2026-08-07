@@ -1,0 +1,16 @@
+<app-page-header title="Reports" subtitle="Analytics & Reports" [showButton]="false">
+</app-page-header>
+
+<div class="reports-grid">
+  @for (report of reports; track report.title) {
+    <mat-card class="report-card" (click)="open(report.route)">
+      <mat-icon>
+        {{ report.icon }}
+      </mat-icon>
+
+      <h2>
+        {{ report.title }}
+      </h2>
+    </mat-card>
+  }
+</div>

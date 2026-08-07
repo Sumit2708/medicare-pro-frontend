@@ -8,10 +8,11 @@ import { Router } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { NotificationService } from '../../../../core/services/notification/notification.service';
+import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
 
 @Component({
   selector: 'app-edit-patient',
-  imports: [MatFormField, MatLabel, MatHint, MatSelect, MatOption, MatCard, ReactiveFormsModule, MatButtonModule, MatInputModule ],
+  imports: [MatFormField, MatLabel, MatHint, MatSelect, MatOption, MatCard, ReactiveFormsModule, MatButtonModule, MatInputModule, PageHeaderComponent],
   templateUrl: './edit-patient.component.html',
   styleUrl: './edit-patient.component.scss',
 })
@@ -65,5 +66,9 @@ export class EditPatientComponent {
         },
       });
     }
+  }
+
+  navtoPatientList() {
+    this.router.navigate(['/patients']);
   }
 }

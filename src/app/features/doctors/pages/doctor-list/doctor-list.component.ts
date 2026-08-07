@@ -52,8 +52,6 @@ import { DialogService } from '../../../../core/services/dialog/dialog.service';
     MatRowDef,
     MatTableModule,
     MatIcon,
-    MatFormField,
-    MatLabel,
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,

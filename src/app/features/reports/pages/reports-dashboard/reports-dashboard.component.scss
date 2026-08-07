@@ -1,0 +1,39 @@
+.reports-grid {
+  display: grid;
+
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+
+  gap: 24px;
+
+  margin-top: 24px;
+}
+
+.report-card {
+  padding: 32px;
+
+  cursor: pointer;
+
+  text-align: center;
+
+  border-radius: 18px;
+
+  transition: 0.25s;
+}
+
+.report-card:hover {
+  transform: translateY(-5px);
+
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+}
+
+mat-icon {
+  font-size: 48px;
+
+  width: 48px;
+
+  height: 48px;
+
+  color: #1976d2;
+
+  margin-bottom: 16px;
+}

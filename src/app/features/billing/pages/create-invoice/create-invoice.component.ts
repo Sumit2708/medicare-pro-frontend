@@ -50,7 +50,6 @@ import { Invoice } from '../../models/invoice.model';
     MatDatepickerModule,
     MatFormFieldModule,
     MatSelect,
-    DatePipe,
     MatDivider,
   ],
   templateUrl: './create-invoice.component.html',

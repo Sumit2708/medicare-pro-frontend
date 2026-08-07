@@ -10,10 +10,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { NotificationService } from '../../../../core/services/notification/notification.service';
 import { MatIcon } from "@angular/material/icon";
+import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
 
 @Component({
   selector: 'app-add-patient',
-  imports: [MatSelectModule, MatFormField, MatLabel, MatHint, MatCard, ReactiveFormsModule, MatInputModule, MatButtonModule, MatIcon],
+  imports: [MatSelectModule, MatFormField, MatLabel, MatHint, MatCard, ReactiveFormsModule, MatInputModule, MatButtonModule, PageHeaderComponent],
   templateUrl: './add-patient.component.html',
   styleUrl: './add-patient.component.scss'
 })
@@ -52,6 +53,10 @@ onSubmit(){
   }else{
     this.notificationService.error('Please fill all required fields');
   }
+}
+
+navtoPatientList(){
+  this.router.navigate(['/patients']);
 }
 
 }

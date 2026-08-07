@@ -1,5 +1,9 @@
+<app-page-header title="Add Patient" subtitle="Enter patient details"  buttonLabel="Add Patient"
+    buttonIcon="arrow_back"
+    (buttonClick)="navtoPatientList()">
+</app-page-header>
+
 <div class="page-container">
-  <h3>Add Patient</h3>
   <mat-card class="main-card">
     <form [formGroup]="patientForm" (ngSubmit)="onSubmit()">
       <div>
