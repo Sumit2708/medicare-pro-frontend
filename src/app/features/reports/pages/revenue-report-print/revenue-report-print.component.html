@@ -1,0 +1,148 @@
+@if (!loading) {
+  <div class="print-page">
+    <!-- Header -->
+
+    <header class="report-header">
+      <div class="clinic-info">
+        <h1>Medicare Pro</h1>
+
+        <p>Hospital Management System</p>
+      </div>
+
+      <div class="report-info">
+        <h2>Revenue Report</h2>
+
+        <p>
+          Generated:
+          {{ currentDate | date: "dd MMM yyyy, hh:mm a" }}
+        </p>
+      </div>
+    </header>
+
+    <!-- Filter Information -->
+
+    <section class="filter-info">
+      <div>
+        <strong>From:</strong>
+
+        {{ fromDate || "All" }}
+      </div>
+
+      <div>
+        <strong>To:</strong>
+
+        {{ toDate || "All" }}
+      </div>
+
+      <div>
+        <strong>Status:</strong>
+
+        {{ paymentStatus }}
+      </div>
+    </section>
+
+    <!-- Summary -->
+
+    <section class="summary-grid">
+      <div class="summary-card">
+        <span>Total Revenue</span>
+
+        <strong>
+          {{ summary.totalRevenue | currency: "INR" }}
+        </strong>
+      </div>
+
+      <div class="summary-card">
+        <span>Total Invoices</span>
+
+        <strong>
+          {{ summary.totalInvoices }}
+        </strong>
+      </div>
+
+      <div class="summary-card">
+        <span>Average Invoice</span>
+
+        <strong>
+          {{ summary.averageInvoice | currency: "INR" }}
+        </strong>
+      </div>
+
+      <div class="summary-card">
+        <span>GST Collected</span>
+
+        <strong>
+          {{ summary.totalGST | currency: "INR" }}
+        </strong>
+      </div>
+    </section>
+
+    <!-- Invoice Table -->
+
+    <section class="table-section">
+      <h3>Invoice Details</h3>
+
+      <table mat-table [dataSource]="invoices" class="report-table">
+        <ng-container matColumnDef="invoice">
+          <th mat-header-cell *matHeaderCellDef>Invoice</th>
+
+          <td mat-cell *matCellDef="let row">
+            {{ row.invoiceNumber }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="patient">
+          <th mat-header-cell *matHeaderCellDef>Patient</th>
+
+          <td mat-cell *matCellDef="let row">
+            {{ row.patientName }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="doctor">
+          <th mat-header-cell *matHeaderCellDef>Doctor</th>
+
+          <td mat-cell *matCellDef="let row">
+            {{ row.doctorName }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef>Date</th>
+
+          <td mat-cell *matCellDef="let row">
+            {{ row.invoiceDate | date: "dd MMM yyyy" }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+
+          <td mat-cell *matCellDef="let row">
+            {{ row.paymentStatus }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef>Amount</th>
+
+          <td mat-cell *matCellDef="let row">
+            {{ row.total | currency: "INR" }}
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </section>
+
+    <!-- Footer -->
+
+    <footer class="report-footer">
+      <span> Medicare Pro </span>
+
+      <span> Revenue Report </span>
+    </footer>
+  </div>
+}

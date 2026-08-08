@@ -24,6 +24,7 @@ import { DoctorPerformanceReportComponent } from './features/reports/pages/docto
 import { AppointmentReportComponent } from './features/reports/pages/appointment-report/appointment-report.component';
 import { RevenueReportComponent } from './features/reports/pages/revenue-report/revenue-report.component';
 import { ReportsDashboardComponent } from './features/reports/pages/reports-dashboard/reports-dashboard.component';
+import { RevenueReportPrintComponent } from './features/reports/pages/revenue-report-print/revenue-report-print.component';
 
 const ADMIN = [UserRole.ADMIN];
 
@@ -211,6 +212,14 @@ export const routes: Routes = [
       {
         path: 'reports/doctors',
         component: DoctorPerformanceReportComponent,
+        canActivate: [roleGuard],
+        data: {
+          roles: [UserRole.ADMIN],
+        },
+      },
+      {
+        path: 'reports/revenue/print',
+        component: RevenueReportPrintComponent,
         canActivate: [roleGuard],
         data: {
           roles: [UserRole.ADMIN],

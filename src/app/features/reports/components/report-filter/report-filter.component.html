@@ -1,0 +1,34 @@
+<form [formGroup]="form" class="filter">
+  <mat-form-field>
+    <mat-label> From </mat-label>
+
+    <input matInput formControlName="fromDate" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label> To </mat-label>
+
+    <input matInput formControlName="toDate" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label> Status </mat-label>
+
+    <mat-select formControlName="paymentStatus">
+      <mat-option value="ALL"> All </mat-option>
+
+      <mat-option value="PAID"> Paid </mat-option>
+
+      <mat-option value="PENDING"> Pending </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <button
+    mat-flat-button
+    color="primary"
+    type="button"
+    (click)="generateReport()"
+  >
+    Generate Report
+  </button>
+</form>

@@ -1,0 +1,19 @@
+<div class="actions">
+  <button mat-flat-button color="primary" (click)="exportPdf.emit()">
+    <mat-icon>picture_as_pdf</mat-icon>
+
+    PDF
+  </button>
+
+  <button mat-flat-button color="accent" (click)="exportExcel.emit()">
+    <mat-icon>table_view</mat-icon>
+
+    Excel
+  </button>
+
+  <button mat-stroked-button (click)="print.emit()">
+    <mat-icon>print</mat-icon>
+
+    Print
+  </button>
+</div>

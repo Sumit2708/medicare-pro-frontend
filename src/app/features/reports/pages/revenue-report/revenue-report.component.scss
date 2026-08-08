@@ -1,0 +1,35 @@
+.filter {
+  display: flex;
+
+  gap: 16px;
+
+  margin-bottom: 24px;
+
+  align-items: center;
+}
+
+.summary {
+  padding: 24px;
+
+  margin-bottom: 24px;
+
+  text-align: center;
+}
+
+table {
+  width: 100%;
+}
+
+.summary-grid {
+  display: grid;
+
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+  gap: 20px;
+
+  margin: 24px 0;
+}
+
+table {
+  width: 100%;
+}
