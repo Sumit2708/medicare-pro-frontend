@@ -1,1 +1,122 @@
-<p>appointment-report works!</p>
+<app-page-header title="Appointment Report" subtitle="Appointment Analytics">
+</app-page-header>
+
+@if (summary) {
+  <div class="summary-grid">
+    <app-report-summary-card
+      title="Total Appointments"
+      [value]="summary.totalAppointments"
+      icon="event"
+      color="#1976D2"
+    >
+    </app-report-summary-card>
+
+    <app-report-summary-card
+      title="Completed"
+      [value]="summary.completedAppointments"
+      icon="check_circle"
+      color="#2E7D32"
+    >
+    </app-report-summary-card>
+
+    <app-report-summary-card
+      title="Scheduled"
+      [value]="summary.pendingAppointments"
+      icon="schedule"
+      color="#FB8C00"
+    >
+    </app-report-summary-card>
+
+    <app-report-summary-card
+      title="Cancelled"
+      [value]="summary.cancelledAppointments"
+      icon="cancel"
+      color="#D32F2F"
+    >
+    </app-report-summary-card>
+  </div>
+}
+
+<table mat-table [dataSource]="appointments" class="appointment-table">
+  <!-- Date -->
+
+  <ng-container matColumnDef="date">
+    <th mat-header-cell *matHeaderCellDef>Date</th>
+
+    <td mat-cell *matCellDef="let row">
+      {{ row.appointmentDate | date: "dd MMM yyyy" }}
+    </td>
+  </ng-container>
+
+  <!-- Time -->
+
+  <ng-container matColumnDef="time">
+    <th mat-header-cell *matHeaderCellDef>Time</th>
+
+    <td mat-cell *matCellDef="let row">
+      {{ row.appointmentTime }}
+    </td>
+  </ng-container>
+
+  <!-- Patient -->
+
+  <ng-container matColumnDef="patient">
+    <th mat-header-cell *matHeaderCellDef>Patient</th>
+
+    <td mat-cell *matCellDef="let row">
+      {{ row.patientName }}
+    </td>
+  </ng-container>
+
+  <!-- Doctor -->
+
+  <ng-container matColumnDef="doctor">
+    <th mat-header-cell *matHeaderCellDef>Doctor</th>
+
+    <td mat-cell *matCellDef="let row">
+      {{ row.doctorName }}
+    </td>
+  </ng-container>
+
+  <!-- Specialization -->
+
+  <ng-container matColumnDef="specialization">
+    <th mat-header-cell *matHeaderCellDef>Specialization</th>
+
+    <td mat-cell *matCellDef="let row">
+      {{ row.specialization }}
+    </td>
+  </ng-container>
+
+  <!-- Status -->
+
+  <ng-container matColumnDef="status">
+    <th mat-header-cell *matHeaderCellDef>Status</th>
+
+    <td mat-cell *matCellDef="let row">
+      <span
+        class="status"
+        [class.completed]="row.status === 'COMPLETED'"
+        [class.pending]="row.status === 'PENDING'"
+        [class.cancelled]="row.status === 'CANCELLED'"
+      >
+        {{ row.status }}
+      </span>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+</table>
+
+@if (!appointments.length) {
+  <div class="empty-state">No appointments found.</div>
+}
+
+<app-report-export-actions
+  (exportPdf)="exportPdf()"
+  (exportExcel)="exportExcel()"
+  (print)="printReport()"
+>
+</app-report-export-actions>

@@ -35,7 +35,6 @@ import { RevenueReportFilter } from '../../models/report-filter.model';
     MatDatepickerModule,
     MatInputModule,
     MatFormFieldModule,
-    MatCard,
     PageHeaderComponent,
     ReportSummaryCardComponent,
     ReportExportActionsComponent,

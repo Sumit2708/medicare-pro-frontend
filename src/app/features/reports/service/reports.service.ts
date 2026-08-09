@@ -15,6 +15,9 @@ import { PatientService } from '../../patients/services/patient.service';
 import { RevenueSummaryModel } from '../models/revenue-summary.model';
 import { RevenueReportResponse } from '../models/revenue-report-response.model';
 import { RevenueReportFilter } from '../models/report-filter.model';
+import { AppointmentSummaryModel } from '../models/appointment-summary.model';
+import { AppointmentReportModel } from '../models/appointment-report.model';
+import { AppointmentStatus } from '../../../core/enums/appointment-status.enum';
 
 @Injectable({
   providedIn: 'root',
@@ -152,6 +155,69 @@ export class ReportsService {
           summary,
 
           invoices: report,
+        };
+      }),
+    );
+  }
+
+  getAppointmentReport(): Observable<{
+    summary: AppointmentSummaryModel;
+    appointments: AppointmentReportModel[];
+  }> {
+    return forkJoin({
+      appointments: this.appointmentService.getAppointments(),
+
+      patients: this.patientService.getPatients(),
+
+      doctors: this.doctorService.getDoctors(),
+    }).pipe(
+      map((data) => {
+        const appointments = data.appointments.map((appointment) => {
+          const patient = data.patients.find(
+            (p) => p.id === appointment.patientId,
+          );
+
+          const doctor = data.doctors.find(
+            (d) => d.id === appointment.doctorId,
+          );
+
+          return {
+            appointmentId: appointment.id!,
+
+            appointmentDate: appointment.date,
+
+            appointmentTime: appointment.time,
+
+            patientName: patient?.name ?? 'Unknown',
+
+            doctorName: doctor?.name ?? 'Unknown',
+
+            specialization: doctor?.specialization ?? 'Unknown',
+
+            status: appointment.status,
+          };
+        });
+
+        const summary: AppointmentSummaryModel = {
+          totalAppointments: appointments.length,
+
+          completedAppointments: appointments.filter(
+            (x) => x.status ===AppointmentStatus.COMPLETED,
+          ).length,
+
+          pendingAppointments: appointments.filter(
+            (x) => x.status === AppointmentStatus.SCHEDULED,
+          ).length,
+
+          cancelledAppointments: appointments.filter(
+            (x) => x.status === AppointmentStatus.CANCELLED,
+          ).length,
+        };
+
+        return {
+          summary,
+
+          appointments,
         };
       }),
     );

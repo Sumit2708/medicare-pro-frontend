@@ -1,9 +1,5 @@
-import { Component, EventEmitter, Output } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule
-} from '@angular/forms';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 import { CommonModule } from '@angular/common';
 
@@ -23,40 +19,30 @@ import { MatSelectModule } from '@angular/material/select';
     MatDatepickerModule,
     MatInputModule,
     MatButtonModule,
-    MatSelectModule
+    MatSelectModule,
   ],
   templateUrl: './report-filter.component.html',
-  styleUrl: './report-filter.component.scss'
+  styleUrl: './report-filter.component.scss',
 })
 export class ReportFilterComponent {
+  @Input()
+  type: 'revenue' | 'appointment' = 'revenue';
 
   @Output()
   generate = new EventEmitter<any>();
   form: FormGroup;
 
-  constructor(
-    private fb: FormBuilder
-  ){
+  constructor(private fb: FormBuilder) {
+    this.form = this.fb.group({
+      fromDate: [null],
 
-  this.form = this.fb.group({
+      toDate: [null],
 
-    fromDate:[null],
-
-    toDate:[null],
-
-    paymentStatus:['ALL']
-
-  });
-}
-
-  generateReport(){
-
-    this.generate.emit(
-
-      this.form.getRawValue()
-
-    );
-
+      paymentStatus: ['ALL'],
+    });
   }
 
+  generateReport() {
+    this.generate.emit(this.form.getRawValue());
+  }
 }
