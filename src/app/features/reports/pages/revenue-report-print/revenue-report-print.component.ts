@@ -52,6 +52,18 @@ export class RevenueReportPrintComponent implements OnInit {
     this.loadReport();
   }
 
+  ngAfterViewInit(): void {
+
+  setTimeout(() => {
+    window.print();
+  }, 500);
+
+  window.addEventListener('afterprint', () => {
+    window.close();
+  });
+
+}
+
   private loadReport(): void {
     const params = this.route.snapshot.queryParamMap;
 
