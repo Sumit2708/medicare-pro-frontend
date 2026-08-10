@@ -18,6 +18,7 @@ import { RevenueReportFilter } from '../models/report-filter.model';
 import { AppointmentSummaryModel } from '../models/appointment-summary.model';
 import { AppointmentReportModel } from '../models/appointment-report.model';
 import { AppointmentStatus } from '../../../core/enums/appointment-status.enum';
+import { AppointmentReportFilter } from '../models/appointment-report-filter.model';
 
 @Injectable({
   providedIn: 'root',
@@ -89,20 +90,27 @@ export class ReportsService {
         let invoices = [...data.invoices];
 
         // From Date
+        // From Date
         if (filter.fromDate) {
+          const fromDate = new Date(filter.fromDate);
+          fromDate.setHours(0, 0, 0, 0);
+
           invoices = invoices.filter(
-            (invoice) =>
-              new Date(invoice.createdDate) >= new Date(filter.fromDate!),
+            (invoice) => new Date(invoice.createdDate) >= fromDate,
           );
         }
 
         // To Date
         if (filter.toDate) {
+          const toDate = new Date(filter.toDate);
+          toDate.setHours(23, 59, 59, 999);
+
           invoices = invoices.filter(
-            (invoice) =>
-              new Date(invoice.createdDate) <= new Date(filter.toDate!),
+            (invoice) => new Date(invoice.createdDate) <= toDate,
           );
         }
+
+        console.log(filter, 'filter');
 
         // Status
         if (filter.paymentStatus && filter.paymentStatus !== 'ALL') {
@@ -160,7 +168,72 @@ export class ReportsService {
     );
   }
 
-  getAppointmentReport(): Observable<{
+  // getAppointmentReport(): Observable<{
+  //   summary: AppointmentSummaryModel;
+  //   appointments: AppointmentReportModel[];
+  // }> {
+  //   return forkJoin({
+  //     appointments: this.appointmentService.getAppointments(),
+
+  //     patients: this.patientService.getPatients(),
+
+  //     doctors: this.doctorService.getDoctors(),
+  //   }).pipe(
+  //     map((data) => {
+  //       const appointments = data.appointments.map((appointment) => {
+  //         const patient = data.patients.find(
+  //           (p) => p.id === appointment.patientId,
+  //         );
+
+  //         const doctor = data.doctors.find(
+  //           (d) => d.id === appointment.doctorId,
+  //         );
+
+  //         let report = appointments;
+
+  //         return {
+  //           appointmentId: appointment.id!,
+
+  //           appointmentDate: appointment.date,
+
+  //           appointmentTime: appointment.time,
+
+  //           patientName: patient?.name ?? 'Unknown',
+
+  //           doctorName: doctor?.name ?? 'Unknown',
+
+  //           specialization: doctor?.specialization ?? 'Unknown',
+
+  //           status: appointment.status,
+  //         };
+  //       });
+
+  //       const summary: AppointmentSummaryModel = {
+  //         totalAppointments: appointments.length,
+
+  //         completedAppointments: appointments.filter(
+  //           (x) => x.status ===AppointmentStatus.COMPLETED,
+  //         ).length,
+
+  //         pendingAppointments: appointments.filter(
+  //           (x) => x.status === AppointmentStatus.SCHEDULED,
+  //         ).length,
+
+  //         cancelledAppointments: appointments.filter(
+  //           (x) => x.status === AppointmentStatus.CANCELLED,
+  //         ).length,
+  //       };
+
+  //       return {
+  //         summary,
+
+  //         appointments,
+  //       };
+  //     }),
+  //   );
+  // }
+
+  getAppointmentReport(filter?: AppointmentReportFilter): Observable<{
     summary: AppointmentSummaryModel;
     appointments: AppointmentReportModel[];
   }> {
@@ -172,52 +245,98 @@ export class ReportsService {
       doctors: this.doctorService.getDoctors(),
     }).pipe(
       map((data) => {
-        const appointments = data.appointments.map((appointment) => {
-          const patient = data.patients.find(
-            (p) => p.id === appointment.patientId,
+        // 1. Convert original appointments into report rows
+        let report: AppointmentReportModel[] = data.appointments.map(
+          (appointment) => {
+            const patient = data.patients.find(
+              (p) => p.id === appointment.patientId,
+            );
+
+            const doctor = data.doctors.find(
+              (d) => d.id === appointment.doctorId,
+            );
+
+            return {
+              appointmentId: appointment.id!,
+
+              appointmentDate: appointment.date,
+
+              appointmentTime: appointment.time,
+
+              patientName: patient?.name ?? 'Unknown',
+
+              doctorName: doctor?.name ?? 'Unknown',
+
+              specialization: doctor?.specialization ?? 'Unknown',
+
+              status: appointment.status,
+            };
+          },
+        );
+
+        // 2. FROM DATE FILTER
+
+        if (filter?.fromDate) {
+          report = report.filter(
+            (appointment) => new Date(appointment.appointmentDate) >= new Date(filter.fromDate!),
           );
+        }
 
-          const doctor = data.doctors.find(
-            (d) => d.id === appointment.doctorId,
+        // 3. TO DATE FILTER
+
+        if (filter?.toDate) {
+          report = report.filter(
+            (appointment) => new Date(appointment.appointmentDate) <= new Date(filter.toDate!),
           );
+        }
 
-          return {
-            appointmentId: appointment.id!,
+        // 4. DOCTOR FILTER
 
-            appointmentDate: appointment.date,
+        if (filter?.doctorId !== null && filter?.doctorId !== undefined) {
+          report = report.filter((appointment) => {
+            const originalAppointment = data.appointments.find(
+              (a) => a.id === appointment.appointmentId,
+            );
 
-            appointmentTime: appointment.time,
+            return originalAppointment?.doctorId === filter.doctorId;
+          });
+        }
 
-            patientName: patient?.name ?? 'Unknown',
+        // 5. STATUS FILTER
 
-            doctorName: doctor?.name ?? 'Unknown',
+        console.log(filter, 'filter');
 
-            specialization: doctor?.specialization ?? 'Unknown',
+        if (filter?.status && filter.status !== 'ALL') {
+          report = report.filter(
+            (appointment) => appointment.status === filter.status,
+          );
+        }
 
-            status: appointment.status,
-          };
-        });
+        // 6. CALCULATE SUMMARY
+        // IMPORTANT: calculate from filtered report
 
         const summary: AppointmentSummaryModel = {
-          totalAppointments: appointments.length,
+          totalAppointments: report.length,
 
-          completedAppointments: appointments.filter(
-            (x) => x.status ===AppointmentStatus.COMPLETED,
+          completedAppointments: report.filter(
+            (x) => x.status === AppointmentStatus.COMPLETED,
           ).length,
 
-          pendingAppointments: appointments.filter(
+          pendingAppointments: report.filter(
             (x) => x.status === AppointmentStatus.SCHEDULED,
           ).length,
 
-          cancelledAppointments: appointments.filter(
+          cancelledAppointments: report.filter(
             (x) => x.status === AppointmentStatus.CANCELLED,
           ).length,
         };
 
+        // 7. RETURN FILTERED DATA
+
         return {
           summary,
 
-          appointments,
+          appointments: report,
         };
       }),
     );

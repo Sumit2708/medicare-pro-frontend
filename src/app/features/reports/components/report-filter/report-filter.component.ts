@@ -32,6 +32,11 @@ export class ReportFilterComponent {
   generate = new EventEmitter<any>();
   form: FormGroup;
 
+  today = new Date();
+  maxFromDate = new Date();
+  minToDate: Date | null = null;
+
+  
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
       fromDate: [null],
@@ -44,5 +49,16 @@ export class ReportFilterComponent {
 
   generateReport() {
     this.generate.emit(this.form.getRawValue());
+  }
+
+  reset(): void {
+    this.form.reset({
+      fromDate: null,
+      toDate: null,
+      doctorId: null,
+      status: 'ALL',
+    });
+
+    this.generateReport();
   }
 }

@@ -2,6 +2,11 @@
 </app-page-header>
 
 @if (summary) {
+  <app-appointment-report-filter
+    [doctors]="doctors"
+    (generate)="generateReport($event)"
+  >
+  </app-appointment-report-filter>
   <div class="summary-grid">
     <app-report-summary-card
       title="Total Appointments"

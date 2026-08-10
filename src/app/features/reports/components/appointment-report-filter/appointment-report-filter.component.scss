@@ -1,15 +1,14 @@
 .filter {
   display: flex;
-
-  gap: 16px;
-
   align-items: center;
-
-  margin-bottom: 24px;
-
+  gap: 16px;
   flex-wrap: wrap;
+  margin: 24px 0;
 }
 
+mat-form-field {
+  min-width: 180px;
+}
 
 .actions {
   display: flex;

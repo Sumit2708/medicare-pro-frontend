@@ -8,10 +8,13 @@ import { PageHeaderComponent } from '../../../../shared/components/page-header/p
 import { ReportSummaryCardComponent } from '../../components/report-summary-card/report-summary-card.component';
 import { ReportExportActionsComponent } from '../../components/report-export-actions/report-export-actions.component';
 
-
 import { AppointmentReportModel } from '../../models/appointment-report.model';
 import { AppointmentSummaryModel } from '../../models/appointment-summary.model';
 import { ReportsService } from '../../service/reports.service';
+import { DoctorService } from '../../../doctors/services/doctor.service';
+import { Doctor } from '../../../../shared/models/doctor.model';
+import { AppointmentReportFilterComponent } from '../../components/appointment-report-filter/appointment-report-filter.component';
+import { AppointmentReportFilter } from '../../models/appointment-report-filter.model';
 
 @Component({
   selector: 'app-appointment-report',
@@ -24,13 +27,13 @@ import { ReportsService } from '../../service/reports.service';
     MatCardModule,
     PageHeaderComponent,
     ReportSummaryCardComponent,
-    ReportExportActionsComponent
+    ReportExportActionsComponent,
+    AppointmentReportFilterComponent,
   ],
   templateUrl: './appointment-report.component.html',
-  styleUrl: './appointment-report.component.scss'
+  styleUrl: './appointment-report.component.scss',
 })
 export class AppointmentReportComponent implements OnInit {
-
   appointments: AppointmentReportModel[] = [];
 
   summary!: AppointmentSummaryModel;
@@ -41,44 +44,51 @@ export class AppointmentReportComponent implements OnInit {
     'patient',
     'doctor',
     'specialization',
-    'status'
+    'status',
   ];
 
+  doctors: Doctor[] = [];
+
   constructor(
-    private reportsService: ReportsService
+    private reportsService: ReportsService,
+    private doctorService: DoctorService,
   ) {}
 
   ngOnInit(): void {
     this.loadReport();
   }
 
-  loadReport(): void {
+  loadReport(filter?: AppointmentReportFilter): void {
+    this.reportsService.getAppointmentReport(filter).subscribe({
+      next: (response) => {
+        console.log('Appointment report loaded successfully', response);
+        this.appointments = response.appointments;
 
-    this.reportsService
-      .getAppointmentReport()
-      .subscribe({
+        this.summary = response.summary;
 
-        next: response => {
+        this.loadDoctors();
+      },
 
-          this.appointments = response.appointments;
+      error: (error) => {
+        console.error('Unable to load appointment report', error);
+      },
+    });
+  }
 
-          this.summary = response.summary;
+  private loadDoctors(): void {
+    this.doctorService.getDoctors().subscribe({
+      next: (doctors) => {
+        this.doctors = doctors;
+      },
 
-          console.log(this.appointments); // TODO: Remove from console log.
+      error: (error) => {
+        console.error('Unable to load doctors', error);
+      },
+    });
+  }
 
-        },
-
-        error: error => {
-
-          console.error(
-            'Unable to load appointment report',
-            error
-          );
-
-        }
-
-      });
-
+  generateReport(filter: AppointmentReportFilter): void {
+    this.loadReport(filter);
   }
 
   exportPdf(): void {
@@ -92,5 +102,4 @@ export class AppointmentReportComponent implements OnInit {
   printReport(): void {
     console.log('Appointment Print');
   }
-
 }

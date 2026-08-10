@@ -1,14 +1,4 @@
 <form [formGroup]="form" class="filter">
-  <!-- <mat-form-field>
-    <mat-label> From </mat-label>
-    <input matInput type="date" formControlName="fromDate" />
-  </mat-form-field>
-
-  <mat-form-field>
-    <mat-label> To </mat-label>
-    <input matInput type="date" formControlName="toDate" />
-  </mat-form-field> -->
-
   <mat-form-field appearance="outline">
     <mat-label>From Date</mat-label>
 
@@ -46,14 +36,29 @@
   </mat-form-field>
 
   <mat-form-field appearance="outline">
+    <mat-label> Doctor </mat-label>
+    <mat-select formControlName="doctorId">
+      <mat-option [value]="null"> All Doctors </mat-option>
+
+      @for (doctor of doctors; track doctor.id) {
+        <mat-option [value]="doctor.id">
+          {{ doctor.name }}
+        </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
     <mat-label> Status </mat-label>
 
-    <mat-select formControlName="paymentStatus">
+    <mat-select formControlName="status">
       <mat-option value="ALL"> All </mat-option>
 
-      <mat-option value="Paid"> Paid </mat-option>
+      <mat-option value="Completed"> Completed </mat-option>
 
-      <mat-option value="Pending"> Pending </mat-option>
+      <mat-option value="Scheduled"> Scheduled </mat-option>
+
+      <mat-option value="Cancelled"> Cancelled </mat-option>
     </mat-select>
   </mat-form-field>
 
@@ -64,7 +69,7 @@
       type="button"
       (click)="generateReport()"
     >
-      Generate Report
+      Generate
     </button>
 
     <button mat-stroked-button type="button" (click)="reset()">Reset</button>
