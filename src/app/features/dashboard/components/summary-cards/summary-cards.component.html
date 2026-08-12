@@ -1,139 +1,75 @@
 <div class="cards-grid">
+  <!-- Patients -->
 
-    <!-- Patients -->
+  <mat-card class="dashboard-card patient">
+    <div class="icon">
+      <mat-icon> groups </mat-icon>
+    </div>
 
-    <mat-card class="dashboard-card patient">
+    <div class="content">
+      <span>Total Patients</span>
 
-        <div class="icon">
+      <h2>
+        {{ dashboard.totalPatients }}
+      </h2>
 
-            <mat-icon>
+      <small> Registered Patients </small>
+    </div>
+  </mat-card>
 
-                groups
+  <!-- Doctors -->
 
-            </mat-icon>
+  <mat-card class="dashboard-card doctor">
+    <div class="icon">
+      <mat-icon> medical_services </mat-icon>
+    </div>
 
-        </div>
+    <div class="content">
+      <span>Total Doctors</span>
 
-        <div class="content">
+      <h2>
+        {{ dashboard.totalDoctors }}
+      </h2>
 
-            <span>Total Patients</span>
+      <small> Active Doctors </small>
+    </div>
+  </mat-card>
 
-            <h2>
+  <!-- Appointments -->
 
-                {{ dashboard.totalPatients }}
+  <mat-card class="dashboard-card appointment">
+    <div class="icon">
+      <mat-icon> event </mat-icon>
+    </div>
 
-            </h2>
+    <div class="content">
+      <span>Today's Appointments</span>
 
-            <small>
+      <h2>
+        {{ dashboard.todayAppointments }}
+      </h2>
 
-                Registered Patients
+      <small> Scheduled Today </small>
+    </div>
+  </mat-card>
 
-            </small>
+  <!-- Revenue -->
 
-        </div>
+  <mat-card class="dashboard-card revenue">
+    <div class="icon">
+      <mat-icon> payments </mat-icon>
+    </div>
 
-    </mat-card>
+    <div class="content">
+      <span>Revenue Today</span>
 
-    <!-- Doctors -->
+      <h2>
+        {{
+          dashboard.todayCollectedRevenue | currency: "INR" : "symbol" : "1.0-0"
+        }}
+      </h2>
 
-    <mat-card class="dashboard-card doctor">
-
-        <div class="icon">
-
-            <mat-icon>
-
-                medical_services
-
-            </mat-icon>
-
-        </div>
-
-        <div class="content">
-
-            <span>Total Doctors</span>
-
-            <h2>
-
-                {{ dashboard.totalDoctors }}
-
-            </h2>
-
-            <small>
-
-                Active Doctors
-
-            </small>
-
-        </div>
-
-    </mat-card>
-
-    <!-- Appointments -->
-
-    <mat-card class="dashboard-card appointment">
-
-        <div class="icon">
-
-            <mat-icon>
-
-                event
-
-            </mat-icon>
-
-        </div>
-
-        <div class="content">
-
-            <span>Today's Appointments</span>
-
-            <h2>
-
-                {{ dashboard.todayAppointments }}
-
-            </h2>
-
-            <small>
-
-                Scheduled Today
-
-            </small>
-
-        </div>
-
-    </mat-card>
-
-    <!-- Revenue -->
-
-    <mat-card class="dashboard-card revenue">
-
-        <div class="icon">
-
-            <mat-icon>
-
-                payments
-
-            </mat-icon>
-
-        </div>
-
-        <div class="content">
-
-            <span>Revenue Today</span>
-
-            <h2>
-
-                {{ dashboard.todayCollectedRevenue | currency:'INR':'symbol':'1.0-0' }}
-
-            </h2>
-
-            <small>
-
-                Collected Revenue
-
-            </small>
-
-        </div>
-
-    </mat-card>
-
+      <small> Collected Revenue </small>
+    </div>
+  </mat-card>
 </div>

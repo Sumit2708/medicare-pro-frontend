@@ -61,7 +61,7 @@
   <div class="dashboard-layout">
     <!-- Revenue -->
 
-    <mat-card>
+    <!-- <mat-card>
       <mat-card-header>
         <mat-card-title> Monthly Revenue </mat-card-title>
       </mat-card-header>
@@ -70,11 +70,20 @@
         <app-revenue-chart [data]="dashboard.monthlyRevenue ?? []">
         </app-revenue-chart>
       </mat-card-content>
-    </mat-card>
+    </mat-card> -->
+
+    <app-chart-card
+      title="Monthly Revenue"
+      subtitle="Last 12 Months"
+      icon="trending_up"
+    >
+      <app-revenue-chart [data]="dashboard.monthlyRevenue ?? []">
+      </app-revenue-chart>
+    </app-chart-card>
 
     <!-- Payment -->
 
-    <mat-card>
+    <!-- <mat-card>
       <mat-card-header>
         <mat-card-title> Payment Status </mat-card-title>
       </mat-card-header>
@@ -83,7 +92,16 @@
         <app-payment-chart [data]="dashboard.paymentSummary ?? []">
         </app-payment-chart>
       </mat-card-content>
-    </mat-card>
+    </mat-card> -->
+
+    <app-chart-card
+      title="Payment Status"
+      subtitle="Payment Summary"
+      icon="receipt"
+    >
+      <app-payment-chart [data]="dashboard.paymentSummary ?? []">
+      </app-payment-chart>
+    </app-chart-card>
 
     <!-- Appointment -->
 
@@ -100,7 +118,7 @@
      </app-appointment-chart>
     </app-chart-card> -->
 
-    <mat-card class="full-width">
+    <!-- <mat-card class="full-width">
       <mat-card-header>
         <mat-card-title> Monthly Appointments </mat-card-title>
       </mat-card-header>
@@ -109,7 +127,17 @@
         <app-appointments-chart [data]="dashboard.monthlyAppointments ?? []">
         </app-appointments-chart>
       </mat-card-content>
-    </mat-card>
+    </mat-card> -->
+
+    <app-chart-card
+      title="Monthly Appointments"
+      subtitle="Last 12 Months"
+      icon="bar_chart"
+      class="full-width"
+    >
+      <app-appointments-chart [data]="dashboard.monthlyAppointments ?? []">
+      </app-appointments-chart>
+    </app-chart-card>
 
     <!-- Recent -->
 
@@ -138,7 +166,7 @@
       </mat-card-content>
     </mat-card> -->
 
-    <mat-card>
+    <!-- <mat-card class="mb-4">
       <mat-card-header>
         <mat-card-title> Pending Payments </mat-card-title>
 
@@ -149,6 +177,15 @@
         <app-pending-payments [invoices]="dashboard.pendingInvoices">
         </app-pending-payments>
       </mat-card-content>
-    </mat-card>
+    </mat-card> -->
+
+    <app-chart-card
+      title="Pending Payments"
+      subtitle="Outstanding invoices"
+      icon="payment"
+    >
+      <app-pending-payments [invoices]="dashboard.pendingInvoices">
+      </app-pending-payments>
+    </app-chart-card>
   </div>
 }
