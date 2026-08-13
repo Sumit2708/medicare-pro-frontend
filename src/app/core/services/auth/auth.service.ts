@@ -21,9 +21,8 @@ export class AuthService {
   login(request: LoginRequest): Observable<boolean | null> {
     return this.http.get<User[]>(`${this.apiUrl}?email=${request.email}`).pipe(
       map((users) => {
-        console.log(users,'users');
-        
-        
+        console.log(users, 'users');
+
         if (users.length > 0 && users[0].password === request.password) {
           this.storageService.saveToken(users[0].token);
           this.storageService.saveUser(users[0]);
@@ -46,5 +45,9 @@ export class AuthService {
 
   getCurrentUser(): User | null {
     return this.storageService.getUser();
+  }
+
+  updateCurrentUser(user: User): void {
+    this.storageService.saveUser(user);
   }
 }

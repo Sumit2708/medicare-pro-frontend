@@ -2,7 +2,7 @@
   "users": [
     {
       "id": "1",
-      "name": "Admin User",
+      "name": "Dr. Sumit",
       "email": "admin@medicare.com",
       "password": "Admin@123",
       "role": "ADMIN",
@@ -325,16 +325,16 @@
     "id": 1,
     "clinic": {
       "clinicName": "Medicare Pro",
-      "address": "",
-      "phone": "",
-      "email": "",
+      "address": "Arihant Avenue near R.R. High School, Polan peth, Ja;gaon-425001",
+      "phone": "7057281275",
+      "email": "sumitvsonawane2611@gmail.com",
       "gstNumber": ""
     },
     "billing": {
       "consultationFee": 500,
       "gstPercentage": 18,
       "currency": "INR",
-      "invoicePrefix": "INV"
+      "invoicePrefix": "MED"
     },
     "workingHours": {
       "days": [
@@ -370,7 +370,7 @@
         },
         {
           "day": "Saturday",
-          "enabled": true,
+          "enabled": false,
           "startTime": "09:00",
           "endTime": "13:00"
         },

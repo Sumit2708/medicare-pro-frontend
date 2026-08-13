@@ -1,41 +1,23 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { UserProfile } from '../../model/user-profile.model';
-
+import { environment } from '../../../../../environment/environment';
+import { API_ENDPOINTS } from '../../../../core/constants/api-endpoints';
+import { User } from '../../../../shared/models/user.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProfileService {
+  private readonly apiUrl = `${environment.API_URL}${API_ENDPOINTS.USERS}`;
 
-  private readonly apiUrl =
-    'http://localhost:3000/users';
+  constructor(private http: HttpClient) {}
 
-  constructor(
-    private http: HttpClient
-  ) {}
-
-  getUserProfile(
-    userId: number
-  ): Observable<UserProfile> {
-
-    return this.http.get<UserProfile>(
-      `${this.apiUrl}/${userId}`
-    );
-
+  getProfile(userId: number): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/${userId}`);
   }
 
-  updateUserProfile(
-    userId: number,
-    profile: Partial<UserProfile>
-  ): Observable<UserProfile> {
-
-    return this.http.patch<UserProfile>(
-      `${this.apiUrl}/${userId}`,
-      profile
-    );
-
+  updateProfile(userId: number, data: Partial<User>): Observable<User> {
+    return this.http.patch<User>(`${this.apiUrl}/${userId}`, data);
   }
-
 }
