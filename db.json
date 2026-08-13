@@ -321,5 +321,67 @@
       "id": "jlhlq2NdN8s"
     }
   ],
+  "settings": {
+    "id": 1,
+    "clinic": {
+      "clinicName": "Medicare Pro",
+      "address": "",
+      "phone": "",
+      "email": "",
+      "gstNumber": ""
+    },
+    "billing": {
+      "consultationFee": 500,
+      "gstPercentage": 18,
+      "currency": "INR",
+      "invoicePrefix": "INV"
+    },
+    "workingHours": {
+      "days": [
+        {
+          "day": "Monday",
+          "enabled": true,
+          "startTime": "09:00",
+          "endTime": "17:30"
+        },
+        {
+          "day": "Tuesday",
+          "enabled": true,
+          "startTime": "09:00",
+          "endTime": "17:30"
+        },
+        {
+          "day": "Wednesday",
+          "enabled": true,
+          "startTime": "09:00",
+          "endTime": "17:30"
+        },
+        {
+          "day": "Thursday",
+          "enabled": true,
+          "startTime": "09:00",
+          "endTime": "17:30"
+        },
+        {
+          "day": "Friday",
+          "enabled": true,
+          "startTime": "09:00",
+          "endTime": "17:30"
+        },
+        {
+          "day": "Saturday",
+          "enabled": true,
+          "startTime": "09:00",
+          "endTime": "13:00"
+        },
+        {
+          "day": "Sunday",
+          "enabled": false,
+          "startTime": "09:00",
+          "endTime": "17:30"
+        }
+      ]
+    }
+  },
   "$schema": "./node_modules/json-server/schema.json"
 }

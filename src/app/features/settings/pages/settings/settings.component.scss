@@ -1,0 +1,118 @@
+.settings-section {
+  padding: 28px 4px;
+  max-width: 700px;
+}
+
+.settings-section h2 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.description {
+  margin: 8px 0 24px;
+  color: #6b7280;
+}
+
+.settings-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.empty-tab {
+  padding: 40px;
+  text-align: center;
+  color: #777;
+}
+
+@media (max-width: 768px) {
+
+  .settings-form {
+    grid-template-columns: 1fr;
+  }
+
+  .full-width,
+  .form-actions {
+    grid-column: auto;
+  }
+
+}
+
+.working-hours {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+
+
+.day-name {
+  min-width: 100px;
+}
+
+.working-day {
+  display: grid;
+
+  grid-template-columns:
+    140px
+    100px
+    1fr;
+
+  align-items: center;
+
+  gap: 16px;
+
+  padding: 16px;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 8px;
+}
+
+@media (max-width: 1100px) {
+
+  .working-day {
+    grid-template-columns: 140px 100px 1fr;
+  }
+
+  .time-fields {
+    flex-wrap: wrap;
+  }
+
+  .time-error {
+    white-space: normal;
+  }
+
+}
+
+// .time-fields {
+//   display: flex;
+//   align-items: center;
+//   flex-direction: column;
+//   gap: 12px;
+// }
+
+.time-fields mat-form-field {
+  width: 180px;
+  margin-bottom: -1.25em;
+
+}
+
+.time-error {
+  white-space: nowrap;
+
+  font-size: 12px;
+
+  color: #d32f2f;
+}

@@ -26,6 +26,7 @@ import { RevenueReportComponent } from './features/reports/pages/revenue-report/
 import { ReportsDashboardComponent } from './features/reports/pages/reports-dashboard/reports-dashboard.component';
 import { RevenueReportPrintComponent } from './features/reports/pages/revenue-report-print/revenue-report-print.component';
 import { AppointmentReportPrintComponent } from './features/reports/pages/appointment-report-print/appointment-report-print.component';
+import { SettingsComponent } from './features/settings/pages/settings/settings.component';
 
 const ADMIN = [UserRole.ADMIN];
 
@@ -229,6 +230,14 @@ export const routes: Routes = [
       {
         path: 'reports/appointments/print',
         component: AppointmentReportPrintComponent,
+        canActivate: [roleGuard],
+        data: {
+          roles: [UserRole.ADMIN],
+        },
+      },
+      {
+        path: 'settings',
+        component: SettingsComponent,
         canActivate: [roleGuard],
         data: {
           roles: [UserRole.ADMIN],

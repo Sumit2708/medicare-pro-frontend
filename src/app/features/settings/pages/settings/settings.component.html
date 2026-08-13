@@ -1,0 +1,287 @@
+<app-page-header
+  title="Settings"
+  subtitle="Manage your clinic and application settings"
+>
+</app-page-header>
+
+<mat-tab-group>
+  <!-- Clinic -->
+
+  <mat-tab label="Clinic Information">
+    <div class="settings-section">
+      <h2>Clinic Information</h2>
+
+      <p class="description">
+        Update your clinic information used throughout the application.
+      </p>
+
+      <form
+        [formGroup]="clinicForm"
+        (ngSubmit)="saveClinicInformation()"
+        class="settings-form"
+      >
+        <!-- Clinic Name -->
+
+        <mat-form-field appearance="outline">
+          <mat-label> Clinic Name </mat-label>
+
+          <input matInput formControlName="clinicName" />
+
+          @if (
+            clinicForm.controls["clinicName"].touched &&
+            clinicForm.controls["clinicName"].hasError("required")
+          ) {
+            <mat-error> Clinic name is required </mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Address -->
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label> Address </mat-label>
+
+          <textarea matInput rows="3" formControlName="address"> </textarea>
+
+          @if (
+            clinicForm.controls["address"].touched &&
+            clinicForm.controls["address"].hasError("required")
+          ) {
+            <mat-error> Address is required </mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Phone -->
+
+        <mat-form-field appearance="outline">
+          <mat-label> Phone </mat-label>
+
+          <input matInput type="tel" maxlength="10" formControlName="phone" />
+
+          @if (
+            clinicForm.controls["phone"].touched &&
+            clinicForm.controls["phone"].hasError("required")
+          ) {
+            <mat-error> Phone number is required </mat-error>
+          }
+
+          @if (
+            clinicForm.controls["phone"].touched &&
+            clinicForm.controls["phone"].hasError("pattern")
+          ) {
+            <mat-error> Enter a valid 10-digit phone number </mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Email -->
+
+        <mat-form-field appearance="outline">
+          <mat-label> Email </mat-label>
+
+          <input matInput type="email" formControlName="email" />
+
+          @if (
+            clinicForm.controls["email"].touched &&
+            clinicForm.controls["email"].hasError("required")
+          ) {
+            <mat-error> Email is required </mat-error>
+          }
+
+          @if (
+            clinicForm.controls["email"].touched &&
+            clinicForm.controls["email"].hasError("email")
+          ) {
+            <mat-error> Enter a valid email </mat-error>
+          }
+        </mat-form-field>
+
+        <!-- GST -->
+
+        <mat-form-field appearance="outline">
+          <mat-label> GST Number </mat-label>
+
+          <input matInput formControlName="gstNumber" />
+        </mat-form-field>
+
+        <div class="form-actions">
+          <button mat-flat-button color="primary" type="submit">
+            Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </mat-tab>
+
+  <!-- Placeholders -->
+
+  <mat-tab label="Billing">
+    <div class="settings-section">
+      <h2>Billing Settings</h2>
+
+      <p class="description">Configure billing and invoice defaults.</p>
+
+      <form
+        [formGroup]="billingForm"
+        (ngSubmit)="saveBillingSettings()"
+        class="settings-form"
+      >
+        <!-- Consultation Fee -->
+
+        <mat-form-field appearance="outline">
+          <mat-label> Default Consultation Fee </mat-label>
+
+          <input matInput type="number" formControlName="consultationFee" />
+
+          <span matTextPrefix>₹&nbsp;</span>
+
+          @if (
+            billingForm.controls["consultationFee"].touched &&
+            billingForm.controls["consultationFee"].hasError("required")
+          ) {
+            <mat-error> Consultation fee is required </mat-error>
+          }
+
+          @if (
+            billingForm.controls["consultationFee"].touched &&
+            billingForm.controls["consultationFee"].hasError("min")
+          ) {
+            <mat-error> Fee cannot be negative </mat-error>
+          }
+        </mat-form-field>
+
+        <!-- GST -->
+
+        <mat-form-field appearance="outline">
+          <mat-label> GST Percentage </mat-label>
+
+          <input matInput type="number" formControlName="gstPercentage" />
+
+          <span matTextSuffix>%</span>
+
+          @if (
+            billingForm.controls["gstPercentage"].touched &&
+            billingForm.controls["gstPercentage"].hasError("required")
+          ) {
+            <mat-error> GST percentage is required </mat-error>
+          }
+
+          @if (
+            billingForm.controls["gstPercentage"].touched &&
+            (billingForm.controls["gstPercentage"].hasError("min") ||
+              billingForm.controls["gstPercentage"].hasError("max"))
+          ) {
+            <mat-error> GST must be between 0 and 100 </mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Currency -->
+
+        <mat-form-field appearance="outline">
+          <mat-label> Currency </mat-label>
+
+          <mat-select formControlName="currency">
+            <mat-option value="INR"> INR - Indian Rupee </mat-option>
+
+            <mat-option value="USD"> USD - US Dollar </mat-option>
+
+            <mat-option value="EUR"> EUR - Euro </mat-option>
+          </mat-select>
+
+          @if (
+            billingForm.controls["currency"].touched &&
+            billingForm.controls["currency"].hasError("required")
+          ) {
+            <mat-error> Currency is required </mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Invoice Prefix -->
+
+        <mat-form-field appearance="outline">
+          <mat-label> Invoice Prefix </mat-label>
+
+          <input matInput formControlName="invoicePrefix" maxlength="10" />
+
+          @if (
+            billingForm.controls["invoicePrefix"].touched &&
+            billingForm.controls["invoicePrefix"].hasError("required")
+          ) {
+            <mat-error> Invoice prefix is required </mat-error>
+          }
+
+          @if (
+            billingForm.controls["invoicePrefix"].touched &&
+            billingForm.controls["invoicePrefix"].hasError("maxlength")
+          ) {
+            <mat-error> Maximum 10 characters allowed </mat-error>
+          }
+        </mat-form-field>
+
+        <div class="form-actions">
+          <button mat-flat-button color="primary" type="submit">
+            Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </mat-tab>
+
+  <mat-tab label="Working Hours">
+    <div class="settings-section">
+      <h2>Working Hours</h2>
+
+      <p class="description">Configure the clinic's weekly working schedule.</p>
+
+      <form [formGroup]="workingHoursForm" (ngSubmit)="saveWorkingHours()">
+        <div>
+          <div formArrayName="days" class="working-hours">
+            @for (day of workingDays.controls; track $index; let i = $index) {
+              <div class="working-day" [formGroupName]="i">
+                <div class="day-name">
+                  <strong>
+                    {{ day.get("day")?.value }}
+                  </strong>
+                </div>
+
+                <mat-slide-toggle formControlName="enabled">
+                  Open
+                </mat-slide-toggle>
+
+                <div class="time-fields">
+                  <mat-form-field appearance="outline">
+                    <mat-label> Opening Time </mat-label>
+
+                    <input matInput type="time" formControlName="startTime" />
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="ms-3">
+                    <mat-label> Closing Time </mat-label>
+
+                    <input matInput type="time" formControlName="endTime" />
+                  </mat-form-field>
+                  @if (hasWorkingTimeError(i)) {
+                    <span class="time-error">
+                      Opening time must be before closing time
+                    </span>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+        <div class="form-actions">
+          <button mat-flat-button color="primary" type="submit">
+            Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </mat-tab>
+
+  <mat-tab label="Profile">
+    <div class="empty-tab">Profile settings coming next.</div>
+  </mat-tab>
+
+  <mat-tab label="Security">
+    <div class="empty-tab">Security settings coming next.</div>
+  </mat-tab>
+</mat-tab-group>

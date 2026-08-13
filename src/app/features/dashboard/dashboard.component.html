@@ -1,191 +1,82 @@
 <app-page-header
   title="Dashboard"
   subtitle="Clinic Overview"
-  [showButton]="false"
->
+  [showButton]="false">
 </app-page-header>
 
 @if (dashboard$ | async; as dashboard) {
-  <!-- KPI Cards -->
-  <app-summary-cards [dashboard]="dashboard"> </app-summary-cards>
 
-  <!-- <div class="dashboard-filter">
+  <app-summary-cards
+    [dashboard]="dashboard">
+  </app-summary-cards>
 
-    <mat-chip-listbox >
-
-        <mat-chip-option
-
-            [selected]="selectedFilter===DashboardFilter.TODAY"
-
-            (click)="changeFilter(DashboardFilter.TODAY)">
-
-            Today
-
-        </mat-chip-option>
-
-        <mat-chip-option
-
-            [selected]="selectedFilter===DashboardFilter.WEEK"
-
-            (click)="changeFilter(DashboardFilter.WEEK)">
-
-            This Week
-
-        </mat-chip-option>
-
-        <mat-chip-option
-
-            [selected]="selectedFilter===DashboardFilter.MONTH"
-
-            (click)="changeFilter(DashboardFilter.MONTH)">
-
-            This Month
-
-        </mat-chip-option>
-
-        <mat-chip-option
-
-            [selected]="selectedFilter===DashboardFilter.YEAR"
-
-            (click)="changeFilter(DashboardFilter.YEAR)">
-
-            This Year
-
-        </mat-chip-option>
-
-    </mat-chip-listbox>
-
-</div> -->
-
-  <!-- Charts -->
   <div class="dashboard-layout">
-    <!-- Revenue -->
 
-    <!-- <mat-card>
-      <mat-card-header>
-        <mat-card-title> Monthly Revenue </mat-card-title>
-      </mat-card-header>
-
-      <mat-card-content>
-        <app-revenue-chart [data]="dashboard.monthlyRevenue ?? []">
-        </app-revenue-chart>
-      </mat-card-content>
-    </mat-card> -->
-
+    <!-- Monthly Revenue -->
     <app-chart-card
       title="Monthly Revenue"
       subtitle="Last 12 Months"
-      icon="trending_up"
-    >
-      <app-revenue-chart [data]="dashboard.monthlyRevenue ?? []">
+      icon="trending_up">
+
+      <app-revenue-chart
+        [data]="dashboard.monthlyRevenue ?? []">
       </app-revenue-chart>
+
     </app-chart-card>
 
-    <!-- Payment -->
 
-    <!-- <mat-card>
-      <mat-card-header>
-        <mat-card-title> Payment Status </mat-card-title>
-      </mat-card-header>
-
-      <mat-card-content>
-        <app-payment-chart [data]="dashboard.paymentSummary ?? []">
-        </app-payment-chart>
-      </mat-card-content>
-    </mat-card> -->
-
+    <!-- Payment Status -->
     <app-chart-card
       title="Payment Status"
       subtitle="Payment Summary"
-      icon="receipt"
-    >
-      <app-payment-chart [data]="dashboard.paymentSummary ?? []">
+      icon="receipt">
+
+      <app-payment-chart
+        [data]="dashboard.paymentSummary ?? []">
       </app-payment-chart>
+
     </app-chart-card>
 
-    <!-- Appointment -->
 
-    <!-- <app-chart-card
-      title="Monthly Revenue"
-      subtitle="Last 12 Months"
-      icon="trending_up"
-    >
-      <button actions mat-icon-button>
-        <mat-icon>download</mat-icon>
-      </button>
-
-     <app-appointments-chart [data]="dashboard.monthlyAppointments ?? []">
-     </app-appointment-chart>
-    </app-chart-card> -->
-
-    <!-- <mat-card class="full-width">
-      <mat-card-header>
-        <mat-card-title> Monthly Appointments </mat-card-title>
-      </mat-card-header>
-
-      <mat-card-content>
-        <app-appointments-chart [data]="dashboard.monthlyAppointments ?? []">
-        </app-appointments-chart>
-      </mat-card-content>
-    </mat-card> -->
-
+    <!-- Monthly Appointments -->
     <app-chart-card
       title="Monthly Appointments"
       subtitle="Last 12 Months"
       icon="bar_chart"
-      class="full-width"
-    >
-      <app-appointments-chart [data]="dashboard.monthlyAppointments ?? []">
+      class="full-width">
+
+      <app-appointments-chart
+        [data]="dashboard.monthlyAppointments ?? []">
       </app-appointments-chart>
+
     </app-chart-card>
 
-    <!-- Recent -->
 
+    <!-- Recent Appointments -->
     <app-chart-card
       title="Recent Appointments"
       subtitle="Latest 5 appointments"
-      icon="schedule"
-    >
+      icon="schedule">
+
       <app-recent-appointments
-        [appointments]="dashboard.recentAppointments ?? []"
-      >
+        [appointments]="dashboard.recentAppointments ?? []">
       </app-recent-appointments>
+
     </app-chart-card>
 
-    <!-- Pending -->
 
-    <!-- <mat-card>
-      <mat-card-header>
-        <mat-card-title> Pending Payments </mat-card-title>
-      </mat-card-header>
-
-      <mat-card-content>
-        <app-pending-payments
-                [invoices]="dashboard.pendingInvoices">
-            </app-pending-payments>
-      </mat-card-content>
-    </mat-card> -->
-
-    <!-- <mat-card class="mb-4">
-      <mat-card-header>
-        <mat-card-title> Pending Payments </mat-card-title>
-
-        <mat-card-subtitle> Outstanding invoices </mat-card-subtitle>
-      </mat-card-header>
-
-      <mat-card-content>
-        <app-pending-payments [invoices]="dashboard.pendingInvoices">
-        </app-pending-payments>
-      </mat-card-content>
-    </mat-card> -->
-
+    <!-- Pending Payments -->
     <app-chart-card
       title="Pending Payments"
       subtitle="Outstanding invoices"
-      icon="payment"
-    >
-      <app-pending-payments [invoices]="dashboard.pendingInvoices">
+      icon="payment">
+
+      <app-pending-payments
+        [invoices]="dashboard.pendingInvoices">
       </app-pending-payments>
+
     </app-chart-card>
+
   </div>
+
 }

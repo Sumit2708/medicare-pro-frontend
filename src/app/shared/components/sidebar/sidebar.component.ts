@@ -53,6 +53,12 @@ export class SidebarComponent {
       route: '/reports',
       roles: [UserRole.ADMIN],
     },
+    {
+      label: 'Settings',
+      icon: 'settings',
+      route: '/settings',
+      roles: [UserRole.ADMIN],
+    },
   ];
 
   constructor(private authService: AuthService) {}
