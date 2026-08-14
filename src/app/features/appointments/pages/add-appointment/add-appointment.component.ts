@@ -30,6 +30,7 @@ import {
 } from '@angular/material/datepicker';
 import { MatTimepickerModule } from '@angular/material/timepicker';
 import { MatIcon } from '@angular/material/icon';
+import { AppointmentAvailabilityService } from '../../services/availability/appointment-availability.service';
 
 @Component({
   selector: 'app-add-appointment',
@@ -63,26 +64,28 @@ export class AddAppointmentComponent {
 
   maxDate = new Date(new Date().setDate(new Date().getDate() + 7));
 
-  timeSlots = [
-    '09:00 AM',
-    '09:30 AM',
-    '10:00 AM',
-    '10:30 AM',
-    '11:00 AM',
-    '11:30 AM',
-    '12:00 PM',
-    '12:30 PM',
-    '01:00 PM',
-    '01:30 PM',
-    '02:00 PM',
-    '02:30 PM',
-    '03:00 PM',
-    '03:30 PM',
-    '04:00 PM',
-    '04:30 PM',
-    '05:00 PM',
-    '05:30 PM',
-  ];
+  timeSlots: string[] = [];
+
+  // timeSlots = [
+  //   '09:00 AM',
+  //   '09:30 AM',
+  //   '10:00 AM',
+  //   '10:30 AM',
+  //   '11:00 AM',
+  //   '11:30 AM',
+  //   '12:00 PM',
+  //   '12:30 PM',
+  //   '01:00 PM',
+  //   '01:30 PM',
+  //   '02:00 PM',
+  //   '02:30 PM',
+  //   '03:00 PM',
+  //   '03:30 PM',
+  //   '04:00 PM',
+  //   '04:30 PM',
+  //   '05:00 PM',
+  //   '05:30 PM',
+  // ];
 
   constructor(
     private fb: FormBuilder,
@@ -91,6 +94,7 @@ export class AddAppointmentComponent {
     private notificationService: NotificationService,
     private doctorService: DoctorService,
     private patientService: PatientService,
+    private appointmentAvailabilityService: AppointmentAvailabilityService,
   ) {
     this.appointmentForm = this.fb.group({
       patientId: ['', { validators: [Validators.required] }],
@@ -105,13 +109,14 @@ export class AddAppointmentComponent {
   ngOnInit(): void {
     this.getDoctors();
     this.getPatients();
+    this.setupAvailabilityListeners();
   }
 
-  myFilter = (d: Date | null): boolean => {
-    const day = (d || new Date()).getDay();
-    // Prevent Saturday and Sunday from being selected.
-    return day !== 0 && day !== 6;
-  };
+  // myFilter = (d: Date | null): boolean => {
+  //   const day = (d || new Date()).getDay();
+  //   // Prevent Saturday and Sunday from being selected.
+  //   return day !== 0 ;
+  // };
 
   getDoctors() {
     this.doctorService.getDoctors().subscribe({
@@ -174,4 +179,67 @@ export class AddAppointmentComponent {
   // getExistingAppointment() {
 
   // }
+
+  private setupAvailabilityListeners(): void {
+    this.appointmentForm.controls['doctorId'].valueChanges.subscribe(() => {
+      this.loadAvailableSlots();
+    });
+
+    this.appointmentForm.controls['date'].valueChanges.subscribe(() => {
+      this.loadAvailableSlots();
+    });
+  }
+
+  private loadAvailableSlots(): void {
+    const timeControl = this.appointmentForm.controls['time'];
+
+    timeControl.disable();
+
+    const doctorId = this.appointmentForm.controls['doctorId'].value;
+
+    const selectedDate = this.appointmentForm.controls['date'].value;
+
+    // Reset time when doctor/date changes
+    this.timeSlots = [];
+
+    this.appointmentForm.controls['time'].reset();
+
+    if (!doctorId || !selectedDate) {
+      return;
+    }
+
+    const date = this.formatDate(selectedDate);
+
+    this.appointmentAvailabilityService
+      .getAvailableSlots(date, doctorId)
+      .subscribe({
+        next: (slots) => {
+          this.timeSlots = slots
+            .filter((slot) => slot.available)
+            .map((slot) => slot.time);
+
+          if (this.timeSlots.length > 0) {
+            timeControl.enable();
+          } else {
+            timeControl.disable();
+          }
+        },
+
+        error: (error) => {
+          console.error('Unable to load available slots', error);
+
+          this.timeSlots = [];
+        },
+      });
+  }
+
+  private formatDate(date: Date): string {
+    const year = date.getFullYear();
+
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  }
 }
