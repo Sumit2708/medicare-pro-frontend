@@ -21,10 +21,21 @@ export class AppointmentAvailabilityService {
   ): Observable<AppointmentSlot[]> {
     return this.settingsService.getSettings().pipe(
       switchMap((settings) => {
-        const workingDay = this.getWorkingDay(
-          selectedDate,
-          settings.workingHours.days,
-        );
+        const workingDay =
+  this.getWorkingDay(
+    selectedDate,
+    settings.workingHours.days
+  );
+
+console.log('Selected date:', selectedDate);
+console.log(
+  'Working days:',
+  settings.workingHours.days
+);
+console.log(
+  'Matched working day:',
+  workingDay
+);
 
         if (!workingDay || !workingDay.enabled) {
           return of([]);

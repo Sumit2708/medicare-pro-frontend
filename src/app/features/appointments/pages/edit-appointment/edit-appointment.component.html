@@ -31,7 +31,6 @@
         <input matInput
           [matDatepicker]="datePicker"
           formControlName="date"
-          [matDatepickerFilter]="myFilter"
           [min]="minDate"
           [max]="maxDate" />
 
@@ -48,7 +47,7 @@
       <mat-form-field appearance="outline">
         <mat-label>Appointment Time</mat-label>
 
-        <mat-select formControlName="time">
+        <mat-select formControlName="time" >
           <mat-option *ngFor="let slot of timeSlots" [value]="slot">
             {{ slot }}
           </mat-option>
