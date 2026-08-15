@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { MatFormField, MatLabel, MatHint, MatFormFieldControl } from "@angular/material/form-field";
-import { MatCard } from "@angular/material/card";
+import { MatCard, MatCardTitle, MatCardHeader, MatCardSubtitle, MatCardContent } from "@angular/material/card";
 import { MatListOption, MatSelectionList } from '@angular/material/list';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators,ReactiveFormsModule } from '@angular/forms';
@@ -14,7 +14,7 @@ import { PageHeaderComponent } from "../../../../shared/components/page-header/p
 
 @Component({
   selector: 'app-add-patient',
-  imports: [MatSelectModule, MatFormField, MatLabel, MatHint, MatCard, ReactiveFormsModule, MatInputModule, MatButtonModule, PageHeaderComponent],
+  imports: [MatSelectModule, MatFormField, MatLabel, MatHint, MatCard, ReactiveFormsModule, MatInputModule, MatButtonModule, PageHeaderComponent, MatIcon, MatCardTitle, MatCardHeader, MatCardSubtitle, MatCardContent],
   templateUrl: './add-patient.component.html',
   styleUrl: './add-patient.component.scss'
 })

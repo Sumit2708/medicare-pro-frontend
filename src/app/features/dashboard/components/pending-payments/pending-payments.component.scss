@@ -1,25 +1,168 @@
-.table {
+.table-wrapper {
   width: 100%;
+  overflow-x: auto;
 }
 
-.empty {
-  padding: 40px;
+.payments-table {
+  width: 100%;
+  background: transparent;
+}
 
-  text-align: center;
+/* Header */
 
-  color: #9e9e9e;
+.mat-mdc-header-row {
+  height: 44px;
+  background: transparent;
+}
+
+.mat-mdc-header-cell {
+  padding: 0 16px;
+
+  color: var(--mat-sys-on-surface-variant);
+
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+}
+
+/* Rows */
+
+.mat-mdc-row {
+  height: 64px;
+
+  transition: background-color 0.15s ease;
+}
+
+.mat-mdc-row:hover {
+  background: var(--mat-sys-surface-container-low);
+}
+
+.mat-mdc-cell {
+  padding: 0 16px;
+
+  color: var(--mat-sys-on-surface);
+
+  font-size: 13px;
+
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+}
+
+/* Invoice */
+
+.invoice-number {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Patient */
+
+.patient {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  min-width: 150px;
+}
+
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 34px;
+  height: 34px;
+
+  border-radius: 50%;
+
+  color: #00897b;
+  background: #e0f2f1;
+
+  flex-shrink: 0;
+}
+
+.avatar mat-icon {
+  width: 18px;
+  height: 18px;
+
+  font-size: 18px;
+}
+
+/* Amount */
+
+.amount {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Status */
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 5px 10px;
+
+  border-radius: 999px;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  white-space: nowrap;
 }
 
 .pending {
-  background: #fff8e1 !important;
-
-  color: #f57c00 !important;
+  color: #f57c00;
+  background: #fff3e0;
 }
 
-.mat-mdc-header-row {
-  background: #fafafa;
+/* Empty */
+
+.empty {
+  min-height: 180px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  color: var(--mat-sys-on-surface-variant);
 }
 
-.mat-mdc-row {
-  height: 52px;
+.empty mat-icon {
+  width: 40px;
+  height: 40px;
+
+  margin-bottom: 10px;
+
+  font-size: 40px;
+
+  opacity: 0.6;
+}
+
+.empty h4 {
+  margin: 0 0 4px;
+
+  color: var(--mat-sys-on-surface);
+
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.empty p {
+  margin: 0;
+
+  font-size: 13px;
+}
+
+/* Mobile */
+
+@media (max-width: 768px) {
+  .payments-table {
+    min-width: 600px;
+  }
 }

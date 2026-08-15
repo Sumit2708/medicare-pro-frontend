@@ -75,99 +75,80 @@ export class AppointmentsChartComponent {
   }
 
   private initializeChart(): void {
+  this.chartOptions = {
+    series: [
+      {
+        name: 'Appointments',
+        data: this.data.map((item) => item.appointments),
+      },
+    ],
 
-    this.chartOptions = {
+    chart: {
+      type: 'bar',
+      height: 320,
+      toolbar: {
+        show: false,
+      },
+    },
 
-      series: [
+    colors: ['#1976D2'],
 
-        {
+    plotOptions: {
+      bar: {
+        borderRadius: 6,
+        columnWidth: '45%',
+      },
+    },
 
-          name: 'Appointments',
+    dataLabels: {
+      enabled: false,
+    },
 
-          data: this.data.map(x => x.appointments)
+    xaxis: {
+      categories: this.data.map((item) => item.month),
 
-        }
-
-      ],
-
-      chart: {
-
-        type: 'bar',
-
-        height: 350,
-
-        toolbar: {
-
-          show: false
-
-        }
-
+      axisBorder: {
+        show: false,
       },
 
-      colors: [
+      axisTicks: {
+        show: false,
+      },
+    },
 
-        '#1976D2'
+    yaxis: {
+      min: 0,
+      forceNiceScale: true,
 
-      ],
-
-      plotOptions: {
-
-        bar: {
-
-          borderRadius: 8,
-
-          columnWidth: '45%'
-
-        }
-
+      labels: {
+        formatter: (value) => Math.round(value).toString(),
       },
 
-      dataLabels: {
-
-        enabled: false
-
+      title: {
+        text: undefined,
       },
+    },
+
+    tooltip: {
+      y: {
+        formatter: (value) => `${value} appointments`,
+      },
+    },
+
+    legend: {
+      show: false,
+    },
+
+    grid: {
+      borderColor: '#E9EDF2',
+      strokeDashArray: 4,
 
       xaxis: {
-
-        categories: this.data.map(x => x.month)
-
+        lines: {
+          show: false,
+        },
       },
-
-      yaxis: {
-
-        title: {
-
-          text: 'Appointments'
-
-        }
-
-      },
-
-      tooltip: {
-
-        y: {
-
-          formatter: value => `${value} Appointments`
-
-        }
-
-      },
-
-      legend: {
-
-        show: false
-
-      },
-
-      grid: {
-
-        borderColor: '#ECECEC'
-
-      }
-
-    };
-
-  }
-
+    },
+  };
+}
 }

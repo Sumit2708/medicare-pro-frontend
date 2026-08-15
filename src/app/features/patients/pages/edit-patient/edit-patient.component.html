@@ -1,53 +1,187 @@
-<app-page-header title="Edit Patient" subtitle="Update patient details"  buttonLabel="Edit Patient"
-    buttonIcon="arrow_back"
-    (buttonClick)="navtoPatientList()">
-</app-page-header>
+<app-page-header
+  title="Edit Patient"
+  subtitle="Update the patient's information"
+  buttonLabel="Back to Patients"
+  buttonIcon="arrow_back"
+  (buttonClick)="navtoPatientList()"
+></app-page-header>
 
-<div class="page-container">
-  <mat-card class="main-card">
-    <form [formGroup]="patientForm" (ngSubmit)="onSubmit()">
-      <div>
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Name</mat-label>
-          <input matInput formControlName="name" />
-        </mat-form-field>
-      </div>
+<div class="patient-form-page">
 
-      <div>
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Age</mat-label>
-          <input matInput type="number" formControlName="age" />
-        </mat-form-field>
-      </div>
+  <form
+    [formGroup]="patientForm"
+    (ngSubmit)="onSubmit()"
+  >
 
-      <div>
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Gender</mat-label>
-          <mat-select formControlName="gender">
-            <mat-option value="Male">Male</mat-option>
-            <mat-option value="Female">Female</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
+    <!-- Patient Information -->
+    <mat-card class="form-card">
 
-      <div>
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Mobile</mat-label>
-          <input matInput formControlName="mobile" />
-        </mat-form-field>
-      </div>
+      <mat-card-header>
 
-      <div>
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Address</mat-label>
-          <input matInput formControlName="address" />
-          <mat-hint>Optional</mat-hint>
-        </mat-form-field>
-      </div>
+        <div class="section-icon">
+          <mat-icon>person</mat-icon>
+        </div>
 
-      <span style="display: flex; justify-content: center">
-        <button mat-raised-button color="primary" type="submit">Save</button>
-      </span>
-    </form>
-  </mat-card>
+        <div>
+          <mat-card-title>
+            Patient Information
+          </mat-card-title>
+
+          <mat-card-subtitle>
+            Update the patient's basic information
+          </mat-card-subtitle>
+        </div>
+
+      </mat-card-header>
+
+      <mat-card-content>
+
+        <div class="form-grid">
+
+          <!-- Name -->
+          <mat-form-field
+            appearance="outline"
+            class="full-width"
+          >
+            <mat-label>Full Name</mat-label>
+
+            <mat-icon matPrefix>person_outline</mat-icon>
+
+            <input
+              matInput
+              formControlName="name"
+              placeholder="Enter patient's full name"
+            />
+
+            @if (
+              patientForm.get('name')?.hasError('required') &&
+              patientForm.get('name')?.touched
+            ) {
+              <mat-error>
+                Name is required
+              </mat-error>
+            }
+
+          </mat-form-field>
+
+
+          <!-- Age -->
+          <mat-form-field
+            appearance="outline"
+            class="full-width"
+          >
+            <mat-label>Age</mat-label>
+
+            <mat-icon matPrefix>calendar_today</mat-icon>
+
+            <input
+              matInput
+              type="number"
+              formControlName="age"
+              placeholder="Enter age"
+            />
+
+          </mat-form-field>
+
+
+          <!-- Gender -->
+          <mat-form-field
+            appearance="outline"
+            class="full-width"
+          >
+            <mat-label>Gender</mat-label>
+
+            <mat-icon matPrefix>wc</mat-icon>
+
+            <mat-select formControlName="gender">
+
+              <mat-option value="Male">
+                Male
+              </mat-option>
+
+              <mat-option value="Female">
+                Female
+              </mat-option>
+
+              <mat-option value="Other">
+                Other
+              </mat-option>
+
+            </mat-select>
+
+          </mat-form-field>
+
+
+          <!-- Mobile -->
+          <mat-form-field
+            appearance="outline"
+            class="full-width"
+          >
+            <mat-label>Mobile Number</mat-label>
+
+            <mat-icon matPrefix>phone</mat-icon>
+
+            <input
+              matInput
+              type="tel"
+              formControlName="mobile"
+              placeholder="Enter mobile number"
+            />
+
+          </mat-form-field>
+
+
+          <!-- Address -->
+          <mat-form-field
+            appearance="outline"
+            class="full-width address-field"
+          >
+            <mat-label>Address</mat-label>
+
+            <mat-icon matPrefix>location_on</mat-icon>
+
+            <input
+              matInput
+              formControlName="address"
+              placeholder="Enter patient's address"
+            />
+
+            <mat-hint>
+              Optional
+            </mat-hint>
+
+          </mat-form-field>
+
+        </div>
+
+      </mat-card-content>
+
+    </mat-card>
+
+
+    <!-- Actions -->
+    <div class="form-actions">
+
+      <button
+        mat-stroked-button
+        type="button"
+        (click)="navtoPatientList()"
+      >
+        Cancel
+      </button>
+
+      <button
+        mat-flat-button
+        color="primary"
+        type="submit"
+        [disabled]="patientForm.invalid"
+      >
+        <mat-icon>save</mat-icon>
+        Save Changes
+      </button>
+
+    </div>
+
+  </form>
+
 </div>

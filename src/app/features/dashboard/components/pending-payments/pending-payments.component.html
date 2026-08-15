@@ -1,52 +1,105 @@
 @if (invoices.length) {
-  <table mat-table [dataSource]="invoices" class="table">
-    <!-- Invoice -->
 
-    <ng-container matColumnDef="invoice">
-      <th mat-header-cell *matHeaderCellDef>Invoice</th>
+  <div class="table-wrapper">
 
-      <td mat-cell *matCellDef="let row">
-        {{ row.invoiceNumber }}
-      </td>
-    </ng-container>
+    <table mat-table [dataSource]="invoices" class="payments-table">
 
-    <!-- Patient -->
+      <!-- Invoice -->
 
-    <ng-container matColumnDef="patient">
-      <th mat-header-cell *matHeaderCellDef>Patient</th>
+      <ng-container matColumnDef="invoice">
+        <th mat-header-cell *matHeaderCellDef>
+          Invoice
+        </th>
 
-      <td mat-cell *matCellDef="let row">
-        {{ row.patientName }}
-      </td>
-    </ng-container>
+        <td mat-cell *matCellDef="let row">
+          <span class="invoice-number">
+            {{ row.invoiceNumber }}
+          </span>
+        </td>
+      </ng-container>
 
-    <!-- Amount -->
 
-    <ng-container matColumnDef="amount">
-      <th mat-header-cell *matHeaderCellDef>Amount</th>
+      <!-- Patient -->
 
-      <td mat-cell *matCellDef="let row">
-        {{ row.amount | currency: "INR" }}
-      </td>
-    </ng-container>
+      <ng-container matColumnDef="patient">
+        <th mat-header-cell *matHeaderCellDef>
+          Patient
+        </th>
 
-    <!-- Status -->
+        <td mat-cell *matCellDef="let row">
 
-    <ng-container matColumnDef="status">
-      <th mat-header-cell *matHeaderCellDef>Status</th>
+          <div class="patient">
+            <div class="avatar">
+              <mat-icon>person</mat-icon>
+            </div>
 
-      <td mat-cell *matCellDef="let row">
-        <mat-chip class="pending">
-          {{ row.paymentStatus }}
-        </mat-chip>
-      </td>
-    </ng-container>
+            <span>
+              {{ row.patientName }}
+            </span>
+          </div>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        </td>
+      </ng-container>
 
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-  </table>
+
+      <!-- Amount -->
+
+      <ng-container matColumnDef="amount">
+        <th mat-header-cell *matHeaderCellDef>
+          Amount
+        </th>
+
+        <td mat-cell *matCellDef="let row">
+          <span class="amount">
+            {{ row.amount | currency: 'INR' : 'symbol' : '1.0-0' }}
+          </span>
+        </td>
+      </ng-container>
+
+
+      <!-- Status -->
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>
+          Status
+        </th>
+
+        <td mat-cell *matCellDef="let row">
+
+          <span class="status-badge pending">
+            {{ row.paymentStatus }}
+          </span>
+
+        </td>
+      </ng-container>
+
+
+      <tr
+        mat-header-row
+        *matHeaderRowDef="displayedColumns">
+      </tr>
+
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns">
+      </tr>
+
+    </table>
+
+  </div>
 
 } @else {
-  <div class="empty">No pending payments.</div>
+
+  <div class="empty">
+
+    <mat-icon>payments</mat-icon>
+
+    <h4>No pending payments</h4>
+
+    <p>
+      All outstanding invoices have been cleared.
+    </p>
+
+  </div>
+
 }

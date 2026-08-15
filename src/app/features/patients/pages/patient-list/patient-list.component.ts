@@ -1,8 +1,6 @@
-import { Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { PatientService } from '../../services/patient.service';
-import { Router, ɵEmptyOutletComponent } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatCard } from '@angular/material/card';
@@ -17,6 +15,7 @@ import { NotificationService } from '../../../../core/services/notification/noti
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
 import { SearchBoxComponent } from '../../../../shared/components/search-box/search-box.component';
 import { DialogService } from '../../../../core/services/dialog/dialog.service';
+import { Patient } from '../../../../shared/models/patient.model';
 
 @Component({
   selector: 'app-patient-list',
@@ -38,11 +37,21 @@ import { DialogService } from '../../../../core/services/dialog/dialog.service';
   templateUrl: './patient-list.component.html',
   styleUrl: './patient-list.component.scss',
 })
-export class PatientListComponent {
-  dataSource = new MatTableDataSource<any>();
+export class PatientListComponent implements AfterViewInit {
+  dataSource = new MatTableDataSource<Patient>();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+
+  displayedColumns: string[] = [
+    'id',
+    'name',
+    'age',
+    'gender',
+    'mobile',
+    'status',
+    'actions',
+  ];
 
   constructor(
     private patientService: PatientService,
@@ -55,18 +64,27 @@ export class PatientListComponent {
     this.loadPatients();
   }
 
-  loadPatients() {
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+
+  getPatientIndex(index: number): number {
+    if (!this.paginator) {
+      return index + 1;
+    }
+
+    return this.paginator.pageIndex * this.paginator.pageSize + index + 1;
+  }
+
+  loadPatients(): void {
     this.patientService.getPatients().subscribe({
       next: (patients) => {
-        this.dataSource.data = patients.reverse();
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+        this.dataSource.data = [...patients].reverse();
       },
-      error: (error) => {
+
+      error: () => {
         this.notificationService.error('Failed to load patients');
-      },
-      complete: () => {
-        console.log('Patients loaded successfully', this.dataSource.data);
       },
     });
   }

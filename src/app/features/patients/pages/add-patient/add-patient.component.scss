@@ -1,0 +1,163 @@
+.patient-form-page {
+  max-width: 1100px;
+  margin: 24px auto 40px;
+}
+
+/* Main card */
+
+.form-card {
+  border-radius: 20px;
+
+  border: 1px solid var(--mat-sys-outline-variant);
+
+  box-shadow: none;
+
+  overflow: hidden;
+}
+
+/* Card header */
+
+mat-card-header {
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+
+  padding: 24px 28px;
+
+  background: var(--mat-sys-surface-container-low);
+}
+
+.section-icon {
+  width: 46px;
+  height: 46px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 12px;
+
+  background: var(--mat-sys-primary-container);
+
+  color: var(--mat-sys-primary);
+}
+
+.section-icon mat-icon {
+  width: 24px;
+  height: 24px;
+
+  font-size: 24px;
+}
+
+/* Titles */
+
+mat-card-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+mat-card-subtitle {
+  margin-top: 4px;
+
+  font-size: 13px;
+
+  color: var(--mat-sys-on-surface-variant);
+}
+
+/* Content */
+
+mat-card-content {
+  padding: 28px !important;
+}
+
+/* Form grid */
+
+.form-grid {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 8px 20px;
+}
+
+/* Angular Material fields */
+
+.full-width {
+  width: 100%;
+}
+
+.address-field {
+  grid-column: 1 / -1;
+}
+
+/* Prefix icons */
+
+mat-form-field mat-icon[matPrefix] {
+  margin-right: 8px;
+
+  color: var(--mat-sys-on-surface-variant);
+}
+
+/* Actions */
+
+.form-actions {
+  display: flex;
+
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 12px;
+
+  margin-top: 20px;
+}
+
+.form-actions button {
+  min-height: 44px;
+
+  border-radius: 10px;
+
+  padding: 0 20px;
+}
+
+.form-actions button[color="primary"] {
+  min-width: 145px;
+}
+
+/* Mobile */
+
+@media (max-width: 768px) {
+  .patient-form-page {
+    margin: 16px 0 30px;
+  }
+
+  mat-card-header {
+    padding: 20px;
+  }
+
+  mat-card-content {
+    padding: 20px !important;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+
+    gap: 6px;
+  }
+
+  .address-field {
+    grid-column: auto;
+  }
+
+  .form-actions {
+    justify-content: stretch;
+
+    flex-direction: column-reverse;
+  }
+
+  .form-actions button {
+    width: 100%;
+  }
+}

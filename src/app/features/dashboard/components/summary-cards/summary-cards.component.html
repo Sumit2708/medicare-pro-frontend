@@ -9,11 +9,13 @@
     <div class="content">
       <span>Total Patients</span>
 
-      <h2>
-        {{ dashboard.totalPatients }}
-      </h2>
+      <div class="sub-content">
+        <h2>
+          {{ dashboard.totalPatients }}
+        </h2>
 
-      <small> Registered Patients </small>
+        <small> Registered Patients </small>
+      </div>
     </div>
   </mat-card>
 
@@ -27,11 +29,13 @@
     <div class="content">
       <span>Total Doctors</span>
 
-      <h2>
-        {{ dashboard.totalDoctors }}
-      </h2>
+      <div class="sub-content">
+        <h2>
+          {{ dashboard.totalDoctors }}
+        </h2>
 
-      <small> Active Doctors </small>
+        <small> Active Doctors </small>
+      </div>
     </div>
   </mat-card>
 
@@ -45,11 +49,13 @@
     <div class="content">
       <span>Today's Appointments</span>
 
-      <h2>
-        {{ dashboard.todayAppointments }}
-      </h2>
+      <div class="sub-content">
+        <h2>
+          {{ dashboard.todayAppointments }}
+        </h2>
 
-      <small> Scheduled Today </small>
+        <small> Scheduled Today </small>
+      </div>
     </div>
   </mat-card>
 
@@ -63,13 +69,16 @@
     <div class="content">
       <span>Revenue Today</span>
 
-      <h2>
-        {{
-          dashboard.todayCollectedRevenue | currency: "INR" : "symbol" : "1.0-0"
-        }}
-      </h2>
+      <div class="sub-content">
+        <h2>
+          {{
+            dashboard.todayCollectedRevenue
+              | currency: "INR" : "symbol" : "1.0-0"
+          }}
+        </h2>
 
-      <small> Collected Revenue </small>
+        <small> Collected Revenue </small>
+      </div>
     </div>
   </mat-card>
 </div>

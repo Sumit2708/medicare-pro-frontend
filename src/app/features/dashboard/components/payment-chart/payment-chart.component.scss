@@ -1,9 +1,10 @@
 :host {
   display: block;
-
   width: 100%;
+  min-width: 0;
 }
 
 apx-chart {
   display: block;
+  width: 100%;
 }

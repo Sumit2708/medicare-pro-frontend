@@ -1,65 +1,124 @@
 @if (appointments.length) {
-  <table mat-table [dataSource]="appointments" class="table">
-    <!-- Date -->
 
-    <ng-container matColumnDef="date">
-      <th mat-header-cell *matHeaderCellDef>Date</th>
+  <div class="table-wrapper">
 
-      <td mat-cell *matCellDef="let row">
-      {{ row.appointmentDate | date:'dd MMM, y' }}
-      </td>
-    </ng-container>
+    <table mat-table [dataSource]="appointments" class="appointments-table">
 
-    <!-- Time -->
+      <!-- Date -->
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef>
+          Date
+        </th>
 
-    <ng-container matColumnDef="time">
-      <th mat-header-cell *matHeaderCellDef>Time</th>
+        <td mat-cell *matCellDef="let row">
+          <span class="date">
+            {{ row.appointmentDate | date: 'dd MMM, y' }}
+          </span>
+        </td>
+      </ng-container>
 
-      <td mat-cell *matCellDef="let row">
-        {{ row.appointmentTime }}
-      </td>
-    </ng-container>
 
-    <!-- Doctor -->
+      <!-- Time -->
+      <ng-container matColumnDef="time">
+        <th mat-header-cell *matHeaderCellDef>
+          Time
+        </th>
 
-    <ng-container matColumnDef="doctor">
-      <th mat-header-cell *matHeaderCellDef>Doctor</th>
+        <td mat-cell *matCellDef="let row">
+          <span class="time">
+            {{ row.appointmentTime }}
+          </span>
+        </td>
+      </ng-container>
 
-      <td mat-cell *matCellDef="let row">
-       {{ row.doctorName }}
-      </td>
-    </ng-container>
 
-    <!-- Patient -->
+      <!-- Doctor -->
+      <ng-container matColumnDef="doctor">
+        <th mat-header-cell *matHeaderCellDef>
+          Doctor
+        </th>
 
-    <ng-container matColumnDef="patient">
-      <th mat-header-cell *matHeaderCellDef>Patient</th>
+        <td mat-cell *matCellDef="let row">
 
-      <td mat-cell *matCellDef="let row">
-        {{ row.patientName }}
-      </td>
-    </ng-container>
+          <div class="person">
+            <div class="avatar doctor-avatar">
+              <mat-icon>medical_services</mat-icon>
+            </div>
 
-    <!-- Status -->
+            <span>
+              {{ row.doctorName }}
+            </span>
+          </div>
 
-    <ng-container matColumnDef="status">
-      <th mat-header-cell *matHeaderCellDef>Status</th>
+        </td>
+      </ng-container>
 
-      <td mat-cell *matCellDef="let row">
-      <mat-chip
-    [ngClass]="getStatusClass(row.status)">
 
-    {{ row.status }}
+      <!-- Patient -->
+      <ng-container matColumnDef="patient">
+        <th mat-header-cell *matHeaderCellDef>
+          Patient
+        </th>
 
-</mat-chip>
-      </td>
-    </ng-container>
+        <td mat-cell *matCellDef="let row">
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <div class="person">
+            <div class="avatar patient-avatar">
+              <mat-icon>person</mat-icon>
+            </div>
 
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-  </table>
+            <span>
+              {{ row.patientName }}
+            </span>
+          </div>
+
+        </td>
+      </ng-container>
+
+
+      <!-- Status -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>
+          Status
+        </th>
+
+        <td mat-cell *matCellDef="let row">
+
+          <span
+            class="status-badge"
+            [ngClass]="getStatusClass(row.status)"
+          >
+            {{ row.status }}
+          </span>
+
+        </td>
+      </ng-container>
+
+
+      <tr
+        mat-header-row
+        *matHeaderRowDef="displayedColumns">
+      </tr>
+
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumns">
+      </tr>
+
+    </table>
+
+  </div>
 
 } @else {
-  <div class="empty">No recent appointments found.</div>
+
+  <div class="empty">
+    <mat-icon>event_busy</mat-icon>
+
+    <h4>No appointments yet</h4>
+
+    <p>
+      There are no recent appointments to display.
+    </p>
+  </div>
+
 }

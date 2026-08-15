@@ -1,21 +1,26 @@
 <app-page-header
   title="Dashboard"
-  subtitle="Clinic Overview"
+  subtitle="Clinic overview"
   [showButton]="false">
 </app-page-header>
 
+
 @if (dashboard$ | async; as dashboard) {
 
-  <app-summary-cards
-    [dashboard]="dashboard">
-  </app-summary-cards>
+  <section class="summary-section">
+    <app-summary-cards
+      [dashboard]="dashboard">
+    </app-summary-cards>
+  </section>
 
-  <div class="dashboard-layout">
 
-    <!-- Monthly Revenue -->
+  <section class="dashboard-layout">
+
+    <!-- Revenue -->
+
     <app-chart-card
       title="Monthly Revenue"
-      subtitle="Last 12 Months"
+      subtitle="Last 12 months"
       icon="trending_up">
 
       <app-revenue-chart
@@ -25,10 +30,11 @@
     </app-chart-card>
 
 
-    <!-- Payment Status -->
+    <!-- Payment -->
+
     <app-chart-card
       title="Payment Status"
-      subtitle="Payment Summary"
+      subtitle="Current payment overview"
       icon="receipt">
 
       <app-payment-chart
@@ -38,11 +44,12 @@
     </app-chart-card>
 
 
-    <!-- Monthly Appointments -->
+    <!-- Appointments -->
+
     <app-chart-card
       title="Monthly Appointments"
-      subtitle="Last 12 Months"
-      icon="bar_chart"
+      subtitle="Last 12 months"
+      icon="calendar_month"
       class="full-width">
 
       <app-appointments-chart
@@ -53,10 +60,11 @@
 
 
     <!-- Recent Appointments -->
+
     <app-chart-card
       title="Recent Appointments"
-      subtitle="Latest 5 appointments"
-      icon="schedule">
+      subtitle="Latest appointments"
+      icon="event">
 
       <app-recent-appointments
         [appointments]="dashboard.recentAppointments ?? []">
@@ -66,17 +74,18 @@
 
 
     <!-- Pending Payments -->
+
     <app-chart-card
       title="Pending Payments"
       subtitle="Outstanding invoices"
-      icon="payment">
+      icon="payments">
 
       <app-pending-payments
-        [invoices]="dashboard.pendingInvoices">
+        [invoices]="dashboard.pendingInvoices ?? []">
       </app-pending-payments>
 
     </app-chart-card>
 
-  </div>
+  </section>
 
 }

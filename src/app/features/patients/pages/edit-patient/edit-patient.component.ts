@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatFormField, MatLabel, MatHint } from '@angular/material/form-field';
 import { MatSelect, MatOption } from '@angular/material/select';
-import { MatCard } from '@angular/material/card';
+import { MatCard, MatCardHeader, MatCardTitle, MatCardSubtitle, MatCardContent } from '@angular/material/card';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PatientService } from '../../services/patient.service';
 import { Router } from '@angular/router';
@@ -9,10 +9,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { NotificationService } from '../../../../core/services/notification/notification.service';
 import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
+import { MatIcon } from "@angular/material/icon";
 
 @Component({
   selector: 'app-edit-patient',
-  imports: [MatFormField, MatLabel, MatHint, MatSelect, MatOption, MatCard, ReactiveFormsModule, MatButtonModule, MatInputModule, PageHeaderComponent],
+  imports: [MatFormField, MatLabel, MatHint, MatSelect, MatOption, MatCard, ReactiveFormsModule, MatButtonModule, MatInputModule, PageHeaderComponent, MatCardHeader, MatIcon, MatCardTitle, MatCardSubtitle, MatCardContent],
   templateUrl: './edit-patient.component.html',
   styleUrl: './edit-patient.component.scss',
 })
