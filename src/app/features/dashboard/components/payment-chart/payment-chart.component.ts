@@ -47,15 +47,13 @@ export class PaymentChartComponent {
   private initializeChart(): void {
     this.chartOptions = {
       series: this.data.map((item) => item.count),
-
       labels: this.data.map((item) => item.status),
 
       chart: {
         type: 'donut',
         height: 320,
-        toolbar: {
-          show: false,
-        },
+        fontFamily: 'Inter, sans-serif',
+        toolbar: { show: false },
       },
 
       plotOptions: {
@@ -67,48 +65,53 @@ export class PaymentChartComponent {
               name: {
                 show: true,
                 fontSize: '13px',
+                color: '#5B6B72',
               },
               value: {
                 show: true,
                 fontSize: '24px',
-                fontWeight: 600,
+                fontWeight: 700,
+                color: '#12232E',
+                fontFamily: 'Lexend, sans-serif',
               },
               total: {
                 show: true,
                 label: 'Total',
+                fontSize: '13px',
+                color: '#5B6B72',
+                fontFamily: 'Inter, sans-serif',
               },
             },
           },
         },
       },
 
-      dataLabels: {
-        enabled: false,
-      },
+      dataLabels: { enabled: false },
 
       legend: {
         position: 'bottom',
         horizontalAlign: 'center',
         fontSize: '13px',
+        fontFamily: 'Inter, sans-serif',
+        labels: { colors: '#12232E' },
+        markers: { size: 7 } as any,
+        itemMargin: { horizontal: 10, vertical: 6 },
       },
 
-      colors: ['#2E7D32', '#F9A825', '#C62828', '#1565C0'],
+      // Paid, Pending, Overdue, Partial — confirm this order matches your data
+      colors: ['#2F9E68', '#E8A33D', '#D64545', '#2F6FA6'],
 
       stroke: {
         width: 2,
+        colors: ['#FFFFFF'], // clean white gap between donut segments
       },
 
       responsive: [
         {
           breakpoint: 768,
           options: {
-            chart: {
-              height: 280,
-            },
-
-            legend: {
-              position: 'bottom',
-            },
+            chart: { height: 280 },
+            legend: { position: 'bottom' },
           },
         },
       ],

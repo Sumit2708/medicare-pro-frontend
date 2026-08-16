@@ -1,27 +1,36 @@
-<mat-toolbar color="primary">
-  <span>MediCare Pro</span>
+<mat-toolbar class="app-navbar">
+  <div class="brand">
+    <span class="brand-mark">
+      <mat-icon>local_hospital</mat-icon>
+    </span>
+    <span class="brand-name">MediCare <b>Pro</b></span>
+  </div>
 
   <span class="spacer"></span>
 
-  <!-- <button mat-icon-button > -->
- <div class="d-flex flex-column align-items-center justify-content-center me-5 mt-3">
-  <mat-icon [matMenuTriggerFor]="profileMenu" class="profile-avatar"
-    >account_circle</mat-icon
+  <button
+    class="profile-trigger"
+    mat-button
+    disableRipple
+    [matMenuTriggerFor]="profileMenu"
   >
-  <span class="fs12">{{ currentUser?.role }}</span>
- </div>
-  <!-- </button> -->
+    <span class="avatar">
+      <mat-icon>account_circle</mat-icon>
+    </span>
+    <span class="profile-meta">
+      <span class="profile-role">{{ currentUser?.role }}</span>
+    </span>
+    <mat-icon class="chevron">expand_more</mat-icon>
+  </button>
 
-  <mat-menu #profileMenu="matMenu">
+  <mat-menu #profileMenu="matMenu" xPosition="before" class="profile-menu">
     <button mat-menu-item (click)="navProfile()">
       <mat-icon>person</mat-icon>
-
-      Profile
+      <span>Profile</span>
     </button>
     <button mat-menu-item (click)="logout()">
       <mat-icon>logout</mat-icon>
-
-      Logout
+      <span>Logout</span>
     </button>
   </mat-menu>
 </mat-toolbar>

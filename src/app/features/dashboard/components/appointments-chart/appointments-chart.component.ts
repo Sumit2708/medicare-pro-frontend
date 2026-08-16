@@ -1,9 +1,4 @@
-import {
-  Component,
-  Input,
-  OnChanges,
-  SimpleChanges
-} from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 
@@ -17,14 +12,11 @@ import {
   ApexTooltip,
   ApexXAxis,
   ApexYAxis,
-  NgApexchartsModule
+  NgApexchartsModule,
 } from 'ng-apexcharts';
 import { AppointmentChartModel } from '../../models/appointment-chart.model';
 
-
-
 export type AppointmentChartOptions = {
-
   series: ApexAxisChartSeries;
 
   chart: ApexChart;
@@ -44,111 +36,87 @@ export type AppointmentChartOptions = {
   legend: ApexLegend;
 
   colors: string[];
-
 };
-
 
 @Component({
   selector: 'app-appointments-chart',
-  imports: [  CommonModule,
-    NgApexchartsModule
-  ],
+  imports: [CommonModule, NgApexchartsModule],
   templateUrl: './appointments-chart.component.html',
-  styleUrl: './appointments-chart.component.scss'
+  styleUrl: './appointments-chart.component.scss',
 })
 export class AppointmentsChartComponent {
-
- @Input({ required: true })
-
+  @Input({ required: true })
   data: AppointmentChartModel[] = [];
 
   chartOptions: Partial<AppointmentChartOptions> = {};
 
   ngOnChanges(changes: SimpleChanges): void {
-
     if (changes['data']) {
-
       this.initializeChart();
-
     }
-
   }
 
   private initializeChart(): void {
-  this.chartOptions = {
-    series: [
-      {
-        name: 'Appointments',
-        data: this.data.map((item) => item.appointments),
-      },
-    ],
+    this.chartOptions = {
+      series: [
+        {
+          name: 'Appointments',
+          data: this.data.map((item) => item.appointments),
+        },
+      ],
 
-    chart: {
-      type: 'bar',
-      height: 320,
-      toolbar: {
-        show: false,
-      },
-    },
-
-    colors: ['#1976D2'],
-
-    plotOptions: {
-      bar: {
-        borderRadius: 6,
-        columnWidth: '45%',
-      },
-    },
-
-    dataLabels: {
-      enabled: false,
-    },
-
-    xaxis: {
-      categories: this.data.map((item) => item.month),
-
-      axisBorder: {
-        show: false,
+      chart: {
+        type: 'bar',
+        height: 320,
+        fontFamily: 'Inter, sans-serif',
+        toolbar: { show: false },
       },
 
-      axisTicks: {
-        show: false,
-      },
-    },
+      colors: ['#2F6FA6'], // matches the appointment stat card accent
 
-    yaxis: {
-      min: 0,
-      forceNiceScale: true,
-
-      labels: {
-        formatter: (value) => Math.round(value).toString(),
-      },
-
-      title: {
-        text: undefined,
-      },
-    },
-
-    tooltip: {
-      y: {
-        formatter: (value) => `${value} appointments`,
-      },
-    },
-
-    legend: {
-      show: false,
-    },
-
-    grid: {
-      borderColor: '#E9EDF2',
-      strokeDashArray: 4,
-
-      xaxis: {
-        lines: {
-          show: false,
+      plotOptions: {
+        bar: {
+          borderRadius: 6,
+          columnWidth: '45%',
+          borderRadiusApplication: 'end',
         },
       },
-    },
-  };
-}
+
+      dataLabels: { enabled: false },
+
+      xaxis: {
+        categories: this.data.map((item) => item.month),
+        axisBorder: { show: false },
+        axisTicks: { show: false },
+        labels: {
+          style: { colors: '#5B6B72', fontSize: '12px' },
+        },
+      },
+
+      yaxis: {
+        min: 0,
+        forceNiceScale: true,
+        labels: {
+          formatter: (value) => Math.round(value).toString(),
+          style: { colors: '#5B6B72', fontSize: '12px' },
+        },
+        title: { text: undefined },
+      },
+
+      tooltip: {
+        theme: 'light',
+        y: {
+          formatter: (value) => `${value} appointments`,
+        },
+      },
+
+      legend: { show: false },
+
+      grid: {
+        borderColor: '#DCE3E1',
+        strokeDashArray: 4,
+        xaxis: { lines: { show: false } },
+      },
+    };
+  }
 }

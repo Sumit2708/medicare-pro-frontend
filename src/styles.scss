@@ -1,131 +1,147 @@
-// Angular Material theming
-// https://material.angular.dev/guide/theming
-@use "@angular/material" as mat;
+// Angular Material theming — https://material.angular.dev/guide/theming
+@use '@angular/material' as mat;
+@use '../theme-colors' as my-theme;   // adjust path to match your actual file location
 
-/* Material Theme */
 html {
+  color-scheme: light;
   @include mat.theme((
     color: (
       theme-type: light,
-      primary: mat.$magenta-palette,
-      tertiary: mat.$violet-palette,
+      primary: my-theme.$primary-palette,
+      tertiary: my-theme.$tertiary-palette,
     ),
     typography: Roboto,
     density: 0,
   ));
 }
+/* ---------- Design tokens ---------- */
+:root {
+  --color-primary: #0F5E5A;
+  --color-primary-dark: #0B4744;
+  --color-primary-light: #E4F0EE;
+  --color-accent: #E8A33D;
+  --color-ink: #12232E;
+  --color-ink-soft: #5B6B72;
+  --color-bg: #F7F9F8;
+  --color-surface: #FFFFFF;
+  --color-border: #DCE3E1;
+  --color-danger: #D64545;
+  --color-success: #2F9E68;
 
-/* Global Reset */
-html,
-body {
+  --font-display: 'Lexend', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+/* ---------- Global reset ---------- */
+html, body {
   height: 100%;
 }
 
-/* Global Body Styling */
 body {
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-  background: #f4f6f9;
-  color: #1f2937;
-}
-
-/* Dashboard Page Padding */
-.page-container {
-  padding: 24px;
-}
-
-/* Card Styling */
-mat-card {
-  border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-}
-
-/* Dashboard Grid Layout */
-.dashboard-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 20px;
-}
-
-/* Stat Card Text */
-.stat-title {
-  font-size: 14px;
-  color: #6b7280;
-}
-
-.stat-value {
-  font-size: 28px;
-  font-weight: 600;
-  margin-top: 4px;
-}
-
-/* Table Styling (future doctor/patient tables) */
-.table-container {
-  margin-top: 20px;
-}
-
-/* Sidebar Active Link */
-.active-link {
-  background: rgba(0, 0, 0, 0.05);
-  border-radius: 8px;
-}
-
-/* Smooth hover */
-.mat-mdc-list-item:hover {
-  background: rgba(0, 0, 0, 0.04);
+  font-family: var(--font-body);
+  background: var(--color-bg);
+  color: var(--color-ink);
 }
 
 button {
   transition: all 0.2s ease;
 }
 
-button:hover {
-  transform: translateY(-2px);
+/* ---------- Layout helpers ---------- */
+.page-container {
+  padding: 24px;
 }
 
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
 
-.fs8{
-  font-size: 8px;
+.table-container {
+  margin-top: 20px;
 }
-.fs10{
-  font-size: 10px;
+
+/* ---------- Card styling ---------- */
+mat-card {
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(15, 35, 46, 0.06);
 }
-.fs12{
-  font-size: 12px;
-}
-.fs14{
+
+.stat-title {
   font-size: 14px;
-}
-.fs16{
-  font-size: 16px;
-}
-.fs18{
-  font-size: 18px;
-}
-.fs20{
-  font-size: 20px;
+  color: var(--color-ink-soft);
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.stat-value {
+  font-size: 28px;
+  font-weight: 600;
+  margin-top: 4px;
+  font-family: var(--font-display);
+  color: var(--color-ink);
+}
 
-// Print PDF
+/* ---------- Material overrides ---------- */
+.mat-mdc-raised-button.mat-primary {
+  --mdc-protected-button-container-color: var(--color-primary);
+  --mdc-protected-button-label-text-color: #fff;
+}
+
+.apexcharts-tooltip {
+  border-radius: 8px !important;
+  box-shadow: 0 8px 20px rgba(15, 35, 46, 0.12) !important;
+  border: 1px solid var(--color-border) !important;
+  font-family: var(--font-body) !important;
+}
+
+.profile-menu {
+  --mat-menu-container-color: var(--color-surface);   // forces pure white panel
+  border-radius: 12px !important;
+  overflow: hidden;
+  margin-top: 8px;
+  box-shadow: 0 10px 30px rgba(15, 35, 46, 0.14), 0 2px 8px rgba(15, 35, 46, 0.06) !important;
+
+  .mat-mdc-menu-content {
+    padding: 6px !important;
+  }
+
+  .mat-mdc-menu-item {
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 500;
+    height: 42px;
+    gap: 10px;
+    color: var(--color-ink);
+
+    .mat-icon {
+      color: var(--color-ink-soft);
+      margin-right: 0;
+    }
+
+    &:hover {
+      background: var(--color-primary-light);
+
+      .mat-icon { color: var(--color-primary); }
+    }
+  }
+}
+/* ---------- Utility font sizes ---------- */
+.fs8  { font-size: 8px; }
+.fs10 { font-size: 10px; }
+.fs12 { font-size: 12px; }
+.fs14 { font-size: 14px; }
+.fs16 { font-size: 16px; }
+.fs18 { font-size: 18px; }
+.fs20 { font-size: 20px; }
+
+/* ---------- Print (invoice) ---------- */
 @media print {
-
-  app-sidebar,
-  app-header,
-  app-navbar,
-  mat-sidenav,
-  mat-toolbar {
-
+  app-sidebar, app-header, app-navbar, mat-sidenav, mat-toolbar {
     display: none !important;
-
   }
-
   app-print-invoice {
-
     display: block !important;
-
   }
-
 }

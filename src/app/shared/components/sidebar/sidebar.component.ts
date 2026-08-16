@@ -66,4 +66,9 @@ export class SidebarComponent {
   ngOnInit() {
     this.currentUser = this.authService.getCurrentUser();
   }
+
+  get visibleMenuItems() {
+    if (!this.currentUser) return [];
+    return this.menuItems.filter(item => item.roles.includes(this.currentUser!.role));
+  }
 }

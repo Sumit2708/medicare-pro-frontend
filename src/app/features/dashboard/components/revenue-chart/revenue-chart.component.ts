@@ -30,6 +30,7 @@ export type ChartOptions = {
   tooltip: ApexTooltip;
   grid: ApexGrid;
   legend: ApexLegend;
+  colors: string[];
 };
 
 @Component({
@@ -59,91 +60,78 @@ export class RevenueChartComponent {
         },
       ],
 
+      colors: ['#0F5E5A'], // our primary teal — was defaulting to Apex's blue
+
       chart: {
         type: 'area',
         height: 320,
-        toolbar: {
-          show: false,
-        },
-        zoom: {
-          enabled: false,
-        },
+        fontFamily: 'Inter, sans-serif',
+        toolbar: { show: false },
+        zoom: { enabled: false },
         parentHeightOffset: 0,
       },
 
       stroke: {
         curve: 'smooth',
-        width: 2,
+        width: 2.5,
       },
 
       fill: {
         type: 'gradient',
+        colors: ['#0F5E5A'], // add this line — gradient needs its own color reference
         gradient: {
           shadeIntensity: 1,
-          opacityFrom: 0.25,
+          opacityFrom: 0.3,
           opacityTo: 0.02,
           stops: [0, 100],
         },
       },
 
-      dataLabels: {
-        enabled: false,
-      },
+      dataLabels: { enabled: false },
 
       markers: {
         size: 0,
-        hover: {
-          size: 5,
-        },
+        colors: ['#0F5E5A'],
+        strokeColors: '#fff',
+        strokeWidth: 2,
+        hover: { size: 6 },
       },
 
       xaxis: {
         categories: this.data.map((item) => item.month),
-        axisBorder: {
-          show: false,
-        },
-        axisTicks: {
-          show: false,
-        },
+        axisBorder: { show: false },
+        axisTicks: { show: false },
         labels: {
           trim: true,
+          style: { colors: '#5B6B72', fontSize: '12px' },
         },
       },
 
       yaxis: {
         labels: {
-          formatter: (value) => {
-            return `₹${this.formatRevenue(value)}`;
-          },
+          formatter: (value) => `₹${this.formatRevenue(value)}`,
+          style: { colors: '#5B6B72', fontSize: '12px' },
         },
       },
 
       tooltip: {
         shared: true,
         intersect: false,
+        theme: 'light',
         y: {
-          formatter: (value) => {
-            return `₹${value.toLocaleString('en-IN')}`;
-          },
+          formatter: (value) => `₹${value.toLocaleString('en-IN')}`,
         },
       },
 
       grid: {
-        borderColor: '#E9EDF2',
+        borderColor: '#DCE3E1', // matches --color-border
         strokeDashArray: 4,
-        xaxis: {
-          lines: {
-            show: false,
-          },
-        },
+        xaxis: { lines: { show: false } },
       },
 
-      legend: {
-        show: false,
-      },
+      legend: { show: false },
     };
   }
-
   private formatRevenue(value: number): string {
     if (value >= 100000) {
       return `${(value / 100000).toFixed(1)}L`;

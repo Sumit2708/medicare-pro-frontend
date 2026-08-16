@@ -16,4 +16,19 @@ export class PendingPaymentsComponent {
   invoices: PendingPaymentViewModel[] = [];
 
   displayedColumns = ['invoice', 'patient', 'amount', 'status'];
+
+  getStatusClass(status: string): string {
+    switch (status?.toLowerCase()) {
+      case 'paid':
+        return 'paid';
+      case 'pending':
+        return 'pending';
+      case 'overdue':
+        return 'overdue';
+      case 'partial':
+        return 'partial';
+      default:
+        return '';
+    }
+  }
 }

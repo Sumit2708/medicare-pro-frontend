@@ -1,10 +1,19 @@
 .layout-container {
   display: flex;
-  height: calc(100vh - 64px);
+  margin-top: 64px;              // was min-height: calc(100vh - 64px)
+  min-height: calc(100vh - 64px);
+  background: var(--color-bg);
 }
 
 .page-content {
   flex: 1;
-  padding: 24px;
-  // background: #f4f6f9;
+  min-width: 0; // prevents flex children (tables etc.) from overflowing
+  padding: 28px 32px;
+  overflow-x: hidden;
+}
+
+@media (max-width: 900px) {
+  .page-content {
+    padding: 20px 16px;
+  }
 }

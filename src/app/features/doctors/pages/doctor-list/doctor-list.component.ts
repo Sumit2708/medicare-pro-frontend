@@ -88,6 +88,14 @@ export class DoctorListComponent {
     this.getDoctors();
   }
 
+   getDoctorIndex(index: number): number {
+    if (!this.paginator) {
+      return index + 1;
+    }
+
+    return this.paginator.pageIndex * this.paginator.pageSize + index + 1;
+  }
+
   getDoctors() {
     this.doctorService.getDoctors().subscribe((data: any) => {
       console.log('API DATA:', data); // 👈 IMPORTANT
