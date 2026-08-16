@@ -1,20 +1,18 @@
 import { Component } from '@angular/core';
 import { MatCard } from '@angular/material/card';
-import { MatFormField, MatLabel } from '@angular/material/form-field';
-import { MatPseudoCheckbox } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDivider } from '@angular/material/divider';
 import {
   FormBuilder,
-  FormControlName,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatIcon } from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon';
 import { NotificationService } from '../../../../core/services/notification/notification.service';
 import { AuthService } from '../../../../core/services/auth/auth.service';
 
@@ -22,14 +20,14 @@ import { AuthService } from '../../../../core/services/auth/auth.service';
   selector: 'app-login',
   imports: [
     MatCard,
-    MatFormField,
-    MatLabel,
+    MatFormFieldModule,
     MatCheckboxModule,
     MatDivider,
     ReactiveFormsModule,
     MatInputModule,
     MatButtonModule,
-    MatIcon,
+    MatIconModule,
+    RouterLink,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
@@ -37,6 +35,7 @@ import { AuthService } from '../../../../core/services/auth/auth.service';
 export class LoginComponent {
   loginForm: FormGroup;
   hidePassword = true;
+  isSubmitting = false;
 
   constructor(
     private router: Router,
@@ -45,15 +44,10 @@ export class LoginComponent {
     private authService: AuthService,
   ) {
     this.loginForm = this.fb.group({
-      email: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
-      rememberMe: [''],
+      rememberMe: [false],
     });
-  }
-
-  ngOnInit(): void {
-    console.log(`email === admin@medicare.com
-      password === admin123`);
   }
 
   onSubmit() {
@@ -62,15 +56,20 @@ export class LoginComponent {
       return;
     }
 
+    this.isSubmitting = true;
+
     this.authService.login(this.loginForm.value).subscribe({
       next: (isLoggedin) => {
-        console.log(isLoggedin,'isLoggedIn');
-        
+        this.isSubmitting = false;
         if (isLoggedin) {
           this.router.navigate(['/dashboard']);
         } else {
           this.notificationService.error('Invalid email or password');
         }
+      },
+      error: () => {
+        this.isSubmitting = false;
+        this.notificationService.error('Something went wrong. Please try again.');
       },
     });
   }

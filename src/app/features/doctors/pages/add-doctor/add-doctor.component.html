@@ -1,41 +1,299 @@
+<!-- <div class="page-container">
+  <app-page-header
+    title="Add Doctor"
+    subtitle="Add a new doctor to your clinic"
+    [showButton]="false">
+  </app-page-header>
+
+  <div class="add-doctor-layout">
+    <mat-card class="form-card">
+      <div class="form-card-header">
+        <div class="form-icon">
+          <mat-icon>person_add</mat-icon>
+        </div>
+        <div>
+          <h3>Doctor Details</h3>
+          <p>Fields marked with * are required</p>
+        </div>
+      </div>
+
+      <div class="progress-track">
+        <div class="progress-fill" [style.width.%]="completionPercent"></div>
+      </div>
+      <p class="progress-label">{{ completionPercent }}% complete</p>
+
+      <form [formGroup]="doctorForm" (ngSubmit)="onSubmit()" class="doctor-form">
+        <mat-form-field appearance="outline" class="full-width field-1">
+          <mat-label>Full Name</mat-label>
+          <mat-icon matPrefix>person</mat-icon>
+          <input matInput formControlName="name" placeholder="e.g. Dr. Aisha Khan">
+          @if (doctorForm.get('name')?.hasError('required') && doctorForm.get('name')?.touched) {
+            <mat-error>Name is required</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="form-row field-2">
+          <mat-form-field appearance="outline">
+            <mat-label>Specialization</mat-label>
+            <mat-icon matPrefix>local_hospital</mat-icon>
+            <input matInput formControlName="specialization" placeholder="e.g. Cardiologist">
+            @if (doctorForm.get('specialization')?.hasError('required') && doctorForm.get('specialization')?.touched) {
+              <mat-error>Specialization is required</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Experience</mat-label>
+            <mat-icon matPrefix>work_history</mat-icon>
+            <input matInput type="number" formControlName="experience" placeholder="0">
+            <span matSuffix class="suffix-text">yrs</span>
+            @if (doctorForm.get('experience')?.hasError('required') && doctorForm.get('experience')?.touched) {
+              <mat-error>Experience is required</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <div class="form-row field-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Qualification</mat-label>
+            <mat-icon matPrefix>school</mat-icon>
+            <input matInput formControlName="qualification" placeholder="e.g. MBBS, MD">
+            @if (doctorForm.get('qualification')?.hasError('required') && doctorForm.get('qualification')?.touched) {
+              <mat-error>Qualification is required</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Consultation Fee</mat-label>
+            <mat-icon matPrefix>currency_rupee</mat-icon>
+            <input matInput type="number" formControlName="fee" placeholder="0">
+            @if (doctorForm.get('fee')?.hasError('required') && doctorForm.get('fee')?.touched) {
+              <mat-error>Fee is required</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <div class="form-actions">
+          <button mat-stroked-button type="button" (click)="onCancel()">
+            Cancel
+          </button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="isSubmitting">
+            <mat-icon *ngIf="isSubmitting" class="spin">progress_activity</mat-icon>
+            <mat-icon *ngIf="!isSubmitting">check</mat-icon>
+            {{ isSubmitting ? 'Saving...' : 'Save Doctor' }}
+          </button>
+        </div>
+      </form>
+    </mat-card>
+
+    <div class="preview-card" [class.filled]="completionPercent > 0">
+      <div class="preview-header">
+        <div class="preview-avatar">
+          {{ initials }}
+        </div>
+        <div class="preview-glow"></div>
+      </div>
+
+      <h4 class="preview-name">{{ doctorForm.value.name || 'Doctor Name' }}</h4>
+      <span class="preview-role">Medical Professional</span>
+
+      <div class="preview-badge" [class.empty]="!doctorForm.value.specialization">
+        <mat-icon>local_hospital</mat-icon>
+        {{ doctorForm.value.specialization || 'Specialization' }}
+      </div>
+
+      <div class="preview-stats">
+        <div class="stat">
+          <mat-icon>work_history</mat-icon>
+          <span>{{ doctorForm.value.experience ? doctorForm.value.experience + ' yrs' : '—' }}</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <mat-icon>currency_rupee</mat-icon>
+          <span>{{ doctorForm.value.fee ? '₹' + doctorForm.value.fee : '—' }}</span>
+        </div>
+      </div>
+
+      @if (doctorForm.value.qualification) {
+        <div class="preview-quals">
+          @for (q of qualificationList; track q) {
+            <span class="qual-chip">{{ q }}</span>
+          }
+        </div>
+      }
+
+      <div class="preview-status">
+        <span class="status-dot"></span>
+        Will be marked Active
+      </div>
+    </div>
+  </div>
+</div> -->
+
+
 <div class="page-container">
-<app-page-header
-title="Add Doctor"
-subtitle="Add a new doctor"
-buttonLabel="Add Doctor"
-[showButton]="false"
->
+  <app-page-header
+    title="Add Doctor"
+    subtitle="Add a new doctor to your clinic"
+    [showButton]="false">
+  </app-page-header>
 
-</app-page-header>
-<mat-card class="main-card">
-    <form [formGroup]="doctorForm" (ngSubmit)="onSubmit()">
-      <div>
-        <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Name</mat-label>
-        <input matInput formControlName="name">
-      </mat-form-field>
+  <div class="add-doctor-layout">
+    <mat-card class="form-card">
+      <div class="form-card-header">
+        <div class="form-icon">
+          <mat-icon>person_add</mat-icon>
+        </div>
+        <div>
+          <h3>Doctor Details</h3>
+          <p>Fields marked with * are required</p>
+        </div>
       </div>
 
-      <div>
-        <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Specialization</mat-label>
-        <input matInput formControlName="specialization">
-      </mat-form-field>
+      <div class="progress-track">
+        <div class="progress-fill" [style.width.%]="completionPercent"></div>
+      </div>
+      <p class="progress-label">{{ completionPercent }}% complete</p>
+
+      <form [formGroup]="doctorForm" (ngSubmit)="onSubmit()" class="doctor-form">
+        <!-- Photo upload -->
+        <div class="photo-upload-row">
+          <div class="photo-preview">
+            @if (doctorForm.value.photoUrl) {
+              <img [src]="doctorForm.value.photoUrl" alt="Doctor photo">
+            } @else {
+              <mat-icon>person</mat-icon>
+            }
+          </div>
+
+          <div class="photo-upload-actions">
+            <label class="upload-btn">
+              <mat-icon>upload</mat-icon>
+              {{ doctorForm.value.photoUrl ? 'Change photo' : 'Upload photo' }}
+              <input type="file" accept="image/*" hidden (change)="onPhotoSelected($event)">
+            </label>
+
+            @if (doctorForm.value.photoUrl) {
+              <button type="button" class="remove-btn" (click)="removePhoto()">
+                <mat-icon>close</mat-icon>
+                Remove
+              </button>
+            }
+
+            <p class="upload-hint ms-2">JPG or PNG, max 2MB</p>
+            @if (photoError) {
+              <p class="upload-error">{{ photoError }}</p>
+            }
+          </div>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width field-1">
+          <mat-label>Full Name</mat-label>
+          <mat-icon matPrefix>person</mat-icon>
+          <input matInput formControlName="name" placeholder="e.g. Dr. Aisha Khan">
+          @if (doctorForm.get('name')?.hasError('required') && doctorForm.get('name')?.touched) {
+            <mat-error>Name is required</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="form-row field-2">
+          <mat-form-field appearance="outline">
+            <mat-label>Specialization</mat-label>
+            <mat-icon matPrefix>local_hospital</mat-icon>
+            <input matInput formControlName="specialization" placeholder="e.g. Cardiologist">
+            @if (doctorForm.get('specialization')?.hasError('required') && doctorForm.get('specialization')?.touched) {
+              <mat-error>Specialization is required</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Experience</mat-label>
+            <mat-icon matPrefix>work_history</mat-icon>
+            <input matInput type="number" formControlName="experience" placeholder="0">
+            <span matSuffix class="suffix-text me-2">years</span>
+            @if (doctorForm.get('experience')?.hasError('required') && doctorForm.get('experience')?.touched) {
+              <mat-error>Experience is required</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <div class="form-row field-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Qualification</mat-label>
+            <mat-icon matPrefix>school</mat-icon>
+            <input matInput formControlName="qualification" placeholder="e.g. MBBS, MD">
+            @if (doctorForm.get('qualification')?.hasError('required') && doctorForm.get('qualification')?.touched) {
+              <mat-error>Qualification is required</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Consultation Fee</mat-label>
+            <mat-icon matPrefix>currency_rupee</mat-icon>
+            <input matInput type="number" formControlName="fee" placeholder="0">
+            @if (doctorForm.get('fee')?.hasError('required') && doctorForm.get('fee')?.touched) {
+              <mat-error>Fee is required</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <div class="form-actions">
+          <button mat-stroked-button type="button" (click)="onCancel()">
+            Cancel
+          </button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="isSubmitting">
+            <mat-icon *ngIf="isSubmitting" class="spin">progress_activity</mat-icon>
+            <mat-icon *ngIf="!isSubmitting">check</mat-icon>
+            {{ isSubmitting ? 'Saving...' : 'Save Doctor' }}
+          </button>
+        </div>
+      </form>
+    </mat-card>
+
+    <div class="preview-card" [class.filled]="completionPercent > 0">
+      <div class="preview-header">
+        <div class="preview-avatar">
+          @if (doctorForm.value.photoUrl) {
+            <img [src]="doctorForm.value.photoUrl" alt="preview">
+          } @else {
+            {{ initials }}
+          }
+        </div>
+        <div class="preview-glow"></div>
       </div>
 
-   <div>
-       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Fee</mat-label>
-        <input matInput type="number" formControlName="fee">
-      </mat-form-field>
-   </div>
+      <h4 class="preview-name">{{ doctorForm.value.name || 'Doctor Name' }}</h4>
+      <span class="preview-role">Medical Professional</span>
 
-   <span style="display: flex;justify-content: center;">
+      <div class="preview-badge" [class.empty]="!doctorForm.value.specialization">
+        <mat-icon>local_hospital</mat-icon>
+        {{ doctorForm.value.specialization || 'Specialization' }}
+      </div>
 
-     <button mat-raised-button color="primary" type="submit" >
-       Save
-     </button>
-   </span>
-    </form>
-</mat-card>
+      <div class="preview-stats">
+        <div class="stat">
+          <mat-icon>work_history</mat-icon>
+          <span>{{ doctorForm.value.experience ? doctorForm.value.experience + ' yrs' : '—' }}</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <mat-icon>currency_rupee</mat-icon>
+          <span>{{ doctorForm.value.fee ? '₹' + doctorForm.value.fee : '—' }}</span>
+        </div>
+      </div>
+
+      @if (doctorForm.value.qualification) {
+        <div class="preview-quals">
+          @for (q of qualificationList; track q) {
+            <span class="qual-chip">{{ q }}</span>
+          }
+        </div>
+      }
+
+      <div class="preview-status">
+        <span class="status-dot"></span>
+        Will be marked Active
+      </div>
+    </div>
+  </div>
 </div>

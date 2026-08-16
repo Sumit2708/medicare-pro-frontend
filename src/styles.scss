@@ -145,3 +145,39 @@ mat-card {
     display: block !important;
   }
 }
+
+/* Form field styling — lighter, rounded, matches search-box language */
+.mat-mdc-form-field {
+  font-family: var(--font-body);
+
+  --mdc-outlined-text-field-container-shape: 10px;
+  --mdc-outlined-text-field-outline-width: 1px;
+  --mdc-outlined-text-field-focus-outline-width: 1.5px;
+  --mdc-outlined-text-field-outline-color: var(--color-border);
+  --mdc-outlined-text-field-hover-outline-color: #B9C4C2;
+  --mdc-outlined-text-field-focus-outline-color: var(--color-primary);
+  --mdc-outlined-text-field-error-outline-color: var(--color-danger);
+  --mdc-outlined-text-field-label-text-color: var(--color-ink-soft);
+  --mdc-outlined-text-field-focus-label-text-color: var(--color-primary);
+  --mdc-outlined-text-field-input-text-color: var(--color-ink);
+  --mdc-outlined-text-field-input-text-placeholder-color: var(--color-ink-soft);
+}
+
+.mat-mdc-text-field-wrapper {
+  background: var(--color-bg);
+}
+
+.mat-mdc-form-field-infix {
+  min-height: 48px;
+  padding-top: 12px !important;
+  padding-bottom: 12px !important;
+}
+
+.mat-mdc-form-field-icon-prefix mat-icon {
+  color: var(--color-ink-soft);
+  margin-right: 4px;
+}
+
+.mat-focused .mat-mdc-form-field-icon-prefix mat-icon {
+  color: var(--color-primary);
+}

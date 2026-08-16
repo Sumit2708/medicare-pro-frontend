@@ -27,13 +27,6 @@
   ],
   "doctors": [
     {
-      "name": "Sumit",
-      "specialization": "Dentist",
-      "fee": 300,
-      "status": "Active",
-      "id": "UZarKM-BH_E"
-    },
-    {
       "name": "Neha",
       "specialization": "cardiologist",
       "fee": 800,
@@ -41,18 +34,43 @@
       "id": "Hp5U32kkfm4"
     },
     {
-      "name": "tipri",
-      "specialization": "yedi",
+      "name": "Dr. Anil Mali",
+      "specialization": "Dentist",
+      "experience": 12,
+      "qualification": "MBBS",
       "fee": 500,
       "status": "Active",
-      "id": "-LZu0dF8PJk"
+      "id": "hzHSK0hHkyg"
     },
     {
-      "name": "Vaibhav Patil",
-      "specialization": "Dentist",
-      "fee": 500,
+      "name": "Dr. Sumit Sonawane",
+      "specialization": "Gastroenterologist",
+      "experience": 7,
+      "qualification": "MD",
+      "fee": 700,
+      "photoUrl": "data:image/jpeg;base64,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",
       "status": "Active",
-      "id": "4yNbyGPbw6k"
+      "id": "nkJmMHJTcPo"
+    },
+    {
+      "name": "Namita",
+      "specialization": "dermatologist",
+      "experience": 2,
+      "qualification": "MD",
+      "fee": 500,
+      "photoUrl": "",
+      "status": "Active",
+      "id": "NM7qpkhn7OU"
+    },
+    {
+      "name": "xus",
+      "specialization": "gastroenterology",
+      "experience": 3,
+      "qualification": "MBBS, MD",
+      "fee": 300,
+      "photoUrl": "",
+      "status": "Active",
+      "id": "0kj4L4o0UE4"
     }
   ],
   "patients": [
@@ -82,39 +100,12 @@
       "address": "midc road",
       "status": "Active",
       "id": "psG93ijLZWw"
-    },
-    {
-      "name": "Raman Vaishnav",
-      "age": 28,
-      "gender": "Male",
-      "mobile": "7057281276",
-      "address": "Kota, Rajsthan",
-      "status": "Active",
-      "id": "AxDvqyM3gKc"
-    },
-    {
-      "name": "xyz",
-      "age": 53,
-      "gender": "Female",
-      "mobile": "7856134582",
-      "address": "somnath nagar, pune",
-      "status": "Active",
-      "id": "02e57fk0oec"
-    },
-    {
-      "name": "Mayur Chaudhari",
-      "age": 31,
-      "gender": "Male",
-      "mobile": "8462834617",
-      "address": "Pune",
-      "status": "Active",
-      "id": "z2N0cOkDur8"
     }
   ],
   "appointments": [
     {
       "patientId": "1",
-      "doctorId": "UZarKM-BH_E",
+      "doctorId": null,
       "date": "2026-07-29T18:30:00.000Z",
       "time": "09:30 AM",
       "notes": "",
@@ -123,7 +114,7 @@
     },
     {
       "patientId": "u2sfm-e_Iqk",
-      "doctorId": "UZarKM-BH_E",
+      "doctorId": null,
       "date": "2026-07-15T18:30:00.000Z",
       "time": "05:00 PM",
       "notes": "",
@@ -141,7 +132,7 @@
     },
     {
       "patientId": "psG93ijLZWw",
-      "doctorId": "-LZu0dF8PJk",
+      "doctorId": null,
       "date": "2026-08-02T18:30:00.000Z",
       "time": "09:30 AM",
       "notes": "",
@@ -150,7 +141,7 @@
     },
     {
       "patientId": "u2sfm-e_Iqk",
-      "doctorId": "-LZu0dF8PJk",
+      "doctorId": null,
       "date": "2026-08-02T18:30:00.000Z",
       "time": "10:00 AM",
       "notes": "",
@@ -158,7 +149,7 @@
       "id": "n5V8PBZgmho"
     },
     {
-      "patientId": "AxDvqyM3gKc",
+      "patientId": null,
       "doctorId": "Hp5U32kkfm4",
       "date": "2026-08-03T18:30:00.000Z",
       "time": "10:00 AM",
@@ -176,8 +167,8 @@
       "id": "DnHryjnEEt8"
     },
     {
-      "patientId": "z2N0cOkDur8",
-      "doctorId": "4yNbyGPbw6k",
+      "patientId": null,
+      "doctorId": null,
       "date": "2026-08-04T18:30:00.000Z",
       "time": "12:00 PM",
       "notes": "root canel",
@@ -195,7 +186,7 @@
     },
     {
       "patientId": "u2sfm-e_Iqk",
-      "doctorId": "-LZu0dF8PJk",
+      "doctorId": null,
       "date": "2026-08-05T18:30:00.000Z",
       "time": "04:30 PM",
       "notes": "",
@@ -203,8 +194,8 @@
       "id": "fqnNx-dkLWc"
     },
     {
-      "patientId": "z2N0cOkDur8",
-      "doctorId": "4yNbyGPbw6k",
+      "patientId": null,
+      "doctorId": null,
       "date": "2026-08-05T18:30:00.000Z",
       "time": "05:30 PM",
       "notes": "",
@@ -212,13 +203,31 @@
       "id": "ftORwS0xXhM"
     },
     {
-      "patientId": "AxDvqyM3gKc",
-      "doctorId": "UZarKM-BH_E",
+      "patientId": null,
+      "doctorId": null,
       "date": "2026-08-05T18:30:00.000Z",
       "time": "09:00 AM",
       "notes": "",
       "status": "Scheduled",
       "id": "J_PsxWVoOsQ"
+    },
+    {
+      "patientId": "1",
+      "doctorId": null,
+      "date": "2026-08-14T18:30:00.000Z",
+      "time": "12:30",
+      "notes": "",
+      "status": "Scheduled",
+      "id": "z1KPk1yhQHk"
+    },
+    {
+      "patientId": "u2sfm-e_Iqk",
+      "doctorId": "Hp5U32kkfm4",
+      "date": "2026-08-14T18:30:00.000Z",
+      "time": "11:00",
+      "notes": "",
+      "status": "Scheduled",
+      "id": "oLub1vqXPbs"
     }
   ],
   "invoices": [
@@ -240,7 +249,7 @@
       "invoiceNumber": "INV-2026-00002",
       "appointmentId": "su_Xt6d2z6o",
       "patientId": "u2sfm-e_Iqk",
-      "doctorId": "UZarKM-BH_E",
+      "doctorId": null,
       "consultationFee": 300,
       "discount": 0,
       "gst": 54,
@@ -254,7 +263,7 @@
       "invoiceNumber": "INV-2026-00003",
       "appointmentId": "JMgD5vgNuMI",
       "patientId": "1",
-      "doctorId": "UZarKM-BH_E",
+      "doctorId": null,
       "consultationFee": 300,
       "discount": 0,
       "gst": 54,
@@ -268,7 +277,7 @@
       "invoiceNumber": "INV-2026-00004",
       "appointmentId": "hksTCihguDY",
       "patientId": "psG93ijLZWw",
-      "doctorId": "-LZu0dF8PJk",
+      "doctorId": null,
       "consultationFee": 2,
       "discount": 0,
       "gst": 0.36,
@@ -281,7 +290,7 @@
     {
       "invoiceNumber": "INV-2026-00005",
       "appointmentId": "3oApa9TFE8g",
-      "patientId": "AxDvqyM3gKc",
+      "patientId": null,
       "doctorId": "Hp5U32kkfm4",
       "consultationFee": 800,
       "discount": 0,
@@ -309,8 +318,8 @@
     {
       "invoiceNumber": "INV-2026-00007",
       "appointmentId": "7HYrM-szN-c",
-      "patientId": "z2N0cOkDur8",
-      "doctorId": "4yNbyGPbw6k",
+      "patientId": null,
+      "doctorId": null,
       "consultationFee": 500,
       "discount": 120,
       "gst": 68.39999999999999,
@@ -370,7 +379,7 @@
         },
         {
           "day": "Saturday",
-          "enabled": false,
+          "enabled": true,
           "startTime": "09:00",
           "endTime": "13:00"
         },

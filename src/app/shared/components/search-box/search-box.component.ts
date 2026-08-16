@@ -13,7 +13,7 @@ import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 })
 export class SearchBoxComponent {
 
-
+  @Input() placeholder = 'Search...';
   @Output() search = new EventEmitter<string>();
 
   private searchSubject = new Subject<string>();

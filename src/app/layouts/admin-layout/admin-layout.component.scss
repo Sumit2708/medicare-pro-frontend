@@ -1,19 +1,22 @@
 .layout-container {
   display: flex;
-  margin-top: 64px;              // was min-height: calc(100vh - 64px)
+  // margin-top: 64px;                    // ← this line was missing
   min-height: calc(100vh - 64px);
   background: var(--color-bg);
 }
 
 .page-content {
   flex: 1;
-  min-width: 0; // prevents flex children (tables etc.) from overflowing
+  min-width: 0;
+  margin-top: 48px; 
+  margin-left: 260px;
   padding: 28px 32px;
   overflow-x: hidden;
 }
 
 @media (max-width: 900px) {
   .page-content {
+    margin-left: 76px;
     padding: 20px 16px;
   }
 }

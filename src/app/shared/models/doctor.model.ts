@@ -1,4 +1,4 @@
-import { doctorStatus } from "../../core/enums/doctor-status.enum";
+import { doctorStatus } from '../../core/enums/doctor-status.enum';
 
 export interface Doctor {
   id: number;
@@ -6,4 +6,8 @@ export interface Doctor {
   specialization: string;
   fee: number;
   status: doctorStatus;
+
+  experience: number;
+  qualification: string;
+  photoUrl?: string
 }

@@ -1,4 +1,4 @@
-<mat-form-field appearance="outline" class="search-field">
+<!-- <mat-form-field appearance="outline" class="search-field">
 
   <mat-label>Search</mat-label>
 
@@ -10,4 +10,9 @@
 
   <mat-icon matSuffix>search</mat-icon>
 
-</mat-form-field>
+</mat-form-field> -->
+
+<div class="search-field">
+  <mat-icon class="search-icon">search</mat-icon>
+  <input type="text" [placeholder]="placeholder" (input)="onSearch($event)" />
+</div>

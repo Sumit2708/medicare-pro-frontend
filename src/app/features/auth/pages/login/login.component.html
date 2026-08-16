@@ -1,77 +1,100 @@
-<!-- Create a login form with remeber me and forget password -->
+<div class="login-page">
+  <!-- Left: Brand panel -->
+  <div class="brand-panel">
+    <div class="panel-decoration"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
 
-<div class="login-container">
-  <mat-card class="main-card mat-elevation-z4">
-    <div class="logo-section">
-      <!-- <mat-icon class="logo">local_hospital</mat-icon>  -->
+    <!-- Floating glass icon chips -->
+    <div class="float-chip chip-1"><mat-icon>event_available</mat-icon></div>
+    <div class="float-chip chip-2"><mat-icon>folder_shared</mat-icon></div>
+    <div class="float-chip chip-3"><mat-icon>verified_user</mat-icon></div>
 
-      <h1 class="text-center">MediCare Pro</h1>
+    <div class="brand-content">
+      <div class="brand-mark">
+        <mat-icon>local_hospital</mat-icon>
+      </div>
+      <h1>MediCare <b>Pro</b></h1>
+      <p class="tagline">Complete clinic management, built for modern healthcare teams.</p>
 
-      <p class="text-center">Clinic Management System</p>
+      <div class="feature-list">
+        <div class="feature-item">
+          <mat-icon>event_available</mat-icon>
+          <span>Smart appointment scheduling</span>
+        </div>
+        <div class="feature-item">
+          <mat-icon>groups</mat-icon>
+          <span>Unified patient & doctor records</span>
+        </div>
+        <div class="feature-item">
+          <mat-icon>insights</mat-icon>
+          <span>Real-time billing & analytics</span>
+        </div>
+      </div>
+
+      <div class="trust-badge">
+        <mat-icon>lock</mat-icon>
+        <span>Your data is encrypted & secure</span>
+      </div>
     </div>
+  </div>
 
-    <h2 class="text-center">Welcome Back</h2>
+  <!-- Right: Login form -->
+  <div class="form-panel">
+    <div class="login-card">
+      <div class="welcome-section">
+        <h2>Welcome back</h2>
+        <p>Sign in to access your dashboard</p>
+      </div>
 
-    <p class="subtitle text-center">Please sign in to continue</p>
-
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      <div class="form-group">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Email</mat-label>
-          <input matInput formControlName="email" />
+          <mat-icon matPrefix>mail_outline</mat-icon>
+          <input matInput formControlName="email" type="email" autocomplete="email" />
+          @if (loginForm.get('email')?.hasError('required') && loginForm.get('email')?.touched) {
+            <mat-error>Email is required</mat-error>
+          } @else if (loginForm.get('email')?.hasError('email') && loginForm.get('email')?.touched) {
+            <mat-error>Enter a valid email address</mat-error>
+          }
         </mat-form-field>
-      </div>
-      <div class="form-group">
+
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Password</mat-label>
+          <mat-icon matPrefix>lock_outline</mat-icon>
           <input
             matInput
             [type]="hidePassword ? 'password' : 'text'"
             formControlName="password"
+            autocomplete="current-password"
           />
-          <button
-            mat-icon-button
-            matSuffix
-            type="button"
-            (click)="hidePassword = !hidePassword"
-          >
-            <mat-icon>
-              {{ hidePassword ? "visibility_off" : "visibility" }}
-            </mat-icon>
+          <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword" tabindex="-1">
+            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
+          @if (loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched) {
+            <mat-error>Password is required</mat-error>
+          }
         </mat-form-field>
-      </div>
-      <div class="form-group">
-        <mat-checkbox class="remember-me" formControlName="rememberMe"
-          >Remember me</mat-checkbox
-        >
-      </div>
-      <div class="mt-3 mb-3 d-flex justify-content-center form-group">
+
+        <div class="form-row">
+          <mat-checkbox formControlName="rememberMe">Remember me</mat-checkbox>
+          <a routerLink="/auth/forgot-password" class="forgot-link">Forgot password?</a>
+        </div>
+
         <button
           mat-raised-button
           color="primary"
-          class="login-button"
           type="submit"
+          class="login-button"
+          [disabled]="isSubmitting"
         >
-          Login
+          <mat-icon *ngIf="isSubmitting" class="spin">progress_activity</mat-icon>
+          {{ isSubmitting ? 'Signing in...' : 'Login' }}
         </button>
-      </div>
+      </form>
 
-     
-
-      <div
-        class="mt-1 mb-3 text-center"
-      >
-        <!-- Forget password -->
-        <a
-          routerLink="/auth/forgot-password"
-          class="forgot-password"
-          color="primary"
-          >Forget Password</a
-        >
-      </div>
-    </form>
-     <mat-divider class="mt-3"></mat-divider>
-    <p class="version text-center fs12">Version 1.0.0</p>
-  </mat-card>
+      <mat-divider></mat-divider>
+      <p class="version">Version 1.0.0</p>
+    </div>
+  </div>
 </div>
