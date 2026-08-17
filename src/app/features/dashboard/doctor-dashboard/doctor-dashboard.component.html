@@ -1,0 +1,108 @@
+@if (dashboard$ | async; as dash) {
+
+  <div class="doc-dash-header">
+    <div class="doc-avatar">
+      @if (dash.photoUrl) {
+        <img [src]="dash.photoUrl" [alt]="dash.doctorName">
+      } @else {
+        <span>{{ getInitials(dash.doctorName) }}</span>
+      }
+    </div>
+    <div>
+      <h2>{{ greeting }}, {{ dash.doctorName }}</h2>
+      <p>{{ dash.specialization | titlecase}} · {{ today | date: 'EEEE, MMMM d, y' }}</p>
+    </div>
+  </div>
+
+  <!-- Quick stats -->
+  <div class="stat-row">
+    <div class="stat-card">
+      <div class="stat-icon"><mat-icon>event_available</mat-icon></div>
+      <div>
+        <span class="stat-value">{{ dash.todayAppointmentsCount }}</span>
+        <span class="stat-label">Today's Appointments</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon patients"><mat-icon>groups</mat-icon></div>
+      <div>
+        <span class="stat-value">{{ dash.totalPatients }}</span>
+        <span class="stat-label">Total Patients</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon month"><mat-icon>calendar_month</mat-icon></div>
+      <div>
+        <span class="stat-value">{{ dash.monthlyAppointmentsCount }}</span>
+        <span class="stat-label">This Month</span>
+      </div>
+    </div>
+  </div>
+
+  <section class="doc-layout">
+    <!-- Today's schedule -->
+    <app-chart-card title="Today's Schedule" subtitle="Your appointments for today" icon="today">
+      @if (dash.todaySchedule.length > 0) {
+        <div class="schedule-list">
+          @for (item of dash.todaySchedule; track item.time + item.patientName) {
+            <div class="schedule-row">
+              <span class="schedule-time">{{ item.time }}</span>
+              <span class="schedule-patient">{{ item.patientName }}</span>
+              <span class="schedule-status" [ngClass]="item.status.toLowerCase()">{{ item.status }}</span>
+            </div>
+          }
+        </div>
+      } @else {
+        <p class="empty-text">No appointments scheduled for today.</p>
+      }
+    </app-chart-card>
+
+    <!-- Upcoming -->
+    <app-chart-card title="Upcoming Appointments" subtitle="Next scheduled visits" icon="upcoming">
+      @if (dash.upcomingAppointments.length > 0) {
+        <div class="schedule-list">
+          @for (item of dash.upcomingAppointments; track item.date + item.patientName) {
+            <div class="schedule-row">
+              <span class="schedule-date">{{ item.date | date: 'MMM d' }}</span>
+              <span class="schedule-patient">{{ item.patientName }}</span>
+              <span class="schedule-time-soft">{{ item.time }}</span>
+            </div>
+          }
+        </div>
+      } @else {
+        <p class="empty-text">No upcoming appointments.</p>
+      }
+    </app-chart-card>
+
+    <!-- Monthly trend -->
+    <app-chart-card title="Appointment Trend" subtitle="Last 12 months" icon="trending_up" class="full-width">
+      <app-appointments-chart [data]="dash.monthlyTrend"></app-appointments-chart>
+    </app-chart-card>
+
+    <!-- Recent patients -->
+    <app-chart-card title="Recent Patients" subtitle="Patients you've recently seen" icon="folder_shared" class="full-width">
+      @if (dash.recentPatients.length > 0) {
+        <div class="patient-grid">
+          @for (p of dash.recentPatients; track p.name) {
+            <div class="patient-chip">
+              <div class="patient-avatar">{{ getInitials(p.name) }}</div>
+              <div>
+                <span class="patient-name">{{ p.name }}</span>
+                <span class="patient-meta">{{ p.visitCount }} visit{{ p.visitCount > 1 ? 's' : '' }} · last {{ p.lastVisit | date: 'MMM d' }}</span>
+              </div>
+            </div>
+          }
+        </div>
+      } @else {
+        <p class="empty-text">No patients seen yet.</p>
+      }
+    </app-chart-card>
+  </section>
+
+} @else {
+  <div class="doc-dash-error">
+    <mat-icon>error_outline</mat-icon>
+    <h3>Doctor profile not linked</h3>
+    <p>Your account isn't linked to a doctor record yet. Contact your administrator.</p>
+  </div>
+}

@@ -146,6 +146,8 @@ export class AppointmentListComponent {
         this.dataSource.data = appointments;
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+
+        console.log('Appointments loaded successfully', this.dataSource.data);
       },
 
       error: () => {

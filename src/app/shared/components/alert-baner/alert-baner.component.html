@@ -1,0 +1,10 @@
+@if (alerts.length > 0) {
+  <div class="alert-strip">
+    @for (alert of alerts; track alert.message) {
+      <div class="alert-chip" [ngClass]="alert.type">
+        <mat-icon>{{ alert.icon }}</mat-icon>
+        <span>{{ alert.message }}</span>
+      </div>
+    }
+  </div>
+}

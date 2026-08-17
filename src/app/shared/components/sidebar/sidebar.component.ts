@@ -21,7 +21,14 @@ export class SidebarComponent {
       label: 'Dashboard',
       icon: 'dashboard',
       route: '/dashboard',
-      roles: [UserRole.ADMIN, UserRole.DOCTOR, UserRole.RECEPTIONIST],
+      roles: [UserRole.ADMIN, UserRole.RECEPTIONIST],
+    },
+
+    {
+      label: 'Doctor Dashboard',
+      icon: 'dashboard',
+      route: '/doctor-dashboard',
+      roles: [UserRole.DOCTOR],
     },
     {
       label: 'Doctors',
@@ -69,6 +76,8 @@ export class SidebarComponent {
 
   get visibleMenuItems() {
     if (!this.currentUser) return [];
-    return this.menuItems.filter(item => item.roles.includes(this.currentUser!.role));
+    return this.menuItems.filter((item) =>
+      item.roles.includes(this.currentUser!.role),
+    );
   }
 }

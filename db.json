@@ -22,7 +22,8 @@
       "email": "doctor@medicare.com",
       "password": "Doctor@123",
       "role": "DOCTOR",
-      "token": "doctor-token"
+      "token": "doctor-token",
+      "doctorId": "Hp5U32kkfm4"
     }
   ],
   "doctors": [
@@ -228,6 +229,51 @@
       "notes": "",
       "status": "Scheduled",
       "id": "oLub1vqXPbs"
+    },
+    {
+      "patientId": "1",
+      "doctorId": "Hp5U32kkfm4",
+      "date": "2026-08-16T18:30:00.000Z",
+      "time": "15:30",
+      "notes": "",
+      "status": "Completed",
+      "id": "OfOjN-NToHI"
+    },
+    {
+      "patientId": "psG93ijLZWw",
+      "doctorId": "Hp5U32kkfm4",
+      "date": "2026-08-16T18:30:00.000Z",
+      "time": "16:30",
+      "notes": "",
+      "status": "Scheduled",
+      "id": "xPJIsaVkX90"
+    },
+    {
+      "patientId": "1",
+      "doctorId": "Hp5U32kkfm4",
+      "date": "2026-08-17",
+      "time": "16:00",
+      "notes": "",
+      "status": "Scheduled",
+      "id": "LoGH-ctJb7w"
+    },
+    {
+      "patientId": "psG93ijLZWw",
+      "doctorId": "Hp5U32kkfm4",
+      "date": "2026-08-17",
+      "time": "15:00",
+      "notes": "Cold",
+      "status": "Scheduled",
+      "id": "IUieBxEGexY"
+    },
+    {
+      "patientId": "u2sfm-e_Iqk",
+      "doctorId": "Hp5U32kkfm4",
+      "date": "2026-08-19",
+      "time": "11:00",
+      "notes": "",
+      "status": "Scheduled",
+      "id": "jQs0qOE16bE"
     }
   ],
   "invoices": [

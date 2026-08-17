@@ -6,10 +6,11 @@ import { NotificationService } from '../../../core/services/notification/notific
 import { Router } from '@angular/router';
 import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 import { User } from '../../models/user.model';
+import { NotificationBellComponent } from "../notification-bell/notification-bell.component";
 
 @Component({
   selector: 'app-navbar',
-  imports: [MatToolbarModule, MatIconModule, MatMenuModule, MatMenuTrigger],
+  imports: [MatToolbarModule, MatIconModule, MatMenuModule, MatMenuTrigger, NotificationBellComponent],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
 })

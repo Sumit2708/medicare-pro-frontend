@@ -1,0 +1,34 @@
+.alert-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.alert-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border-radius: 10px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+
+  mat-icon { font-size: 18px; height: 18px; width: 18px; }
+
+  &.warning {
+    background: #FCEFDA;
+    color: #966516;
+  }
+
+  &.danger {
+    background: #FBE7E7;
+    color: var(--color-danger);
+  }
+
+  &.info {
+    background: var(--color-primary-light);
+    color: var(--color-primary-dark);
+  }
+}

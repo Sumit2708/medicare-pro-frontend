@@ -1,4 +1,4 @@
-<app-page-header
+<!-- <app-page-header
   title="Dashboard"
   subtitle="Clinic overview"
   [showButton]="false">
@@ -16,7 +16,6 @@
 
   <section class="dashboard-layout">
 
-    <!-- Revenue -->
 
     <app-chart-card
       title="Monthly Revenue"
@@ -30,7 +29,6 @@
     </app-chart-card>
 
 
-    <!-- Payment -->
 
     <app-chart-card
       title="Payment Status"
@@ -44,7 +42,6 @@
     </app-chart-card>
 
 
-    <!-- Appointments -->
 
     <app-chart-card
       title="Monthly Appointments"
@@ -59,7 +56,6 @@
     </app-chart-card>
 
 
-    <!-- Recent Appointments -->
 
     <app-chart-card
       title="Recent Appointments"
@@ -73,7 +69,6 @@
     </app-chart-card>
 
 
-    <!-- Pending Payments -->
 
     <app-chart-card
       title="Pending Payments"
@@ -88,4 +83,108 @@
 
   </section>
 
+} -->
+
+
+@if (dashboard$ | async; as dashboard) {
+
+  <!-- Personalized header -->
+  <div class="dash-header">
+    <div>
+      <h2>{{ greeting }}, Admin</h2>
+      <p>{{ today | date: 'EEEE, MMMM d, y' }} — here's what's happening today</p>
+    </div>
+
+    <div class="quick-actions">
+      <button mat-stroked-button (click)="goTo('/doctors/add')">
+        <mat-icon>person_add</mat-icon>
+        Add Doctor
+      </button>
+      <button mat-stroked-button (click)="goTo('/patients/add')">
+        <mat-icon>personal_injury</mat-icon>
+        Add Patient
+      </button>
+      <button mat-raised-button color="primary" (click)="goTo('/appointments/add')">
+        <mat-icon>add</mat-icon>
+        New Appointment
+      </button>
+    </div>
+  </div>
+
+  <!-- Alerts -->
+  <app-alert-banner [alerts]="getAlerts(dashboard)"></app-alert-banner>
+
+  <!-- Summary cards -->
+  <section class="summary-section">
+    <app-summary-cards [dashboard]="dashboard"></app-summary-cards>
+  </section>
+
+  <!-- Doctors on duty -->
+  @if (doctorsOnDuty.length > 0) {
+    <section class="duty-section">
+      <div class="duty-header">
+        <h3>Doctors on Duty</h3>
+        <a (click)="goTo('/doctors')">View all</a>
+      </div>
+
+      <div class="duty-strip">
+        @for (doc of doctorsOnDuty; track doc.id) {
+          <div class="duty-chip" [matTooltip]="doc.specialization">
+            <div class="duty-avatar">
+              @if (doc.photoUrl) {
+                <img [src]="doc.photoUrl" [alt]="doc.name">
+              } @else {
+                <span>{{ getInitials(doc.name) }}</span>
+              }
+              <span class="duty-dot"></span>
+            </div>
+            <span class="duty-name">{{ doc.name }}</span>
+          </div>
+        }
+      </div>
+    </section>
+  }
+
+  <!-- Charts -->
+  <section class="dashboard-layout">
+    <app-chart-card title="Monthly Revenue" subtitle="Last 12 months" icon="trending_up">
+      <app-revenue-chart [data]="dashboard.monthlyRevenue ?? []"></app-revenue-chart>
+    </app-chart-card>
+
+    <app-chart-card title="Payment Status" subtitle="Current payment overview" icon="receipt">
+      <app-payment-chart [data]="dashboard.paymentSummary ?? []"></app-payment-chart>
+    </app-chart-card>
+
+    <app-chart-card title="Monthly Appointments" subtitle="Last 12 months" icon="calendar_month" class="full-width">
+      <app-appointments-chart [data]="dashboard.monthlyAppointments ?? []"></app-appointments-chart>
+    </app-chart-card>
+
+    <app-chart-card title="Recent Appointments" subtitle="Latest appointments" icon="event">
+      <app-recent-appointments [appointments]="dashboard.recentAppointments ?? []"></app-recent-appointments>
+    </app-chart-card>
+
+    <app-chart-card title="Pending Payments" subtitle="Outstanding invoices" icon="payments">
+      <app-pending-payments [invoices]="dashboard.pendingInvoices ?? []"></app-pending-payments>
+    </app-chart-card>
+
+    <!-- Activity feed -->
+    <app-chart-card title="Recent Activity" subtitle="Latest updates across your clinic" icon="history">
+      <div class="activity-feed">
+        @for (item of getActivityFeed(dashboard); track item.title) {
+          <div class="activity-row">
+            <div class="activity-icon" [class.payment]="item.type === 'payment'">
+              <mat-icon>{{ item.icon }}</mat-icon>
+            </div>
+            <div class="activity-text">
+              <span class="activity-title">{{ item.title }}</span>
+              <span class="activity-meta">{{ item.meta }}</span>
+            </div>
+          </div>
+        }
+        @if (getActivityFeed(dashboard).length === 0) {
+          <p class="activity-empty">No recent activity to show.</p>
+        }
+      </div>
+    </app-chart-card>
+  </section>
 }

@@ -162,17 +162,21 @@ export class AddAppointmentComponent {
           return;
         }
 
-        this.appointmentService.createAppointment(form).subscribe({
-          next: () => {
-            this.notificationService.success(
-              'Appointment created successfully',
-            );
-            this.router.navigate(['/appointments']);
-          },
-          error: () => {
-            this.notificationService.error('Failed to create appointment');
-          },
-        });
+        let selectedDate = this.appointmentForm.value.date;
+
+        ((form.date = selectedDate ? this.formatDate(selectedDate) : null),
+        
+          this.appointmentService.createAppointment(form).subscribe({
+            next: () => {
+              this.notificationService.success(
+                'Appointment created successfully',
+              );
+              this.router.navigate(['/appointments']);
+            },
+            error: () => {
+              this.notificationService.error('Failed to create appointment');
+            },
+          }));
       },
     });
   }

@@ -15,6 +15,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { NotificationService } from '../../../../core/services/notification/notification.service';
 import { AuthService } from '../../../../core/services/auth/auth.service';
+import { UserRole } from '../../../../core/enums/user-role.enum';
 
 @Component({
   selector: 'app-login',
@@ -62,14 +63,21 @@ export class LoginComponent {
       next: (isLoggedin) => {
         this.isSubmitting = false;
         if (isLoggedin) {
-          this.router.navigate(['/dashboard']);
+          const user = this.authService.getCurrentUser();
+          if (user?.role === UserRole.DOCTOR) {
+            this.router.navigate(['/doctor-dashboard']);
+          } else {
+            this.router.navigate(['/dashboard']);
+          }
         } else {
           this.notificationService.error('Invalid email or password');
         }
       },
       error: () => {
         this.isSubmitting = false;
-        this.notificationService.error('Something went wrong. Please try again.');
+        this.notificationService.error(
+          'Something went wrong. Please try again.',
+        );
       },
     });
   }

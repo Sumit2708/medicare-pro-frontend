@@ -7,4 +7,5 @@ export interface User {
   password: string;
   role: UserRole;
   token: string;
+  doctorId?: number;   // links a DOCTOR-role user to their Doctor record
 }

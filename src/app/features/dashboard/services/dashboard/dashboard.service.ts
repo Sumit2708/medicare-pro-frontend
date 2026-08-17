@@ -13,6 +13,7 @@ import { Appointment } from '../../../../shared/models/appointment.model';
 import { AppointmentChartModel } from '../../models/appointment-chart.model';
 import { PaymentChartModel } from '../../models/payment-summary.model';
 import { DashboardFilter } from '../../../../core/enums/dashboard-filter.enum';
+import { DoctorDashboardViewModel } from '../../../../shared/models/doctor-dashboard.viewmodel';
 
 @Injectable({
   providedIn: 'root',
@@ -274,4 +275,99 @@ export class DashboardService {
   //     }
 
   // }
+
+
+
+
+  getDoctorDashboardData(doctorId: number): Observable<DoctorDashboardViewModel> {
+  return forkJoin({
+    patients: this.patientService.getPatients(),
+    doctors: this.doctorService.getDoctors(),
+    appointments: this.appointmentService.getAppointments(),
+  }).pipe(
+    map((data) => {
+      const doctor = data.doctors.find((d) => d.id === doctorId);
+      const myAppointments = (data.appointments as any[]).filter(
+        (a) => a.doctorId === doctorId,
+      );
+      const today = new Date().toISOString().split('T')[0];
+      const now = new Date();
+
+      const todaySchedule = myAppointments
+        .filter((a) => (a.appointmentDate ?? a.date) === today)
+        .sort((a, b) =>
+          (a.appointmentTime ?? a.time).localeCompare(b.appointmentTime ?? b.time),
+        )
+        .map((a) => this.toScheduleItem(a, data.patients));
+
+      const upcomingAppointments = myAppointments
+        .filter((a) => (a.appointmentDate ?? a.date) > today)
+        .sort(
+          (a, b) =>
+            new Date(a.appointmentDate ?? a.date).getTime() -
+            new Date(b.appointmentDate ?? b.date).getTime(),
+        )
+        .slice(0, 5)
+        .map((a) => this.toScheduleItem(a, data.patients));
+
+      const patientIds = Array.from(new Set(myAppointments.map((a) => a.patientId)));
+
+      const recentPatients: DoctorDashboardViewModel['recentPatients'] = patientIds
+        .map((pid) => {
+          const patient = data.patients.find((p: any) => p.id === pid);
+          const visits = myAppointments.filter((a) => a.patientId === pid);
+          const last = [...visits].sort(
+            (a, b) =>
+              new Date(b.appointmentDate ?? b.date).getTime() -
+              new Date(a.appointmentDate ?? a.date).getTime(),
+          )[0];
+          return {
+            name: patient?.name ?? 'Unknown',
+            lastVisit: last ? last.appointmentDate ?? last.date : '',
+            visitCount: visits.length,
+          };
+        })
+        .sort((a, b) => new Date(b.lastVisit).getTime() - new Date(a.lastVisit).getTime())
+        .slice(0, 6);
+
+      const monthlyAppointmentsCount = myAppointments.filter((a) => {
+        const d = new Date(a.appointmentDate ?? a.date);
+        return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+      }).length;
+
+      return {
+        doctorName: doctor?.name ?? 'Doctor',
+        specialization: doctor?.specialization ?? '',
+        photoUrl: doctor?.photoUrl,
+        todayAppointmentsCount: todaySchedule.length,
+        totalPatients: patientIds.length,
+        monthlyAppointmentsCount,
+        todaySchedule,
+        upcomingAppointments,
+        recentPatients,
+        monthlyTrend: this.buildDoctorMonthlyTrend(myAppointments),
+      };
+    }),
+  );
+}
+
+private toScheduleItem(a: any, patients: any[]): any {
+  const patient = patients.find((p) => p.id === a.patientId);
+  return {
+    patientName: patient?.name ?? 'Unknown',
+    date: a.appointmentDate ?? a.date,
+    time: a.appointmentTime ?? a.time,
+    status: a.status,
+  };
+}
+
+private buildDoctorMonthlyTrend(appointments: any[]) {
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return months.map((month, index) => ({
+    month,
+    appointments: appointments.filter(
+      (a) => new Date(a.appointmentDate ?? a.date).getMonth() === index,
+    ).length,
+  }));
+}
 }

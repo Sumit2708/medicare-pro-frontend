@@ -1,39 +1,42 @@
 // Angular Material theming — https://material.angular.dev/guide/theming
-@use '@angular/material' as mat;
-@use '../theme-colors' as my-theme;   // adjust path to match your actual file location
+@use "@angular/material" as mat;
+@use "../theme-colors" as my-theme; // adjust path to match your actual file location
 
 html {
   color-scheme: light;
-  @include mat.theme((
-    color: (
-      theme-type: light,
-      primary: my-theme.$primary-palette,
-      tertiary: my-theme.$tertiary-palette,
-    ),
-    typography: Roboto,
-    density: 0,
-  ));
+  @include mat.theme(
+    (
+      color: (
+        theme-type: light,
+        primary: my-theme.$primary-palette,
+        tertiary: my-theme.$tertiary-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
 }
 /* ---------- Design tokens ---------- */
 :root {
-  --color-primary: #0F5E5A;
-  --color-primary-dark: #0B4744;
-  --color-primary-light: #E4F0EE;
-  --color-accent: #E8A33D;
-  --color-ink: #12232E;
-  --color-ink-soft: #5B6B72;
-  --color-bg: #F7F9F8;
-  --color-surface: #FFFFFF;
-  --color-border: #DCE3E1;
-  --color-danger: #D64545;
-  --color-success: #2F9E68;
+  --color-primary: #0f5e5a;
+  --color-primary-dark: #0b4744;
+  --color-primary-light: #e4f0ee;
+  --color-accent: #e8a33d;
+  --color-ink: #12232e;
+  --color-ink-soft: #5b6b72;
+  --color-bg: #f7f9f8;
+  --color-surface: #ffffff;
+  --color-border: #dce3e1;
+  --color-danger: #d64545;
+  --color-success: #2f9e68;
 
-  --font-display: 'Lexend', sans-serif;
-  --font-body: 'Inter', sans-serif;
+  --font-display: "Lexend", sans-serif;
+  --font-body: "Inter", sans-serif;
 }
 
 /* ---------- Global reset ---------- */
-html, body {
+html,
+body {
   height: 100%;
 }
 
@@ -96,11 +99,13 @@ mat-card {
 }
 
 .profile-menu {
-  --mat-menu-container-color: var(--color-surface);   // forces pure white panel
+  --mat-menu-container-color: var(--color-surface); // forces pure white panel
   border-radius: 12px !important;
   overflow: hidden;
   margin-top: 8px;
-  box-shadow: 0 10px 30px rgba(15, 35, 46, 0.14), 0 2px 8px rgba(15, 35, 46, 0.06) !important;
+  box-shadow:
+    0 10px 30px rgba(15, 35, 46, 0.14),
+    0 2px 8px rgba(15, 35, 46, 0.06) !important;
 
   .mat-mdc-menu-content {
     padding: 6px !important;
@@ -123,22 +128,42 @@ mat-card {
     &:hover {
       background: var(--color-primary-light);
 
-      .mat-icon { color: var(--color-primary); }
+      .mat-icon {
+        color: var(--color-primary);
+      }
     }
   }
 }
 /* ---------- Utility font sizes ---------- */
-.fs8  { font-size: 8px; }
-.fs10 { font-size: 10px; }
-.fs12 { font-size: 12px; }
-.fs14 { font-size: 14px; }
-.fs16 { font-size: 16px; }
-.fs18 { font-size: 18px; }
-.fs20 { font-size: 20px; }
+.fs8 {
+  font-size: 8px;
+}
+.fs10 {
+  font-size: 10px;
+}
+.fs12 {
+  font-size: 12px;
+}
+.fs14 {
+  font-size: 14px;
+}
+.fs16 {
+  font-size: 16px;
+}
+.fs18 {
+  font-size: 18px;
+}
+.fs20 {
+  font-size: 20px;
+}
 
 /* ---------- Print (invoice) ---------- */
 @media print {
-  app-sidebar, app-header, app-navbar, mat-sidenav, mat-toolbar {
+  app-sidebar,
+  app-header,
+  app-navbar,
+  mat-sidenav,
+  mat-toolbar {
     display: none !important;
   }
   app-print-invoice {
@@ -154,7 +179,7 @@ mat-card {
   --mdc-outlined-text-field-outline-width: 1px;
   --mdc-outlined-text-field-focus-outline-width: 1.5px;
   --mdc-outlined-text-field-outline-color: var(--color-border);
-  --mdc-outlined-text-field-hover-outline-color: #B9C4C2;
+  --mdc-outlined-text-field-hover-outline-color: #b9c4c2;
   --mdc-outlined-text-field-focus-outline-color: var(--color-primary);
   --mdc-outlined-text-field-error-outline-color: var(--color-danger);
   --mdc-outlined-text-field-label-text-color: var(--color-ink-soft);
@@ -180,4 +205,156 @@ mat-card {
 
 .mat-focused .mat-mdc-form-field-icon-prefix mat-icon {
   color: var(--color-primary);
+}
+
+.notif-menu .mat-mdc-menu-content {
+  padding: 0 !important;
+}
+
+.notif-menu {
+  max-width: 380px !important;
+  min-width: 360px !important;
+}
+
+.notif-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--color-border);
+
+  h4 {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-ink);
+    margin: 0;
+  }
+
+  .mark-all-btn {
+    border: none;
+    background: none;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-primary);
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.notif-list {
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.notif-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: var(--color-bg);
+  }
+  &:last-child {
+    border-bottom: none;
+  }
+  &.unread {
+    background: var(--color-primary-light);
+  }
+  &.unread:hover {
+    background: #ddedeb;
+  }
+
+  .notif-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    border-radius: 10px;
+    background: var(--color-primary-light);
+    color: var(--color-primary);
+
+    &.payment {
+      background: #fcefda;
+      color: var(--color-accent);
+    }
+    &.system {
+      background: var(--color-info-light);
+      color: var(--color-info);
+    }
+
+    mat-icon {
+      font-size: 18px;
+      height: 18px;
+      width: 18px;
+    }
+  }
+
+  .notif-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+
+    .notif-title {
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-ink);
+    }
+    .notif-message {
+      font-family: var(--font-body);
+      font-size: 12px;
+      color: var(--color-ink-soft);
+    }
+    .notif-time {
+      font-family: var(--font-body);
+      font-size: 11px;
+      color: var(--color-ink-soft);
+      margin-top: 2px;
+    }
+  }
+
+  .unread-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    margin-top: 4px;
+    flex-shrink: 0;
+  }
+}
+
+.notif-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+
+  mat-icon {
+    font-size: 32px;
+    height: 32px;
+    width: 32px;
+    color: var(--color-border);
+    margin-bottom: 10px;
+  }
+  p {
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--color-ink-soft);
+    margin: 0;
+  }
 }
