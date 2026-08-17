@@ -358,3 +358,9 @@ mat-card {
     margin: 0;
   }
 }
+
+.cred-dialog-panel .mat-mdc-dialog-container .mdc-dialog__surface {
+  border-radius: 20px !important;
+  padding: 28px !important;
+  box-shadow: 0 24px 60px rgba(15, 35, 46, 0.18) !important;
+}

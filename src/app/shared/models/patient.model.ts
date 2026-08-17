@@ -5,4 +5,9 @@ export interface Patient {
   gender: string;
   mobile: string;
   status: string;
+  address?: String;
+
+  bloodGroup?: string;
+  alternateMobile?: string;
+  medicalHistory?: string;
 }

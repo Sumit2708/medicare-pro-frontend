@@ -1,71 +1,105 @@
 import { Component } from '@angular/core';
-import { MatFormField, MatLabel, MatHint } from '@angular/material/form-field';
-import { MatSelect, MatOption } from '@angular/material/select';
-import { MatCard, MatCardHeader, MatCardTitle, MatCardSubtitle, MatCardContent } from '@angular/material/card';
+import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { PatientService } from '../../services/patient.service';
-import { Router } from '@angular/router';
+import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { ActivatedRoute, Router } from '@angular/router';
+import { PatientService } from '../../services/patient.service';
 import { NotificationService } from '../../../../core/services/notification/notification.service';
-import { PageHeaderComponent } from "../../../../shared/components/page-header/page-header.component";
-import { MatIcon } from "@angular/material/icon";
+import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
 
 @Component({
   selector: 'app-edit-patient',
-  imports: [MatFormField, MatLabel, MatHint, MatSelect, MatOption, MatCard, ReactiveFormsModule, MatButtonModule, MatInputModule, PageHeaderComponent, MatCardHeader, MatIcon, MatCardTitle, MatCardSubtitle, MatCardContent],
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    MatCardModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatIconModule,
+    PageHeaderComponent,
+  ],
   templateUrl: './edit-patient.component.html',
   styleUrl: './edit-patient.component.scss',
 })
 export class EditPatientComponent {
   patientForm: FormGroup;
- patientId: any;
+  patientId = '';
+  isLoading = true;
+  isSubmitting = false;
+
+  bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private fb: FormBuilder,
     private patientService: PatientService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
   ) {
     this.patientForm = this.fb.group({
       name: ['', Validators.required],
       age: ['', Validators.required],
       gender: ['', Validators.required],
       mobile: ['', Validators.required],
+      alternateMobile: [''],
+      bloodGroup: [''],
       address: [''],
+      medicalHistory: [''],
       status: ['Active'],
     });
   }
 
   ngOnInit() {
-    this.router.routerState.root.queryParams.subscribe((params) => {
+    this.route.queryParams.subscribe((params) => {
       this.patientId = params['id'];
-    });
-    if (this.patientId) {
-      this.getPatientById();
-    }
-  }
-
-  getPatientById() {
-    this.patientService.getPatients().subscribe((data: any) => {
-      const patient = data.find((p: any) => p.id == this.patientId);
-      if (patient) {
-        this.patientForm.patchValue(patient);
+      if (this.patientId) {
+        this.getPatientById();
       }
     });
   }
 
+  get initials(): string {
+    const name = this.patientForm.value.name || '';
+    const parts = name.trim().split(' ').filter(Boolean);
+    if (!parts.length) return 'P';
+    return parts.slice(0, 2).map((p: string) => p[0].toUpperCase()).join('');
+  }
+
+  getPatientById() {
+    this.patientService.getPatientById(this.patientId as any).subscribe({
+      next: (patient: any) => {
+        this.patientForm.patchValue(patient);
+        this.isLoading = false;
+      },
+      error: () => {
+        this.isLoading = false;
+        this.notificationService.error('Failed to load patient details.');
+      },
+    });
+  }
+
   onSubmit() {
-    // Handle form submission
     if (this.patientForm.valid) {
-      this.patientService.updatePatient(this.patientId, this.patientForm.value).subscribe({
+      this.isSubmitting = true;
+      this.patientService.updatePatient(this.patientId as any, this.patientForm.value).subscribe({
         next: (res: any) => {
           this.notificationService.success(`Patient ${res.name} updated successfully`);
           this.router.navigate(['/patients']);
         },
-        error: (error) => {
+        error: () => {
+          this.isSubmitting = false;
           this.notificationService.error('Failed to update patient');
         },
       });
+    } else {
+      this.patientForm.markAllAsTouched();
+      this.notificationService.error('Please fill all required fields');
     }
   }
 

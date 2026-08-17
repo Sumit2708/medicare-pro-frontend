@@ -102,8 +102,6 @@
 //   }
 // }
 
-
-
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -122,6 +120,10 @@ import { Router } from '@angular/router';
 import { Doctor } from '../../../../shared/models/doctor.model';
 import { NotificationService } from '../../../../core/services/notification/notification.service';
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
+import { UserService } from '../../../../core/services/user/user.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DoctorCredentialsDialogComponent } from '../../components/doctor-credentials-dialog/doctor-credentials-dialog/doctor-credentials-dialog.component';
+import { UserRole } from '../../../../core/enums/user-role.enum';
 
 @Component({
   selector: 'app-add-doctor',
@@ -148,6 +150,8 @@ export class AddDoctorComponent {
     private doctorService: DoctorService,
     private router: Router,
     private notificationService: NotificationService,
+    private userService: UserService,
+    private dialog: MatDialog,
   ) {
     this.doctorForm = this.fb.group({
       name: ['', Validators.required],
@@ -163,7 +167,10 @@ export class AddDoctorComponent {
     const name = this.doctorForm.value.name || '';
     const parts = name.trim().split(' ').filter(Boolean);
     if (!parts.length) return 'DR';
-    return parts.slice(0, 2).map((p: string) => p[0].toUpperCase()).join('');
+    return parts
+      .slice(0, 2)
+      .map((p: string) => p[0].toUpperCase())
+      .join('');
   }
 
   get completionPercent(): number {
@@ -178,7 +185,10 @@ export class AddDoctorComponent {
 
   get qualificationList(): string[] {
     const raw = this.doctorForm.value.qualification || '';
-    return raw.split(',').map((q: string) => q.trim()).filter(Boolean);
+    return raw
+      .split(',')
+      .map((q: string) => q.trim())
+      .filter(Boolean);
   }
 
   onPhotoSelected(event: Event): void {
@@ -222,12 +232,16 @@ export class AddDoctorComponent {
 
       this.doctorService.addDoctor(doctor).subscribe({
         next: (res: any) => {
-          this.notificationService.success(`Doctor ${res.name} added successfully`);
-          this.router.navigate(['/doctors']);
+          this.notificationService.success(
+            `Doctor ${res.name} added successfully`,
+          );
+          this.createDoctorLogin(res);
         },
         error: () => {
           this.isSubmitting = false;
-          this.notificationService.error('Failed to add doctor. Please try again.');
+          this.notificationService.error(
+            'Failed to add doctor. Please try again.',
+          );
         },
       });
     } else {
@@ -236,6 +250,78 @@ export class AddDoctorComponent {
     }
   }
 
+  private createDoctorLogin(doctor: any): void {
+    const baseEmail = this.slugifyEmail(doctor.name);
+
+    this.userService.checkEmailExists(baseEmail).subscribe((exists) => {
+      const email = exists ? this.makeUniqueEmail(baseEmail) : baseEmail;
+      const password = this.generatePassword(doctor.name);
+
+      const newUser = {
+        name: doctor.name,
+        email,
+        password,
+        role: UserRole.DOCTOR,
+        doctorId: doctor.id,
+        token: 'doctor-token-' + Math.random().toString(36).substring(2, 10),
+      };
+
+      this.userService.createUser(newUser).subscribe({
+        next: () => {
+          this.isSubmitting = false;
+          this.dialog
+            .open(DoctorCredentialsDialogComponent, {
+              width: '420px',
+              disableClose: true,
+              panelClass: 'cred-dialog-panel', // ← add this line
+              data: { doctorName: doctor.name, email, password },
+            })
+            .afterClosed()
+            .subscribe(() => {
+              this.router.navigate(['/doctors']);
+            });
+        },
+        error: () => {
+          this.isSubmitting = false;
+          this.notificationService.error(
+            'Doctor added, but failed to create login credentials.',
+          );
+          this.router.navigate(['/doctors']);
+        },
+      });
+    });
+  }
+
+  private slugifyEmail(name: string): string {
+    const cleaned = name
+      .replace(/^dr\.?\s*/i, '')
+      .trim()
+      .toLowerCase();
+    const slug = cleaned
+      .replace(/[^a-z\s]/g, '')
+      .trim()
+      .split(/\s+/)
+      .join('.');
+    return `${slug}@medicare.com`;
+  }
+
+  private makeUniqueEmail(baseEmail: string): string {
+    const [local, domain] = baseEmail.split('@');
+    const suffix = Math.floor(Math.random() * 900 + 100);
+    return `${local}${suffix}@${domain}`;
+  }
+
+  private generatePassword(name: string): string {
+    const cleaned =
+      name
+        .replace(/^dr\.?\s*/i, '')
+        .trim()
+        .split(' ')[0] || 'Doctor';
+    const namePart =
+      cleaned.charAt(0).toUpperCase() + cleaned.slice(1).toLowerCase();
+    const digits = Math.floor(1000 + Math.random() * 9000);
+    return `${namePart}@${digits}`;
+  }
   onCancel() {
     this.router.navigate(['/doctors']);
   }

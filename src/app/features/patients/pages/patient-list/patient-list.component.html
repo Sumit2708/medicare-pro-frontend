@@ -1,198 +1,142 @@
 <app-page-header
   title="Patients"
-  subtitle="Manage and view registered patients"
+  subtitle="Complete patient records for your clinic"
   buttonLabel="Add Patient"
   buttonIcon="add"
   (buttonClick)="navAddPatient()"
 ></app-page-header>
 
 <div class="patient-page">
-  <!-- Search -->
-  <div class="toolbar">
+  <div class="list-toolbar">
+    <div class="toolbar-info">
+      <div class="toolbar-icon">
+        <mat-icon>folder_shared</mat-icon>
+      </div>
+      <div>
+        <h3>Patient Records</h3>
+        <p>Search and manage patient information</p>
+      </div>
+    </div>
+
     <app-search-box
-      placeholder="Search patients..."
+      placeholder="Search by name or mobile..."
       (search)="applyFilter($event)"
     ></app-search-box>
   </div>
 
-  <!-- Search result empty state -->
-  <div
-    *ngIf="dataSource.data.length > 0 && dataSource.filteredData.length === 0"
-    class="empty-state"
-  >
-    <mat-icon>search_off</mat-icon>
+  @if (dataSource.data.length > 0 && dataSource.filteredData.length === 0) {
+    <div class="empty-state">
+      <div class="empty-icon"><mat-icon>search_off</mat-icon></div>
+      <h3>No matches found</h3>
+      <p>Try a different name or mobile number.</p>
+    </div>
+  }
 
-    <h3>No patients found</h3>
+  @if (dataSource.data.length === 0) {
+    <div class="empty-state">
+      <div class="empty-icon"><mat-icon>people_outline</mat-icon></div>
+      <h3>No patient records yet</h3>
+      <p>Add your first patient to begin building your clinic's records.</p>
+      <button mat-flat-button color="primary" type="button" (click)="navAddPatient()">
+        <mat-icon>add</mat-icon>
+        Add Patient
+      </button>
+    </div>
+  }
 
-    <p>Try searching with a different patient name or mobile number.</p>
-  </div>
+  @if (dataSource.filteredData.length > 0) {
+    <div class="table-card">
+      <div class="table-container">
+        <table mat-table [dataSource]="dataSource" matSort class="patients-table">
 
-  <!-- Patient table -->
-  <div class="table-container" *ngIf="dataSource.filteredData.length > 0">
-    <table mat-table [dataSource]="dataSource" matSort class="patients-table">
-      <!-- ID -->
-      <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+            <td mat-cell *matCellDef="let patient; let i = index">
+              <span class="patient-id">{{ getPatientIndex(i) }}</span>
+            </td>
+          </ng-container>
 
-        <td mat-cell *matCellDef="let patient; let i = index">
-          <span class="patient-id">
-            {{ getPatientIndex(i) }}
-          </span>
-        </td>
-      </ng-container>
+          <ng-container matColumnDef="patient">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Patient</th>
+            <td mat-cell *matCellDef="let patient">
+              <div class="patient-info">
+                <div class="patient-avatar">{{ getInitials(patient.name) }}</div>
+                <div class="patient-details">
+                  <span class="patient-name">{{ patient.name }}</span>
+                  <span class="patient-meta">{{ patient.age }} yrs · {{ patient.gender }}</span>
+                </div>
+              </div>
+            </td>
+          </ng-container>
 
-      <!-- Patient -->
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef>Patient</th>
+          <ng-container matColumnDef="bloodGroup">
+            <th mat-header-cell *matHeaderCellDef>Blood Group</th>
+            <td mat-cell *matCellDef="let patient">
+              @if (patient.bloodGroup) {
+                <span class="blood-chip">
+                  <mat-icon>bloodtype</mat-icon>
+                  {{ patient.bloodGroup }}
+                </span>
+              } @else {
+                <span class="blood-chip empty">—</span>
+              }
+            </td>
+          </ng-container>
 
-        <td mat-cell *matCellDef="let patient">
-          <div class="patient-info">
-            <div class="patient-avatar">
-              <mat-icon>person</mat-icon>
-            </div>
+          <ng-container matColumnDef="contact">
+            <th mat-header-cell *matHeaderCellDef>Contact</th>
+            <td mat-cell *matCellDef="let patient">
+              <a class="contact-link" [href]="'tel:' + patient.mobile">
+                <mat-icon>phone</mat-icon>
+                {{ patient.mobile }}
+              </a>
+              @if (patient.alternateMobile) {
+                <span class="contact-alt">Alt: {{ patient.alternateMobile }}</span>
+              }
+            </td>
+          </ng-container>
 
-            <div class="patient-details">
-              <span class="patient-name">
-                {{ patient.name }}
+          <ng-container matColumnDef="address">
+            <th mat-header-cell *matHeaderCellDef>Address</th>
+            <td mat-cell *matCellDef="let patient">
+              <span class="address-text" [matTooltip]="patient.address || ''">
+                {{ patient.address || '—' }}
               </span>
+            </td>
+          </ng-container>
 
-              <span class="patient-label"> Patient </span>
-            </div>
-          </div>
-        </td>
-      </ng-container>
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+            <td mat-cell *matCellDef="let patient">
+              <span class="status-badge" [class.status-active]="patient.status === 'Active'" [class.status-inactive]="patient.status !== 'Active'">
+                <span class="status-dot"></span>
+                {{ patient.status }}
+              </span>
+            </td>
+          </ng-container>
 
-      <!-- Age -->
-      <ng-container matColumnDef="age">
-        <th mat-header-cell *matHeaderCellDef>Age</th>
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef class="actions-header">Actions</th>
+            <td mat-cell *matCellDef="let patient" class="actions-cell">
+              <button mat-icon-button type="button" matTooltip="Edit patient" (click)="navToEditPatient(patient)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button type="button" color="warn" matTooltip="Delete patient" (click)="deletePatient(patient.id)">
+                <mat-icon>delete_outline</mat-icon>
+              </button>
+            </td>
+          </ng-container>
 
-        <td mat-cell *matCellDef="let patient">{{ patient.age }} yrs</td>
-      </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+    </div>
 
-      <!-- Gender -->
-      <ng-container matColumnDef="gender">
-        <th mat-header-cell *matHeaderCellDef>Gender</th>
-
-        <td mat-cell *matCellDef="let patient">
-          {{ patient.gender }}
-        </td>
-      </ng-container>
-
-      <!-- Mobile -->
-      <ng-container matColumnDef="mobile">
-        <th mat-header-cell *matHeaderCellDef>Contact</th>
-
-        <td mat-cell *matCellDef="let patient">
-          <div class="contact">
-            <mat-icon>phone</mat-icon>
-
-            <span>
-              {{ patient.mobile }}
-            </span>
-          </div>
-        </td>
-      </ng-container>
-
-      <!-- Actions -->
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef class="actions-header">
-          Actions
-        </th>
-
-        <td mat-cell *matCellDef="let patient" class="actions-cell">
-          <button
-            mat-icon-button
-            type="button"
-            matTooltip="Edit patient"
-            (click)="navToEditPatient(patient)"
-          >
-            <mat-icon>edit</mat-icon>
-          </button>
-
-          <button
-            mat-icon-button
-            type="button"
-            class="delete-button"
-            matTooltip="Delete patient"
-            (click)="deletePatient(patient.id)"
-          >
-            <mat-icon>delete_outline</mat-icon>
-          </button>
-        </td>
-      </ng-container>
-
-      <!-- Status -->
-      <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
-
-        <td mat-cell *matCellDef="let patient">
-          <span
-            class="status-badge"
-            [class.status-active]="patient.status === 'Active'"
-            [class.status-inactive]="patient.status !== 'Active'"
-          >
-            <span class="status-dot"></span>
-
-            {{ patient.status }}
-          </span>
-        </td>
-      </ng-container>
-
-      <!-- Header -->
-      <tr
-        mat-header-row
-        *matHeaderRowDef="[
-          'id',
-          'name',
-          'age',
-          'gender',
-          'mobile',
-          'actions',
-          'status',
-        ]"
-      ></tr>
-
-      <!-- Rows -->
-      <tr
-        mat-row
-        *matRowDef="
-          let row;
-          columns: [
-            'id',
-            'name',
-            'age',
-            'gender',
-            'mobile',
-            'actions',
-            'status',
-          ]
-        "
-      ></tr>
-    </table>
     <mat-paginator
+      [length]="dataSource.filteredData.length"
       [pageSizeOptions]="[5, 10, 25]"
       showFirstLastButtons
     ></mat-paginator>
-  </div>
-
-  <!-- No patients -->
-  <div *ngIf="dataSource.data.length === 0" class="empty-state">
-    <div class="empty-icon">
-      <mat-icon>people_outline</mat-icon>
-    </div>
-
-    <h3>No patients yet</h3>
-
-    <p>Add your first patient to start managing patient records.</p>
-
-    <button
-      mat-flat-button
-      color="primary"
-      type="button"
-      (click)="navAddPatient()"
-    >
-      <mat-icon>add</mat-icon>
-      Add Patient
-    </button>
-  </div>
+  }
 </div>

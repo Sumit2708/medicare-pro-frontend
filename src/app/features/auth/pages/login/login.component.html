@@ -15,7 +15,9 @@
         <mat-icon>local_hospital</mat-icon>
       </div>
       <h1>MediCare <b>Pro</b></h1>
-      <p class="tagline">Complete clinic management, built for modern healthcare teams.</p>
+      <p class="tagline">
+        Complete clinic management, built for modern healthcare teams.
+      </p>
 
       <div class="feature-list">
         <div class="feature-item">
@@ -51,10 +53,21 @@
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Email</mat-label>
           <mat-icon matPrefix>mail_outline</mat-icon>
-          <input matInput formControlName="email" type="email" autocomplete="email" />
-          @if (loginForm.get('email')?.hasError('required') && loginForm.get('email')?.touched) {
+          <input
+            matInput
+            formControlName="email"
+            type="email"
+            autocomplete="email"
+          />
+          @if (
+            loginForm.get("email")?.hasError("required") &&
+            loginForm.get("email")?.touched
+          ) {
             <mat-error>Email is required</mat-error>
-          } @else if (loginForm.get('email')?.hasError('email') && loginForm.get('email')?.touched) {
+          } @else if (
+            loginForm.get("email")?.hasError("email") &&
+            loginForm.get("email")?.touched
+          ) {
             <mat-error>Enter a valid email address</mat-error>
           }
         </mat-form-field>
@@ -68,17 +81,30 @@
             formControlName="password"
             autocomplete="current-password"
           />
-          <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword" tabindex="-1">
-            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="hidePassword = !hidePassword"
+            tabindex="-1"
+          >
+            <mat-icon>{{
+              hidePassword ? "visibility_off" : "visibility"
+            }}</mat-icon>
           </button>
-          @if (loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched) {
+          @if (
+            loginForm.get("password")?.hasError("required") &&
+            loginForm.get("password")?.touched
+          ) {
             <mat-error>Password is required</mat-error>
           }
         </mat-form-field>
 
         <div class="form-row">
           <mat-checkbox formControlName="rememberMe">Remember me</mat-checkbox>
-          <a routerLink="/auth/forgot-password" class="forgot-link">Forgot password?</a>
+          <a routerLink="/auth/forgot-password" class="forgot-link"
+            >Forgot password?</a
+          >
         </div>
 
         <button
@@ -88,8 +114,10 @@
           class="login-button"
           [disabled]="isSubmitting"
         >
-          <mat-icon *ngIf="isSubmitting" class="spin">progress_activity</mat-icon>
-          {{ isSubmitting ? 'Signing in...' : 'Login' }}
+          @if (isSubmitting) {
+            <mat-icon class="spin">progress_activity</mat-icon>
+          }
+          {{ isSubmitting ? "Signing in..." : "Login" }}
         </button>
       </form>
 

@@ -1,163 +1,233 @@
-.patient-form-page {
-  max-width: 1100px;
-  margin: 24px auto 40px;
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-/* Main card */
+.add-patient-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+  gap: 20px;
+  align-items: start;
+
+  @media (max-width: 1100px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.patient-form-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
 
 .form-card {
-  border-radius: 20px;
-
-  border: 1px solid var(--mat-sys-outline-variant);
-
-  box-shadow: none;
-
-  overflow: hidden;
+  border-radius: 16px !important;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 1px 2px rgba(15, 35, 46, 0.04) !important;
+  padding: 24px !important;
 }
 
-/* Card header */
-
-mat-card-header {
+.form-card-header {
   display: flex;
   align-items: center;
-
   gap: 14px;
+  padding-bottom: 18px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--color-border);
 
-  padding: 24px 28px;
+  .form-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    border-radius: 12px;
+    background: var(--color-primary-light);
+    color: var(--color-primary);
 
-  background: var(--mat-sys-surface-container-low);
+    &.medical { background: #FBE7E7; color: var(--color-danger); }
+
+    mat-icon { font-size: 21px; height: 21px; width: 21px; }
+  }
+
+  h3 {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-ink);
+    margin: 0 0 2px;
+  }
+
+  p {
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    color: var(--color-ink-soft);
+    margin: 0;
+  }
 }
 
-.section-icon {
-  width: 46px;
-  height: 46px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  flex-shrink: 0;
-
-  border-radius: 12px;
-
-  background: var(--mat-sys-primary-container);
-
-  color: var(--mat-sys-primary);
-}
-
-.section-icon mat-icon {
-  width: 24px;
-  height: 24px;
-
-  font-size: 24px;
-}
-
-/* Titles */
-
-mat-card-title {
-  font-size: 18px;
-  font-weight: 600;
-}
-
-mat-card-subtitle {
-  margin-top: 4px;
-
-  font-size: 13px;
-
-  color: var(--mat-sys-on-surface-variant);
-}
-
-/* Content */
-
-mat-card-content {
-  padding: 28px !important;
-}
-
-/* Form grid */
-
-.form-grid {
+.form-row {
   display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
 
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  &:last-child { margin-bottom: 0; }
 
-  gap: 8px 20px;
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
 }
 
-/* Angular Material fields */
+.full-width { width: 100%; }
 
-.full-width {
-  width: 100%;
+mat-form-field {
+  font-family: var(--font-body);
+
+  mat-icon[matPrefix] {
+    color: var(--color-ink-soft);
+    margin-right: 8px;
+    font-size: 20px;
+    height: 20px;
+    width: 20px;
+  }
 }
-
-.address-field {
-  grid-column: 1 / -1;
-}
-
-/* Prefix icons */
-
-mat-form-field mat-icon[matPrefix] {
-  margin-right: 8px;
-
-  color: var(--mat-sys-on-surface-variant);
-}
-
-/* Actions */
 
 .form-actions {
   display: flex;
-
-  align-items: center;
   justify-content: flex-end;
-
   gap: 12px;
+  padding-top: 4px;
 
-  margin-top: 20px;
-}
-
-.form-actions button {
-  min-height: 44px;
-
-  border-radius: 10px;
-
-  padding: 0 20px;
-}
-
-.form-actions button[color="primary"] {
-  min-width: 145px;
-}
-
-/* Mobile */
-
-@media (max-width: 768px) {
-  .patient-form-page {
-    margin: 16px 0 30px;
+  button {
+    border-radius: 10px;
+    text-transform: none;
+    padding: 0 22px;
+    height: 42px;
   }
 
-  mat-card-header {
-    padding: 20px;
-  }
-
-  mat-card-content {
-    padding: 20px !important;
-  }
-
-  .form-grid {
-    grid-template-columns: 1fr;
-
+  button[color="primary"] {
+    box-shadow: 0 2px 10px rgba(15, 94, 90, 0.2);
+    display: flex;
+    align-items: center;
     gap: 6px;
+
+    mat-icon { font-size: 18px; height: 18px; width: 18px; }
+    .spin { animation: spin 0.8s linear infinite; }
+  }
+}
+
+/* Preview card */
+.preview-card {
+  position: sticky;
+  top: 20px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 24px 20px;
+  text-align: center;
+}
+
+.preview-header {
+  margin-bottom: 12px;
+}
+
+.preview-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.preview-name {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-ink);
+  margin: 0 0 2px;
+}
+
+.preview-meta {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  color: var(--color-ink-soft);
+  margin-bottom: 12px;
+}
+
+.preview-blood {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: #FBE7E7;
+  color: var(--color-danger);
+  font-family: var(--font-display);
+  font-size: 12.5px;
+  font-weight: 700;
+  margin-bottom: 16px;
+
+  mat-icon { font-size: 14px; height: 14px; width: 14px; }
+}
+
+.preview-divider {
+  height: 1px;
+  background: var(--color-border);
+  margin-bottom: 14px;
+}
+
+.preview-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--color-ink);
+  margin-bottom: 10px;
+
+  mat-icon { font-size: 16px; height: 16px; width: 16px; color: var(--color-accent); flex-shrink: 0; }
+}
+
+.preview-history {
+  text-align: left;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--color-border);
+
+  .preview-history-label {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 6px;
   }
 
-  .address-field {
-    grid-column: auto;
+  p {
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    color: var(--color-ink);
+    line-height: 1.5;
+    margin: 0;
   }
+}
 
-  .form-actions {
-    justify-content: stretch;
-
-    flex-direction: column-reverse;
-  }
-
-  .form-actions button {
-    width: 100%;
+@media (max-width: 1100px) {
+  .preview-card {
+    position: static;
+    order: -1;
   }
 }

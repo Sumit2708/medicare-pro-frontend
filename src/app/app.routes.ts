@@ -252,8 +252,6 @@
 //   },
 // ];
 
-
-
 import { Routes } from '@angular/router';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { DashboardComponent } from './features/dashboard/dashboard.component';
@@ -284,6 +282,7 @@ import { RevenueReportPrintComponent } from './features/reports/pages/revenue-re
 import { AppointmentReportPrintComponent } from './features/reports/pages/appointment-report-print/appointment-report-print.component';
 import { SettingsComponent } from './features/settings/pages/settings/settings.component';
 import { DoctorDashboardComponent } from './features/dashboard/doctor-dashboard/doctor-dashboard.component';
+import { ForgotPasswordComponent } from './features/auth/pages/forgot-password/forgot-password.component';
 
 const ADMIN = [UserRole.ADMIN];
 const ADMIN_RECEPTION = [UserRole.ADMIN, UserRole.RECEPTIONIST];
@@ -294,6 +293,10 @@ export const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
+  },
+  {
+    path: 'auth/forgot-password',
+    component: ForgotPasswordComponent,
   },
   {
     path: 'access-denied',

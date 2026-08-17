@@ -43,8 +43,8 @@ export class DashboardService {
 
         const totalDoctors = data.doctors.length;
 
-        const todayAppointments = (data as any).appointments.filter(
-          (appointment: any) => appointment.appointmentDate === today,
+        const todayAppointments = data.appointments.filter(
+          (appointment: any) => appointment.date == today
         ).length;
 
         const todayCollectedRevenue = data.invoices
@@ -54,6 +54,8 @@ export class DashboardService {
               invoice.createdDate.split('T')[0] === today,
           )
           .reduce((sum, invoice) => sum + invoice.total, 0);
+
+
 
         // const recentAppointments = [...data.appointments]
         //   .sort(
@@ -66,8 +68,8 @@ export class DashboardService {
         const recentAppointments = [...data.appointments]
           .sort(
             (a, b) =>
-              new Date(b.appointmentDate).getTime() -
-              new Date(a.appointmentDate).getTime(),
+              new Date(b.date).getTime() -
+              new Date(a.date).getTime(),
           )
           .slice(0, 5)
           .map((appointment) => {
@@ -132,6 +134,7 @@ export class DashboardService {
         //     filter
         // );
 
+        console.log('data', todayAppointments, todayCollectedRevenue, data , today);
         return {
           totalPatients,
 
