@@ -177,7 +177,7 @@
       "alternateMobile": "",
       "bloodGroup": "AB+",
       "address": "Jamner, Jalgaon-425001",
-      "medicalHistory": "Gastoric",
+      "medicalHistory": "Gastric, Acidity , Stomach pain ",
       "status": "Active",
       "id": "hyb6V_5xnmg"
     }
@@ -261,7 +261,7 @@
       "date": "2026-08-05T18:30:00.000Z",
       "time": "10:30 AM",
       "notes": "",
-      "status": "Scheduled",
+      "status": "Cancelled",
       "id": "JDHrz8HJpE0"
     },
     {
@@ -270,7 +270,7 @@
       "date": "2026-08-05T18:30:00.000Z",
       "time": "04:30 PM",
       "notes": "",
-      "status": "Scheduled",
+      "status": "Cancelled",
       "id": "fqnNx-dkLWc"
     },
     {
@@ -279,7 +279,7 @@
       "date": "2026-08-05T18:30:00.000Z",
       "time": "05:30 PM",
       "notes": "",
-      "status": "Scheduled",
+      "status": "Cancelled",
       "id": "ftORwS0xXhM"
     },
     {
@@ -288,7 +288,7 @@
       "date": "2026-08-05T18:30:00.000Z",
       "time": "09:00 AM",
       "notes": "",
-      "status": "Scheduled",
+      "status": "Cancelled",
       "id": "J_PsxWVoOsQ"
     },
     {
@@ -297,7 +297,7 @@
       "date": "2026-08-14T18:30:00.000Z",
       "time": "12:30",
       "notes": "",
-      "status": "Scheduled",
+      "status": "Cancelled",
       "id": "z1KPk1yhQHk"
     },
     {
@@ -306,7 +306,7 @@
       "date": "2026-08-14T18:30:00.000Z",
       "time": "11:00",
       "notes": "",
-      "status": "Scheduled",
+      "status": "Cancelled",
       "id": "oLub1vqXPbs"
     },
     {
@@ -324,7 +324,7 @@
       "date": "2026-08-16T18:30:00.000Z",
       "time": "16:30",
       "notes": "",
-      "status": "Scheduled",
+      "status": "Cancelled",
       "id": "xPJIsaVkX90"
     },
     {
@@ -333,7 +333,7 @@
       "date": "2026-08-17",
       "time": "16:00",
       "notes": "",
-      "status": "Scheduled",
+      "status": "Cancelled",
       "id": "LoGH-ctJb7w"
     },
     {
@@ -342,7 +342,7 @@
       "date": "2026-08-17",
       "time": "15:00",
       "notes": "Cold",
-      "status": "Scheduled",
+      "status": "Cancelled",
       "id": "IUieBxEGexY"
     },
     {
@@ -351,7 +351,7 @@
       "date": "2026-08-19",
       "time": "11:00",
       "notes": "",
-      "status": "Scheduled",
+      "status": "Cancelled",
       "id": "jQs0qOE16bE"
     }
   ],

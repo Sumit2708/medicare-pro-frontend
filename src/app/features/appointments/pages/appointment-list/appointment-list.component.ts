@@ -1,51 +1,43 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, ViewChild } from '@angular/core';
-import { Router, ɵEmptyOutletComponent } from '@angular/router';
+import { Component, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { forkJoin } from 'rxjs';
 import { AppointmentService } from '../../services/appointment.service';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { NotificationService } from '../../../../core/services/notification/notification.service';
-import { MatFormField, MatLabel } from '@angular/material/form-field';
-import { MatIcon } from '@angular/material/icon';
-import { MatCard } from '@angular/material/card';
-import { DatePipe, CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { MatInputModule } from '@angular/material/input';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { DoctorService } from '../../../doctors/services/doctor.service';
 import { PatientService } from '../../../patients/services/patient.service';
 import { Patient } from '../../../../shared/models/patient.model';
 import { Doctor } from '../../../../shared/models/doctor.model';
 import { Appointment } from '../../../../shared/models/appointment.model';
 import { MatDialog } from '@angular/material/dialog';
-import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
-import { MatBadgeModule } from '@angular/material/badge';
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
 import { SearchBoxComponent } from '../../../../shared/components/search-box/search-box.component';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { DialogService } from '../../../../core/services/dialog/dialog.service';
+
+const SIXTY_DAYS_MS = 60 * 24 * 60 * 60 * 1000;
 
 @Component({
   selector: 'app-appointment-list',
+  standalone: true,
   imports: [
-    MatFormField,
-    MatIcon,
-    MatCard,
-    MatSort,
-    MatLabel,
-    DatePipe,
     CommonModule,
     MatTableModule,
-    MatButtonModule,
-    MatInputModule,
-    MatBadgeModule,
-    MatPaginator,
     MatSort,
+    MatPaginator,
+    MatIconModule,
+    MatButtonModule,
+    MatTooltipModule,
     PageHeaderComponent,
     SearchBoxComponent,
-    MatTooltipModule,
   ],
   templateUrl: './appointment-list.component.html',
   styleUrl: './appointment-list.component.scss',
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppointmentListComponent {
   displayedColumns: string[] = [
@@ -59,13 +51,38 @@ export class AppointmentListComponent {
   ];
   dataSource = new MatTableDataSource<any>();
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
-
-  appointments: Appointment[] = [];
   doctors: Doctor[] = [];
   patients: Patient[] = [];
-  appointmentList: any;
+
+  private _paginator!: MatPaginator;
+  @ViewChild(MatPaginator) set paginator(mp: MatPaginator) {
+    this._paginator = mp;
+    if (mp) this.dataSource.paginator = mp;
+  }
+  get paginator(): MatPaginator {
+    return this._paginator;
+  }
+
+  private _sort!: MatSort;
+  @ViewChild(MatSort) set sort(ms: MatSort) {
+    this._sort = ms;
+    if (ms) {
+      this.dataSource.sort = ms;
+      this.dataSource.sortingDataAccessor = (item, property) => {
+        switch (property) {
+          case 'doctor':
+            return this.getDoctorName(item.doctorId);
+          case 'patient':
+            return this.getPatientName(item.patientId);
+          default:
+            return item[property];
+        }
+      };
+    }
+  }
+  get sort(): MatSort {
+    return this._sort;
+  }
 
   constructor(
     private router: Router,
@@ -73,265 +90,189 @@ export class AppointmentListComponent {
     private notificationService: NotificationService,
     private patientService: PatientService,
     private doctorService: DoctorService,
-    private dialog: MatDialog,
+    private dialogService: DialogService,
   ) {}
 
   ngOnInit(): void {
-    this.getAppointments();
-    this.loadPatients();
     this.loadDoctors();
+    this.loadAll();
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-
-    this.dataSource.sortingDataAccessor = (item, property) => {
-      switch (property) {
-        case 'doctor':
-          return item.doctorName;
-
-        case 'patient':
-          return item.patientName;
-
-        default:
-          return item[property];
-      }
-    };
-  }
-
-  // getAppointments() {
-  //   // Implement logic to fetch appointments from the backend or service
-  //   this.appointmentService.getAppointments().subscribe({
-  //     next: (appointments: any) => {
-  //       // this.appointmentList = appointments.map(...this.dataSource.data);
-  //       // Handle the fetched appointments
-  //       this.dataSource.data = appointments;
-  //       this.dataSource.paginator = this.paginator;
-  //       this.dataSource.sort = this.sort;
-  //     },
-  //     error: (error) => {
-  //       this.notificationService.error('Failed to load appointments');
-  //     },
-  //     complete: () => {
-  //       console.log('Appointments loaded successfully', this.dataSource.data);
-  //     },
-  //   });
-  // }
-
-  getAppointments() {
-    this.appointmentService.getAppointments().subscribe({
-      next: (appointments: Appointment[]) => {
-        appointments.sort((a, b) => {
-          const now = new Date().getTime();
-          const dateA = this.getAppointmentDateTime(a).getTime();
-          const dateB = this.getAppointmentDateTime(b).getTime();
-
-          const aUpcoming = dateA >= now;
-          const bUpcoming = dateB >= now;
-
-          // Upcoming appointments first
-          if (aUpcoming !== bUpcoming) {
-            return aUpcoming ? -1 : 1;
-          }
-
-          // Upcoming: nearest first
-          if (aUpcoming) {
-            return dateA - dateB;
-          }
-
-          // Past: latest first
-          return dateB - dateA;
-        });
-        this.dataSource.data = appointments;
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-
-        console.log('Appointments loaded successfully', this.dataSource.data);
+  private loadAll(): void {
+    forkJoin({
+      appointments: this.appointmentService.getAppointments(),
+      patients: this.patientService.getPatients(),
+    }).subscribe({
+      next: ({ appointments, patients }) => {
+        this.patients = patients;
+        this.runAutomationRules(appointments, patients);
+        this.setSortedData(appointments);
       },
-
       error: () => {
         this.notificationService.error('Failed to load appointments');
       },
     });
   }
 
+  private setSortedData(appointments: Appointment[]): void {
+    const sorted = [...appointments].sort((a, b) => {
+      const now = new Date().getTime();
+      const dateA = this.getAppointmentDateTime(a).getTime();
+      const dateB = this.getAppointmentDateTime(b).getTime();
+      const aUpcoming = dateA >= now;
+      const bUpcoming = dateB >= now;
+
+      if (aUpcoming !== bUpcoming) return aUpcoming ? -1 : 1;
+      if (aUpcoming) return dateA - dateB;
+      return dateB - dateA;
+    });
+
+    this.dataSource.data = sorted;
+  }
+
+  /**
+   * Client-side sweep: runs whenever this page loads.
+   * NOTE: this only enforces the rules when someone visits this page —
+   * a real production system needs a server-side scheduled job for this
+   * to apply continuously in the background.
+   */
+  private runAutomationRules(appointments: Appointment[], patients: Patient[]): void {
+    const now = Date.now();
+
+    // Rule 1: auto-cancel overdue, non-completed appointments
+    const overdue = appointments.filter((a: any) => {
+      return a.status !== 'Completed' && a.status !== 'Cancelled' &&
+        this.getAppointmentDateTime(a).getTime() < now;
+    });
+
+    overdue.forEach((a: any) => {
+      a.status = 'Cancelled';
+      this.appointmentService.updateAppointment(a.id, a).subscribe({
+        error: () => {
+          this.notificationService.error(`Failed to auto-cancel appointment #${a.id}`);
+        },
+      });
+    });
+
+    if (overdue.length > 0) {
+      this.notificationService.success(
+        `${overdue.length} overdue appointment${overdue.length > 1 ? 's' : ''} auto-cancelled`,
+      );
+    }
+
+    // Rule 2: mark patients inactive if their most recent appointment was 60+ days ago
+    const lastVisitByPatient = new Map<string, number>();
+    appointments.forEach((a: any) => {
+      const t = this.getAppointmentDateTime(a).getTime();
+      const existing = lastVisitByPatient.get(a.patientId);
+      if (!existing || t > existing) {
+        lastVisitByPatient.set(a.patientId, t);
+      }
+    });
+
+    let inactivatedCount = 0;
+    patients.forEach((patient: any) => {
+      if (patient.status !== 'Active') return;
+      const lastVisit = lastVisitByPatient.get(patient.id);
+      if (!lastVisit) return; // no appointment history — leave untouched
+      if (now - lastVisit > SIXTY_DAYS_MS) {
+        this.patientService.updatePatient(patient.id, { ...patient, status: 'Inactive' }).subscribe({
+          error: () => {
+            this.notificationService.error(`Failed to update status for ${patient.name}`);
+          },
+        });
+        inactivatedCount++;
+      }
+    });
+
+    if (inactivatedCount > 0) {
+      this.notificationService.success(
+        `${inactivatedCount} patient${inactivatedCount > 1 ? 's' : ''} marked inactive (60+ days since last visit)`,
+      );
+    }
+  }
+
   private getAppointmentDateTime(appointment: any): Date {
     const date = new Date(appointment.date);
-
-    const [time, period] = appointment.time.split(' ');
+    const [time, period] = (appointment.time || '').split(' ');
     let [hours, minutes] = time.split(':').map(Number);
 
-    if (period === 'PM' && hours !== 12) {
-      hours += 12;
-    }
-
-    if (period === 'AM' && hours === 12) {
-      hours = 0;
-    }
+    if (period === 'PM' && hours !== 12) hours += 12;
+    if (period === 'AM' && hours === 12) hours = 0;
 
     date.setHours(hours, minutes, 0, 0);
-
     return date;
   }
 
-  navEditAppointment(appointmentId: number) {
-    // Implement logic to navigate to the update appointment page
-    this.router.navigate(['/appointments/edit'], {
-      queryParams: { id: appointmentId },
-    });
-    console.log(appointmentId, 'appointmentId');
+  isOverdue(appointment: any): boolean {
+    return this.getAppointmentDateTime(appointment).getTime() < Date.now();
   }
 
-  deleteAppointment(appointmentId: any) {
-    // Implement logic to delete the appointment
+  getRowNumber(index: number): number {
+    if (!this.paginator) return index + 1;
+    return this.paginator.pageIndex * this.paginator.pageSize + index + 1;
+  }
 
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '400px',
-      data: {
-        title: 'Cancel Appointment',
-        message: 'Are you sure you want to Cancel the Appointment?',
-      },
-    });
+  getDoctorName(doctorId: any): string {
+    return this.doctors.find((d) => d.id === doctorId)?.name || '—';
+  }
 
-    dialogRef.afterClosed().subscribe((result) => {
+  getPatientName(patientId: any): string {
+    return this.patients.find((p) => p.id === patientId)?.name || '—';
+  }
+
+  getInitials(name: string): string {
+    if (!name || name === '—') return '?';
+    const parts = name.trim().split(' ').filter(Boolean);
+    return parts.slice(0, 2).map((p) => p[0].toUpperCase()).join('');
+  }
+
+  navEditAppointment(appointmentId: any) {
+    this.router.navigate(['/appointments/edit'], { queryParams: { id: appointmentId } });
+  }
+
+  navAddAppointment() {
+    this.router.navigate(['/appointments/add']);
+  }
+
+  cancelAppointment(appointment: any): void {
+    this.dialogService.confirm({
+      title: 'Cancel Appointment',
+      message: 'Are you sure you want to cancel this appointment?',
+      confirmText: 'Cancel Appointment',
+      cancelText: 'Keep It',
+    }).subscribe((result: any) => {
       if (result) {
-        this.appointmentService.deleteAppointment(appointmentId).subscribe({
+        const updated = { ...appointment, status: 'Cancelled' };
+        this.appointmentService.updateAppointment(appointment.id, updated).subscribe({
           next: () => {
-            // Handle successful deletion
-            this.notificationService.success(
-              'Appointment Cancelled successfully',
-            );
-            console.log('Appointment Cancelled successfully');
-            this.getAppointments();
+            this.notificationService.success('Appointment cancelled');
+            this.loadAll();
           },
-          error: (error) => {
-            // Handle any errors
-            this.notificationService.error('Error cancelling appointment ');
-
-            console.error('Error deleting appointment:', error);
+          error: () => {
+            this.notificationService.error('Failed to cancel appointment');
           },
         });
       }
     });
   }
 
-  navAddAppointment() {
-    // Implement logic to navigate to the add appointment page
-    this.router.navigate(['/appointments/add']);
+  generateInvoice(appointment: any): void {
+    if (appointment.status !== 'Completed') {
+      this.notificationService.error('Invoice can only be generated for completed appointments');
+      return;
+    }
+    this.router.navigate(['/billing/create'], { queryParams: { data: appointment.id } });
   }
 
   applyFilter(value: string) {
     this.dataSource.filter = value.trim().toLowerCase();
   }
 
-  loadPatients() {
-    this.patientService.getPatients().subscribe({
-      next: (patients) => {
-        // Handle the fetched patients
-        this.patients = patients;
-        console.log('Patients loaded successfully', patients);
-      },
-      error: (error) => {
-        this.notificationService.error('Failed to load patients');
-      },
-    });
-  }
-
   loadDoctors() {
     this.doctorService.getDoctors().subscribe({
-      next: (doctors) => {
-        // Handle the fetched doctors
-        this.doctors = doctors;
-        console.log('Doctors loaded successfully', doctors);
-      },
-      error: (error) => {
-        this.notificationService.error('Failed to load doctors');
-      },
-    });
-  }
-
-  getDoctorName(doctorId: any) {
-    return this.doctors.find((d) => d.id === doctorId)?.name || '-';
-  }
-
-  getPatientName(patientId: any) {
-    return this.patients.find((p) => p.id === patientId)?.name || '-';
-  }
-
-  getRowNumber(index: number): number {
-    if (!this.paginator) {
-      return index + 1;
-    }
-
-    return this.paginator.pageIndex * this.paginator.pageSize + index + 1;
-  }
-
-  getStatusColor(status: string): string {
-    switch (status) {
-      case 'Scheduled':
-        return 'primary';
-      case 'Completed':
-        return 'success';
-      case 'Cancelled':
-        return 'warn';
-      default:
-        return 'default';
-    }
-  }
-
-  getStatusClass(status: string): string {
-    switch (status) {
-      case 'Scheduled':
-        return 'badge-scheduled';
-      case 'Completed':
-        return 'badge-completed';
-      case 'Cancelled':
-        return 'badge-cancelled';
-      default:
-        return '';
-    }
-  }
-
-  generateInvoice(appointment: any): void {
-    console.log(appointment);
-
-    if (appointment.status !== 'Completed') {
-      this.notificationService.error(
-        'Invoice can only be generated for completed appointments',
-      );
-      return;
-    }
-    this.router.navigate(['/billing/create'], {
-      queryParams: { data: appointment.id },
-    });
-  }
-
-  // cancelAppointment(appointmentId: any) {
-  //   // Implement logic to cancel the appointment
-  //   this.appointmentService.getAppointmentById(appointmentId).subscribe({
-
-  //     next: () => {
-
-  //       // Handle successful cancellation
-  //       this.notificationService.success(
-  //         'Appointment Cancelled successfully',
-  //       );
-  //       console.log('Appointment Cancelled successfully');
-  //       this.getAppointments();
-  //     },
-  //     error: (error: any) => {
-  //       // Handle any errors
-  //       this.notificationService.error('Error cancelling appointment ');
-
-  //       console.error('Error deleting appointment:', error);
-  //     },
-  //   });
-  // }
-
-  viewInvoice(appointmentId: any) {
-    this.router.navigate(['/billing/view'], {
-      queryParams: { data: appointmentId },
+      next: (doctors) => (this.doctors = doctors),
+      error: () => this.notificationService.error('Failed to load doctors'),
     });
   }
 }

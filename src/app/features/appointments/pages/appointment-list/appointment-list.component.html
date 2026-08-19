@@ -1,131 +1,166 @@
 <app-page-header
   title="Appointments"
-  subtitle="Manage appointments"
+  subtitle="Schedule and track patient appointments"
   buttonLabel="Add Appointment"
   buttonIcon="add"
   (buttonClick)="navAddAppointment()"
 ></app-page-header>
 
-<app-search-box
-  placeholder="Search appointments..."
-  (search)="applyFilter($event)"
->
-</app-search-box>
-
-<mat-card class="main-card p-2 m-2">
-  <div class="table-container">
-    <div *ngIf="dataSource.data.length == 0" class="empty-state">
-      <mat-icon>info</mat-icon>
-      <p>No appointments found</p>
+<div class="appointment-page">
+  <div class="list-toolbar">
+    <div class="toolbar-info">
+      <div class="toolbar-icon">
+        <mat-icon>event</mat-icon>
+      </div>
+      <div>
+        <h3>Appointment Schedule</h3>
+        <p>Upcoming first, past appointments below</p>
+      </div>
     </div>
 
-    <div
-      *ngIf="dataSource.data.length > 0 && dataSource.filteredData.length === 0"
-      class="empty-state"
-    >
-      <mat-icon>search_off</mat-icon>
-      <p>No appointments match your search</p>
+    <app-search-box
+      placeholder="Search appointments..."
+      (search)="applyFilter($event)"
+    ></app-search-box>
+  </div>
+
+  @if (dataSource.data.length > 0 && dataSource.filteredData.length === 0) {
+    <div class="empty-state">
+      <div class="empty-icon"><mat-icon>search_off</mat-icon></div>
+      <h3>No appointments found</h3>
+      <p>No appointments match your search.</p>
     </div>
+  }
 
-    <table
-      mat-table
-      [dataSource]="dataSource"
-      class="mat-elevation-z8"
-      *ngIf="dataSource.filteredData.length > 0"
-      matSort
-    >
-      <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
-        <td mat-cell *matCellDef="let appointment; let i = index">
-          {{ getRowNumber(i) }}
-        </td></ng-container
-      >
+  @if (dataSource.data.length === 0) {
+    <div class="empty-state">
+      <div class="empty-icon"><mat-icon>event_busy</mat-icon></div>
+      <h3>No appointments yet</h3>
+      <p>Schedule your first appointment to get started.</p>
+      <button mat-flat-button color="primary" (click)="navAddAppointment()">
+        <mat-icon>add</mat-icon>
+        Add Appointment
+      </button>
+    </div>
+  }
 
-      <ng-container matColumnDef="patient">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Patient Name</th>
-        <td mat-cell *matCellDef="let element">
-          {{ getPatientName(element.patientId) }}
-        </td>
-      </ng-container>
+  @if (dataSource.filteredData.length > 0) {
+    <div class="table-card">
+      <div class="table-container">
+        <table
+          mat-table
+          [dataSource]="dataSource"
+          matSort
+          class="appointments-table"
+        >
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+            <td mat-cell *matCellDef="let appt; let i = index">
+              <span class="row-id">{{ getRowNumber(i) }}</span>
+            </td>
+          </ng-container>
 
-      <ng-container matColumnDef="date">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
-        <td mat-cell *matCellDef="let element">
-          {{ element?.date | date: "dd-MM-yyyy" }}
-        </td>
-      </ng-container>
+          <ng-container matColumnDef="patient">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Patient</th>
+            <td mat-cell *matCellDef="let appt">
+              <div class="person-chip">
+                <div class="person-avatar patient">
+                  {{ getInitials(getPatientName(appt.patientId)) }}
+                </div>
+                <span>{{ getPatientName(appt.patientId) }}</span>
+              </div>
+            </td>
+          </ng-container>
 
-      <ng-container matColumnDef="time">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Time</th>
-        <td mat-cell *matCellDef="let element">
-          <!-- {{ element?.time | date: "HH:mm a" }} -->
-          {{ element?.time }}
-        </td>
-      </ng-container>
+          <ng-container matColumnDef="doctor">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Doctor</th>
+            <td mat-cell *matCellDef="let appt">
+              <div class="person-chip">
+                <div class="person-avatar doctor">
+                  {{ getInitials(getDoctorName(appt.doctorId)) }}
+                </div>
+                <span>{{ getDoctorName(appt.doctorId) }}</span>
+              </div>
+            </td>
+          </ng-container>
 
-      <ng-container matColumnDef="doctor">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Doctor</th>
-        <td mat-cell *matCellDef="let element">
-          {{ getDoctorName(element.doctorId) }}
-        </td>
-      </ng-container>
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+            <td mat-cell *matCellDef="let appt">
+              <span class="date-text">{{ appt.date | date: "dd MMM, y" }}</span>
+            </td>
+          </ng-container>
 
-      <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
-        <td mat-cell *matCellDef="let element">
-          <mat-badge
-            [color]="getStatusColor(element.status)"
-            [class]="getStatusClass(element.status)"
-          >
-            {{ element.status }}
-          </mat-badge>
-        </td>
-      </ng-container>
+          <ng-container matColumnDef="time">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Time</th>
+            <td mat-cell *matCellDef="let appt">
+              <span class="time-text">{{ appt.time }}</span>
+            </td>
+          </ng-container>
 
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef>Actions</th>
-        <td mat-cell *matCellDef="let element">
-          @if (element.status !== "Completed") {
-            <button
-              mat-button
-              color="primary"
-              (click)="navEditAppointment(element.id)"
-              [matTooltip]="
-                element.status !== 'Completed'
-                  ? 'Edit Appointment'
-                  : 'Can not edit completed appointments'
-              "
-            >
-              <mat-icon>edit</mat-icon>
-            </button>
-          }
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+            <td mat-cell *matCellDef="let appt">
+              <span class="status-badge" [ngClass]="appt.status.toLowerCase()">
+                <span class="status-dot"></span>
+                {{ appt.status }}
+              </span>
+            </td>
+          </ng-container>
 
-          @if (element.status == "Completed") {
-            <button
-              mat-button
-              color="primary"
-              (click)="generateInvoice(element)"
-              [matTooltip]="
-                element.status === 'Completed'
-                  ? 'Generate Invoice'
-                  : 'Invoice can only be generated for completed appointments'
-              "
-            >
-              <mat-icon>receipt_long</mat-icon>
-            </button>
-          }
-        </td>
-      </ng-container>
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef class="actions-header">
+              Actions
+            </th>
+            <td mat-cell *matCellDef="let appt" class="actions-cell">
+              @if (appt.status === "Scheduled") {
+                <button
+                  mat-icon-button
+                  matTooltip="Edit appointment"
+                  (click)="navEditAppointment(appt.id)"
+                >
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button
+                  mat-icon-button
+                  color="warn"
+                  matTooltip="Cancel appointment"
+                  (click)="cancelAppointment(appt)"
+                >
+                  <mat-icon>event_busy</mat-icon>
+                </button>
+              }
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-    </table>
+              @if (appt.status === "Completed") {
+                <button
+                  mat-icon-button
+                  matTooltip="Generate invoice"
+                  (click)="generateInvoice(appt)"
+                >
+                  <mat-icon>receipt_long</mat-icon>
+                </button>
+              }
+
+              @if (appt.status === "Cancelled") {
+                <span class="no-action">—</span>
+              }
+            </td>
+          </ng-container>
+
+          <tr
+            mat-header-row
+            *matHeaderRowDef="displayedColumns; sticky: true"
+          ></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+    </div>
 
     <mat-paginator
-      [pageSize]="5"
+      [length]="dataSource.filteredData.length"
+      [pageSize]="10"
       [pageSizeOptions]="[5, 10, 20]"
       showFirstLastButtons
-    >
-    </mat-paginator>
-  </div>
-</mat-card>
+    ></mat-paginator>
+  }
+</div>

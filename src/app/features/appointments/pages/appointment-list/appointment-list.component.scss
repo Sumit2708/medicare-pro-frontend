@@ -1,49 +1,229 @@
-.badge-scheduled {
-  background-color: #8ec4ef;
-
-  // color: #dcfce7;
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 500;
+.appointment-page {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.badge-completed {
-  background-color: #4caf50;
+.list-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 18px 20px;
 
-  // -color: #dcfce7;   // Light green
-  //   color: #166534;              // Dark green
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 500;
+  .toolbar-info {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    .toolbar-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      min-width: 42px;
+      border-radius: 12px;
+      background: var(--color-primary-light);
+      color: var(--color-primary);
+
+      mat-icon { font-size: 22px; height: 22px; width: 22px; }
+    }
+
+    h3 {
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--color-ink);
+      margin: 0 0 2px;
+    }
+
+    p {
+      font-family: var(--font-body);
+      font-size: 13px;
+      color: var(--color-ink-soft);
+      margin: 0;
+    }
+  }
 }
 
-.badge-cancelled {
-  background-color: #ff5252;
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
 
-  // color: #dcfce7;   // Light green
-  //   color: #166534;              // Dark green
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 500;
+  .empty-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--color-bg);
+    color: var(--color-border);
+    margin-bottom: 16px;
+
+    mat-icon { font-size: 30px; height: 30px; width: 30px; }
+  }
+
+  h3 {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-ink);
+    margin: 0 0 6px;
+  }
+
+  p {
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--color-ink-soft);
+    margin: 0 0 20px;
+    max-width: 320px;
+  }
+
+  button { border-radius: 10px; text-transform: none; }
 }
 
-// .status-active {
-//   background-color: #dcfce7;   // Light green
-//   color: #166534;              // Dark green
-//   padding: 4px 10px;
-//   border-radius: 20px;
-//   font-size: 12px;
-//   font-weight: 500;
-// }
+.table-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  overflow: hidden;
+}
 
-// .status-inactive {
-//   background-color: #fee2e2;   // Light red
-//   color: #991b1b;              // Dark red
-//   padding: 4px 10px;
-//   border-radius: 20px;
-//   font-size: 12px;
-//   font-weight: 500;
-// }
+.table-container {
+  overflow-x: auto;
+
+  table { width: 100%; background: transparent; }
+
+  th.mat-mdc-header-cell {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    background: var(--color-bg);
+    border-bottom: 1px solid var(--color-border);
+    padding: 14px 16px;
+    white-space: nowrap;
+  }
+
+  td.mat-mdc-cell {
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--color-ink);
+    border-bottom: 1px solid var(--color-border);
+    padding: 14px 16px;
+  }
+
+  tr.mat-mdc-row {
+    transition: background 0.15s ease;
+
+    &:hover { background: var(--color-primary-light); }
+    &:last-child td { border-bottom: none; }
+  }
+
+  .row-id {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-ink-soft);
+  }
+
+  .person-chip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .person-avatar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      min-width: 32px;
+      border-radius: 50%;
+      color: #fff;
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 700;
+
+      &.patient { background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); }
+      &.doctor { background: linear-gradient(135deg, var(--color-accent), #C97F1F); }
+    }
+
+    span {
+      font-family: var(--font-body);
+      font-weight: 500;
+      color: var(--color-ink);
+    }
+  }
+
+  .date-text { font-weight: 500; }
+  .time-text { color: var(--color-ink-soft); font-size: 13px; }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: capitalize;
+
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; }
+
+    &.scheduled {
+      background: var(--color-primary-light);
+      color: var(--color-primary);
+      .status-dot { background: var(--color-primary); }
+    }
+
+    &.completed {
+      background: #E3F5EC;
+      color: var(--color-success);
+      .status-dot { background: var(--color-success); }
+    }
+
+    &.cancelled {
+      background: #FBE7E7;
+      color: var(--color-danger);
+      .status-dot { background: var(--color-danger); }
+    }
+  }
+
+  .actions-header { text-align: right; }
+  .actions-cell {
+    text-align: right;
+    white-space: nowrap;
+
+    button {
+      color: var(--color-ink-soft);
+      &:hover { color: var(--color-primary); }
+      &[color="warn"]:hover { color: var(--color-danger); }
+    }
+
+    .no-action {
+      color: var(--color-ink-soft);
+      font-size: 13px;
+    }
+  }
+}
+
+::ng-deep mat-paginator {
+  background: transparent;
+  font-family: var(--font-body);
+}
