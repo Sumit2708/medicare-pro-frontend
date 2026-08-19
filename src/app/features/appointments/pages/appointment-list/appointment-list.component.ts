@@ -136,20 +136,28 @@ export class AppointmentListComponent {
    * a real production system needs a server-side scheduled job for this
    * to apply continuously in the background.
    */
-  private runAutomationRules(appointments: Appointment[], patients: Patient[]): void {
+  private runAutomationRules(
+    appointments: Appointment[],
+    patients: Patient[],
+  ): void {
     const now = Date.now();
 
     // Rule 1: auto-cancel overdue, non-completed appointments
     const overdue = appointments.filter((a: any) => {
-      return a.status !== 'Completed' && a.status !== 'Cancelled' &&
-        this.getAppointmentDateTime(a).getTime() < now;
+      return (
+        a.status !== 'Completed' &&
+        a.status !== 'Cancelled' &&
+        this.getAppointmentDateTime(a).getTime() < now
+      );
     });
 
     overdue.forEach((a: any) => {
       a.status = 'Cancelled';
       this.appointmentService.updateAppointment(a.id, a).subscribe({
         error: () => {
-          this.notificationService.error(`Failed to auto-cancel appointment #${a.id}`);
+          this.notificationService.error(
+            `Failed to auto-cancel appointment #${a.id}`,
+          );
         },
       });
     });
@@ -176,11 +184,15 @@ export class AppointmentListComponent {
       const lastVisit = lastVisitByPatient.get(patient.id);
       if (!lastVisit) return; // no appointment history — leave untouched
       if (now - lastVisit > SIXTY_DAYS_MS) {
-        this.patientService.updatePatient(patient.id, { ...patient, status: 'Inactive' }).subscribe({
-          error: () => {
-            this.notificationService.error(`Failed to update status for ${patient.name}`);
-          },
-        });
+        this.patientService
+          .updatePatient(patient.id, { ...patient, status: 'Inactive' })
+          .subscribe({
+            error: () => {
+              this.notificationService.error(
+                `Failed to update status for ${patient.name}`,
+              );
+            },
+          });
         inactivatedCount++;
       }
     });
@@ -224,11 +236,16 @@ export class AppointmentListComponent {
   getInitials(name: string): string {
     if (!name || name === '—') return '?';
     const parts = name.trim().split(' ').filter(Boolean);
-    return parts.slice(0, 2).map((p) => p[0].toUpperCase()).join('');
+    return parts
+      .slice(0, 2)
+      .map((p) => p[0].toUpperCase())
+      .join('');
   }
 
   navEditAppointment(appointmentId: any) {
-    this.router.navigate(['/appointments/edit'], { queryParams: { id: appointmentId } });
+    this.router.navigate(['/appointments/edit'], {
+      queryParams: { id: appointmentId },
+    });
   }
 
   navAddAppointment() {
@@ -236,33 +253,41 @@ export class AppointmentListComponent {
   }
 
   cancelAppointment(appointment: any): void {
-    this.dialogService.confirm({
-      title: 'Cancel Appointment',
-      message: 'Are you sure you want to cancel this appointment?',
-      confirmText: 'Cancel Appointment',
-      cancelText: 'Keep It',
-    }).subscribe((result: any) => {
-      if (result) {
-        const updated = { ...appointment, status: 'Cancelled' };
-        this.appointmentService.updateAppointment(appointment.id, updated).subscribe({
-          next: () => {
-            this.notificationService.success('Appointment cancelled');
-            this.loadAll();
-          },
-          error: () => {
-            this.notificationService.error('Failed to cancel appointment');
-          },
-        });
-      }
-    });
+    this.dialogService
+      .confirm({
+        title: 'Cancel Appointment',
+        message: 'Are you sure you want to cancel this appointment?',
+        confirmText: 'Cancel Appointment',
+        cancelText: 'Keep It',
+      })
+      .subscribe((result: any) => {
+        if (result) {
+          const updated = { ...appointment, status: 'Cancelled' };
+          this.appointmentService
+            .updateAppointment(appointment.id, updated)
+            .subscribe({
+              next: () => {
+                this.notificationService.success('Appointment cancelled');
+                this.loadAll();
+              },
+              error: () => {
+                this.notificationService.error('Failed to cancel appointment');
+              },
+            });
+        }
+      });
   }
 
   generateInvoice(appointment: any): void {
     if (appointment.status !== 'Completed') {
-      this.notificationService.error('Invoice can only be generated for completed appointments');
+      this.notificationService.error(
+        'Invoice can only be generated for completed appointments',
+      );
       return;
     }
-    this.router.navigate(['/billing/create'], { queryParams: { data: appointment.id } });
+    this.router.navigate(['/billing/create'], {
+      queryParams: { data: appointment.id },
+    });
   }
 
   applyFilter(value: string) {

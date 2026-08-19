@@ -31,7 +31,11 @@
       background: var(--color-primary-light);
       color: var(--color-primary);
 
-      mat-icon { font-size: 22px; height: 22px; width: 22px; }
+      mat-icon {
+        font-size: 22px;
+        height: 22px;
+        width: 22px;
+      }
     }
 
     h3 {
@@ -73,7 +77,11 @@
     color: var(--color-border);
     margin-bottom: 16px;
 
-    mat-icon { font-size: 30px; height: 30px; width: 30px; }
+    mat-icon {
+      font-size: 30px;
+      height: 30px;
+      width: 30px;
+    }
   }
 
   h3 {
@@ -92,7 +100,10 @@
     max-width: 320px;
   }
 
-  button { border-radius: 10px; text-transform: none; }
+  button {
+    border-radius: 10px;
+    text-transform: none;
+  }
 }
 
 .table-card {
@@ -105,7 +116,10 @@
 .table-container {
   overflow-x: auto;
 
-  table { width: 100%; background: transparent; }
+  table {
+    width: 100%;
+    background: transparent;
+  }
 
   th.mat-mdc-header-cell {
     font-family: var(--font-body);
@@ -131,8 +145,12 @@
   tr.mat-mdc-row {
     transition: background 0.15s ease;
 
-    &:hover { background: var(--color-primary-light); }
-    &:last-child td { border-bottom: none; }
+    &:hover {
+      background: var(--color-primary-light);
+    }
+    &:last-child td {
+      border-bottom: none;
+    }
   }
 
   .row-id {
@@ -160,8 +178,16 @@
       font-size: 12px;
       font-weight: 700;
 
-      &.patient { background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); }
-      &.doctor { background: linear-gradient(135deg, var(--color-accent), #C97F1F); }
+      &.patient {
+        background: linear-gradient(
+          135deg,
+          var(--color-primary),
+          var(--color-primary-dark)
+        );
+      }
+      &.doctor {
+        background: linear-gradient(135deg, var(--color-accent), #c97f1f);
+      }
     }
 
     span {
@@ -171,8 +197,13 @@
     }
   }
 
-  .date-text { font-weight: 500; }
-  .time-text { color: var(--color-ink-soft); font-size: 13px; }
+  .date-text {
+    font-weight: 500;
+  }
+  .time-text {
+    color: var(--color-ink-soft);
+    font-size: 13px;
+  }
 
   .status-badge {
     display: inline-flex;
@@ -184,36 +215,52 @@
     font-weight: 600;
     text-transform: capitalize;
 
-    .status-dot { width: 6px; height: 6px; border-radius: 50%; }
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
 
     &.scheduled {
       background: var(--color-primary-light);
       color: var(--color-primary);
-      .status-dot { background: var(--color-primary); }
+      .status-dot {
+        background: var(--color-primary);
+      }
     }
 
     &.completed {
-      background: #E3F5EC;
+      background: #e3f5ec;
       color: var(--color-success);
-      .status-dot { background: var(--color-success); }
+      .status-dot {
+        background: var(--color-success);
+      }
     }
 
     &.cancelled {
-      background: #FBE7E7;
+      background: #fbe7e7;
       color: var(--color-danger);
-      .status-dot { background: var(--color-danger); }
+      .status-dot {
+        background: var(--color-danger);
+      }
     }
   }
 
-  .actions-header { text-align: right; }
+  .actions-header {
+    text-align: right;
+  }
   .actions-cell {
     text-align: right;
     white-space: nowrap;
 
     button {
       color: var(--color-ink-soft);
-      &:hover { color: var(--color-primary); }
-      &[color="warn"]:hover { color: var(--color-danger); }
+      &:hover {
+        color: var(--color-primary);
+      }
+      &[color="warn"]:hover {
+        color: var(--color-danger);
+      }
     }
 
     .no-action {
