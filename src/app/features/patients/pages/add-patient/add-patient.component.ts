@@ -81,4 +81,13 @@ export class AddPatientComponent {
   navtoPatientList() {
     this.router.navigate(['/patients']);
   }
+
+  get completionPercent(): number {
+  const keys = ['name', 'age', 'gender', 'mobile'];
+  const filled = keys.filter((k) => {
+    const v = this.patientForm.get(k)?.value;
+    return v !== null && v !== undefined && v !== '';
+  }).length;
+  return Math.round((filled / keys.length) * 100);
+}
 }

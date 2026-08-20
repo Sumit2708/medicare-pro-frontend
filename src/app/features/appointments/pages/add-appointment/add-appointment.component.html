@@ -1,99 +1,223 @@
-<h3>Add Appointment</h3>
+<div class="page-container">
+  <app-page-header
+    title="Add Appointment"
+    subtitle="Schedule a new patient appointment"
+    [showButton]="false">
+  </app-page-header>
 
-<mat-card class="main-card p-2 m-2 fs-5">
-  <form [formGroup]="appointmentForm" (ngSubmit)="onSubmit()">
-    <div>
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Patient</mat-label>
-        <mat-select formControlName="patientId">
-          <mat-option *ngFor="let patient of patients" [value]="patient.id">
-            {{ patient.name }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+  <div class="add-appointment-layout">
+    <mat-card class="form-card">
+      <div class="form-card-header">
+        <div class="form-icon">
+          <mat-icon>event_available</mat-icon>
+        </div>
+        <div>
+          <h3>Appointment Details</h3>
+          <p>Fields marked with * are required</p>
+        </div>
+      </div>
+
+      <div class="progress-track">
+        <div class="progress-fill" [style.width.%]="completionPercent"></div>
+      </div>
+      <p class="progress-label">{{ completionPercent }}% complete</p>
+
+      <form [formGroup]="appointmentForm" (ngSubmit)="onSubmit()" class="appointment-form">
+
+        <!-- Participants -->
+        <div class="form-section">
+          <div class="section-heading">
+            <mat-icon>group</mat-icon>
+            <div>
+              <h4>Participants</h4>
+              <p>Who this appointment is for</p>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Patient*</mat-label>
+              <mat-icon matPrefix>person</mat-icon>
+              <mat-select formControlName="patientId">
+                @if (loadingPatients) {
+                  <mat-option disabled>Loading patients…</mat-option>
+                }
+                @for (patient of patients; track patient.id) {
+                  <mat-option [value]="patient.id">
+                    {{ patient.name }}
+                    @if (patient.phone) {
+                      <span class="option-subtext"> · {{ patient.phone }}</span>
+                    }
+                  </mat-option>
+                }
+              </mat-select>
+              @if (appointmentForm.get('patientId')?.hasError('required') && appointmentForm.get('patientId')?.touched) {
+                <mat-error>Patient is required</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Doctor*</mat-label>
+              <mat-icon matPrefix>medical_services</mat-icon>
+              <mat-select formControlName="doctorId">
+                @if (loadingDoctors) {
+                  <mat-option disabled>Loading doctors…</mat-option>
+                }
+                @for (doctor of doctors; track doctor.id) {
+                  <mat-option [value]="doctor.id">
+                    {{ doctor.name }}
+                    @if (doctor.specialization) {
+                      <span class="option-subtext"> · {{ doctor.specialization }}</span>
+                    }
+                  </mat-option>
+                }
+              </mat-select>
+              @if (appointmentForm.get('doctorId')?.hasError('required') && appointmentForm.get('doctorId')?.touched) {
+                <mat-error>Doctor is required</mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- Schedule -->
+        <div class="form-section">
+          <div class="section-heading">
+            <mat-icon>event</mat-icon>
+            <div>
+              <h4>Schedule</h4>
+              <p>Date and available time slot</p>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Appointment Date*</mat-label>
+              <mat-icon matPrefix>calendar_today</mat-icon>
+              <input
+                matInput
+                [matDatepicker]="datePicker"
+                formControlName="date"
+                [min]="minDate"
+                [max]="maxDate"
+              />
+              <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+              <mat-datepicker #datePicker></mat-datepicker>
+              @if (appointmentForm.get('date')?.hasError('required') && appointmentForm.get('date')?.touched) {
+                <mat-error>Date is required</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Appointment Time*</mat-label>
+              <mat-icon matPrefix>schedule</mat-icon>
+              <mat-select formControlName="time">
+                @if (loadingSlots) {
+                  <mat-option disabled>Loading slots…</mat-option>
+                }
+                @if (!loadingSlots && timeSlots.length === 0) {
+                  <mat-option disabled>
+                    {{ appointmentForm.get('doctorId')?.value && appointmentForm.get('date')?.value
+                      ? 'No slots available for this doctor/date'
+                      : 'Select a doctor and date first' }}
+                  </mat-option>
+                }
+                @for (slot of timeSlots; track slot) {
+                  <mat-option [value]="slot">{{ slot }}</mat-option>
+                }
+              </mat-select>
+              @if (loadingSlots) {
+                <mat-hint>Checking availability…</mat-hint>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- Additional details -->
+        <div class="form-section">
+          <div class="section-heading">
+            <mat-icon>notes</mat-icon>
+            <div>
+              <h4>Additional Details</h4>
+              <p>Notes and appointment status</p>
+            </div>
+          </div>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Notes</mat-label>
+            <mat-icon matPrefix>edit_note</mat-icon>
+            <textarea matInput rows="3" formControlName="notes"></textarea>
+            <mat-hint align="end">{{ appointmentForm.get('notes')?.value?.length || 0 }}/250</mat-hint>
+          </mat-form-field>
+
+          <div class="status-row">
+            <span class="status-label">Status</span>
+            <mat-chip-listbox formControlName="status" aria-label="Appointment status">
+              @for (option of statusOptions; track option.value) {
+                <mat-chip-option
+                  [value]="option.value"
+                  [ngClass]="'status-chip status-chip--' + option.value.toLowerCase()">
+                  <mat-icon class="chip-icon">{{ option.icon }}</mat-icon>
+                  {{ option.value }}
+                </mat-chip-option>
+              }
+            </mat-chip-listbox>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button mat-stroked-button type="button" (click)="onCancel()">
+            Cancel
+          </button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="isSubmitting">
+            <mat-icon *ngIf="isSubmitting" class="spin">progress_activity</mat-icon>
+            <mat-icon *ngIf="!isSubmitting">check</mat-icon>
+            {{ isSubmitting ? 'Saving...' : 'Save Appointment' }}
+          </button>
+        </div>
+      </form>
+    </mat-card>
+
+    <!-- Ticket-style preview -->
+    <div class="preview-card" [class.filled]="completionPercent > 0">
+      <span class="preview-label">APPOINTMENT PREVIEW</span>
+
+      <div class="preview-avatars">
+        <div class="avatar-glow"></div>
+        <div class="preview-avatar preview-avatar--patient">{{ patientInitials }}</div>
+        <mat-icon class="avatar-link">sync_alt</mat-icon>
+        <div class="preview-avatar preview-avatar--doctor">{{ doctorInitials }}</div>
+      </div>
+
+      <h4 class="preview-name">{{ selectedPatient?.name || 'Patient' }}</h4>
+      <span class="preview-sub">with {{ selectedDoctor?.name || 'Doctor' }}</span>
+      @if (selectedDoctor?.specialization) {
+        <div class="preview-badge">
+          <mat-icon>local_hospital</mat-icon>
+          {{ selectedDoctor?.specialization }}
+        </div>
+      }
+
+      <div class="ticket-stub">
+        <div class="stub-notch stub-notch--left"></div>
+        <div class="stub-notch stub-notch--right"></div>
+      </div>
+
+      <div class="preview-datetime">
+        <div class="dt-block">
+          <mat-icon>calendar_today</mat-icon>
+          <span>{{ appointmentForm.get('date')?.value ? (appointmentForm.get('date')?.value | date: 'MMM d, y') : '—' }}</span>
+        </div>
+        <div class="dt-divider"></div>
+        <div class="dt-block">
+          <mat-icon>schedule</mat-icon>
+          <span>{{ appointmentForm.get('time')?.value || '—' }}</span>
+        </div>
+      </div>
+
+      <div class="preview-status">
+        <span class="status-dot" [ngClass]="'status-dot--' + (appointmentForm.get('status')?.value || 'scheduled').toLowerCase()"></span>
+        {{ appointmentForm.get('status')?.value || 'Scheduled' }}
+      </div>
     </div>
-
-    <div>
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Doctor</mat-label>
-        <mat-select formControlName="doctorId">
-          <mat-option *ngFor="let doctor of doctors" [value]="doctor.id">
-            {{ doctor.name }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-
-    <div>
-      <mat-form-field>
-        <mat-label>Appointment Date</mat-label>
-
-        <input
-          matInput
-          [matDatepicker]="datePicker"
-          formControlName="date"
-          [min]="minDate"
-          [max]="maxDate"
-        />
-
-        <mat-datepicker-toggle matSuffix [for]="datePicker">
-        </mat-datepicker-toggle>
-
-        <mat-datepicker #datePicker></mat-datepicker>
-      </mat-form-field>
-    </div>
-
-    <div>
-      <!-- <mat-form-field>
-        <mat-label>Appointment Time</mat-label>
-
-        <input matInput [matTimepicker]="timePicker" formControlName="time" />
-
-        <mat-timepicker-toggle matSuffix [for]="timePicker">
-        </mat-timepicker-toggle>
-
-        <mat-timepicker #timePicker></mat-timepicker>
-      </mat-form-field> -->
-
-      <mat-form-field appearance="outline">
-        <mat-label>Appointment Time</mat-label>
-
-        <mat-select formControlName="time"  [disabled]="timeSlots.length === 0">
-          <mat-option *ngFor="let slot of timeSlots" [value]="slot">
-            {{ slot }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-
-    <div>
-      <mat-form-field appearance="outline" class="">
-        <mat-label>Notes</mat-label>
-        <textarea matInput rows="3" formControlName="notes"> </textarea>
-        <mat-hint>Optional</mat-hint>
-      </mat-form-field>
-    </div>
-
-    <div>
-      <mat-form-field appearance="outline" class="full-width mt-4">
-        <mat-label>Status</mat-label>
-        <mat-select formControlName="status">
-          <mat-option value="Scheduled">Scheduled</mat-option>
-          <mat-option value="Completed">Completed</mat-option>
-          <mat-option value="Cancelled">Cancelled</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-
-    <span style="display: flex; justify-content: center">
-      <button
-        mat-raised-button
-        color="primary"
-        type="submit"
-        [disabled]="appointmentForm.invalid"
-      >
-        Save Appointment
-      </button>
-    </span>
-  </form>
-</mat-card>
+  </div>
+</div>

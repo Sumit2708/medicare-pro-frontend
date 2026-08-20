@@ -10,6 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PatientService } from '../../services/patient.service';
 import { NotificationService } from '../../../../core/services/notification/notification.service';
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
+import { MatChipOption, MatChipsModule } from "@angular/material/chips";
 
 @Component({
   selector: 'app-edit-patient',
@@ -23,7 +24,9 @@ import { PageHeaderComponent } from '../../../../shared/components/page-header/p
     MatButtonModule,
     MatIconModule,
     PageHeaderComponent,
-  ],
+    MatChipsModule,
+    
+],
   templateUrl: './edit-patient.component.html',
   styleUrl: './edit-patient.component.scss',
 })
@@ -106,4 +109,13 @@ export class EditPatientComponent {
   navtoPatientList() {
     this.router.navigate(['/patients']);
   }
+
+    get completionPercent(): number {
+  const keys = ['name', 'age', 'gender', 'mobile'];
+  const filled = keys.filter((k) => {
+    const v = this.patientForm.get(k)?.value;
+    return v !== null && v !== undefined && v !== '';
+  }).length;
+  return Math.round((filled / keys.length) * 100);
+}
 }

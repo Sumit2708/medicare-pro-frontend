@@ -1,94 +1,68 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatCard } from '@angular/material/card';
-import {
-  MatFormField,
-  MatLabel,
-  MatHint,
-  MatFormFieldModule,
-} from '@angular/material/form-field';
-import { MatSelect, MatOption } from '@angular/material/select';
-import {
-  MatTimepickerInput,
-  MatTimepickerToggle,
-  MatTimepicker,
-} from '@angular/material/timepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 import {
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatChipsModule } from '@angular/material/chips';
 import { AppointmentService } from '../../services/appointment.service';
 import { NotificationService } from '../../../../core/services/notification/notification.service';
 import { DoctorService } from '../../../doctors/services/doctor.service';
 import { PatientService } from '../../../patients/services/patient.service';
-import {
-  MatDatepickerToggle,
-  MatDatepickerActions,
-  MatDatepicker,
-  MatDatepickerInput,
-  MatDatepickerModule,
-} from '@angular/material/datepicker';
-import { MatInput, MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { CommonModule } from '@angular/common';
-import { MatTimepickerModule } from '@angular/material/timepicker';
 import { AppointmentAvailabilityService } from '../../services/availability/appointment-availability.service';
 import { Appointment } from '../../../../shared/models/appointment.model';
+import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
 
 @Component({
   selector: 'app-edit-appointment',
+  standalone: true,
   imports: [
-    MatCard,
-    MatFormField,
-    MatLabel,
-    MatSelect,
-    MatOption,
-    MatDatepickerToggle,
-    MatDatepicker,
-    MatDatepickerInput,
-    MatHint,
-    ReactiveFormsModule,
-    MatInput,
-    MatButtonModule,
     CommonModule,
-    MatTimepickerModule,
-    MatDatepickerModule,
+    MatCard,
+    ReactiveFormsModule,
     MatFormFieldModule,
+    MatSelectModule,
     MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    MatChipsModule,
+    MatDatepickerModule,
+    PageHeaderComponent,
   ],
   templateUrl: './edit-appointment.component.html',
   styleUrl: './edit-appointment.component.scss',
 })
-export class EditAppointmentComponent {
+export class EditAppointmentComponent implements OnInit {
   appointmentForm: FormGroup;
   doctors: any[] = [];
   patients: any[] = [];
   minDate = new Date();
-  appointmentId: any;
   maxDate = new Date(new Date().setDate(new Date().getDate() + 7));
+  appointmentId: any;
 
-  timeSlots: String[] = [];
-  // '09:00 AM',
-  // '09:30 AM',
-  // '10:00 AM',
-  // '10:30 AM',
-  // '11:00 AM',
-  // '11:30 AM',
-  // '12:00 PM',
-  // '12:30 PM',
-  // '01:00 PM',
-  // '01:30 PM',
-  // '02:00 PM',
-  // '02:30 PM',
-  // '03:00 PM',
-  // '03:30 PM',
-  // '04:00 PM',
-  // '04:30 PM',
-  // '05:00 PM',
-  // '05:30 PM',
-  // ];
+  timeSlots: string[] = [];
+
+  loadingDoctors = false;
+  loadingPatients = false;
+  loadingSlots = false;
+  isSubmitting = false;
+  isLoadingAppointment = false;
+
+  statusOptions = [
+    { value: 'Scheduled', icon: 'event_available' },
+    { value: 'Completed', icon: 'task_alt' },
+    { value: 'Cancelled', icon: 'cancel' },
+  ];
 
   constructor(
     private fb: FormBuilder,
@@ -101,10 +75,10 @@ export class EditAppointmentComponent {
     private appointmentAvailabilityService: AppointmentAvailabilityService,
   ) {
     this.appointmentForm = this.fb.group({
-      patientId: ['', { validators: [Validators.required] }],
-      doctorId: ['', { validators: [Validators.required] }],
-      date: ['', { validators: [Validators.required] }],
-      time: [null, { validators: [Validators.required] }],
+      patientId: ['', Validators.required],
+      doctorId: ['', Validators.required],
+      date: ['', Validators.required],
+      time: [{ value: '', disabled: true }, Validators.required],
       notes: [''],
       status: ['Scheduled'],
     });
@@ -113,30 +87,32 @@ export class EditAppointmentComponent {
   ngOnInit() {
     this.route.queryParams.subscribe((params: any) => {
       this.appointmentId = params['id'];
-      console.log(this.appointmentId, 'appointmentId test');
+
+      if (this.appointmentId) {
+        this.getAppointmentById();
+      }
     });
-    if (this.appointmentId) {
-      this.getAppointmentById();
-    }
 
     this.getDoctors();
     this.getPatients();
+    this.setupAvailabilityListeners();
   }
 
   getAppointmentById(): void {
+    this.isLoadingAppointment = true;
+
     this.appointmentService
       .getAppointments()
       .subscribe((data: Appointment[]) => {
         const appointment = data.find((a) => a.id === this.appointmentId);
 
+        this.isLoadingAppointment = false;
+
         if (!appointment) {
+          this.notificationService.error('Appointment not found');
           return;
         }
 
-        console.log(appointment, 'appointment....');
-
-
-        
         this.appointmentForm.patchValue({
           patientId: appointment.patientId,
           doctorId: appointment.doctorId,
@@ -147,69 +123,90 @@ export class EditAppointmentComponent {
         });
 
         this.loadAvailableSlotsForEdit(
-         new Date(appointment.date),
+          new Date(appointment.date),
           appointment.doctorId,
           appointment.time,
         );
       });
   }
-  // myFilter = (d: Date | null): boolean => {
-  //   const day = (d || new Date()).getDay();
-  //   // Prevent Saturday and Sunday from being selected.
-  //   return day !== 0 && day !== 6;
-  // };
 
   getDoctors() {
+    this.loadingDoctors = true;
     this.doctorService.getDoctors().subscribe({
       next: (res: any) => {
         this.doctors = res;
+        this.loadingDoctors = false;
       },
-      error: (error) => {
+      error: () => {
         this.notificationService.error('Failed to fetch doctors');
+        this.loadingDoctors = false;
       },
     });
   }
 
   getPatients() {
+    this.loadingPatients = true;
     this.patientService.getPatients().subscribe({
       next: (res: any) => {
         this.patients = res;
-        // console.log('Patients fetched:', this.patients); // Log the fetched patients for debugging
+        this.loadingPatients = false;
       },
-      error: (error) => {
+      error: () => {
         this.notificationService.error('Failed to fetch patients');
+        this.loadingPatients = false;
       },
     });
   }
 
-  // onSubmit() {
-  //   if (this.appointmentForm.valid) {
-  //     const appointmentData = this.appointmentForm.value;
-  //     // const appointmentId: any = localStorage.getItem('appointmentId');
-  //     this.appointmentService
-  //       .updateAppointment(this.appointmentId, appointmentData)
-  //       .subscribe({
-  //         next: () => {
-  //           this.notificationService.success(
-  //             'Appointment Information updated successfully',
-  //           );
-  //           this.router.navigate(['/appointments']);
-  //         },
-  //         error: (error) => {
-  //           this.notificationService.error('Failed to update appointment');
-  //         },
-  //       });
-  //   }
-  // }
+  get selectedPatient() {
+    const id = this.appointmentForm.get('patientId')?.value;
+    return this.patients.find((p) => p.id === id);
+  }
+
+  get selectedDoctor() {
+    const id = this.appointmentForm.get('doctorId')?.value;
+    return this.doctors.find((d) => d.id === id);
+  }
+
+  get patientInitials(): string {
+    return this.initialsOf(this.selectedPatient?.name);
+  }
+
+  get doctorInitials(): string {
+    return this.initialsOf(this.selectedDoctor?.name);
+  }
+
+  private initialsOf(name?: string): string {
+    if (!name) return '—';
+    const parts = name.trim().split(' ').filter(Boolean);
+    if (!parts.length) return '—';
+    return parts
+      .slice(0, 2)
+      .map((p) => p[0].toUpperCase())
+      .join('');
+  }
+
+  get completionPercent(): number {
+    const keys = ['patientId', 'doctorId', 'date', 'time'];
+    const filled = keys.filter((k) => {
+      const v = this.appointmentForm.get(k)?.value;
+      return v !== null && v !== undefined && v !== '';
+    }).length;
+    return Math.round((filled / keys.length) * 100);
+  }
 
   onSubmit() {
-    // Existing Appointment slot validation
+    if (this.appointmentForm.invalid) {
+      this.appointmentForm.markAllAsTouched();
+      this.notificationService.error('Please fill in all required fields.');
+      return;
+    }
+
+    this.isSubmitting = true;
+
     this.appointmentService.getAppointments().subscribe({
       next: (appointments: any) => {
-        const form = this.appointmentForm.value;
-
-        console.log(form);
-        // debugger;
+        const form = this.appointmentForm.getRawValue();
 
         const existingAppointment = appointments.some(
           (a: any) =>
@@ -224,28 +221,39 @@ export class EditAppointmentComponent {
           this.notificationService.error(
             'Doctor is already booked for the selected date and time.',
           );
+          this.isSubmitting = false;
           return;
         }
 
-        if (this.appointmentForm.valid) {
-          const appointmentData = this.appointmentForm.value;
-          // const appointmentId: any = localStorage.getItem('appointmentId');
-          this.appointmentService
-            .updateAppointment(this.appointmentId, appointmentData)
-            .subscribe({
-              next: () => {
-                this.notificationService.success(
-                  'Appointment Information updated successfully',
-                );
-                this.router.navigate(['/appointments']);
-              },
-              error: () => {
-                this.notificationService.error('Failed to update appointment');
-              },
-            });
-        }
+        const appointmentData = {
+          ...form,
+          date: form.date ? this.formatDate(form.date) : null,
+        };
+
+        this.appointmentService
+          .updateAppointment(this.appointmentId, appointmentData)
+          .subscribe({
+            next: () => {
+              this.notificationService.success(
+                'Appointment updated successfully',
+              );
+              this.router.navigate(['/appointments']);
+            },
+            error: () => {
+              this.notificationService.error('Failed to update appointment');
+              this.isSubmitting = false;
+            },
+          });
+      },
+      error: () => {
+        this.notificationService.error('Failed to verify appointment slot');
+        this.isSubmitting = false;
       },
     });
+  }
+
+  onCancel() {
+    this.router.navigate(['/appointments']);
   }
 
   private setupAvailabilityListeners(): void {
@@ -260,25 +268,20 @@ export class EditAppointmentComponent {
 
   private loadAvailableSlots(): void {
     const timeControl = this.appointmentForm.controls['time'];
-
-    console.log(timeControl, 'timecontrol');
-
     timeControl.disable();
 
     const doctorId = this.appointmentForm.controls['doctorId'].value;
-
     const selectedDate = this.appointmentForm.controls['date'].value;
 
-    // Reset time when doctor/date changes
     this.timeSlots = [];
-
-    this.appointmentForm.controls['time'].reset();
+    timeControl.reset();
 
     if (!doctorId || !selectedDate) {
       return;
     }
 
     const date = this.formatDate(selectedDate);
+    this.loadingSlots = true;
 
     this.appointmentAvailabilityService
       .getAvailableSlots(date, doctorId)
@@ -293,12 +296,12 @@ export class EditAppointmentComponent {
           } else {
             timeControl.disable();
           }
+          this.loadingSlots = false;
         },
-
         error: (error) => {
           console.error('Unable to load available slots', error);
-
           this.timeSlots = [];
+          this.loadingSlots = false;
         },
       });
   }
@@ -309,8 +312,7 @@ export class EditAppointmentComponent {
     currentTime: string,
   ): void {
     const date = this.formatDate(selectedDate);
-
-    console.log(date, 'date...');
+    this.loadingSlots = true;
 
     this.appointmentAvailabilityService
       .getAvailableSlots(date, doctorId)
@@ -320,11 +322,10 @@ export class EditAppointmentComponent {
             .filter((slot) => slot.available)
             .map((slot) => slot.time);
 
-          // Existing appointment time may not be
-          // returned as available because it is already booked.
+          // The appointment's current slot may not come back as "available"
+          // since it's already booked by this same appointment — add it back.
           if (currentTime && !availableTimes.includes(currentTime)) {
             availableTimes.push(currentTime);
-
             availableTimes.sort();
           }
 
@@ -334,39 +335,28 @@ export class EditAppointmentComponent {
 
           if (this.timeSlots.length > 0) {
             timeControl.enable();
-
             timeControl.setValue(currentTime);
           } else {
             timeControl.disable();
           }
+          this.loadingSlots = false;
         },
-
         error: (error) => {
           console.error('Unable to load appointment slots', error);
-
           this.timeSlots = [];
+          this.loadingSlots = false;
         },
       });
   }
 
- private formatDate(date: Date | string): string {
+  private formatDate(date: Date | string): string {
+    if (typeof date === 'string') {
+      return date.includes('T') ? date.split('T')[0] : date;
+    }
 
-  if (typeof date === 'string') {
-    return date.includes('T')
-      ? date.split('T')[0]
-      : date;
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
-
-  const year = date.getFullYear();
-
-  const month = String(
-    date.getMonth() + 1
-  ).padStart(2, '0');
-
-  const day = String(
-    date.getDate()
-  ).padStart(2, '0');
-
-  return `${year}-${month}-${day}`;
-}
 }
