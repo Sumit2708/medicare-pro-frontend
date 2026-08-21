@@ -1,69 +1,54 @@
+<!-- print-invoice.component.html -->
 @if (!loading && invoiceDetails) {
   <div id="invoice-content" class="invoice-container">
-    <!-- Header -->
-
+    <!-- Letterhead -->
     <div class="invoice-header">
-      <h1>{{ clinicInfo.name }}</h1>
-      <p>{{ clinicInfo.tagline }}</p>
-      <p>{{ clinicInfo.address }}</p>
-      <p>{{ clinicInfo.phone }}</p>
+      <div class="clinic-block">
+        <h1>{{ clinicInfo.name }}</h1>
+        <p class="tagline">{{ clinicInfo.tagline }}</p>
+        <p class="contact-line">{{ clinicInfo.address }} &nbsp;•&nbsp; {{ clinicInfo.phone }}</p>
+      </div>
 
-      <h2>TAX INVOICE</h2>
+      <div class="doc-type-badge">TAX INVOICE</div>
     </div>
 
-    <hr />
-
-    <!-- Invoice Information -->
-
+    <!-- Invoice meta -->
     <div class="invoice-info">
-      <div>
-        <strong>Invoice Number</strong>
-
-        <p>{{ invoiceDetails.invoice.invoiceNumber }}</p>
+      <div class="info-block">
+        <span class="info-label">Invoice Number</span>
+        <span class="info-value">{{ invoiceDetails.invoice.invoiceNumber }}</span>
       </div>
 
-      <div>
-        <strong>Invoice Date</strong>
-
-        <p>
-          {{ invoiceDetails.invoice.createdDate | date: "dd MMM yyyy" }}
-        </p>
+      <div class="info-block info-block--right">
+        <span class="info-label">Invoice Date</span>
+        <span class="info-value">{{ invoiceDetails.invoice.createdDate | date: "dd MMM yyyy" }}</span>
       </div>
     </div>
-
-    <hr />
 
     <!-- Bill To -->
-
-    <div class="section">
-      <h3>Bill To</h3>
-
-      <p>
-        <strong>Patient :</strong>
-
-        {{ invoiceDetails.patient.name }}
-      </p>
-
-      <p>
-        <strong>Doctor :</strong>
-
-        {{ invoiceDetails.doctor.name }}
-      </p>
-
-      <p>
-        <strong>Specialization :</strong>
-
-        {{ invoiceDetails.doctor.specialization }}
-      </p>
+    <div class="section bill-to">
+      <span class="section-label">Bill To</span>
+      <div class="bill-to-grid">
+        <div>
+          <span class="field-label">Patient</span>
+          <span class="field-value">{{ invoiceDetails.patient.name }}</span>
+        </div>
+        <div>
+          <span class="field-label">Doctor</span>
+          <span class="field-value">{{ invoiceDetails.doctor.name }}</span>
+        </div>
+        <div>
+          <span class="field-label">Specialization</span>
+          <span class="field-value">{{ invoiceDetails.doctor.specialization }}</span>
+        </div>
+      </div>
     </div>
 
-    <!-- Invoice Table -->
-
-    <table>
+    <!-- Line items -->
+    <table class="invoice-table">
       <thead>
         <tr>
           <th>Description</th>
-
           <th class="right">Amount</th>
         </tr>
       </thead>
@@ -71,75 +56,48 @@
       <tbody>
         <tr>
           <td>Consultation Fee</td>
-
-          <td class="right">
-            {{ invoiceDetails.invoice.consultationFee | currency: "INR" }}
-          </td>
+          <td class="right">{{ invoiceDetails.invoice.consultationFee | currency: "INR" }}</td>
         </tr>
-
         <tr>
           <td>Discount</td>
-
-          <td class="right">
-            -{{ invoiceDetails.invoice.discount | currency: "INR" }}
-          </td>
+          <td class="right">-{{ invoiceDetails.invoice.discount | currency: "INR" }}</td>
         </tr>
-
         <tr>
           <td>GST (18%)</td>
-
-          <td class="right">
-            {{ invoiceDetails.invoice.gst | currency: "INR" }}
-          </td>
+          <td class="right">{{ invoiceDetails.invoice.gst | currency: "INR" }}</td>
         </tr>
       </tbody>
 
       <tfoot>
-        <tr>
-          <td>
-            <strong>Grand Total</strong>
-          </td>
-
-          <td class="right">
-            <strong>
-              {{ invoiceDetails.invoice.total | currency: "INR" }}
-            </strong>
-          </td>
+        <tr class="total-row">
+          <td>Grand Total</td>
+          <td class="right">{{ invoiceDetails.invoice.total | currency: "INR" }}</td>
         </tr>
       </tfoot>
     </table>
 
     <!-- Payment -->
-
     <div class="payment-section">
-      <div>
-        <strong>Payment Method</strong>
-
-        <p>
-          {{ invoiceDetails.invoice.paymentMethod }}
-        </p>
+      <div class="info-block">
+        <span class="info-label">Payment Method</span>
+        <span class="info-value">{{ invoiceDetails.invoice.paymentMethod }}</span>
       </div>
 
-      <div>
-        <strong>Payment Status</strong>
-
-        <p>
+      <div class="info-block info-block--right">
+        <span class="info-label">Payment Status</span>
+        <span class="info-value status-value" [class.paid]="invoiceDetails.invoice.paymentStatus === 'Paid'">
           {{ invoiceDetails.invoice.paymentStatus }}
-        </p>
+        </span>
       </div>
     </div>
 
     <!-- Footer -->
-
     <div class="footer">
-      <p>Thank you for choosing ABC Clinic.</p>
+      <p class="thank-you">Thank you for choosing {{ clinicInfo.name }}.</p>
 
       <div class="signature">
-        _______________________
-
-        <br />
-
-        Authorized Signature
+        <div class="signature-line"></div>
+        <span>Authorized Signature</span>
       </div>
     </div>
   </div>

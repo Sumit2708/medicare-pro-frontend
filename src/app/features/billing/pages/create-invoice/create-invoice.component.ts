@@ -34,6 +34,8 @@ import {
 import { MatDivider } from '@angular/material/divider';
 import { InvoiceViewModel } from '../../../../shared/models/invoice-view.model';
 import { Invoice } from '../../models/invoice.model';
+import { MatIcon } from "@angular/material/icon";
+import { MatChipsModule } from '@angular/material/chips';
 
 @Component({
   selector: 'app-create-invoice',
@@ -51,7 +53,9 @@ import { Invoice } from '../../models/invoice.model';
     MatFormFieldModule,
     MatSelect,
     MatDivider,
-  ],
+    MatIcon,
+    MatChipsModule
+],
   templateUrl: './create-invoice.component.html',
   styleUrl: './create-invoice.component.scss',
 })
@@ -64,6 +68,12 @@ export class CreateInvoiceComponent {
   PaymentStatus = PaymentStatus;
   invoiceData!: InvoiceViewModel;
   invoiceExists = false;
+
+  paymentStatusOptions = [
+  { value: PaymentStatus.PENDING, icon: 'schedule' },
+  { value: PaymentStatus.PAID, icon: 'task_alt' },
+  { value: PaymentStatus.CANCELLED, icon: 'cancel' },
+];
 
   constructor(
     private router: Router,

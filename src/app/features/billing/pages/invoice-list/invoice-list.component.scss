@@ -1,85 +1,293 @@
-.filter-card {
+// invoice-list.component.scss — full file
+
+// ---------- Stats strip ----------
+.stats-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
   margin-bottom: 20px;
 }
 
-.filter-row {
+.stat-card {
   display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid transparent;
+  border-radius: 12px;
+  padding: 18px 20px;
+  box-shadow: 0 2px 6px rgba(15, 35, 46, 0.06);
 
-  gap: 20px;
+  &--total { border-left-color: var(--color-primary); }
+  &--paid { border-left-color: var(--color-success); }
+  &--pending { border-left-color: var(--color-accent); }
 }
 
-.filter-row mat-form-field {
-  flex: 1;
+.stat-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  flex-shrink: 0;
+
+  mat-icon { font-size: 22px; width: 22px; height: 22px; }
+
+  &.total { background: var(--color-primary-light); color: var(--color-primary); }
+  &.paid { background: rgba(47, 158, 104, 0.12); color: var(--color-success); }
+  &.pending { background: rgba(232, 163, 61, 0.15); color: var(--color-accent); }
 }
 
-table {
-  width: 100%;
-}
+.stat-body { display: flex; flex-direction: column; gap: 2px; }
+.stat-label { font-family: var(--font-body); font-size: 13px; color: var(--color-ink-soft); }
+.stat-value { font-family: var(--font-display); font-size: 22px; font-weight: 600; color: var(--color-ink); }
 
-mat-card {
+// ---------- Filter card ----------
+// invoice-list.component.scss — replace .filter-card and everything chip/label related
+
+.filter-card {
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 4px 14px rgba(15, 35, 46, 0.08);
   padding: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-mat-chip {
-  min-width: 90px;
-
-  justify-content: center;
+.filter-search-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
 }
 
-// .mat-column-actions {
-//   width: 120px;
-// }
+.search-field { width: 320px; }
 
-actions-column {
-  text-align: center;
-  justify-content: center;
+.clear-filters {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--color-ink-soft);
+
+  mat-icon { font-size: 18px; width: 18px; height: 18px; }
+  &:hover { color: var(--color-danger); }
 }
 
-.mat-column-actions {
-  justify-content: center;
+// Contained panel replaces the old divider lines — groups both chip
+// rows into one visually distinct zone, same language as the .breakdown
+// box on Create Invoice.
+.filter-chips-panel {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
-.mat-mdc-header-cell.mat-column-actions {
-  justify-content: center;
-  text-align: center;
-}
-.mat-column-actions {
-  text-align: center;
-  justify-content: center;
+.chip-group-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
 }
 
-.paid {
-  background: #e8f5e9 !important;
-
-  color: #2e7d32 !important;
+.chip-group-label {
+  width: 56px;
+  flex-shrink: 0;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-ink-soft);
 }
 
-.pending {
-  background: #fff8e1 !important;
+.chip-icon { font-size: 16px; height: 16px; width: 16px; margin-right: 4px; }
 
-  color: #f9a825 !important;
+// Unselected chips need contrast against the panel's --color-bg fill,
+// so they get a solid white background instead of blending in.
+mat-chip-option {
+  background: var(--color-surface) !important;
+  border: 1px solid var(--color-border) !important;
 }
 
-.cancelled {
-  background: #ffebee !important;
-
-  color: #c62828 !important;
+// "All" is neutral, not a status — same dark treatment in both groups
+// so it doesn't read as two different controls.
+.all-chip.mat-mdc-chip-selected {
+  background: var(--color-ink) !important;
+  color: #fff !important;
+  border-color: var(--color-ink) !important;
 }
 
-.table-container {
-  overflow-x: auto;
+.status-chip {
+  font-family: var(--font-body);
+
+  &--pending.mat-mdc-chip-selected { background: rgba(232, 163, 61, 0.15) !important; color: var(--color-accent) !important; border-color: transparent !important; }
+  &--paid.mat-mdc-chip-selected { background: rgba(47, 158, 104, 0.12) !important; color: var(--color-success) !important; border-color: transparent !important; }
+  &--cancelled.mat-mdc-chip-selected { background: rgba(214, 69, 69, 0.1) !important; color: var(--color-danger) !important; border-color: transparent !important; }
 }
+
+.method-chip {
+  font-family: var(--font-body);
+
+  &.mat-mdc-chip-selected {
+    background: var(--color-primary-light) !important;
+    color: var(--color-primary) !important;
+    border-color: transparent !important;
+  }
+}
+
+// ---------- Table card ----------
+.table-card {
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(15, 35, 46, 0.06);
+  padding: 0;
+  overflow: hidden;
+}
+
+.table-container { overflow-x: auto; }
 
 table {
   width: 100%;
+
+  th.mat-mdc-header-cell {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--color-ink-soft);
+    background: var(--color-bg);
+    border-bottom: 1px solid var(--color-border);
+    padding: 14px 16px;
+  }
+
+  td.mat-mdc-cell {
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--color-ink);
+    border-bottom: 1px solid var(--color-border);
+    padding: 14px 16px;
+  }
+
+  tr.mat-mdc-row {
+    transition: background-color 0.15s ease;
+    &:hover { background-color: var(--color-primary-light); }
+    &:last-child td { border-bottom: none; }
+  }
 }
 
-mat-card {
-  padding: 16px;
+// Status color bar — signature touch: the invoice # cell carries a left
+// accent matching the row's payment status, so you can scan for unpaid
+// invoices without reading the status column at all.
+.status-bar {
+  &--pending { box-shadow: inset 3px 0 0 var(--color-accent); }
+  &--paid { box-shadow: inset 3px 0 0 var(--color-success); }
+  &--cancelled { box-shadow: inset 3px 0 0 var(--color-danger); }
 }
 
-.empty-state {
+.invoice-number {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--color-primary-dark);
+  padding-left: 6px;
+}
+
+.patient-cell { display: flex; align-items: center; gap: 10px; }
+
+.patient-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--color-primary-light);
+  color: var(--color-primary-dark);
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.doctor-cell { color: var(--color-ink-soft); }
+.amount { font-family: var(--font-display); font-weight: 600; color: var(--color-ink); }
+.method { color: var(--color-ink-soft); }
+.date { color: var(--color-ink-soft); font-size: 13px; }
+
+// ---------- Status pill (table column) ----------
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+
+  .status-dot { width: 6px; height: 6px; border-radius: 50%; }
+
+  &.paid { background: rgba(47, 158, 104, 0.12); color: var(--color-success); .status-dot { background: var(--color-success); } }
+  &.pending { background: rgba(232, 163, 61, 0.15); color: var(--color-accent); .status-dot { background: var(--color-accent); } }
+  &.cancelled { background: rgba(214, 69, 69, 0.1); color: var(--color-danger); .status-dot { background: var(--color-danger); } }
+}
+
+// ---------- Actions ----------
+.actions-header { text-align: right; }
+.actions-column { text-align: right; }
+
+.action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+
+  button {
+    color: var(--color-ink-soft);
+    &:hover { color: var(--color-primary); }
+  }
+}
+
+// ---------- Empty / loading states ----------
+.empty-state, .loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
   text-align: center;
-  padding: 40px;
-  color: #6b7280;
+
+  h3 { font-family: var(--font-display); font-size: 18px; font-weight: 600; color: var(--color-ink); margin: 16px 0 4px; }
+  p { font-family: var(--font-body); font-size: 14px; color: var(--color-ink-soft); margin: 0; }
+}
+
+.empty-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+
+  mat-icon { font-size: 28px; width: 28px; height: 28px; }
+}
+
+.loading-state p { margin-top: 12px; }
+
+// ---------- Responsive ----------
+@media (max-width: 900px) {
+  .chip-group-row {
+    align-items: flex-start;
+
+    .chip-group-label { padding-top: 6px; }
+  }
 }

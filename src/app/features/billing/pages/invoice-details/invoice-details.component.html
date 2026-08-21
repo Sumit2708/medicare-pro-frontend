@@ -1,151 +1,122 @@
-<app-page-header title="Invoice Details" subtitle="View generated invoice" >
-</app-page-header>
+<!-- invoice-details.component.html -->
+<app-page-header title="Invoice Details" subtitle="View generated invoice"></app-page-header>
 
 @if (invoiceDetails) {
   <div class="details-container">
     <!-- Patient Card -->
-
-    <mat-card>
-      <mat-card-title> Patient Information </mat-card-title>
-
-      <mat-divider></mat-divider>
+    <mat-card class="info-card">
+      <div class="info-card-header">
+        <div class="info-avatar">{{ invoiceDetails.patient.name.charAt(0) }}</div>
+        <h3>Patient Information</h3>
+      </div>
 
       <div class="info-row">
         <span>Name</span>
-
         <strong>{{ invoiceDetails.patient.name }}</strong>
       </div>
-
       <div class="info-row">
         <span>Gender</span>
-
         <strong>{{ invoiceDetails.patient.gender }}</strong>
       </div>
-
       <div class="info-row">
         <span>Mobile</span>
-
         <strong>{{ invoiceDetails.patient.mobile }}</strong>
       </div>
     </mat-card>
 
     <!-- Doctor Card -->
-
-    <mat-card>
-      <mat-card-title> Doctor Information </mat-card-title>
-
-      <mat-divider></mat-divider>
+    <mat-card class="info-card">
+      <div class="info-card-header">
+        <div class="info-avatar info-avatar--doctor"><mat-icon>medical_services</mat-icon></div>
+        <h3>Doctor Information</h3>
+      </div>
 
       <div class="info-row">
         <span>Name</span>
-
         <strong>{{ invoiceDetails.doctor.name }}</strong>
       </div>
-
       <div class="info-row">
         <span>Specialization</span>
-
         <strong>{{ invoiceDetails.doctor.specialization }}</strong>
       </div>
-
       <div class="info-row">
         <span>Consultation Fee</span>
-
-        <strong>
-          {{ invoiceDetails.doctor.fee | currency: "INR" }}
-        </strong>
+        <strong>{{ invoiceDetails.doctor.fee | currency: "INR" }}</strong>
       </div>
     </mat-card>
   </div>
 
-  <mat-card class="billing-card">
-    <mat-card-title> Billing Summary </mat-card-title>
+  <!-- Receipt -->
+  <mat-card class="receipt-card">
+    <div class="receipt-header">
+      <div class="receipt-header-text">
+        <span class="receipt-eyebrow">Invoice</span>
+        <span class="receipt-number">{{ invoiceDetails.invoice.invoiceNumber }}</span>
+      </div>
 
-    <mat-divider></mat-divider>
-
-    <div class="summary-row">
-      <span>Invoice Number</span>
-
-      <strong>{{ invoiceDetails.invoice.invoiceNumber }}</strong>
-    </div>
-
-    <div class="summary-row">
-      <span>Consultation Fee</span>
-
-      <strong>
-        {{ invoiceDetails.invoice.consultationFee | currency: "INR" }}
-      </strong>
-    </div>
-
-    <div class="summary-row">
-      <span>Discount</span>
-
-      <strong>
-        {{ invoiceDetails.invoice.discount | currency: "INR" }}
-      </strong>
-    </div>
-
-    <div class="summary-row">
-      <span>GST (18%)</span>
-
-      <strong>
-        {{ invoiceDetails.invoice.gst | currency: "INR" }}
-      </strong>
-    </div>
-
-    <div class="summary-row total">
-      <span>Grand Total</span>
-
-      <strong>
-        {{ invoiceDetails.invoice.total | currency: "INR" }}
-      </strong>
-    </div>
-
-    <div class="summary-row">
-      <span>Payment Method</span>
-
-      <strong>{{ invoiceDetails.invoice.paymentMethod }}</strong>
-    </div>
-
-    <div class="summary-row">
-      <span>Payment Status</span>
-
-      <mat-chip
-        [class.paid]="
-          invoiceDetails.invoice.paymentStatus === PaymentStatus.PAID
-        "
-        [class.pending]="
-          invoiceDetails.invoice.paymentStatus === PaymentStatus.PENDING
-        "
-        [class.cancelled]="
-          invoiceDetails.invoice.paymentStatus === PaymentStatus.CANCELLED
-        "
-      >
+      <span
+        class="status-pill"
+        [class.paid]="invoiceDetails.invoice.paymentStatus === PaymentStatus.PAID"
+        [class.pending]="invoiceDetails.invoice.paymentStatus === PaymentStatus.PENDING"
+        [class.cancelled]="invoiceDetails.invoice.paymentStatus === PaymentStatus.CANCELLED">
+        <span class="status-dot"></span>
         {{ invoiceDetails.invoice.paymentStatus }}
-      </mat-chip>
+      </span>
     </div>
 
-    <div class="summary-row">
-      <span>Created Date</span>
+    <div class="receipt-body">
+      <div class="breakdown">
+        <div class="breakdown-row">
+          <span class="breakdown-label">Consultation Fee</span>
+          <span class="breakdown-value">{{ invoiceDetails.invoice.consultationFee | currency: "INR" }}</span>
+        </div>
+        <div class="breakdown-row">
+          <span class="breakdown-label">Discount</span>
+          <span class="breakdown-value">{{ invoiceDetails.invoice.discount | currency: "INR" }}</span>
+        </div>
+        <div class="breakdown-row">
+          <span class="breakdown-label">GST (18%)</span>
+          <span class="breakdown-value">{{ invoiceDetails.invoice.gst | currency: "INR" }}</span>
+        </div>
 
-      <strong>
-        {{ invoiceDetails.invoice.createdDate | date: "dd MMM yyyy" }}
-      </strong>
+        <div class="breakdown-divider"></div>
+
+        <div class="breakdown-row total-row">
+          <span class="breakdown-label">Grand Total</span>
+          <span class="breakdown-value total">{{ invoiceDetails.invoice.total | currency: "INR" }}</span>
+        </div>
+      </div>
+
+      <div class="meta-strip">
+        <div class="meta-item">
+          <mat-icon>payments</mat-icon>
+          <div class="meta-text">
+            <span class="meta-label">Payment Method</span>
+            <span class="meta-value">{{ invoiceDetails.invoice.paymentMethod }}</span>
+          </div>
+        </div>
+
+        <div class="meta-divider"></div>
+
+        <div class="meta-item">
+          <mat-icon>event</mat-icon>
+          <div class="meta-text">
+            <span class="meta-label">Created Date</span>
+            <span class="meta-value">{{ invoiceDetails.invoice.createdDate | date: "dd MMM yyyy" }}</span>
+          </div>
+        </div>
+      </div>
     </div>
   </mat-card>
 
   <div class="actions pb-3">
     <button mat-stroked-button routerLink="/billing">Back</button>
 
-    <!-- <button mat-raised-button color="accent" (click)="printInvoice()"> -->
-    
     <button
       mat-raised-button
       color="accent"
-      [routerLink]="['/billing/print', invoiceDetails.invoice.id]"
-    >
-      <mat-icon> print </mat-icon>
-
+      [routerLink]="['/billing/print', invoiceDetails.invoice.id]">
+      <mat-icon>print</mat-icon>
       Print Invoice
     </button>
 
@@ -153,8 +124,8 @@
       mat-raised-button
       color="primary"
       (click)="markAsPaid()"
-      [disabled]="invoiceDetails.invoice.paymentStatus === PaymentStatus.PAID"
-    >
+      [disabled]="invoiceDetails.invoice.paymentStatus === PaymentStatus.PAID">
+      <mat-icon>task_alt</mat-icon>
       Mark Paid
     </button>
   </div>

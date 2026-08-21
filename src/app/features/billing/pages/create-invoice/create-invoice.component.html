@@ -1,229 +1,133 @@
+<!-- create-invoice.component.html -->
 <app-page-header
   title="Create Invoice"
   subtitle="Generate invoice for completed appointment"
-  buttonLabel="Back">
+  buttonLabel="Back"
+  routerLink="/billing">
 </app-page-header>
 
-<mat-card class="summary-card">
+@if (invoiceExists) {
+  <div class="exists-banner">
+    <mat-icon>error_outline</mat-icon>
+    <span>An invoice already exists for this appointment. You can't generate another one.</span>
+  </div>
+}
 
-    <mat-card-title>
-
-        Appointment Summary
-
-    </mat-card-title>
-
-    <mat-divider class="mt-2"></mat-divider>
-
-    <div class="summary-grid">
-
-        <div>
-
-            <strong>Patient</strong>
-
-            <p>{{invoiceData?.patient?.name}}</p>
-
-        </div>
-
-        <div>
-
-            <strong>Doctor</strong>
-
-            <p>{{invoiceData?.doctor?.name}}</p>
-
-        </div>
-
-        <div>
-
-            <strong>Appointment Date</strong>
-
-            <p>{{invoiceForm.get('appointmentDate')?.value}}</p>
-
-        </div>
-
-        <div>
-
-            <strong>Consultation Fee</strong>
-
-            <p>
-
-                ₹{{invoiceData?.doctor?.fee}}
-
-            </p>
-
-        </div>
-
+<div class="invoice-layout">
+  <!-- Ticket-style summary -->
+  <mat-card class="ticket-card">
+    <div class="ticket-eyebrow">
+      <span class="eyebrow-badge">Draft Invoice</span>
+      @if (invoiceData?.appointment?.id) {
+        <span class="eyebrow-ref">Ref: APT-{{ invoiceData.appointment.id }}</span>
+      }
     </div>
 
-</mat-card>
+    <div class="ticket-identity">
+      <div class="identity-row">
+        <div class="identity-avatar">{{ invoiceData?.patient?.name?.charAt(0) }}</div>
+        <div class="identity-text">
+          <span class="identity-label">Patient</span>
+          <span class="identity-value">{{ invoiceData?.patient?.name }}</span>
+        </div>
+      </div>
 
-<mat-card class="billing-card">
+      <div class="identity-row">
+        <div class="identity-avatar identity-avatar--doctor"><mat-icon>medical_services</mat-icon></div>
+        <div class="identity-text">
+          <span class="identity-label">Doctor</span>
+          <span class="identity-value">{{ invoiceData?.doctor?.name }}</span>
+        </div>
+      </div>
 
-<form
-    [formGroup]="invoiceForm">
+      <div class="identity-row">
+        <div class="identity-avatar identity-avatar--date"><mat-icon>event</mat-icon></div>
+        <div class="identity-text">
+          <span class="identity-label">Appointment Date</span>
+          <span class="identity-value">{{ invoiceForm.get('appointmentDate')?.value }}</span>
+        </div>
+      </div>
+    </div>
 
-<h3>
+    <!-- Perforated divider -->
+    <div class="ticket-perforation">
+      <span class="perforation-notch perforation-notch--left"></span>
+      <span class="perforation-notch perforation-notch--right"></span>
+    </div>
 
-Billing Information
+    <div class="ticket-fee">
+      <span class="fee-label">Consultation Fee</span>
+      <span class="fee-value">₹{{ invoiceData?.doctor?.fee }}</span>
+    </div>
+  </mat-card>
 
-</h3>
+  <!-- Billing -->
+  <mat-card class="billing-card">
+    <form [formGroup]="invoiceForm">
+      <h3 class="section-title">Billing Information</h3>
 
-<div class="row">
+      <div class="breakdown">
+        <div class="breakdown-row">
+          <span class="breakdown-label">Consultation Fee</span>
+          <span class="breakdown-value">₹{{ invoiceData?.doctor?.fee }}</span>
+        </div>
 
-<mat-form-field appearance="outline">
+        <div class="breakdown-row discount-row">
+          <span class="breakdown-label">Discount</span>
+          <mat-form-field appearance="outline" class="inline-field">
+            <span matPrefix class="ms-3 ">₹&nbsp;</span>
+            <input matInput type="number" formControlName="discount">
+          </mat-form-field>
+        </div>
 
-<mat-label>
+        <div class="breakdown-row">
+          <span class="breakdown-label">GST (18%)</span>
+          <span class="breakdown-value">₹{{ invoiceForm.get('gst')?.value | number: '1.2-2' }}</span>
+        </div>
 
-Discount
+        <div class="breakdown-divider"></div>
 
-</mat-label>
+        <div class="breakdown-row total-row">
+          <span class="breakdown-label">Grand Total</span>
+          <span class="breakdown-value total">₹{{ invoiceForm.get('total')?.value | number: '1.2-2' }}</span>
+        </div>
+      </div>
 
-<input
-matInput
-type="number"
-formControlName="discount">
+      <mat-divider class="section-divider"></mat-divider>
 
-</mat-form-field>
+      <h3 class="section-title">Payment Method</h3>
+      <mat-chip-listbox formControlName="paymentMethod" aria-label="Payment method" class="chip-listbox">
+        @for (option of paymentStatusOptions; track option.value) {
+          <mat-chip-option [value]="option.value" class="method-chip">
+            <mat-icon class="chip-icon">{{ option.icon }}</mat-icon>
+            {{ option.value }}
+          </mat-chip-option>
+        }
+      </mat-chip-listbox>
 
-<mat-form-field appearance="outline">
+      <h3 class="section-title status-title">Payment Status</h3>
+      <mat-chip-listbox formControlName="paymentStatus" aria-label="Payment status" class="chip-listbox">
+        @for (option of paymentStatusOptions; track option.value) {
+          <mat-chip-option
+            [value]="option.value"
+            [ngClass]="'status-chip status-chip--' + option.value.toLowerCase()">
+            <mat-icon class="chip-icon">{{ option.icon }}</mat-icon>
+            {{ option.value }}
+          </mat-chip-option>
+        }
+      </mat-chip-listbox>
 
-<mat-label>
-
-GST (18%)
-
-</mat-label>
-
-<input
-matInput
-formControlName="gst">
-
-</mat-form-field>
-
+      <div class="actions">
+        <button mat-stroked-button routerLink="/billing">Cancel</button>
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="saveInvoice()"
+          [disabled]="invoiceExists">
+          <mat-icon>receipt_long</mat-icon>
+          Generate Invoice
+        </button>
+      </div>
+    </form>
+  </mat-card>
 </div>
-
-<div class="row">
-
-<mat-form-field appearance="outline">
-
-<mat-label>
-
-Grand Total
-
-</mat-label>
-
-<input
-matInput
-formControlName="total">
-
-</mat-form-field>
-
-<mat-form-field appearance="outline">
-
-<mat-label>
-
-Payment Method
-
-</mat-label>
-
-<mat-select
-formControlName="paymentMethod">
-
-<mat-option
-[value]="PaymentMethod.CASH">
-
-Cash
-
-</mat-option>
-
-<mat-option
-[value]="PaymentMethod.UPI">
-
-UPI
-
-</mat-option>
-
-<mat-option
-[value]="PaymentMethod.CARD">
-
-Card
-
-</mat-option>
-
-<mat-option
-[value]="PaymentMethod.INSURANCE">
-
-Insurance
-
-</mat-option>
-
-</mat-select>
-
-</mat-form-field>
-
-</div>
-
-<div class="row">
-
-<mat-form-field appearance="outline">
-
-<mat-label>
-
-Payment Status
-
-</mat-label>
-
-<mat-select
-formControlName="paymentStatus">
-
-<mat-option
-[value]="PaymentStatus.PENDING">
-
-Pending
-
-</mat-option>
-
-<mat-option
-[value]="PaymentStatus.PAID">
-
-Paid
-
-</mat-option>
-
-<mat-option
-[value]="PaymentStatus.CANCELLED">
-
-Cancelled
-
-</mat-option>
-
-</mat-select>
-
-</mat-form-field>
-
-</div>
-
-<div class="actions">
-
-<button
-mat-stroked-button
-routerLink="/billing">
-
-Cancel
-
-</button>
-
-<button
-mat-raised-button
-color="primary"
-(click)="saveInvoice()"
-[disabled]="invoiceExists"
->
-
-Generate Invoice
-
-</button>
-
-</div>
-
-</form>
-
-</mat-card>

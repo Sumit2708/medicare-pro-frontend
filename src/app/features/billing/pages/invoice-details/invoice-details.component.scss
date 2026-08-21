@@ -1,73 +1,312 @@
+// .details-container {
+//   display: grid;
+
+//   grid-template-columns: repeat(2, 1fr);
+
+//   gap: 24px;
+
+//   margin-bottom: 24px;
+// }
+
+// mat-card {
+//   padding: 24px;
+// }
+
+// .info-row,
+// .summary-row {
+//   display: flex;
+
+//   justify-content: space-between;
+
+//   align-items: center;
+
+//   padding: 14px 0;
+
+//   border-bottom: 1px solid #eeeeee;
+// }
+
+// .summary-row:last-child,
+// .info-row:last-child {
+//   border-bottom: none;
+// }
+
+// .total {
+//   font-size: 18px;
+
+//   font-weight: 600;
+// }
+
+// .billing-card {
+//   margin-bottom: 24px;
+// }
+
+// .actions {
+//   display: flex;
+
+//   justify-content: flex-end;
+
+//   gap: 12px;
+// }
+
+// .paid {
+//   background: #e8f5e9 !important;
+
+//   color: #2e7d32 !important;
+// }
+
+// .pending {
+//   background: #fff8e1 !important;
+
+//   color: #f9a825 !important;
+// }
+
+// .cancelled {
+//   background: #ffebee !important;
+
+//   color: #c62828 !important;
+// }
+
+// @media (max-width: 768px) {
+//   .details-container {
+//     grid-template-columns: 1fr;
+//   }
+// }
+
+
+// invoice-details.component.scss
+
+// ---------- Info cards (Patient / Doctor) ----------
 .details-container {
   display: grid;
-
-  grid-template-columns: repeat(2, 1fr);
-
-  gap: 24px;
-
-  margin-bottom: 24px;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
 }
 
-mat-card {
+.info-card {
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(15, 35, 46, 0.06);
+  padding: 20px 24px;
+}
+
+.info-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--color-border);
+
+  h3 {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-ink);
+    margin: 0;
+  }
+}
+
+.info-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--color-primary-light);
+  color: var(--color-primary-dark);
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  flex-shrink: 0;
+
+  mat-icon { font-size: 18px; width: 18px; height: 18px; }
+
+  &--doctor { color: var(--color-primary); }
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-family: var(--font-body);
+  font-size: 14px;
+
+  span { color: var(--color-ink-soft); }
+  strong { color: var(--color-ink); font-weight: 500; }
+}
+
+// ---------- Receipt card ----------
+.receipt-card {
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(15, 35, 46, 0.06);
+  padding: 0;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.receipt-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  background: var(--color-primary-dark);
+}
+
+.receipt-header-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.receipt-eyebrow {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.receipt-number {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.receipt-body {
   padding: 24px;
 }
 
-.info-row,
-.summary-row {
+// Reused breakdown pattern from create-invoice — same visual language
+// across the whole billing flow.
+.breakdown {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 18px 20px;
+}
+
+.breakdown-row {
   display: flex;
-
-  justify-content: space-between;
-
   align-items: center;
-
-  padding: 14px 0;
-
-  border-bottom: 1px solid #eeeeee;
+  justify-content: space-between;
+  padding: 8px 0;
 }
 
-.summary-row:last-child,
-.info-row:last-child {
-  border-bottom: none;
+.breakdown-label { font-family: var(--font-body); font-size: 14px; color: var(--color-ink-soft); }
+
+.breakdown-value {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-ink);
+
+  &.total { font-size: 24px; font-weight: 700; color: var(--color-primary-dark); }
 }
 
-.total {
-  font-size: 18px;
+.breakdown-divider { height: 1px; background: var(--color-border); margin: 4px 0; }
+.total-row { padding-top: 12px; }
 
+// ---------- Meta strip ----------
+.meta-strip {
+  display: flex;
+  align-items: center;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--color-border);
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+
+  mat-icon {
+    color: var(--color-primary);
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.meta-divider {
+  width: 1px;
+  height: 32px;
+  background: var(--color-border);
+  margin: 0 20px;
+}
+
+.meta-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.meta-label {
+  font-family: var(--font-body);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-ink-soft);
+}
+
+.meta-value {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-ink);
+}
+
+// ---------- Status pill (same tokens as billing list) ----------
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-family: var(--font-body);
+  font-size: 13px;
   font-weight: 600;
+  white-space: nowrap;
+
+  .status-dot { width: 6px; height: 6px; border-radius: 50%; }
+
+  &.paid { background: rgba(47, 158, 104, 0.15); color: #fff; background: rgba(255,255,255,0.15); .status-dot { background: var(--color-success); } }
+  &.pending { background: rgba(255,255,255,0.15); color: #fff; .status-dot { background: var(--color-accent); } }
+  &.cancelled { background: rgba(255,255,255,0.15); color: #fff; .status-dot { background: var(--color-danger); } }
 }
 
-.billing-card {
-  margin-bottom: 24px;
-}
-
+// ---------- Actions ----------
 .actions {
   display: flex;
-
   justify-content: flex-end;
-
   gap: 12px;
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    mat-icon { font-size: 18px; width: 18px; height: 18px; }
+  }
 }
 
-.paid {
-  background: #e8f5e9 !important;
-
-  color: #2e7d32 !important;
+// ---------- Responsive ----------
+@media (max-width: 900px) {
+  .details-container { grid-template-columns: 1fr; }
 }
 
-.pending {
-  background: #fff8e1 !important;
+@media (max-width: 640px) {
+  .receipt-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .meta-strip { flex-direction: column; align-items: flex-start; gap: 14px; }
+  .meta-divider { display: none; }
 
-  color: #f9a825 !important;
-}
-
-.cancelled {
-  background: #ffebee !important;
-
-  color: #c62828 !important;
-}
-
-@media (max-width: 768px) {
-  .details-container {
-    grid-template-columns: 1fr;
+  .actions {
+    flex-direction: column-reverse;
+    button { width: 100%; justify-content: center; }
   }
 }

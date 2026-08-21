@@ -2,7 +2,8 @@
   <app-page-header
     title="Edit Doctor"
     subtitle="Update doctor details"
-    [showButton]="false">
+    [showButton]="false"
+  >
   </app-page-header>
 
   @if (isLoading) {
@@ -28,11 +29,15 @@
         </div>
         <p class="progress-label">{{ completionPercent }}% complete</p>
 
-        <form [formGroup]="doctorForm" (ngSubmit)="onSubmit()" class="doctor-form">
+        <form
+          [formGroup]="doctorForm"
+          (ngSubmit)="onSubmit()"
+          class="doctor-form"
+        >
           <div class="photo-upload-row">
             <div class="photo-preview">
               @if (doctorForm.value.photoUrl) {
-                <img [src]="doctorForm.value.photoUrl" alt="Doctor photo">
+                <img [src]="doctorForm.value.photoUrl" alt="Doctor photo" />
               } @else {
                 <mat-icon>person</mat-icon>
               }
@@ -41,12 +46,23 @@
             <div class="photo-upload-actions">
               <label class="upload-btn">
                 <mat-icon>upload</mat-icon>
-                {{ doctorForm.value.photoUrl ? 'Change photo' : 'Upload photo' }}
-                <input type="file" accept="image/*" hidden (change)="onPhotoSelected($event)">
+                {{
+                  doctorForm.value.photoUrl ? "Change photo" : "Upload photo"
+                }}
+                <input
+                  type="file"
+                  accept="image/*"
+                  hidden
+                  (change)="onPhotoSelected($event)"
+                />
               </label>
 
               @if (doctorForm.value.photoUrl) {
-                <button type="button" class="remove-btn" (click)="removePhoto()">
+                <button
+                  type="button"
+                  class="remove-btn"
+                  (click)="removePhoto()"
+                >
                   <mat-icon>close</mat-icon>
                   Remove
                 </button>
@@ -59,73 +75,145 @@
             </div>
           </div>
 
-          <mat-form-field appearance="outline" class="full-width" >
+          <mat-form-field appearance="outline" class="full-width">
             <mat-label>Full Name</mat-label>
             <mat-icon matPrefix>person</mat-icon>
-            <input matInput formControlName="name" placeholder="e.g. Dr. Aisha Khan">
-            @if (doctorForm.get('name')?.hasError('required') && doctorForm.get('name')?.touched) {
+            <input
+              matInput
+              formControlName="name"
+              placeholder="e.g. Dr. Aisha Khan"
+            />
+            @if (
+              doctorForm.get("name")?.hasError("required") &&
+              doctorForm.get("name")?.touched
+            ) {
               <mat-error>Name is required</mat-error>
             }
           </mat-form-field>
 
           <div class="form-row">
-            <mat-form-field appearance="outline" >
+            <mat-form-field appearance="outline">
               <mat-label>Specialization</mat-label>
               <mat-icon matPrefix>local_hospital</mat-icon>
-              <input matInput formControlName="specialization" placeholder="e.g. Cardiologist">
-              @if (doctorForm.get('specialization')?.hasError('required') && doctorForm.get('specialization')?.touched) {
+              <input
+                matInput
+                formControlName="specialization"
+                placeholder="e.g. Cardiologist"
+              />
+              @if (
+                doctorForm.get("specialization")?.hasError("required") &&
+                doctorForm.get("specialization")?.touched
+              ) {
                 <mat-error>Specialization is required</mat-error>
               }
             </mat-form-field>
 
-            <mat-form-field appearance="outline" >
+            <mat-form-field appearance="outline">
               <mat-label>Experience</mat-label>
               <mat-icon matPrefix>work_history</mat-icon>
-              <input matInput type="number" formControlName="experience" placeholder="0">
+              <input
+                matInput
+                type="number"
+                formControlName="experience"
+                placeholder="0"
+              />
               <span matSuffix class="suffix-text me-2">yrs</span>
-              @if (doctorForm.get('experience')?.hasError('required') && doctorForm.get('experience')?.touched) {
+              @if (
+                doctorForm.get("experience")?.hasError("required") &&
+                doctorForm.get("experience")?.touched
+              ) {
                 <mat-error>Experience is required</mat-error>
               }
             </mat-form-field>
           </div>
 
           <div class="form-row">
-            <mat-form-field appearance="outline" >
+            <mat-form-field appearance="outline">
               <mat-label>Qualification</mat-label>
               <mat-icon matPrefix>school</mat-icon>
-              <input matInput formControlName="qualification" placeholder="e.g. MBBS, MD">
-              @if (doctorForm.get('qualification')?.hasError('required') && doctorForm.get('qualification')?.touched) {
+              <input
+                matInput
+                formControlName="qualification"
+                placeholder="e.g. MBBS, MD"
+              />
+              @if (
+                doctorForm.get("qualification")?.hasError("required") &&
+                doctorForm.get("qualification")?.touched
+              ) {
                 <mat-error>Qualification is required</mat-error>
               }
             </mat-form-field>
 
-            <mat-form-field appearance="outline" >
+            <mat-form-field appearance="outline">
               <mat-label>Consultation Fee</mat-label>
               <mat-icon matPrefix>currency_rupee</mat-icon>
-              <input matInput type="number" formControlName="fee" placeholder="0">
-              @if (doctorForm.get('fee')?.hasError('required') && doctorForm.get('fee')?.touched) {
+              <input
+                matInput
+                type="number"
+                formControlName="fee"
+                placeholder="0"
+              />
+              @if (
+                doctorForm.get("fee")?.hasError("required") &&
+                doctorForm.get("fee")?.touched
+              ) {
                 <mat-error>Fee is required</mat-error>
               }
             </mat-form-field>
           </div>
 
-          <mat-form-field appearance="outline" class="full-width" >
+          <!-- <mat-form-field appearance="outline" class="full-width" >
             <mat-label>Status</mat-label>
             <mat-icon matPrefix>toggle_on</mat-icon>
             <mat-select formControlName="status">
               <mat-option value="Active">Active</mat-option>
               <mat-option value="Inactive">Inactive</mat-option>
             </mat-select>
-          </mat-form-field>
+          </mat-form-field> -->
+
+          <div class="status-row">
+            <span class="status-label">Doctor Status</span>
+            <mat-chip-listbox
+              formControlName="status"
+              aria-label="Doctor status"
+            >
+              <mat-chip-option
+                value="Active"
+                class="status-chip status-chip--active"
+              >
+                <span class="d-flex align-items-center">
+                  <mat-icon class="chip-icon">check_circle</mat-icon>
+                  <span> Active </span>
+                </span>
+              </mat-chip-option>
+              <mat-chip-option
+                value="Inactive"
+                class="status-chip status-chip--inactive"
+              >
+                <span class="d-flex align-items-center">
+                  <mat-icon class="chip-icon">pause_circle</mat-icon>
+                  <span> Inactive </span>
+                </span>
+              </mat-chip-option>
+            </mat-chip-listbox>
+          </div>
+          <!-- </div> -->
 
           <div class="form-actions">
             <button mat-stroked-button type="button" (click)="onCancel()">
               Cancel
             </button>
-            <button mat-raised-button color="primary" type="submit" [disabled]="isSubmitting">
-              <mat-icon *ngIf="isSubmitting" class="spin">progress_activity</mat-icon>
+            <button
+              mat-raised-button
+              color="primary"
+              type="submit"
+              [disabled]="isSubmitting"
+            >
+              <mat-icon *ngIf="isSubmitting" class="spin"
+                >progress_activity</mat-icon
+              >
               <mat-icon *ngIf="!isSubmitting">check</mat-icon>
-              {{ isSubmitting ? 'Updating...' : 'Update Doctor' }}
+              {{ isSubmitting ? "Updating..." : "Update Doctor" }}
             </button>
           </div>
         </form>
@@ -135,7 +223,7 @@
         <div class="preview-header">
           <div class="preview-avatar">
             @if (doctorForm.value.photoUrl) {
-              <img [src]="doctorForm.value.photoUrl" alt="preview">
+              <img [src]="doctorForm.value.photoUrl" alt="preview" />
             } @else {
               {{ initials }}
             }
@@ -143,23 +231,34 @@
           <div class="preview-glow"></div>
         </div>
 
-        <h4 class="preview-name">{{ doctorForm.value.name || 'Doctor Name' }}</h4>
+        <h4 class="preview-name">
+          {{ doctorForm.value.name || "Doctor Name" }}
+        </h4>
         <span class="preview-role">Medical Professional</span>
 
-        <div class="preview-badge" [class.empty]="!doctorForm.value.specialization">
+        <div
+          class="preview-badge"
+          [class.empty]="!doctorForm.value.specialization"
+        >
           <mat-icon>local_hospital</mat-icon>
-          {{ doctorForm.value.specialization || 'Specialization' }}
+          {{ doctorForm.value.specialization || "Specialization" }}
         </div>
 
         <div class="preview-stats">
           <div class="stat">
             <mat-icon>work_history</mat-icon>
-            <span>{{ doctorForm.value.experience ? doctorForm.value.experience + ' yrs' : '—' }}</span>
+            <span>{{
+              doctorForm.value.experience
+                ? doctorForm.value.experience + " yrs"
+                : "—"
+            }}</span>
           </div>
           <div class="stat-divider"></div>
           <div class="stat">
             <mat-icon>currency_rupee</mat-icon>
-            <span>{{ doctorForm.value.fee ? '₹' + doctorForm.value.fee : '—' }}</span>
+            <span>{{
+              doctorForm.value.fee ? "₹" + doctorForm.value.fee : "—"
+            }}</span>
           </div>
         </div>
 
@@ -171,9 +270,16 @@
           </div>
         }
 
-        <div class="preview-status" [class.inactive]="doctorForm.value.status !== 'Active'">
+        <div
+          class="preview-status"
+          [class.inactive]="doctorForm.value.status !== 'Active'"
+        >
           <span class="status-dot"></span>
-          {{ doctorForm.value.status === 'Active' ? 'Currently Active' : 'Currently Inactive' }}
+          {{
+            doctorForm.value.status === "Active"
+              ? "Currently Active"
+              : "Currently Inactive"
+          }}
         </div>
       </div>
     </div>

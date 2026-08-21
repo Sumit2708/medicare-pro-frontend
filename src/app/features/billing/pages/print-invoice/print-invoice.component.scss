@@ -1,129 +1,243 @@
-:host {
-  display: block;
+// print-invoice.component.scss
 
-  background: white;
+// Ensures backgrounds/colors actually print — browsers strip them by
+// default to save ink unless the page opts back in explicitly.
+* {
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
 
 .invoice-container {
-  width: 800px;
-
-  margin: auto;
-
-  padding: 40px;
-
-  color: #212121;
-
-  background: white;
-
-  font-family: Arial, Helvetica, sans-serif;
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 0 8px;
+  font-family: var(--font-body);
+  color: var(--color-ink);
 }
 
+// ---------- Letterhead ----------
 .invoice-header {
-  text-align: center;
-  margin-bottom: 22px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-top: 4px solid var(--color-primary);
 }
 
-.invoice-header h1 {
+.clinic-block h1 {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  margin: 8px 0 2px;
+}
+
+.tagline {
+  font-size: 13px;
+  color: var(--color-accent);
+  font-weight: 500;
+  margin: 0 0 6px;
+}
+
+.contact-line {
+  font-size: 12px;
+  color: var(--color-ink-soft);
   margin: 0;
-  font-size: 34px;
 }
 
-.invoice-header p {
-  margin: 6px 0;
-  color: #666;
+.doc-type-badge {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-primary-dark);
+  border: 1.5px solid var(--color-primary);
+  border-radius: 4px;
+  padding: 6px 14px;
+  margin-top: 8px;
+  white-space: nowrap;
 }
 
-.invoice-header h2 {
-  margin-top: 24px;
-  letter-spacing: 4px;
-}
-
+// ---------- Invoice meta ----------
 .invoice-info {
   display: flex;
-
   justify-content: space-between;
-
-  margin: 15px 0;
+  padding: 16px 0;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
 }
 
-.section {
-  margin: 22px 0;
+.info-block {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+
+  &--right { align-items: flex-end; }
 }
 
-.section p {
-  margin: 8px 0;
+.info-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-ink-soft);
 }
 
-table {
+.info-value {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+// ---------- Bill To ----------
+.section { padding: 18px 0; }
+
+.section-label {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-primary-dark);
+  margin-bottom: 10px;
+}
+
+.bill-to-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+
+  > div { display: flex; flex-direction: column; gap: 2px; }
+}
+
+.field-label {
+  font-size: 11px;
+  color: var(--color-ink-soft);
+}
+
+.field-value {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-ink);
+}
+
+// ---------- Line items table ----------
+.invoice-table {
   width: 100%;
-
   border-collapse: collapse;
+  margin-top: 6px;
 
-  margin-top: 24px;
+  th {
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #fff;
+    background: var(--color-primary-dark);
+    padding: 10px 14px;
+    text-align: left;
+
+    &.right { text-align: right; }
+    &:first-child { border-radius: 4px 0 0 4px; }
+    &:last-child { border-radius: 0 4px 4px 0; }
+  }
+
+  td {
+    font-size: 14px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--color-border);
+
+    &.right { text-align: right; }
+  }
+
+  tfoot .total-row td {
+    border-bottom: none;
+    border-top: 2px solid var(--color-primary-dark);
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--color-primary-dark);
+    padding-top: 14px;
+  }
 }
 
-th,
-td {
-  border: 1px solid #ddd;
-
-  padding: 12px;
-}
-
-th {
-  background: #f5f5f5;
-}
-
-.right {
-  text-align: right;
-}
-
-tfoot td {
-  font-size: 18px;
-}
-
+// ---------- Payment ----------
 .payment-section {
   display: flex;
-
   justify-content: space-between;
-
-  margin-top: 32px;
+  padding: 18px 0;
+  margin-top: 8px;
+  border-top: 1px solid var(--color-border);
 }
 
+.status-value {
+  color: var(--color-accent);
+  &.paid { color: var(--color-success); }
+}
+
+// ---------- Footer ----------
 .footer {
-   display: flex;
-
+  display: flex;
+  align-items: flex-end;
   justify-content: space-between;
-
-  margin-top: 80px;
+  margin-top: 48px;
+  padding-top: 18px;
+  border-top: 1px solid var(--color-border);
 }
 
+.thank-you {
+  font-size: 13px;
+  color: var(--color-ink-soft);
+  font-style: italic;
+  margin: 0;
+}
 
+.signature {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
 
+.signature-line {
+  width: 160px;
+  border-top: 1px solid var(--color-ink);
+}
 
-// .signature {
-//   // text-align: right;
+.signature span {
+  font-size: 12px;
+  color: var(--color-ink-soft);
+}
 
-//   // margin-top: 20px;
-// }
+// ---------- Print rules ----------
+@page {
+  size: A4;
+  margin: 16mm 14mm;
+}
 
 @media print {
-  body {
-    margin: 0;
+  // Hide any app chrome that might still be in the DOM (nav, page-header
+  // if it's not already conditionally removed from this route)
+  app-page-header,
+  .no-print {
+    display: none !important;
+  }
 
-    background: white;
+  body {
+    background: #fff;
   }
 
   .invoice-container {
-    width: 100%;
-
-    padding: 0;
-
-    margin: 0;
+    max-width: 100%;
   }
 
-  @page {
-    size: A4;
-
-    margin: 15mm;
+  // Keep line items and totals from splitting across a page break
+  .invoice-table tr,
+  .payment-section,
+  .footer {
+    break-inside: avoid;
   }
 }

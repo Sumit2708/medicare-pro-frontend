@@ -16,6 +16,7 @@ import { DoctorService } from '../../services/doctor.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
 import { NotificationService } from '../../../../core/services/notification/notification.service';
+import { MatChipsModule } from '@angular/material/chips';
 
 @Component({
   selector: 'app-edit-doctor',
@@ -29,6 +30,7 @@ import { NotificationService } from '../../../../core/services/notification/noti
     MatButtonModule,
     MatIconModule,
     PageHeaderComponent,
+    MatChipsModule
   ],
   templateUrl: './edit-doctor.component.html',
   styleUrl: './edit-doctor.component.scss',
