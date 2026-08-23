@@ -1,4 +1,4 @@
-export interface AppointmentSummaryModel {
+export interface  AppointmentSummaryModel {
   totalAppointments: number;
 
   completedAppointments: number;

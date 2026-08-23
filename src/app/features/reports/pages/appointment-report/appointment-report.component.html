@@ -1,11 +1,6 @@
-<app-page-header title="Appointment Report" subtitle="Appointment Analytics">
-</app-page-header>
+<app-page-header title="Appointment Report" subtitle="Bookings, cancellations & no-shows"></app-page-header>
 
-<app-appointment-report-filter
-  [doctors]="doctors"
-  (generate)="generateReport($event)"
->
-</app-appointment-report-filter>
+<app-report-filter (generate)="generateReport($event)"></app-report-filter>
 
 <div #reportContent class="report-content">
   @if (summary) {
@@ -13,118 +8,113 @@
       <app-report-summary-card
         title="Total Appointments"
         [value]="summary.totalAppointments"
-        icon="event"
-        color="#1976D2"
-      >
-      </app-report-summary-card>
+        icon="event_note"
+        color="#0f5e5a"
+      ></app-report-summary-card>
 
       <app-report-summary-card
         title="Completed"
         [value]="summary.completedAppointments"
-        icon="check_circle"
-        color="#2E7D32"
-      >
-      </app-report-summary-card>
-
-      <app-report-summary-card
-        title="Scheduled"
-        [value]="summary.pendingAppointments"
-        icon="schedule"
-        color="#FB8C00"
-      >
-      </app-report-summary-card>
+        icon="event_available"
+        color="#2f9e68"
+      ></app-report-summary-card>
 
       <app-report-summary-card
         title="Cancelled"
         [value]="summary.cancelledAppointments"
-        icon="cancel"
-        color="#D32F2F"
-      >
-      </app-report-summary-card>
+        icon="event_busy"
+        color="#d64545"
+      ></app-report-summary-card>
+
+      <app-report-summary-card
+        title="Pending"
+        [value]="summary.pendingAppointments"
+        icon="person_off"
+        color="#e8a33d"
+      ></app-report-summary-card>
     </div>
   }
 
-  <table mat-table [dataSource]="appointments" class="appointment-table">
-    <!-- Date -->
+  @if (dataSource.filteredData.length > 0) {
+    <div class="table-card">
+      <div class="table-container">
+        <table mat-table [dataSource]="dataSource" matSort class="appointments-report-table">
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+            <td mat-cell *matCellDef="let row; let i = index">
+              <span class="row-id">{{ getRowNumber(i) }}</span>
+            </td>
+          </ng-container>
 
-    <ng-container matColumnDef="date">
-      <th mat-header-cell *matHeaderCellDef>Date</th>
+          <ng-container matColumnDef="patient">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Patient</th>
+            <td mat-cell *matCellDef="let row">
+              <div class="person-chip">
+                <div class="person-avatar patient">{{ getInitials(row.patientName) }}</div>
+                <span>{{ row.patientName }}</span>
+              </div>
+            </td>
+          </ng-container>
 
-      <td mat-cell *matCellDef="let row">
-        {{ row.appointmentDate | date: "dd MMM yyyy" }}
-      </td>
-    </ng-container>
+          <ng-container matColumnDef="doctor">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Doctor</th>
+            <td mat-cell *matCellDef="let row">
+              <div class="person-chip">
+                <div class="person-avatar doctor">{{ getInitials(row.doctorName) }}</div>
+                <span>{{ row.doctorName }}</span>
+              </div>
+            </td>
+          </ng-container>
 
-    <!-- Time -->
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+            <td mat-cell *matCellDef="let row">
+              <span class="date-text">{{ row.date | date: "dd MMM yyyy" }}</span>
+            </td>
+          </ng-container>
 
-    <ng-container matColumnDef="time">
-      <th mat-header-cell *matHeaderCellDef>Time</th>
+          <ng-container matColumnDef="time">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Time</th>
+            <td mat-cell *matCellDef="let row">
+              <span class="time-text">{{ row.time }}</span>
+            </td>
+          </ng-container>
 
-      <td mat-cell *matCellDef="let row">
-        {{ row.appointmentTime }}
-      </td>
-    </ng-container>
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+            <td mat-cell *matCellDef="let row">
+              <span class="status-badge" [ngClass]="row.status.toLowerCase()">
+                <span class="status-dot"></span>
+                {{ row.status }}
+              </span>
+            </td>
+          </ng-container>
 
-    <!-- Patient -->
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+    </div>
 
-    <ng-container matColumnDef="patient">
-      <th mat-header-cell *matHeaderCellDef>Patient</th>
-
-      <td mat-cell *matCellDef="let row">
-        {{ row.patientName }}
-      </td>
-    </ng-container>
-
-    <!-- Doctor -->
-
-    <ng-container matColumnDef="doctor">
-      <th mat-header-cell *matHeaderCellDef>Doctor</th>
-
-      <td mat-cell *matCellDef="let row">
-        {{ row.doctorName }}
-      </td>
-    </ng-container>
-
-    <!-- Specialization -->
-
-    <ng-container matColumnDef="specialization">
-      <th mat-header-cell *matHeaderCellDef>Specialization</th>
-
-      <td mat-cell *matCellDef="let row">
-        {{ row.specialization }}
-      </td>
-    </ng-container>
-
-    <!-- Status -->
-
-    <ng-container matColumnDef="status">
-      <th mat-header-cell *matHeaderCellDef>Status</th>
-
-      <td mat-cell *matCellDef="let row">
-        <span
-          class="status"
-          [class.completed]="row.status === 'COMPLETED'"
-          [class.pending]="row.status === 'PENDING'"
-          [class.cancelled]="row.status === 'CANCELLED'"
-        >
-          {{ row.status }}
-        </span>
-      </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-  </table>
+    <mat-paginator
+    class="mt-3"
+      [length]="dataSource.filteredData.length"
+      [pageSize]="5"
+      [pageSizeOptions]="[5, 10, 20]"
+      showFirstLastButtons
+    ></mat-paginator>
+  } @else {
+    <div class="empty-state">
+      <div class="empty-icon"><mat-icon>event_busy</mat-icon></div>
+      <h3>No appointments found</h3>
+      <p>No appointments match the selected filters.</p>
+    </div>
+  }
 </div>
 
-@if (!appointments.length) {
-  <div class="empty-state">No appointments found.</div>
-}
-
 <app-report-export-actions
+class="mt-3"
   (exportPdf)="exportPdf()"
   (exportExcel)="exportExcel()"
   (print)="printReport()"
->
-</app-report-export-actions>
+></app-report-export-actions>

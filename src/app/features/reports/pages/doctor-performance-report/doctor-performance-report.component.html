@@ -1,87 +1,82 @@
-<app-page-header
-  title="Doctor Performance"
-  subtitle="Revenue & Appointment Analytics"
->
-</app-page-header>
+<app-page-header title="Doctor Performance" subtitle="Revenue & Appointment Analytics"></app-page-header>
 
-<table mat-table [dataSource]="performance">
-  <!-- Doctor -->
+<div #reportContent class="report-content">
+  <div class="summary-grid">
+    <app-report-summary-card
+      title="Doctors"
+      [value]="performance.length"
+      icon="medical_services"
+      color="#0f5e5a"
+    ></app-report-summary-card>
 
-  <ng-container matColumnDef="doctor">
-    <th mat-header-cell *matHeaderCellDef>Doctor</th>
+    <app-report-summary-card
+      title="Appointments"
+      [value]="getTotalAppointments()"
+      icon="event_note"
+      color="#0b4744"
+    ></app-report-summary-card>
 
-    <td mat-cell *matCellDef="let row">
-      {{ row.doctorName }}
-    </td>
-  </ng-container>
+    <app-report-summary-card
+      title="Revenue"
+      [value]="getTotalRevenue() | currency: 'INR'"
+      icon="payments"
+      color="#2f9e68"
+    ></app-report-summary-card>
+  </div>
 
-  <!-- Specialization -->
+  @if (dataSource.filteredData.length > 0) {
+    <div class="table-card">
+      <div class="table-container">
+        <table mat-table [dataSource]="dataSource" matSort class="doctor-performance-table">
+          <ng-container matColumnDef="doctor">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Doctor</th>
+            <td mat-cell *matCellDef="let row">
+              <div class="person-chip">
+                <div class="person-avatar doctor">{{ getInitials(row.doctorName) }}</div>
+                <span>{{ row.doctorName }}</span>
+              </div>
+            </td>
+          </ng-container>
 
-  <ng-container matColumnDef="specialization">
-    <th mat-header-cell *matHeaderCellDef>Specialization</th>
+          <ng-container matColumnDef="specialization">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Specialization</th>
+            <td mat-cell *matCellDef="let row">
+              <span class="spec-text">{{ row.specialization }}</span>
+            </td>
+          </ng-container>
 
-    <td mat-cell *matCellDef="let row">
-      {{ row.specialization }}
-    </td>
-  </ng-container>
+          <ng-container matColumnDef="appointments">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Appointments</th>
+            <td mat-cell *matCellDef="let row">{{ row.appointments }}</td>
+          </ng-container>
 
-  <!-- Appointment -->
+          <ng-container matColumnDef="revenue">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Revenue</th>
+            <td mat-cell *matCellDef="let row">{{ row.revenue | currency: "INR" }}</td>
+          </ng-container>
 
-  <ng-container matColumnDef="appointments">
-    <th mat-header-cell *matHeaderCellDef>Appointments</th>
+          <ng-container matColumnDef="average">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Avg Fee</th>
+            <td mat-cell *matCellDef="let row">{{ row.averageFee | currency: "INR" }}</td>
+          </ng-container>
 
-    <td mat-cell *matCellDef="let row">
-      {{ row.appointments }}
-    </td>
-  </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+    </div>
 
-  <!-- Revenue -->
-
-  <ng-container matColumnDef="revenue">
-    <th mat-header-cell *matHeaderCellDef>Revenue</th>
-
-    <td mat-cell *matCellDef="let row">
-      {{ row.revenue | currency: "INR" }}
-    </td>
-  </ng-container>
-
-  <!-- Avg -->
-
-  <ng-container matColumnDef="average">
-    <th mat-header-cell *matHeaderCellDef>Avg Fee</th>
-
-    <td mat-cell *matCellDef="let row">
-      {{ row.averageFee | currency: "INR" }}
-    </td>
-  </ng-container>
-
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-
-  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-</table>
-
-<div class="summary">
-  <mat-card>
-    <h2>
-      {{ performance.length }}
-    </h2>
-
-    <p>Doctors</p>
-  </mat-card>
-
-  <mat-card>
-    <h2>
-      {{ getTotalAppointments() }}
-    </h2>
-
-    <p>Appointments</p>
-  </mat-card>
-
-  <mat-card>
-    <h2>
-      {{ getTotalRevenue() | currency: "INR" }}
-    </h2>
-
-    <p>Revenue</p>
-  </mat-card>
+    <mat-paginator
+      [length]="dataSource.filteredData.length"
+      [pageSize]="10"
+      [pageSizeOptions]="[5, 10, 20]"
+      showFirstLastButtons
+    ></mat-paginator>
+  } @else {
+    <div class="empty-state">
+      <div class="empty-icon"><mat-icon>medical_services</mat-icon></div>
+      <h3>No performance data</h3>
+      <p>No doctor performance data available yet.</p>
+    </div>
+  }
 </div>

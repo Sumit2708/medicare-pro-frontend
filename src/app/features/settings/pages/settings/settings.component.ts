@@ -49,6 +49,8 @@ type WorkingDayForm = FormGroup<{
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.scss',
 })
+
+
 export class SettingsComponent {
   clinicForm: FormGroup;
   billingForm: FormGroup;
@@ -63,6 +65,17 @@ export class SettingsComponent {
   showCurrentPassword = false;
   showNewPassword = false;
   showConfirmPassword = false;
+
+  // Add near the top of the class:
+sections = [
+  { id: 'clinic', label: 'Clinic Information', description: 'Name, address, contact details', icon: 'storefront' },
+  { id: 'billing', label: 'Billing', description: 'Fees, GST, invoice defaults', icon: 'payments' },
+  { id: 'hours', label: 'Working Hours', description: 'Weekly schedule', icon: 'schedule' },
+  { id: 'profile', label: 'Profile', description: 'Your account details', icon: 'person' },
+  { id: 'security', label: 'Security', description: 'Password & login', icon: 'lock' },
+];
+activeSection = 'clinic';
+  
 
   constructor(
     private fb: FormBuilder,
@@ -125,6 +138,53 @@ export class SettingsComponent {
     this.loadSettings();
     this.loadProfile();
   }
+
+
+
+
+
+
+get activeSectionMeta() {
+  return this.sections.find(s => s.id === this.activeSection)!;
+}
+
+get activeForm(): FormGroup {
+  switch (this.activeSection) {
+    case 'clinic': return this.clinicForm;
+    case 'billing': return this.billingForm;
+    case 'hours': return this.workingHoursForm;
+    case 'profile': return this.profileForm;
+    case 'security': return this.passwordForm;
+    default: return this.clinicForm;
+  }
+}
+
+saveActiveSection(): void {
+  switch (this.activeSection) {
+    case 'clinic': return this.saveClinicInformation();
+    case 'billing': return this.saveBillingSettings();
+    case 'hours': return this.saveWorkingHours();
+    case 'profile': return this.saveProfile();
+    case 'security': return this.changePassword();
+  }
+}
+
+discardChanges(): void {
+  switch (this.activeSection) {
+    case 'clinic': this.clinicForm.patchValue(this.settings.clinic); break;
+    case 'billing': this.billingForm.patchValue(this.settings.billing); break;
+    case 'hours':
+      this.workingHoursForm.setControl(
+        'days',
+        new FormArray(this.settings.workingHours.days.map((day) => this.createWorkingDay(day))),
+      );
+      break;
+    case 'profile': this.loadProfile(); break;
+    case 'security': this.passwordForm.reset(); break;
+  }
+  this.activeForm.markAsPristine();
+}
+
 
   saveClinicInformation(): void {
     if (this.clinicForm.invalid || !this.settings) {

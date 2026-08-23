@@ -3,6 +3,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from "@angular/material/icon";
 import { MatInputModule } from '@angular/material/input';
 import { RouterLink } from '@angular/router';
+import { Location } from '@angular/common';
+
 
 @Component({
   selector: 'app-access-denied',
@@ -12,4 +14,11 @@ import { RouterLink } from '@angular/router';
 })
 export class AccessDeniedComponent {
 
+  constructor(
+    private location: Location
+  ) {}
+
+   goBack(): void {
+    this.location.back();
+  }
 }

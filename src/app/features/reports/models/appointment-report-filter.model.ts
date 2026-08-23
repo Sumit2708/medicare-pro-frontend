@@ -1,9 +1,9 @@
 export interface AppointmentReportFilter {
-  fromDate: string | null;
+  fromDate?: string | null;
 
-  toDate: string | null;
+  toDate?: string | null;
 
-  status: string;
+  status?: string;
 
-  doctorId: number | null;
+  doctorId?: number | null;
 }

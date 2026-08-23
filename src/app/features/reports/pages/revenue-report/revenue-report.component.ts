@@ -1,21 +1,17 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
-
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-
-import { MatTableModule } from '@angular/material/table';
-
+import { MatTableModule, MatTableDataSource } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatButtonModule } from '@angular/material/button';
-
 import { MatDatepickerModule } from '@angular/material/datepicker';
-
 import { MatInputModule } from '@angular/material/input';
-
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+
 import { RevenueReportModel } from '../../models/revenue-report.model';
 import { ReportsService } from '../../service/reports.service';
-import { MatCard } from '@angular/material/card';
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
 import { RevenueSummaryModel } from '../../models/revenue-summary.model';
 import { ReportSummaryCardComponent } from '../../components/report-summary-card/report-summary-card.component';
@@ -31,10 +27,13 @@ import { RevenueReportFilter } from '../../models/report-filter.model';
     ReactiveFormsModule,
     CurrencyPipe,
     MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
     MatButtonModule,
     MatDatepickerModule,
     MatInputModule,
     MatFormFieldModule,
+    MatIconModule,
     PageHeaderComponent,
     ReportSummaryCardComponent,
     ReportExportActionsComponent,
@@ -44,12 +43,9 @@ import { RevenueReportFilter } from '../../models/report-filter.model';
   styleUrl: './revenue-report.component.scss',
 })
 export class RevenueReportComponent {
-  reports: RevenueReportModel[] = [];
   filterForm: FormGroup;
   summary!: RevenueSummaryModel;
-
-  invoices: RevenueReportModel[] = [];
-
+  dataSource = new MatTableDataSource<RevenueReportModel>([]);
   displayedColumns = [
     'invoice',
     'patient',
@@ -59,8 +55,23 @@ export class RevenueReportComponent {
     'amount',
   ];
 
-  @ViewChild('reportContent')
-  reportContent!: ElementRef<HTMLElement>;
+  @ViewChild('reportContent') reportContent!: ElementRef<HTMLElement>;
+
+  private _paginator?: MatPaginator;
+  @ViewChild(MatPaginator) set paginator(mp: MatPaginator) {
+    if (mp) {
+      this._paginator = mp;
+      this.dataSource.paginator = mp;
+    }
+  }
+
+  private _sort?: MatSort;
+  @ViewChild(MatSort) set sort(ms: MatSort) {
+    if (ms) {
+      this._sort = ms;
+      this.dataSource.sort = ms;
+    }
+  }
 
   constructor(
     private reportService: ReportsService,
@@ -69,9 +80,7 @@ export class RevenueReportComponent {
   ) {
     this.filterForm = this.fb.group({
       fromDate: [null],
-
       toDate: [null],
-
       paymentStatus: ['ALL'],
     });
   }
@@ -90,7 +99,8 @@ export class RevenueReportComponent {
     this.reportService.getRevenueReport(filter).subscribe({
       next: (response) => {
         this.summary = response.summary;
-        this.invoices = response.invoices;
+        this.dataSource.data = response.invoices;
+        this._paginator?.firstPage();
       },
     });
   }
@@ -99,11 +109,17 @@ export class RevenueReportComponent {
     this.loadReport(filter);
   }
 
-  exportPdf(): void {
-    if (!this.reportContent) {
-      return;
-    }
+  getInitials(name: string): string {
+    return name
+      .split(' ')
+      .map((n) => n[0])
+      .join('')
+      .slice(0, 2)
+      .toUpperCase();
+  }
 
+  exportPdf(): void {
+    if (!this.reportContent) return;
     this.exportService.exportPdf(
       this.reportContent.nativeElement,
       'Revenue Report',
@@ -111,30 +127,16 @@ export class RevenueReportComponent {
   }
 
   exportExcel(): void {
-    this.exportService.exportExcel(
-      this.invoices,
-
-      'Revenue Report',
-    );
+    this.exportService.exportExcel(this.dataSource.data, 'Revenue Report');
   }
 
   printReport(): void {
     const filter = this.filterForm.getRawValue();
-
     const queryParams = new URLSearchParams();
-
-    if (filter.fromDate) {
-      queryParams.set('fromDate', String(filter.fromDate));
-    }
-
-    if (filter.toDate) {
-      queryParams.set('toDate', String(filter.toDate));
-    }
-
-    if (filter.paymentStatus) {
+    if (filter.fromDate) queryParams.set('fromDate', String(filter.fromDate));
+    if (filter.toDate) queryParams.set('toDate', String(filter.toDate));
+    if (filter.paymentStatus)
       queryParams.set('paymentStatus', filter.paymentStatus);
-    }
-
     window.open(`/reports/revenue/print?${queryParams.toString()}`, '_blank');
   }
 }

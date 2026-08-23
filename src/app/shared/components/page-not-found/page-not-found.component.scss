@@ -1,40 +1,89 @@
 .not-found-container {
-  height: 100vh;
   display: flex;
-  justify-content: center;
   align-items: center;
-  background: #f5f7fa;
+  justify-content: center;
+  min-height: calc(100vh - 80px);
+  padding: 24px;
+  background: var(--color-bg);
 }
 
 .content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
+  max-width: 420px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  padding: 48px 40px;
+  box-shadow: 0 10px 30px rgba(15, 35, 46, 0.08);
 }
 
-.content h1 {
-  font-size: 120px;
-  color: #1976d2;
-  margin: 0;
+.icon-ring {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: var(--color-primary-light);
+  margin-bottom: 20px;
+
+  .error-icon {
+    font-size: 40px;
+    height: 40px;
+    width: 40px;
+    color: var(--color-primary);
+  }
+}
+
+.error-code {
+  font-family: var(--font-display);
+  font-size: 13px;
   font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-primary);
+  background: var(--color-primary-light);
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 16px;
 }
 
-.content h2 {
-  margin: 10px 0;
-  font-size: 32px;
+h2 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--color-ink);
+  margin: 0 0 10px;
 }
 
-.content p {
-  color: #666;
-  margin-bottom: 30px;
+p {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-ink-soft);
+  margin: 0 0 28px;
 }
 
-button {
-  min-width: 180px;
-}
+.actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
 
-.error-icon {
-  font-size: 80px;
-  width: 80px;
-  height: 80px;
-  color: #1976d2;
-  margin-bottom: 15px;
+  button {
+    border-radius: 10px;
+    text-transform: none;
+    font-family: var(--font-body);
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    mat-icon {
+      font-size: 18px;
+      height: 18px;
+      width: 18px;
+    }
+  }
 }

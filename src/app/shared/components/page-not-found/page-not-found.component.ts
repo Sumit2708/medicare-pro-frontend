@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatLabel } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../../core/services/auth/auth.service';
+import { UserRole } from '../../../core/enums/user-role.enum';
 
 @Component({
   selector: 'app-page-not-found',
@@ -10,16 +11,20 @@ import { RouterLink } from '@angular/router';
   templateUrl: './page-not-found.component.html',
   styleUrl: './page-not-found.component.scss',
 })
-export class PageNotFoundComponent {
-  isLoggedIn:boolean = false;
+export class PageNotFoundComponent implements OnInit {
+  isLoggedIn = false;
+  role: any = '';
 
-  constructor() {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+  ) {}
 
-  ngOnInit() {
-    // this.isLoggedIn = !!localStorage.getItem('token');
-    
+  ngOnInit(): void {
     this.isLoggedIn = !!localStorage.getItem('token');
-    console.log(this.isLoggedIn);
-    
+
+    const user = this.authService.getCurrentUser();
+    this.role = user?.role;
+
   }
 }

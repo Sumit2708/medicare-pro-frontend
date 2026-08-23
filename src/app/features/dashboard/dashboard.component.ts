@@ -190,29 +190,29 @@ export class DashboardComponent {
     return alerts;
   }
 
-  getActivityFeed(dashboard: DashboardViewModel): ActivityItem[] {
-    const feed: ActivityItem[] = [];
+  // getActivityFeed(dashboard: DashboardViewModel): ActivityItem[] {
+  //   const feed: ActivityItem[] = [];
 
-    (dashboard.recentAppointments ?? []).slice(0, 4).forEach((a: any) => {
-      feed.push({
-        icon: 'event_available',
-        type: 'appointment',
-        title: `${a.patientName} — appointment with ${a.doctorName}`,
-        meta: `${a.status} · ${a.appointmentTime}`,
-      });
-    });
+  //   (dashboard.recentAppointments ?? []).slice(0, 4).forEach((a: any) => {
+  //     feed.push({
+  //       icon: 'event_available',
+  //       type: 'appointment',
+  //       title: `${a.patientName} — appointment with ${a.doctorName}`,
+  //       meta: `${a.status} · ${a.appointmentTime}`,
+  //     });
+  //   });
 
-    (dashboard.pendingInvoices ?? []).slice(0, 3).forEach((p: any) => {
-      feed.push({
-        icon: 'receipt_long',
-        type: 'payment',
-        title: `Invoice ${p.invoiceNumber} — ${p.patientName}`,
-        meta: `₹${p.amount} · ${p.paymentStatus}`,
-      });
-    });
+  //   (dashboard.pendingInvoices ?? []).slice(0, 3).forEach((p: any) => {
+  //     feed.push({
+  //       icon: 'receipt_long',
+  //       type: 'payment',
+  //       title: `Invoice ${p.invoiceNumber} — ${p.patientName}`,
+  //       meta: `₹${p.amount} · ${p.paymentStatus}`,
+  //     });
+  //   });
 
-    return feed;
-  }
+  //   return feed;
+  // }
 
   goTo(path: string): void {
     this.router.navigate([path]);

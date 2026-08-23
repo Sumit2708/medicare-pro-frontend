@@ -1,129 +1,330 @@
-.settings-section {
-  padding: 28px 4px;
-  max-width: 700px;
-}
+// settings.component.scss
 
-.settings-section h2 {
-  margin: 0;
-  font-size: 22px;
-}
-
-.description {
-  margin: 8px 0 24px;
-  color: #6b7280;
-}
-
-.settings-form {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
-}
-
-.full-width {
-  grid-column: 1 / -1;
-}
-
-.form-actions {
-  grid-column: 1 / -1;
+// ---------- Shell layout ----------
+.settings-shell {
   display: flex;
-  justify-content: flex-end;
-  margin-top: 8px;
+  align-items: flex-start;
+  gap: 32px;
+  padding-bottom: 80px; // clears the floating save bar
 }
 
-.empty-tab {
-  padding: 40px;
-  text-align: center;
-  color: #777;
-}
-
-@media (max-width: 768px) {
-
-  .settings-form {
-    grid-template-columns: 1fr;
-  }
-
-  .full-width,
-  .form-actions {
-    grid-column: auto;
-  }
-
-}
-
-.working-hours {
+// ---------- Nav rail ----------
+.settings-nav {
+  width: 260px;
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
+  gap: 2px;
+  position: sticky;
+  top: 20px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: flex-start;
   gap: 12px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: none;
+  background: transparent;
+  border-left: 3px solid transparent;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover:not(.active) {
+    background: var(--color-bg);
+  }
+
+  &.active {
+    background: var(--color-primary-light);
+    border-left-color: var(--color-primary);
+
+    .nav-icon {
+      background: var(--color-primary);
+      color: #fff;
+    }
+
+    .nav-label { color: var(--color-primary-dark); }
+  }
 }
 
-
-
-.day-name {
-  min-width: 100px;
-}
-
-.working-day {
-  display: grid;
-
-  grid-template-columns:
-    140px
-    100px
-    1fr;
-
+.nav-icon {
+  display: flex;
   align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: var(--color-surface);
+  color: var(--color-ink-soft);
+  flex-shrink: 0;
+  transition: background-color 0.15s ease, color 0.15s ease;
 
-  gap: 16px;
-
-  padding: 16px;
-
-  border: 1px solid #e5e7eb;
-
-  border-radius: 8px;
+  mat-icon { font-size: 18px; width: 18px; height: 18px; }
 }
 
-@media (max-width: 1100px) {
-
-  .working-day {
-    grid-template-columns: 140px 100px 1fr;
-  }
-
-  .time-fields {
-    flex-wrap: wrap;
-  }
-
-  .time-error {
-    white-space: normal;
-  }
-
+.nav-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding-top: 2px;
 }
 
-// .time-fields {
-//   display: flex;
-//   align-items: center;
-//   flex-direction: column;
-//   gap: 12px;
-// }
-
-.time-fields mat-form-field {
-  width: 180px;
-  margin-bottom: -1.25em;
-
+.nav-label {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-ink);
 }
 
-.time-error {
-  white-space: nowrap;
-
+.nav-description {
+  font-family: var(--font-body);
   font-size: 12px;
+  color: var(--color-ink-soft);
+}
 
-  color: #d32f2f;
+// ---------- Content pane ----------
+.settings-content {
+  flex: 1;
+  max-width: 680px;
+}
+
+.breadcrumb {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--color-ink-soft);
+  margin-bottom: 12px;
+}
+
+.section-heading {
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--color-border);
+
+  h2 {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--color-ink);
+    margin: 0 0 4px;
+  }
+
+  .description {
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--color-ink-soft);
+    margin: 0;
+  }
+}
+
+// ---------- Forms ----------
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 20px;
+
+  .full-width { grid-column: 1 / -1; }
+}
+
+.settings-form,
+.security-form {
+  mat-form-field { width: 100%; }
 }
 
 .security-form {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  max-width: 520px;
+  max-width: 420px;
 }
 
-.security-form mat-form-field {
-  width: 100%;
+// ---------- Working hours ----------
+.working-hours {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.working-day {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 14px 18px;
+  transition: background-color 0.15s ease;
+
+  &.closed {
+    background: var(--color-bg);
+
+    .day-badge { background: var(--color-border); color: var(--color-ink-soft); }
+    .day-name { color: var(--color-ink-soft); }
+  }
+}
+
+.day-identity {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 130px;
+  flex-shrink: 0;
+}
+
+.day-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--color-primary-light);
+  color: var(--color-primary-dark);
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.day-name {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--color-ink);
+}
+
+.day-toggle {
+  width: 90px;
+  flex-shrink: 0;
+
+  ::ng-deep .mdc-label {
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--color-ink-soft);
+  }
+}
+
+.time-fields {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+
+  mat-form-field {
+    width: 140px;
+
+    ::ng-deep .mat-mdc-text-field-wrapper { height: 44px; }
+    ::ng-deep .mat-mdc-form-field-infix { min-height: 44px; padding-top: 8px; padding-bottom: 8px; }
+  }
+}
+
+.time-arrow {
+  color: var(--color-ink-soft);
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  margin-bottom: 18px;
+}
+
+.closed-label {
+  flex: 1;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-style: italic;
+  color: var(--color-ink-soft);
+}
+
+.time-error {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--color-danger);
+  flex-shrink: 0;
+
+  mat-icon { font-size: 15px; width: 15px; height: 15px; }
+}
+
+// ---------- Floating save bar ----------
+// Signature element: absent when the form is clean, slides up the moment
+// it isn't. Sticky to the settings pane rather than the viewport, so it
+// doesn't fight any outer app shell for z-index/positioning.
+.save-bar {
+  position: sticky;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  background: var(--color-ink);
+  border-radius: 12px;
+  padding: 14px 20px;
+  box-shadow: 0 8px 24px rgba(15, 35, 46, 0.25);
+  margin-top: 24px;
+  animation: save-bar-in 0.2s ease-out;
+}
+
+@keyframes save-bar-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.save-bar-text {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: #fff;
+
+  mat-icon { font-size: 18px; width: 18px; height: 18px; color: var(--color-accent); }
+}
+
+.save-bar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+
+  button[mat-button] { color: rgba(255, 255, 255, 0.75); }
+}
+
+// ---------- Responsive ----------
+@media (max-width: 900px) {
+  .settings-shell { flex-direction: column; }
+
+  .settings-nav {
+    width: 100%;
+    flex-direction: row;
+    overflow-x: auto;
+    position: static;
+    gap: 8px;
+    padding-bottom: 4px;
+  }
+
+  .nav-item {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    border-left: none;
+    border-bottom: 3px solid transparent;
+    min-width: 96px;
+
+    &.active { border-bottom-color: var(--color-primary); }
+  }
+
+  .nav-description { display: none; }
+
+  .form-grid { grid-template-columns: 1fr; }
+
+  .working-day { flex-wrap: wrap; gap: 12px; }
+  .time-fields { width: 100%; flex-wrap: wrap; }
+
+  .save-bar { flex-direction: column; align-items: stretch; gap: 12px; }
+  .save-bar-actions { justify-content: flex-end; }
 }

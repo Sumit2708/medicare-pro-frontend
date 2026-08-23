@@ -1,11 +1,7 @@
 <mat-card class="chart-card">
-
   <mat-card-header>
-
     <div class="header">
-
       <div class="left">
-
         <mat-icon>
           {{ icon }}
         </mat-icon>
@@ -17,19 +13,15 @@
             <p>{{ subtitle }}</p>
           }
         </div>
-
       </div>
 
       <div class="right">
         <ng-content select="[actions]"></ng-content>
       </div>
-
     </div>
-
   </mat-card-header>
 
   <mat-card-content class="chart-card-content">
     <ng-content></ng-content>
   </mat-card-content>
-
 </mat-card>

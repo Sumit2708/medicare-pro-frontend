@@ -1,20 +1,23 @@
-<!-- make access denied page for unauthorized users. -->
-
-<div class="not-found-container">
+<div class="access-denied-container">
   <div class="content">
-    <mat-icon class="error-icon"> sentiment_dissatisfied </mat-icon>
+    <div class="icon-ring">
+      <mat-icon class="error-icon">block</mat-icon>
+    </div>
+
+    <span class="error-code">403</span>
 
     <h2>Access Denied</h2>
+    <p>You don't have permission to view this page. If you think this is a mistake, contact your administrator.</p>
 
-    <p>You don't have permission to access this page.</p>
-
-      <button
-        mat-raised-button
-        color="primary"
-        routerLink="/dashboard"
-      >
-      Go To Dashboard
+    <div class="actions">
+      <button mat-raised-button color="primary" routerLink="/doctor-dashboard">
+        <mat-icon>dashboard</mat-icon>
+        Go To Dashboard
       </button>
-
+      <button mat-stroked-button (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+        Go Back
+      </button>
+    </div>
   </div>
 </div>

@@ -1,473 +1,297 @@
+<!-- settings.component.html -->
 <app-page-header
   title="Settings"
-  subtitle="Manage your clinic and application settings"
->
+  subtitle="Manage your clinic and application settings">
 </app-page-header>
 
-<mat-tab-group>
-  <!-- Clinic -->
+<div class="settings-shell">
+  <!-- Nav rail -->
+  <nav class="settings-nav">
+    @for (section of sections; track section.id) {
+      <button
+        type="button"
+        class="nav-item"
+        [class.active]="activeSection === section.id"
+        (click)="activeSection = section.id">
+        <div class="nav-icon"><mat-icon>{{ section.icon }}</mat-icon></div>
+        <div class="nav-text">
+          <span class="nav-label">{{ section.label }}</span>
+          <span class="nav-description">{{ section.description }}</span>
+        </div>
+      </button>
+    }
+  </nav>
 
-  <mat-tab label="Clinic Information">
-    <div class="settings-section">
-      <h2>Clinic Information</h2>
+  <!-- Content -->
+  <div class="settings-content">
+    <span class="breadcrumb">Settings / {{ activeSectionMeta.label }}</span>
 
-      <p class="description">
-        Update your clinic information used throughout the application.
-      </p>
+    <!-- Clinic Information -->
+    @if (activeSection === 'clinic') {
+      <div class="section-heading">
+        <h2>Clinic Information</h2>
+        <p class="description">Update your clinic information used throughout the application.</p>
+      </div>
 
-      <form
-        [formGroup]="clinicForm"
-        (ngSubmit)="saveClinicInformation()"
-        class="settings-form"
-      >
-        <!-- Clinic Name -->
+      <form [formGroup]="clinicForm" (ngSubmit)="saveClinicInformation()" class="settings-form">
+        <div class="form-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>Clinic Name</mat-label>
+            <input matInput formControlName="clinicName" />
+            @if (clinicForm.controls['clinicName'].touched && clinicForm.controls['clinicName'].hasError('required')) {
+              <mat-error>Clinic name is required</mat-error>
+            }
+          </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <mat-label> Clinic Name </mat-label>
+          <mat-form-field appearance="outline">
+            <mat-label>Phone</mat-label>
+            <input matInput type="tel" maxlength="10" formControlName="phone" />
+            @if (clinicForm.controls['phone'].touched && clinicForm.controls['phone'].hasError('required')) {
+              <mat-error>Phone number is required</mat-error>
+            }
+            @if (clinicForm.controls['phone'].touched && clinicForm.controls['phone'].hasError('pattern')) {
+              <mat-error>Enter a valid 10-digit phone number</mat-error>
+            }
+          </mat-form-field>
 
-          <input matInput formControlName="clinicName" />
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" formControlName="email" />
+            @if (clinicForm.controls['email'].touched && clinicForm.controls['email'].hasError('required')) {
+              <mat-error>Email is required</mat-error>
+            }
+            @if (clinicForm.controls['email'].touched && clinicForm.controls['email'].hasError('email')) {
+              <mat-error>Enter a valid email</mat-error>
+            }
+          </mat-form-field>
 
-          @if (
-            clinicForm.controls["clinicName"].touched &&
-            clinicForm.controls["clinicName"].hasError("required")
-          ) {
-            <mat-error> Clinic name is required </mat-error>
-          }
-        </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>GST Number</mat-label>
+            <input matInput formControlName="gstNumber" />
+          </mat-form-field>
 
-        <!-- Address -->
-
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label> Address </mat-label>
-
-          <textarea matInput rows="3" formControlName="address"> </textarea>
-
-          @if (
-            clinicForm.controls["address"].touched &&
-            clinicForm.controls["address"].hasError("required")
-          ) {
-            <mat-error> Address is required </mat-error>
-          }
-        </mat-form-field>
-
-        <!-- Phone -->
-
-        <mat-form-field appearance="outline">
-          <mat-label> Phone </mat-label>
-
-          <input matInput type="tel" maxlength="10" formControlName="phone" />
-
-          @if (
-            clinicForm.controls["phone"].touched &&
-            clinicForm.controls["phone"].hasError("required")
-          ) {
-            <mat-error> Phone number is required </mat-error>
-          }
-
-          @if (
-            clinicForm.controls["phone"].touched &&
-            clinicForm.controls["phone"].hasError("pattern")
-          ) {
-            <mat-error> Enter a valid 10-digit phone number </mat-error>
-          }
-        </mat-form-field>
-
-        <!-- Email -->
-
-        <mat-form-field appearance="outline">
-          <mat-label> Email </mat-label>
-
-          <input matInput type="email" formControlName="email" />
-
-          @if (
-            clinicForm.controls["email"].touched &&
-            clinicForm.controls["email"].hasError("required")
-          ) {
-            <mat-error> Email is required </mat-error>
-          }
-
-          @if (
-            clinicForm.controls["email"].touched &&
-            clinicForm.controls["email"].hasError("email")
-          ) {
-            <mat-error> Enter a valid email </mat-error>
-          }
-        </mat-form-field>
-
-        <!-- GST -->
-
-        <mat-form-field appearance="outline">
-          <mat-label> GST Number </mat-label>
-
-          <input matInput formControlName="gstNumber" />
-        </mat-form-field>
-
-        <div class="form-actions">
-          <button mat-flat-button color="primary" type="submit">
-            Save Changes
-          </button>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Address</mat-label>
+            <textarea matInput rows="3" formControlName="address"></textarea>
+            @if (clinicForm.controls['address'].touched && clinicForm.controls['address'].hasError('required')) {
+              <mat-error>Address is required</mat-error>
+            }
+          </mat-form-field>
         </div>
       </form>
-    </div>
-  </mat-tab>
+    }
 
-  <!-- Placeholders -->
+    <!-- Billing -->
+    @if (activeSection === 'billing') {
+      <div class="section-heading">
+        <h2>Billing Settings</h2>
+        <p class="description">Configure billing and invoice defaults.</p>
+      </div>
 
-  <mat-tab label="Billing">
-    <div class="settings-section">
-      <h2>Billing Settings</h2>
+      <form [formGroup]="billingForm" (ngSubmit)="saveBillingSettings()" class="settings-form">
+        <div class="form-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>Default Consultation Fee</mat-label>
+            <span matTextPrefix>₹&nbsp;</span>
+            <input matInput type="number" formControlName="consultationFee" />
+            @if (billingForm.controls['consultationFee'].touched && billingForm.controls['consultationFee'].hasError('required')) {
+              <mat-error>Consultation fee is required</mat-error>
+            }
+            @if (billingForm.controls['consultationFee'].touched && billingForm.controls['consultationFee'].hasError('min')) {
+              <mat-error>Fee cannot be negative</mat-error>
+            }
+          </mat-form-field>
 
-      <p class="description">Configure billing and invoice defaults.</p>
+          <mat-form-field appearance="outline">
+            <mat-label>GST Percentage</mat-label>
+            <input matInput type="number" formControlName="gstPercentage" />
+            <span matTextSuffix>%</span>
+            @if (billingForm.controls['gstPercentage'].touched && billingForm.controls['gstPercentage'].hasError('required')) {
+              <mat-error>GST percentage is required</mat-error>
+            }
+            @if (billingForm.controls['gstPercentage'].touched && (billingForm.controls['gstPercentage'].hasError('min') || billingForm.controls['gstPercentage'].hasError('max'))) {
+              <mat-error>GST must be between 0 and 100</mat-error>
+            }
+          </mat-form-field>
 
-      <form
-        [formGroup]="billingForm"
-        (ngSubmit)="saveBillingSettings()"
-        class="settings-form"
-      >
-        <!-- Consultation Fee -->
+          <mat-form-field appearance="outline">
+            <mat-label>Currency</mat-label>
+            <mat-select formControlName="currency">
+              <mat-option value="INR">INR - Indian Rupee</mat-option>
+              <mat-option value="USD">USD - US Dollar</mat-option>
+              <mat-option value="EUR">EUR - Euro</mat-option>
+            </mat-select>
+            @if (billingForm.controls['currency'].touched && billingForm.controls['currency'].hasError('required')) {
+              <mat-error>Currency is required</mat-error>
+            }
+          </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <mat-label> Default Consultation Fee </mat-label>
-
-          <input matInput type="number" formControlName="consultationFee" />
-
-          <span matTextPrefix>₹&nbsp;</span>
-
-          @if (
-            billingForm.controls["consultationFee"].touched &&
-            billingForm.controls["consultationFee"].hasError("required")
-          ) {
-            <mat-error> Consultation fee is required </mat-error>
-          }
-
-          @if (
-            billingForm.controls["consultationFee"].touched &&
-            billingForm.controls["consultationFee"].hasError("min")
-          ) {
-            <mat-error> Fee cannot be negative </mat-error>
-          }
-        </mat-form-field>
-
-        <!-- GST -->
-
-        <mat-form-field appearance="outline">
-          <mat-label> GST Percentage </mat-label>
-
-          <input matInput type="number" formControlName="gstPercentage" />
-
-          <span matTextSuffix>%</span>
-
-          @if (
-            billingForm.controls["gstPercentage"].touched &&
-            billingForm.controls["gstPercentage"].hasError("required")
-          ) {
-            <mat-error> GST percentage is required </mat-error>
-          }
-
-          @if (
-            billingForm.controls["gstPercentage"].touched &&
-            (billingForm.controls["gstPercentage"].hasError("min") ||
-              billingForm.controls["gstPercentage"].hasError("max"))
-          ) {
-            <mat-error> GST must be between 0 and 100 </mat-error>
-          }
-        </mat-form-field>
-
-        <!-- Currency -->
-
-        <mat-form-field appearance="outline">
-          <mat-label> Currency </mat-label>
-
-          <mat-select formControlName="currency">
-            <mat-option value="INR"> INR - Indian Rupee </mat-option>
-
-            <mat-option value="USD"> USD - US Dollar </mat-option>
-
-            <mat-option value="EUR"> EUR - Euro </mat-option>
-          </mat-select>
-
-          @if (
-            billingForm.controls["currency"].touched &&
-            billingForm.controls["currency"].hasError("required")
-          ) {
-            <mat-error> Currency is required </mat-error>
-          }
-        </mat-form-field>
-
-        <!-- Invoice Prefix -->
-
-        <mat-form-field appearance="outline">
-          <mat-label> Invoice Prefix </mat-label>
-
-          <input matInput formControlName="invoicePrefix" maxlength="10" />
-
-          @if (
-            billingForm.controls["invoicePrefix"].touched &&
-            billingForm.controls["invoicePrefix"].hasError("required")
-          ) {
-            <mat-error> Invoice prefix is required </mat-error>
-          }
-
-          @if (
-            billingForm.controls["invoicePrefix"].touched &&
-            billingForm.controls["invoicePrefix"].hasError("maxlength")
-          ) {
-            <mat-error> Maximum 10 characters allowed </mat-error>
-          }
-        </mat-form-field>
-
-        <div class="form-actions">
-          <button mat-flat-button color="primary" type="submit">
-            Save Changes
-          </button>
+          <mat-form-field appearance="outline">
+            <mat-label>Invoice Prefix</mat-label>
+            <input matInput formControlName="invoicePrefix" maxlength="10" />
+            @if (billingForm.controls['invoicePrefix'].touched && billingForm.controls['invoicePrefix'].hasError('required')) {
+              <mat-error>Invoice prefix is required</mat-error>
+            }
+            @if (billingForm.controls['invoicePrefix'].touched && billingForm.controls['invoicePrefix'].hasError('maxlength')) {
+              <mat-error>Maximum 10 characters allowed</mat-error>
+            }
+          </mat-form-field>
         </div>
       </form>
-    </div>
-  </mat-tab>
+    }
 
-  <mat-tab label="Working Hours">
-    <div class="settings-section">
-      <h2>Working Hours</h2>
-
-      <p class="description">Configure the clinic's weekly working schedule.</p>
+    <!-- Working Hours -->
+    @if (activeSection === 'hours') {
+      <div class="section-heading">
+        <h2>Working Hours</h2>
+        <p class="description">Configure the clinic's weekly working schedule.</p>
+      </div>
 
       <form [formGroup]="workingHoursForm" (ngSubmit)="saveWorkingHours()">
-        <div>
-          <div formArrayName="days" class="working-hours">
-            @for (day of workingDays.controls; track $index; let i = $index) {
-              <div class="working-day" [formGroupName]="i">
-                <div class="day-name">
-                  <strong>
-                    {{ day.get("day")?.value }}
-                  </strong>
-                </div>
+        <div formArrayName="days" class="working-hours">
+          @for (day of workingDays.controls; track $index; let i = $index) {
+            <div class="working-day" [formGroupName]="i" [class.closed]="!day.get('enabled')?.value">
+              <div class="day-identity">
+                <div class="day-badge">{{ day.get('day')?.value?.slice(0, 2) }}</div>
+                <strong class="day-name">{{ day.get('day')?.value }}</strong>
+              </div>
 
-                <mat-slide-toggle formControlName="enabled">
-                  Open
-                </mat-slide-toggle>
+              <mat-slide-toggle formControlName="enabled" class="day-toggle">
+                {{ day.get('enabled')?.value ? 'Open' : 'Closed' }}
+              </mat-slide-toggle>
 
+              @if (day.get('enabled')?.value) {
                 <div class="time-fields">
                   <mat-form-field appearance="outline">
-                    <mat-label> Opening Time </mat-label>
-
+                    <mat-label>Opening Time</mat-label>
                     <input matInput type="time" formControlName="startTime" />
                   </mat-form-field>
 
-                  <mat-form-field appearance="outline" class="ms-3">
-                    <mat-label> Closing Time </mat-label>
+                  <mat-icon class="time-arrow">arrow_forward</mat-icon>
 
+                  <mat-form-field appearance="outline">
+                    <mat-label>Closing Time</mat-label>
                     <input matInput type="time" formControlName="endTime" />
                   </mat-form-field>
-                  @if (hasWorkingTimeError(i)) {
-                    <span class="time-error">
-                      Opening time must be before closing time
-                    </span>
-                  }
                 </div>
-              </div>
+
+                @if (hasWorkingTimeError(i)) {
+                  <span class="time-error">
+                    <mat-icon>error_outline</mat-icon>
+                    Opening before closing
+                  </span>
+                }
+              } @else {
+                <span class="closed-label">Not seeing patients today</span>
+              }
+            </div>
+          }
+        </div>
+      </form>
+    }
+
+    <!-- Profile -->
+    @if (activeSection === 'profile') {
+      <div class="section-heading">
+        <h2>Profile</h2>
+        <p class="description">Manage your personal account information.</p>
+      </div>
+
+      <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="settings-form">
+        <div class="form-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>Full Name</mat-label>
+            <input matInput formControlName="name" />
+            @if (profileForm.controls['name'].touched && profileForm.controls['name'].hasError('required')) {
+              <mat-error>Name is required</mat-error>
             }
-          </div>
-        </div>
-        <div class="form-actions">
-          <button mat-flat-button color="primary" type="submit">
-            Save Changes
-          </button>
-        </div>
-      </form>
-    </div>
-  </mat-tab>
+            @if (profileForm.controls['name'].touched && profileForm.controls['name'].hasError('minlength')) {
+              <mat-error>Name must contain at least 2 characters</mat-error>
+            }
+          </mat-form-field>
 
-  <mat-tab label="Profile">
-    <div class="settings-section">
-      <h2>Profile</h2>
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" formControlName="email" />
+            <mat-hint>Email cannot be changed here</mat-hint>
+          </mat-form-field>
 
-      <p class="description">Manage your personal account information.</p>
-
-      <form
-        [formGroup]="profileForm"
-        (ngSubmit)="saveProfile()"
-        class="settings-form"
-      >
-        <!-- Name -->
-
-        <mat-form-field appearance="outline">
-          <mat-label> Full Name </mat-label>
-
-          <input matInput formControlName="name" />
-
-          @if (
-            profileForm.controls["name"].touched &&
-            profileForm.controls["name"].hasError("required")
-          ) {
-            <mat-error> Name is required </mat-error>
-          }
-
-          @if (
-            profileForm.controls["name"].touched &&
-            profileForm.controls["name"].hasError("minlength")
-          ) {
-            <mat-error> Name must contain at least 2 characters </mat-error>
-          }
-        </mat-form-field>
-
-        <!-- Email -->
-
-        <mat-form-field appearance="outline">
-          <mat-label> Email </mat-label>
-
-          <input matInput type="email" formControlName="email" />
-
-          <mat-hint> Email cannot be changed here </mat-hint>
-        </mat-form-field>
-
-        <!-- Role -->
-
-        <mat-form-field appearance="outline">
-          <mat-label> Role </mat-label>
-
-          <input matInput formControlName="role" />
-
-          <mat-hint> Role is managed by an administrator </mat-hint>
-        </mat-form-field>
-
-        <div class="form-actions">
-          <button mat-flat-button color="primary" type="submit">
-            Save Changes
-          </button>
+          <mat-form-field appearance="outline">
+            <mat-label>Role</mat-label>
+            <input matInput formControlName="role" />
+            <mat-hint>Role is managed by an administrator</mat-hint>
+          </mat-form-field>
         </div>
       </form>
-    </div>
-  </mat-tab>
+    }
 
-  <mat-tab label="Security">
-    <div class="settings-section">
-      <h2>Security</h2>
+    <!-- Security -->
+    @if (activeSection === 'security') {
+      <div class="section-heading">
+        <h2>Security</h2>
+        <p class="description">Change your account password.</p>
+      </div>
 
-      <p class="description">Change your account password.</p>
-
-      <form
-        [formGroup]="passwordForm"
-        (ngSubmit)="changePassword()"
-        class="security-form"
-      >
-        <!-- Current Password -->
-
+      <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" class="security-form">
         <mat-form-field appearance="outline">
-          <mat-label> Current Password </mat-label>
-
-          <input
-            matInput
-            [type]="showCurrentPassword ? 'text' : 'password'"
-            formControlName="currentPassword"
-          />
-
-          <button
-            mat-icon-button
-            matSuffix
-            type="button"
-            (click)="showCurrentPassword = !showCurrentPassword"
-            [attr.aria-label]="
-              showCurrentPassword ? 'Hide password' : 'Show password'
-            "
-          >
-            <mat-icon>
-              {{ showCurrentPassword ? "visibility_off" : "visibility" }}
-            </mat-icon>
+          <mat-label>Current Password</mat-label>
+          <input matInput [type]="showCurrentPassword ? 'text' : 'password'" formControlName="currentPassword" />
+          <button mat-icon-button matSuffix type="button" (click)="showCurrentPassword = !showCurrentPassword"
+            [attr.aria-label]="showCurrentPassword ? 'Hide password' : 'Show password'">
+            <mat-icon>{{ showCurrentPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
-
-          @if (
-            passwordForm.controls["currentPassword"].touched &&
-            passwordForm.controls["currentPassword"].hasError("required")
-          ) {
-            <mat-error> Current password is required </mat-error>
+          @if (passwordForm.controls['currentPassword'].touched && passwordForm.controls['currentPassword'].hasError('required')) {
+            <mat-error>Current password is required</mat-error>
           }
-
-          @if (
-            passwordForm.controls["currentPassword"].hasError(
-              "incorrectPassword"
-            )
-          ) {
-            <mat-error> Current password is incorrect </mat-error>
+          @if (passwordForm.controls['currentPassword'].hasError('incorrectPassword')) {
+            <mat-error>Current password is incorrect</mat-error>
           }
         </mat-form-field>
 
-        <!-- New Password -->
-
         <mat-form-field appearance="outline">
-          <mat-label> New Password </mat-label>
-
-          <input
-            matInput
-            [type]="showNewPassword ? 'text' : 'password'"
-            formControlName="newPassword"
-          />
-
-          <button
-            mat-icon-button
-            matSuffix
-            type="button"
-            (click)="showNewPassword = !showNewPassword"
-          >
-            <mat-icon>
-              {{ showNewPassword ? "visibility_off" : "visibility" }}
-            </mat-icon>
+          <mat-label>New Password</mat-label>
+          <input matInput [type]="showNewPassword ? 'text' : 'password'" formControlName="newPassword" />
+          <button mat-icon-button matSuffix type="button" (click)="showNewPassword = !showNewPassword">
+            <mat-icon>{{ showNewPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
-
-          @if (
-            passwordForm.controls["newPassword"].touched &&
-            passwordForm.controls["newPassword"].hasError("required")
-          ) {
-            <mat-error> New password is required </mat-error>
+          @if (passwordForm.controls['newPassword'].touched && passwordForm.controls['newPassword'].hasError('required')) {
+            <mat-error>New password is required</mat-error>
           }
-
-          @if (
-            passwordForm.controls["newPassword"].touched &&
-            passwordForm.controls["newPassword"].hasError("minlength")
-          ) {
-            <mat-error> Password must contain at least 8 characters </mat-error>
+          @if (passwordForm.controls['newPassword'].touched && passwordForm.controls['newPassword'].hasError('minlength')) {
+            <mat-error>Password must contain at least 8 characters</mat-error>
           }
         </mat-form-field>
 
-        <!-- Confirm Password -->
-
         <mat-form-field appearance="outline">
-          <mat-label> Confirm Password </mat-label>
-
-          <input
-            matInput
-            [type]="showConfirmPassword ? 'text' : 'password'"
-            formControlName="confirmPassword"
-          />
-
-          <button
-            mat-icon-button
-            matSuffix
-            type="button"
-            (click)="showConfirmPassword = !showConfirmPassword"
-          >
-            <mat-icon>
-              {{ showConfirmPassword ? "visibility_off" : "visibility" }}
-            </mat-icon>
+          <mat-label>Confirm Password</mat-label>
+          <input matInput [type]="showConfirmPassword ? 'text' : 'password'" formControlName="confirmPassword" />
+          <button mat-icon-button matSuffix type="button" (click)="showConfirmPassword = !showConfirmPassword">
+            <mat-icon>{{ showConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
-
-          @if (
-            passwordForm.controls["confirmPassword"].touched &&
-            passwordForm.controls["confirmPassword"].hasError("required")
-          ) {
-            <mat-error> Confirm password is required </mat-error>
+          @if (passwordForm.controls['confirmPassword'].touched && passwordForm.controls['confirmPassword'].hasError('required')) {
+            <mat-error>Confirm password is required</mat-error>
           }
-
           @if (hasPasswordMismatch()) {
-            <mat-error> Passwords do not match </mat-error>
+            <mat-error>Passwords do not match</mat-error>
           }
         </mat-form-field>
-
-        <div class="form-actions">
-          <button mat-flat-button color="primary" type="submit">
-            Change Password
-          </button>
-        </div>
       </form>
+    }
+  </div>
+</div>
+
+<!-- Floating save bar — only visible when the active form is dirty -->
+@if (activeForm.dirty) {
+  <div class="save-bar">
+    <div class="save-bar-text">
+      <mat-icon>edit_note</mat-icon>
+      <span>You have unsaved changes in {{ activeSectionMeta.label }}</span>
     </div>
-  </mat-tab>
-</mat-tab-group>
+    <div class="save-bar-actions">
+      <button mat-button type="button" (click)="discardChanges()">Discard</button>
+      <button mat-flat-button color="primary" type="button" (click)="saveActiveSection()">
+        {{ activeSection === 'security' ? 'Change Password' : 'Save Changes' }}
+      </button>
+    </div>
+  </div>
+}

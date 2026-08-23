@@ -1,68 +1,62 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
-
-import { MatTableModule } from '@angular/material/table';
-import { MatCardModule } from '@angular/material/card';
-
-import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
-import { ReportSummaryCardComponent } from '../../components/report-summary-card/report-summary-card.component';
-import { ReportExportActionsComponent } from '../../components/report-export-actions/report-export-actions.component';
+import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
+import { MatTableModule, MatTableDataSource } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatIconModule } from '@angular/material/icon';
 
 import { AppointmentReportModel } from '../../models/appointment-report.model';
 import { AppointmentSummaryModel } from '../../models/appointment-summary.model';
 import { ReportsService } from '../../service/reports.service';
-import { DoctorService } from '../../../doctors/services/doctor.service';
-import { Doctor } from '../../../../shared/models/doctor.model';
-import { AppointmentReportFilterComponent } from '../../components/appointment-report-filter/appointment-report-filter.component';
-import { AppointmentReportFilter } from '../../models/appointment-report-filter.model';
+import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
+import { ReportSummaryCardComponent } from '../../components/report-summary-card/report-summary-card.component';
+import { ReportExportActionsComponent } from '../../components/report-export-actions/report-export-actions.component';
+import { ReportFilterComponent } from '../../components/report-filter/report-filter.component';
 import { ExportService } from '../../../../core/services/export/export.service';
+import { AppointmentReportFilter } from '../../models/appointment-report-filter.model';
 
 @Component({
   selector: 'app-appointment-report',
-  standalone: true,
   imports: [
     CommonModule,
-    CurrencyPipe,
     DatePipe,
     MatTableModule,
-    MatCardModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatIconModule,
     PageHeaderComponent,
     ReportSummaryCardComponent,
     ReportExportActionsComponent,
-    AppointmentReportFilterComponent,
+    ReportFilterComponent,
   ],
   templateUrl: './appointment-report.component.html',
   styleUrl: './appointment-report.component.scss',
 })
-export class AppointmentReportComponent implements OnInit {
-  appointments: AppointmentReportModel[] = [];
-
+export class AppointmentReportComponent {
   summary!: AppointmentSummaryModel;
+  dataSource = new MatTableDataSource<AppointmentReportModel>([]);
+  displayedColumns = ['id', 'patient', 'doctor', 'date', 'time', 'status'];
 
-  @ViewChild('reportContent')
-  reportContent!: ElementRef<HTMLElement>;
+  @ViewChild('reportContent') reportContent!: ElementRef<HTMLElement>;
 
-  displayedColumns: string[] = [
-    'date',
-    'time',
-    'patient',
-    'doctor',
-    'specialization',
-    'status',
-  ];
+  private _paginator?: MatPaginator;
+  @ViewChild(MatPaginator) set paginator(mp: MatPaginator) {
+    if (mp) {
+      this._paginator = mp;
+      this.dataSource.paginator = mp;
+    }
+  }
 
-  doctors: Doctor[] = [];
-
-  currentFilter: AppointmentReportFilter = {
-    fromDate: null,
-    toDate: null,
-    doctorId: null,
-    status: 'ALL',
-  };
+  private _sort?: MatSort;
+  @ViewChild(MatSort) set sort(ms: MatSort) {
+    if (ms) {
+      this._sort = ms;
+      this.dataSource.sort = ms;
+    }
+  }
 
   constructor(
-    private reportsService: ReportsService,
-    private doctorService: DoctorService,
+    private reportService: ReportsService,
     private exportService: ExportService,
   ) {}
 
@@ -70,84 +64,43 @@ export class AppointmentReportComponent implements OnInit {
     this.loadReport();
   }
 
-  loadReport(filter?: AppointmentReportFilter): void {
-    this.reportsService.getAppointmentReport(filter).subscribe({
+  loadReport(
+    filter: AppointmentReportFilter = { fromDate: null, toDate: null, status: 'ALL' },
+  ): void {
+    this.reportService.getAppointmentReport(filter).subscribe({
       next: (response) => {
-        console.log('Appointment report loaded successfully', response);
-        this.appointments = response.appointments;
-
         this.summary = response.summary;
-
-        this.loadDoctors();
-      },
-
-      error: (error) => {
-        console.error('Unable to load appointment report', error);
-      },
-    });
-  }
-
-  private loadDoctors(): void {
-    this.doctorService.getDoctors().subscribe({
-      next: (doctors) => {
-        this.doctors = doctors;
-      },
-
-      error: (error) => {
-        console.error('Unable to load doctors', error);
+        this.dataSource.data = response.appointments;
+        // paginator is guaranteed set by now via the setter above,
+        // since the @if condition becomes true right as this assigns
+        this._paginator?.firstPage();
       },
     });
   }
 
   generateReport(filter: AppointmentReportFilter): void {
-    this.currentFilter = filter;
-
     this.loadReport(filter);
   }
 
-  exportPdf(): void {
-    if (!this.reportContent) {
-      return;
-    }
+  getRowNumber(index: number): number {
+    if (!this._paginator) return index + 1;
+    return this._paginator.pageIndex * this._paginator.pageSize + index + 1;
+  }
 
-    this.exportService.exportPdf(
-      this.reportContent.nativeElement,
-      'Appointment Report',
-    );
+  getInitials(name: string): string {
+    return name.split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase();
+  }
+
+  exportPdf(): void {
+    if (!this.reportContent) return;
+    this.exportService.exportPdf(this.reportContent.nativeElement, 'Appointment Report');
   }
 
   exportExcel(): void {
-    const data = this.appointments.map((appointment) => ({
-      Date: appointment.appointmentDate,
-      Time: appointment.appointmentTime,
-      Patient: appointment.patientName,
-      Doctor: appointment.doctorName,
-      Specialization: appointment.specialization,
-      Status: appointment.status,
-    }));
-
-    this.exportService.exportExcel(data, 'Appointment Report');
+    this.exportService.exportExcel(this.dataSource.data, 'Appointment Report');
   }
 
   printReport(): void {
-    const params = new URLSearchParams();
-
-    if (this.currentFilter.fromDate) {
-      params.set('fromDate', this.currentFilter.fromDate);
-    }
-
-    if (this.currentFilter.toDate) {
-      params.set('toDate', this.currentFilter.toDate);
-    }
-
-    if (this.currentFilter.doctorId !== null) {
-      params.set('doctorId', String(this.currentFilter.doctorId));
-    }
-
-    params.set('status', this.currentFilter.status);
-
-    
-
-    window.open(`/reports/appointments/print?${params.toString()}`, '_blank');
+    window.open(`/reports/appointments/print`, '_blank');
   }
 }

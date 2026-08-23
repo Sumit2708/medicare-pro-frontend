@@ -1,119 +1,89 @@
-<app-page-header title="Revenue Report" subtitle="Revenue Analytics">
-</app-page-header>
+<app-page-header title="Revenue Report" subtitle="Revenue Analytics"></app-page-header>
 
-<app-report-filter (generate)="generateReport($event)"> </app-report-filter>
+<app-report-filter (generate)="generateReport($event)"></app-report-filter>
 
 <div #reportContent class="report-content">
   @if (summary) {
     <div class="summary-grid">
-      <app-report-summary-card
-        title="Total Revenue"
-        [value]="summary.totalRevenue | currency: 'INR'"
-        icon="payments"
-        color="#2E7D32"
-      >
-      </app-report-summary-card>
-
-      <app-report-summary-card
-        title="Invoices"
-        [value]="summary.totalInvoices"
-        icon="receipt_long"
-        color="#1976D2"
-      >
-      </app-report-summary-card>
-
-      <app-report-summary-card
-        title="Average Invoice"
-        [value]="summary.averageInvoice | currency: 'INR'"
-        icon="analytics"
-        color="#FB8C00"
-      >
-      </app-report-summary-card>
-
-      <app-report-summary-card
-        title="GST"
-        [value]="summary.totalGST | currency: 'INR'"
-        icon="account_balance"
-        color="#8E24AA"
-      >
-      </app-report-summary-card>
+      <app-report-summary-card title="Total Revenue" [value]="summary.totalRevenue | currency: 'INR'" icon="payments" color="#2f9e68"></app-report-summary-card>
+      <app-report-summary-card title="Invoices" [value]="summary.totalInvoices" icon="receipt_long" color="#0f5e5a"></app-report-summary-card>
+      <app-report-summary-card title="Average Invoice" [value]="summary.averageInvoice | currency: 'INR'" icon="analytics" color="#e8a33d"></app-report-summary-card>
+      <app-report-summary-card title="GST" [value]="summary.totalGST | currency: 'INR'" icon="account_balance" color="#0b4744"></app-report-summary-card>
     </div>
   }
 
-  <table mat-table [dataSource]="invoices" class="revenue-table">
-    <!-- Invoice -->
+  @if (dataSource.filteredData.length > 0) {
+    <div class="table-card">
+      <div class="table-container">
+        <table mat-table [dataSource]="dataSource" matSort class="revenue-table">
+          <ng-container matColumnDef="invoice">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Invoice</th>
+            <td mat-cell *matCellDef="let row"><span class="row-id">{{ row.invoiceNumber }}</span></td>
+          </ng-container>
 
-    <ng-container matColumnDef="invoice">
-      <th mat-header-cell *matHeaderCellDef>Invoice</th>
+          <ng-container matColumnDef="patient">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Patient</th>
+            <td mat-cell *matCellDef="let row">
+              <div class="person-chip">
+                <div class="person-avatar patient">{{ getInitials(row.patientName) }}</div>
+                <span>{{ row.patientName }}</span>
+              </div>
+            </td>
+          </ng-container>
 
-      <td mat-cell *matCellDef="let row">
-        {{ row.invoiceNumber }}
-      </td>
-    </ng-container>
+          <ng-container matColumnDef="doctor">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Doctor</th>
+            <td mat-cell *matCellDef="let row">
+              <div class="person-chip">
+                <div class="person-avatar doctor">{{ getInitials(row.doctorName) }}</div>
+                <span>{{ row.doctorName }}</span>
+              </div>
+            </td>
+          </ng-container>
 
-    <!-- Patient -->
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+            <td mat-cell *matCellDef="let row"><span class="date-text">{{ row.invoiceDate | date: "dd MMM yyyy" }}</span></td>
+          </ng-container>
 
-    <ng-container matColumnDef="patient">
-      <th mat-header-cell *matHeaderCellDef>Patient</th>
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+            <td mat-cell *matCellDef="let row">
+              <span class="status-badge" [ngClass]="row.paymentStatus.toLowerCase()">
+                <span class="status-dot"></span>
+                {{ row.paymentStatus }}
+              </span>
+            </td>
+          </ng-container>
 
-      <td mat-cell *matCellDef="let row">
-        {{ row.patientName }}
-      </td>
-    </ng-container>
+          <ng-container matColumnDef="amount">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th>
+            <td mat-cell *matCellDef="let row">{{ row.total | currency: "INR" }}</td>
+          </ng-container>
 
-    <!-- Doctor -->
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+    </div>
 
-    <ng-container matColumnDef="doctor">
-      <th mat-header-cell *matHeaderCellDef>Doctor</th>
-
-      <td mat-cell *matCellDef="let row">
-        {{ row.doctorName }}
-      </td>
-    </ng-container>
-
-    <!-- Date -->
-
-    <ng-container matColumnDef="date">
-      <th mat-header-cell *matHeaderCellDef>Date</th>
-
-      <td mat-cell *matCellDef="let row">
-        {{ row.invoiceDate | date: "dd MMM yyyy" }}
-      </td>
-    </ng-container>
-
-    <!-- Status -->
-
-    <ng-container matColumnDef="status">
-      <th mat-header-cell *matHeaderCellDef>Status</th>
-
-      <td mat-cell *matCellDef="let row">
-        {{ row.paymentStatus }}
-      </td>
-    </ng-container>
-
-    <!-- Amount -->
-
-    <ng-container matColumnDef="amount">
-      <th mat-header-cell *matHeaderCellDef>Amount</th>
-
-      <td mat-cell *matCellDef="let row">
-        {{ row.total | currency: "INR" }}
-      </td>
-    </ng-container>
-
-    <!-- Header -->
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-
-    <!-- Rows -->
-
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-  </table>
+    <mat-paginator
+      [length]="dataSource.filteredData.length"
+      [pageSize]="10"
+      [pageSizeOptions]="[10, 25, 50]"
+      showFirstLastButtons
+    ></mat-paginator>
+  } @else {
+    <div class="empty-state">
+      <div class="empty-icon"><mat-icon>receipt_long</mat-icon></div>
+      <h3>No invoices found</h3>
+      <p>No invoices match the selected filters.</p>
+    </div>
+  }
 </div>
 
 <app-report-export-actions
   (exportPdf)="exportPdf()"
   (exportExcel)="exportExcel()"
   (print)="printReport()"
->
-</app-report-export-actions>
+></app-report-export-actions>

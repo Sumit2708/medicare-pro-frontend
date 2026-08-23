@@ -13,6 +13,8 @@ import { PageHeaderComponent } from '../../../../shared/components/page-header/p
 import { SearchBoxComponent } from '../../../../shared/components/search-box/search-box.component';
 import { DialogService } from '../../../../core/services/dialog/dialog.service';
 import { Patient } from '../../../../shared/models/patient.model';
+import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-patient-list',
@@ -67,6 +69,7 @@ export class PatientListComponent {
     private router: Router,
     private notificationService: NotificationService,
     private dialogService: DialogService,
+    private dialog: MatDialog,
   ) {}
 
   ngOnInit() {
@@ -81,7 +84,10 @@ export class PatientListComponent {
   getInitials(name: string): string {
     if (!name) return 'P';
     const parts = name.trim().split(' ').filter(Boolean);
-    return parts.slice(0, 2).map((p) => p[0].toUpperCase()).join('');
+    return parts
+      .slice(0, 2)
+      .map((p) => p[0].toUpperCase())
+      .join('');
   }
 
   loadPatients(): void {
@@ -103,17 +109,23 @@ export class PatientListComponent {
     this.router.navigate(['/patients/add']);
   }
 
-  deletePatient(id: string) {
-    this.dialogService
-      .confirm({
-        title: 'Delete Patient',
-        message: 'Are you sure you want to delete this patient record?',
-        confirmText: 'Delete',
-        cancelText: 'Cancel',
+  deletePatient(id: any): void {
+    this.dialog
+      .open(ConfirmDialogComponent, {
+        panelClass: 'app-dialog-panel',
+        data: {
+          title: 'Delete Patient',
+          message:
+            'Are you sure you want to delete this patient? This action cannot be undone.',
+          type: 'danger',
+          confirmLabel: 'Delete',
+          cancelLabel: 'Cancel',
+        },
       })
-      .subscribe((result: any) => {
-        if (result) {
-          this.patientService.deletePatient(id as any).subscribe({
+      .afterClosed()
+      .subscribe((confirmed: boolean) => {
+        if (confirmed) {
+          this.patientService.deletePatient(id).subscribe({
             next: () => {
               this.notificationService.success('Patient deleted successfully');
               this.loadPatients();

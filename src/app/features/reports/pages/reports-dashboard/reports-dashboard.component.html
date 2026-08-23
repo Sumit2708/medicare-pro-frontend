@@ -3,14 +3,19 @@
 
 <div class="reports-grid">
   @for (report of reports; track report.title) {
-    <mat-card class="report-card" (click)="open(report.route)">
-      <mat-icon>
-        {{ report.icon }}
-      </mat-icon>
+    <mat-card class="report-card" [class]="report.accent" (click)="open(report.route)">
+      <div class="report-icon">
+        <mat-icon>{{ report.icon }}</mat-icon>
+      </div>
 
-      <h2>
-        {{ report.title }}
-      </h2>
+      <div class="report-body">
+        <h2>{{ report.title }}</h2>
+        <p>{{ report.description }}</p>
+      </div>
+
+      <div class="report-arrow-wrap">
+        <mat-icon class="report-arrow">chevron_right</mat-icon>
+      </div>
     </mat-card>
   }
 </div>
