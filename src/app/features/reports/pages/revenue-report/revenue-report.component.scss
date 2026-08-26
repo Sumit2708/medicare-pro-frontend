@@ -1,12 +1,47 @@
+* {
+  min-width: 0;
+  box-sizing: border-box;
+}
+
 .summary-grid {
   margin-bottom: 4px;
+  width: 100%;
+}
+
+/* =========================================================
+   TABLE — same pattern as the invoice table: only the table's
+   own scroll container scrolls horizontally, never the page.
+   Wrap this in a container div if one doesn't already exist:
+   <div class="table-container"><table class="revenue-table">…
+   ========================================================= */
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .revenue-table {
   width: 100%;
+  min-width: 640px; // below this, columns get unreadably cramped — container scrolls instead
+
+  th.mat-mdc-header-cell,
+  td.mat-mdc-cell {
+    white-space: nowrap;
+  }
 }
 
 ::ng-deep mat-paginator {
   background: transparent;
   font-family: var(--font-body);
+
+  .mat-mdc-paginator-container {
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 8px;
+
+    @media (min-width: 640px) {
+      justify-content: flex-end;
+    }
+  }
 }

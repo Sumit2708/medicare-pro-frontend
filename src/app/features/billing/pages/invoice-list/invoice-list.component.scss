@@ -1,124 +1,222 @@
-// invoice-list.component.scss — full file
+* {
+  min-width: 0;
+  box-sizing: border-box;
+}
 
-// ---------- Stats strip ----------
+html, body {
+  overflow-x: hidden;
+}
+
+:host {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* =========================================================
+   STATS STRIP — mobile-first: stack, then 2-up, then 3-up
+   ========================================================= */
+
 .stats-strip {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin-bottom: 20px;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-bottom: clamp(14px, 3vw, 20px);
+  width: 100%;
+
+  @media (min-width: 560px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (min-width: 860px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
 }
 
 .stat-card {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
+  min-width: 0;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-left: 3px solid transparent;
   border-radius: 12px;
-  padding: 18px 20px;
+  padding: 14px 16px;
   box-shadow: 0 2px 6px rgba(15, 35, 46, 0.06);
 
   &--total { border-left-color: var(--color-primary); }
   &--paid { border-left-color: var(--color-success); }
   &--pending { border-left-color: var(--color-accent); }
+
+  @media (min-width: 860px) {
+    gap: 14px;
+    padding: 18px 20px;
+  }
 }
 
 .stat-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
   border-radius: 10px;
   flex-shrink: 0;
 
-  mat-icon { font-size: 22px; width: 22px; height: 22px; }
+  mat-icon { font-size: 19px; width: 19px; height: 19px; }
 
   &.total { background: var(--color-primary-light); color: var(--color-primary); }
   &.paid { background: rgba(47, 158, 104, 0.12); color: var(--color-success); }
   &.pending { background: rgba(232, 163, 61, 0.15); color: var(--color-accent); }
+
+  @media (min-width: 860px) {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    mat-icon { font-size: 22px; width: 22px; height: 22px; }
+  }
 }
 
-.stat-body { display: flex; flex-direction: column; gap: 2px; }
-.stat-label { font-family: var(--font-body); font-size: 13px; color: var(--color-ink-soft); }
-.stat-value { font-family: var(--font-display); font-size: 22px; font-weight: 600; color: var(--color-ink); }
+.stat-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
 
-// ---------- Filter card ----------
-// invoice-list.component.scss — replace .filter-card and everything chip/label related
+.stat-label {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--color-ink-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  @media (min-width: 860px) { font-size: 13px; }
+}
+
+.stat-value {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  @media (min-width: 860px) { font-size: 22px; }
+}
+
+/* =========================================================
+   FILTER CARD
+   ========================================================= */
 
 .filter-card {
+  width: 100%;
   border-radius: 12px;
   border: 1px solid var(--color-border);
   box-shadow: 0 4px 14px rgba(15, 35, 46, 0.08);
-  padding: 20px;
-  margin-bottom: 20px;
+  padding: clamp(14px, 3vw, 20px);
+  margin-bottom: clamp(14px, 3vw, 20px);
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
 }
 
 .filter-search-row {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 14px;
+  gap: 10px;
+  width: 100%;
 }
 
-.search-field { width: 320px; }
+// Full-width on mobile (no room for a fixed 320px field), fixed on desktop
+.search-field {
+  width: 100%;
+
+  @media (min-width: 640px) {
+    width: 320px;
+  }
+}
 
 .clear-filters {
   display: flex;
   align-items: center;
   gap: 4px;
   color: var(--color-ink-soft);
+  flex-shrink: 0;
+  white-space: nowrap;
 
   mat-icon { font-size: 18px; width: 18px; height: 18px; }
   &:hover { color: var(--color-danger); }
 }
 
-// Contained panel replaces the old divider lines — groups both chip
-// rows into one visually distinct zone, same language as the .breakdown
-// box on Create Invoice.
 .filter-chips-panel {
   background: var(--color-bg);
   border: 1px solid var(--color-border);
   border-radius: 10px;
-  padding: 14px 18px;
+  padding: 12px 14px;
   display: flex;
   flex-direction: column;
   gap: 14px;
+  width: 100%;
+
+  @media (min-width: 640px) {
+    padding: 14px 18px;
+  }
 }
 
+// Mobile: label stacks above the chips (chips need the full row width to
+// wrap cleanly). Desktop: label sits inline to the left, fixed width.
 .chip-group-row {
   display: flex;
-  align-items: center;
-  gap: 14px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+
+  mat-chip-listbox {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    max-width: 100%;
+  }
+
+  @media (min-width: 640px) {
+    flex-direction: row;
+    align-items: center;
+    gap: 14px;
+  }
 }
 
 .chip-group-label {
-  width: 56px;
   flex-shrink: 0;
   font-family: var(--font-body);
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.03em;
   color: var(--color-ink-soft);
+
+  @media (min-width: 640px) {
+    width: 56px;
+    font-size: 12px;
+  }
 }
 
 .chip-icon { font-size: 16px; height: 16px; width: 16px; margin-right: 4px; }
 
-// Unselected chips need contrast against the panel's --color-bg fill,
-// so they get a solid white background instead of blending in.
 mat-chip-option {
   background: var(--color-surface) !important;
   border: 1px solid var(--color-border) !important;
 }
 
-// "All" is neutral, not a status — same dark treatment in both groups
-// so it doesn't read as two different controls.
 .all-chip.mat-mdc-chip-selected {
   background: var(--color-ink) !important;
   color: #fff !important;
@@ -143,18 +241,31 @@ mat-chip-option {
   }
 }
 
-// ---------- Table card ----------
+/* =========================================================
+   TABLE CARD
+   A wide data table is a case where INTENTIONAL horizontal
+   scroll is correct UX — don't try to force 8 columns into
+   320px. .table-container is the only element allowed to
+   scroll; the page itself must not.
+   ========================================================= */
+
 .table-card {
+  width: 100%;
   border-radius: 12px;
   box-shadow: 0 2px 6px rgba(15, 35, 46, 0.06);
   padding: 0;
-  overflow: hidden;
+  overflow: hidden; // clips to the card's rounded corners
 }
 
-.table-container { overflow-x: auto; }
+.table-container {
+  width: 100%;
+  overflow-x: auto; // intentional scroll, contained to the table only
+  -webkit-overflow-scrolling: touch;
+}
 
 table {
   width: 100%;
+  min-width: 720px; // below this the columns get unreadably cramped — table-container scrolls instead
 
   th.mat-mdc-header-cell {
     font-family: var(--font-body);
@@ -165,15 +276,16 @@ table {
     color: var(--color-ink-soft);
     background: var(--color-bg);
     border-bottom: 1px solid var(--color-border);
-    padding: 14px 16px;
+    padding: 12px 14px;
+    white-space: nowrap;
   }
 
   td.mat-mdc-cell {
     font-family: var(--font-body);
-    font-size: 14px;
+    font-size: 13.5px;
     color: var(--color-ink);
     border-bottom: 1px solid var(--color-border);
-    padding: 14px 16px;
+    padding: 12px 14px;
   }
 
   tr.mat-mdc-row {
@@ -181,11 +293,14 @@ table {
     &:hover { background-color: var(--color-primary-light); }
     &:last-child td { border-bottom: none; }
   }
+
+  @media (min-width: 860px) {
+    th.mat-mdc-header-cell,
+    td.mat-mdc-cell { padding: 14px 16px; }
+    td.mat-mdc-cell { font-size: 14px; }
+  }
 }
 
-// Status color bar — signature touch: the invoice # cell carries a left
-// accent matching the row's payment status, so you can scan for unpaid
-// invoices without reading the status column at all.
 .status-bar {
   &--pending { box-shadow: inset 3px 0 0 var(--color-accent); }
   &--paid { box-shadow: inset 3px 0 0 var(--color-success); }
@@ -197,9 +312,15 @@ table {
   font-weight: 600;
   color: var(--color-primary-dark);
   padding-left: 6px;
+  white-space: nowrap;
 }
 
-.patient-cell { display: flex; align-items: center; gap: 10px; }
+.patient-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
 
 .patient-avatar {
   display: flex;
@@ -207,6 +328,7 @@ table {
   justify-content: center;
   width: 30px;
   height: 30px;
+  min-width: 30px;
   border-radius: 50%;
   background: var(--color-primary-light);
   color: var(--color-primary-dark);
@@ -216,12 +338,11 @@ table {
   flex-shrink: 0;
 }
 
-.doctor-cell { color: var(--color-ink-soft); }
-.amount { font-family: var(--font-display); font-weight: 600; color: var(--color-ink); }
-.method { color: var(--color-ink-soft); }
-.date { color: var(--color-ink-soft); font-size: 13px; }
+.doctor-cell { color: var(--color-ink-soft); white-space: nowrap; }
+.amount { font-family: var(--font-display); font-weight: 600; color: var(--color-ink); white-space: nowrap; }
+.method { color: var(--color-ink-soft); white-space: nowrap; }
+.date { color: var(--color-ink-soft); font-size: 13px; white-space: nowrap; }
 
-// ---------- Status pill (table column) ----------
 .status-pill {
   display: inline-flex;
   align-items: center;
@@ -233,14 +354,13 @@ table {
   font-weight: 600;
   white-space: nowrap;
 
-  .status-dot { width: 6px; height: 6px; border-radius: 50%; }
+  .status-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
 
   &.paid { background: rgba(47, 158, 104, 0.12); color: var(--color-success); .status-dot { background: var(--color-success); } }
   &.pending { background: rgba(232, 163, 61, 0.15); color: var(--color-accent); .status-dot { background: var(--color-accent); } }
   &.cancelled { background: rgba(214, 69, 69, 0.1); color: var(--color-danger); .status-dot { background: var(--color-danger); } }
 }
 
-// ---------- Actions ----------
 .actions-header { text-align: right; }
 .actions-column { text-align: right; }
 
@@ -255,39 +375,71 @@ table {
   }
 }
 
-// ---------- Empty / loading states ----------
+/* =========================================================
+   EMPTY / LOADING STATES
+   ========================================================= */
+
 .empty-state, .loading-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 64px 24px;
+  padding: clamp(40px, 10vw, 64px) 20px;
   text-align: center;
 
-  h3 { font-family: var(--font-display); font-size: 18px; font-weight: 600; color: var(--color-ink); margin: 16px 0 4px; }
-  p { font-family: var(--font-body); font-size: 14px; color: var(--color-ink-soft); margin: 0; }
+  h3 {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-ink);
+    margin: 14px 0 4px;
+
+    @media (min-width: 640px) { font-size: 18px; }
+  }
+
+  p {
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--color-ink-soft);
+    margin: 0;
+    max-width: 320px;
+
+    @media (min-width: 640px) { font-size: 14px; }
+  }
 }
 
 .empty-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 56px;
-  height: 56px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   background: var(--color-primary-light);
   color: var(--color-primary);
 
-  mat-icon { font-size: 28px; width: 28px; height: 28px; }
+  mat-icon { font-size: 24px; width: 24px; height: 24px; }
+
+  @media (min-width: 640px) {
+    width: 56px;
+    height: 56px;
+    mat-icon { font-size: 28px; width: 28px; height: 28px; }
+  }
 }
 
 .loading-state p { margin-top: 12px; }
 
-// ---------- Responsive ----------
-@media (max-width: 900px) {
-  .chip-group-row {
-    align-items: flex-start;
+/* =========================================================
+   PAGINATOR — Angular Material's default can overflow on
+   very narrow screens because its controls don't wrap
+   ========================================================= */
 
-    .chip-group-label { padding-top: 6px; }
+::ng-deep mat-paginator .mat-mdc-paginator-container {
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 8px;
+
+  @media (min-width: 640px) {
+    justify-content: flex-end;
   }
 }

@@ -1,3 +1,12 @@
+* {
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  overflow-x: hidden;
+}
+
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
@@ -8,54 +17,82 @@
   50% { opacity: 0.9; transform: scale(1.08); }
 }
 
-.page-container {
+:host {
+  display: block;
   width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
-.add-appointment-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 720px) minmax(280px, 380px);
-  gap: 20px;
-  align-items: start;
+.page-container {
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 clamp(10px, 4vw, 20px);
+}
 
-  @media (max-width: 1100px) {
-    grid-template-columns: 1fr;
+/* =========================================================
+   MAIN LAYOUT — mobile-first: single column by default
+   ========================================================= */
+
+.add-appointment-layout {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 3vw, 20px);
+  width: 100%;
+
+  @media (min-width: 901px) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 340px);
+    align-items: start;
+  }
+
+  @media (min-width: 1200px) {
+    grid-template-columns: minmax(0, 720px) minmax(0, 380px);
   }
 }
 
-/* ---------- Form card ---------- */
+/* =========================================================
+   FORM CARD
+   ========================================================= */
+
 .form-card {
-  border-radius: 16px !important;
+  width: 100%;
+  border-radius: 14px !important;
   border: 1px solid var(--color-border);
   box-shadow: 0 1px 2px rgba(15, 35, 46, 0.04) !important;
-  padding: 28px !important;
+  padding: clamp(16px, 4vw, 28px) !important;
+
+  @media (min-width: 901px) {
+    border-radius: 16px !important;
+  }
 }
 
 .form-card-header {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding-bottom: 20px;
-  margin-bottom: 16px;
+  gap: 12px;
+  padding-bottom: clamp(14px, 3vw, 20px);
+  margin-bottom: clamp(12px, 3vw, 16px);
   border-bottom: 1px solid var(--color-border);
 
   .form-icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 44px;
-    height: 44px;
-    min-width: 44px;
-    border-radius: 12px;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: 10px;
     background: var(--color-primary-light);
     color: var(--color-primary);
 
-    mat-icon { font-size: 22px; height: 22px; width: 22px; }
+    mat-icon { font-size: 20px; height: 20px; width: 20px; }
   }
 
   h3 {
     font-family: var(--font-display);
-    font-size: 16px;
+    font-size: clamp(14px, 2.5vw, 16px);
     font-weight: 600;
     color: var(--color-ink);
     margin: 0 0 2px;
@@ -63,11 +100,30 @@
 
   p {
     font-family: var(--font-body);
-    font-size: 13px;
+    font-size: 12px;
     color: var(--color-ink-soft);
     margin: 0;
+    line-height: 1.4;
+  }
+
+  @media (min-width: 901px) {
+    gap: 14px;
+
+    .form-icon {
+      width: 44px;
+      height: 44px;
+      min-width: 44px;
+      border-radius: 12px;
+      mat-icon { font-size: 22px; height: 22px; width: 22px; }
+    }
+
+    p { font-size: 13px; }
   }
 }
+
+/* =========================================================
+   PROGRESS
+   ========================================================= */
 
 .progress-track {
   height: 6px;
@@ -86,27 +142,36 @@
 
 .progress-label {
   font-family: var(--font-body);
-  font-size: 12px;
+  font-size: 11px;
   color: var(--color-ink-soft);
-  margin: 0 0 20px;
+  margin: 0 0 clamp(12px, 3vw, 20px);
   text-align: right;
+
+  @media (min-width: 901px) { font-size: 12px; }
 }
 
 .appointment-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: clamp(14px, 3vw, 20px);
+  width: 100%;
 }
 
-/* ---------- Sub-section groups (matches patient form pattern) ---------- */
+/* =========================================================
+   FORM SECTIONS
+   ========================================================= */
+
 .form-section {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 18px;
+  gap: 14px;
+  padding: clamp(14px, 3vw, 18px);
   border: 1px solid var(--color-border);
   border-radius: 12px;
   background: var(--color-bg);
+  width: 100%;
+
+  @media (min-width: 901px) { gap: 16px; }
 }
 
 .section-heading {
@@ -115,21 +180,20 @@
   gap: 10px;
 
   > mat-icon {
-    width: 32px;
-    height: 32px;
-    min-width: 32px;
-    padding: 7px;
-    box-sizing: border-box;
-    border-radius: 9px;
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    padding: 6px;
+    border-radius: 8px;
     background: var(--color-primary-light);
     color: var(--color-primary);
-    font-size: 18px;
+    font-size: 16px;
   }
 
   h4 {
     margin: 0 0 2px;
     font-family: var(--font-display);
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     color: var(--color-ink);
   }
@@ -137,8 +201,22 @@
   p {
     margin: 0;
     font-family: var(--font-body);
-    font-size: 12px;
+    font-size: 11px;
     color: var(--color-ink-soft);
+  }
+
+  @media (min-width: 901px) {
+    > mat-icon {
+      width: 32px;
+      height: 32px;
+      min-width: 32px;
+      padding: 7px;
+      border-radius: 9px;
+      font-size: 18px;
+    }
+
+    h4 { font-size: 14px; }
+    p { font-size: 12px; }
   }
 }
 
@@ -146,15 +224,18 @@
 
 .form-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  width: 100%;
 
-  @media (max-width: 650px) {
-    grid-template-columns: 1fr;
+  @media (min-width: 640px) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 16px;
   }
 }
 
 mat-form-field {
+  width: 100%;
   font-family: var(--font-body);
 
   mat-icon[matPrefix] {
@@ -170,6 +251,10 @@ mat-form-field {
   color: var(--color-ink-soft);
   font-size: 0.85em;
 }
+
+/* =========================================================
+   STATUS
+   ========================================================= */
 
 .status-row {
   display: flex;
@@ -203,20 +288,28 @@ mat-form-field {
   }
 }
 
+::ng-deep mat-chip-listbox {
+  flex-wrap: wrap;
+}
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
 .form-actions {
   display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  padding-top: 20px;
+  flex-direction: column-reverse;
+  gap: 10px;
+  width: 100%;
+  padding-top: clamp(14px, 3vw, 20px);
   border-top: 1px solid var(--color-border);
 
   button {
+    width: 100%;
     border-radius: 10px;
     text-transform: none;
-    padding: 0 22px;
-    height: 42px;
+    height: 44px;
     transition: transform 0.15s ease;
-
     &:hover:not(:disabled) { transform: translateY(-1px); }
   }
 
@@ -224,38 +317,59 @@ mat-form-field {
     box-shadow: 0 2px 10px rgba(15, 94, 90, 0.2);
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 6px;
 
     mat-icon { font-size: 18px; height: 18px; width: 18px; }
     .spin { animation: spin 0.8s linear infinite; }
   }
+
+  @media (min-width: 640px) {
+    flex-direction: row;
+    justify-content: flex-end;
+
+    button { width: auto; padding: 0 22px; }
+  }
 }
 
-/* ---------- Ticket-style preview ---------- */
+/* =========================================================
+   TICKET-STYLE PREVIEW
+   Note: horizontal padding on .preview-card is fixed per
+   breakpoint (not clamp) so .ticket-stub's negative margin
+   can match it exactly at every width.
+   ========================================================= */
+
 .preview-card {
-  position: sticky;
-  top: 20px;
+  width: 100%;
+  overflow: hidden;
   background: linear-gradient(165deg, #0B4744 0%, #0F5E5A 100%);
-  border-radius: 16px;
-  padding: 26px 22px 22px;
+  border-radius: 14px;
+  padding: 20px 18px 18px;
   text-align: center;
   color: #fff;
   box-shadow: 0 12px 30px rgba(15, 94, 90, 0.22);
   transition: box-shadow 0.3s ease;
 
-  &.filled {
-    box-shadow: 0 16px 36px rgba(15, 94, 90, 0.32);
+  &.filled { box-shadow: 0 16px 36px rgba(15, 94, 90, 0.32); }
+
+  @media (min-width: 901px) {
+    position: sticky;
+    top: 20px;
+    border-radius: 16px;
+    padding: 26px 22px 22px;
   }
 }
 
 .preview-label {
   display: block;
   font-family: var(--font-body);
-  font-size: 10px;
+  font-size: 9.5px;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   color: rgba(255, 255, 255, 0.5);
-  margin-bottom: 18px;
+  margin-bottom: 14px;
+
+  @media (min-width: 901px) { font-size: 10px; margin-bottom: 18px; }
 }
 
 .preview-avatars {
@@ -263,16 +377,16 @@ mat-form-field {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  margin-bottom: 14px;
+  gap: 8px;
+  margin-bottom: 12px;
 }
 
 .avatar-glow {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 110px;
-  height: 70px;
+  width: 100px;
+  height: 64px;
   border-radius: 50%;
   background: var(--color-accent);
   filter: blur(26px);
@@ -288,62 +402,81 @@ mat-form-field {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 56px;
-  height: 56px;
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.14);
   border: 2px solid rgba(255, 255, 255, 0.25);
   backdrop-filter: blur(6px);
   font-family: var(--font-display);
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
+
+  @media (min-width: 901px) { width: 56px; height: 56px; min-width: 56px; font-size: 18px; }
 }
 
 .avatar-link {
   position: relative;
   z-index: 2;
   color: rgba(255, 255, 255, 0.5);
-  font-size: 18px;
-  height: 18px;
-  width: 18px;
+  font-size: 16px;
+  height: 16px;
+  width: 16px;
+  flex-shrink: 0;
+
+  @media (min-width: 901px) { font-size: 18px; height: 18px; width: 18px; }
 }
 
 .preview-name {
   font-family: var(--font-display);
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 600;
   margin: 0 0 2px;
+  overflow-wrap: anywhere;
+
+  @media (min-width: 901px) { font-size: 17px; }
 }
 
 .preview-sub {
   display: block;
   font-family: var(--font-body);
-  font-size: 12px;
+  font-size: 11px;
   color: rgba(255, 255, 255, 0.6);
-  margin-bottom: 12px;
+  margin-bottom: 10px;
+  overflow-wrap: anywhere;
+
+  @media (min-width: 901px) { font-size: 12px; margin-bottom: 12px; }
 }
 
 .preview-badge {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
+  max-width: 100%;
   padding: 5px 12px;
   border-radius: 20px;
   background: rgba(255, 255, 255, 0.12);
   font-family: var(--font-body);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 500;
-  margin-bottom: 18px;
+  margin-bottom: 14px;
+  overflow-wrap: anywhere;
 
-  mat-icon { font-size: 14px; height: 14px; width: 14px; color: var(--color-accent); }
+  mat-icon { font-size: 14px; height: 14px; width: 14px; color: var(--color-accent); flex-shrink: 0; }
+
+  @media (min-width: 901px) { font-size: 12px; margin-bottom: 18px; }
 }
 
-/* Ticket stub notches */
+/* Ticket stub notches — margin matches preview-card's horizontal padding exactly */
 .ticket-stub {
   position: relative;
   height: 1px;
   border-top: 1px dashed rgba(255, 255, 255, 0.25);
-  margin: 16px -22px;
+  margin: 14px -18px;
+
+  @media (min-width: 901px) { margin: 16px -22px; }
 }
 
 .stub-notch {
@@ -360,10 +493,13 @@ mat-form-field {
 
 .preview-datetime {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 18px;
-  margin: 16px 0;
+  gap: 14px;
+  margin: 14px 0;
+
+  @media (min-width: 901px) { gap: 18px; margin: 16px 0; }
 }
 
 .dt-block {
@@ -372,16 +508,25 @@ mat-form-field {
   align-items: center;
   gap: 6px;
   font-family: var(--font-body);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
+  min-width: 0;
 
-  mat-icon { font-size: 18px; height: 18px; width: 18px; color: var(--color-accent); }
+  mat-icon { font-size: 17px; height: 17px; width: 17px; color: var(--color-accent); flex-shrink: 0; }
+
+  @media (min-width: 901px) {
+    font-size: 13px;
+    mat-icon { font-size: 18px; height: 18px; width: 18px; }
+  }
 }
 
 .dt-divider {
   width: 1px;
-  height: 28px;
+  min-width: 1px;
+  height: 26px;
   background: rgba(255, 255, 255, 0.15);
+
+  @media (min-width: 901px) { height: 28px; }
 }
 
 .preview-status {
@@ -390,11 +535,12 @@ mat-form-field {
   justify-content: center;
   gap: 6px;
   font-family: var(--font-body);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 500;
   color: rgba(255, 255, 255, 0.75);
 
   .status-dot {
+    flex-shrink: 0;
     width: 6px;
     height: 6px;
     border-radius: 50%;
@@ -410,31 +556,6 @@ mat-form-field {
       box-shadow: 0 0 0 3px rgba(47, 158, 104, 0.25);
     }
   }
-}
 
-@media (max-width: 1100px) {
-  .preview-card {
-    position: static;
-    order: -1;
-  }
-}
-
-.loading-state {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 60px 0;
-  font-family: var(--font-body);
-  font-size: 14px;
-  color: var(--color-ink-soft);
-
-  mat-icon {
-    color: var(--color-primary);
-  }
-}
-
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  @media (min-width: 901px) { font-size: 12px; }
 }

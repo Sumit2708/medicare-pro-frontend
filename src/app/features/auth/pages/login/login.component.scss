@@ -19,12 +19,14 @@
   to { transform: rotate(360deg); }
 }
 
+* { min-width: 0; box-sizing: border-box; }
+
 .login-page {
   min-height: 100vh;
   display: flex;
 }
 
-/* ---------- Left brand panel ---------- */
+/* ---------- Left brand panel (desktop only) ---------- */
 .brand-panel {
   position: relative;
   flex: 1;
@@ -51,22 +53,8 @@
     animation: drift 14s ease-in-out infinite;
   }
 
-  .orb-1 {
-    width: 260px;
-    height: 260px;
-    top: -60px;
-    right: -60px;
-    background: rgba(232, 163, 61, 0.28);
-  }
-
-  .orb-2 {
-    width: 220px;
-    height: 220px;
-    bottom: -40px;
-    left: -40px;
-    background: rgba(143, 211, 205, 0.18);
-    animation-delay: -7s;
-  }
+  .orb-1 { width: 260px; height: 260px; top: -60px; right: -60px; background: rgba(232, 163, 61, 0.28); }
+  .orb-2 { width: 220px; height: 220px; bottom: -40px; left: -40px; background: rgba(143, 211, 205, 0.18); animation-delay: -7s; }
 
   .float-chip {
     position: absolute;
@@ -90,11 +78,7 @@
   .chip-2 { top: 55%; right: 6%; animation-delay: -2s; color: var(--color-accent); }
   .chip-3 { bottom: 12%; right: 22%; animation-delay: -4s; }
 
-  .brand-content {
-    position: relative;
-    z-index: 3;
-    max-width: 420px;
-  }
+  .brand-content { position: relative; z-index: 3; max-width: 420px; }
 
   .brand-mark {
     display: inline-flex;
@@ -137,12 +121,7 @@
     animation-delay: 0.16s;
   }
 
-  .feature-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    margin-bottom: 32px;
-  }
+  .feature-list { display: flex; flex-direction: column; gap: 16px; margin-bottom: 32px; }
 
   .feature-item {
     display: flex;
@@ -198,20 +177,141 @@
 
 /* ---------- Right form panel ---------- */
 .form-panel {
+  position: relative;
   flex: 1;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 24px;
   background: var(--color-bg);
+  overflow: hidden; // contains the mobile orbs' blur bleed
+  min-height: 100vh;
 }
 
+/* ---------- Mobile decoration: only visible once brand-panel hides ---------- */
+.mobile-orb {
+  display: none;
+}
+
+.mobile-brand-header {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .form-panel {
+    background: linear-gradient(180deg, #0B4744 0%, #0F5E5A 38%, var(--color-bg) 38%);
+    padding: 40px 20px 24px;
+  }
+
+  .mobile-orb {
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(40px);
+    z-index: 0;
+    animation: drift 14s ease-in-out infinite;
+
+    &-1 {
+      width: 160px;
+      height: 160px;
+      top: -30px;
+      right: -30px;
+      background: rgba(232, 163, 61, 0.3);
+    }
+
+    &-2 {
+      width: 130px;
+      height: 130px;
+      top: 40px;
+      left: -30px;
+      background: rgba(143, 211, 205, 0.2);
+      animation-delay: -7s;
+    }
+  }
+
+  .mobile-brand-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeInUp 0.5s ease forwards;
+
+    .mobile-brand-mark {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.14);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: #fff;
+      margin-bottom: 12px;
+
+      mat-icon { font-size: 24px; height: 24px; width: 24px; }
+    }
+
+    h1 {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 500;
+      color: #fff;
+      margin: 0 0 4px;
+
+      b { font-weight: 700; color: var(--color-accent); }
+    }
+
+    p {
+      font-family: var(--font-body);
+      font-size: 12.5px;
+      color: rgba(255, 255, 255, 0.7);
+      margin: 0;
+    }
+  }
+}
+
+@media (max-width: 420px) {
+  .form-panel {
+    padding: 32px 16px 20px;
+  }
+
+  .mobile-brand-header {
+    margin-bottom: 22px;
+
+    .mobile-brand-mark { width: 42px; height: 42px; margin-bottom: 10px; mat-icon { font-size: 21px; height: 21px; width: 21px; } }
+    h1 { font-size: 19px; }
+    p { font-size: 12px; }
+  }
+}
+
+/* ---------- Login card ---------- */
 .login-card {
+  position: relative;
+  z-index: 1;
   width: 100%;
   max-width: 380px;
+  background: var(--color-surface);
+  border-radius: 18px;
+  padding: 32px 28px;
+  box-shadow: 0 8px 28px rgba(15, 35, 46, 0.08);
   opacity: 0;
   animation: fadeInUp 0.6s ease forwards;
   animation-delay: 0.15s;
+
+  @media (max-width: 900px) {
+    box-shadow: 0 16px 40px rgba(11, 71, 68, 0.18);
+    border: 1px solid var(--color-border);
+  }
+
+  @media (max-width: 420px) {
+    padding: 26px 20px;
+    border-radius: 16px;
+  }
 }
 
 .welcome-section {
@@ -223,6 +323,8 @@
     font-weight: 600;
     color: var(--color-ink);
     margin: 0 0 6px;
+
+    @media (max-width: 420px) { font-size: 22px; }
   }
 
   p {
@@ -237,6 +339,7 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
+  width: 100%;
 }
 
 .full-width { width: 100%; }
@@ -245,6 +348,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
   margin: 4px 0 22px;
 
   .forgot-link {
@@ -287,9 +392,7 @@
   }
 }
 
-mat-divider {
-  margin: 24px 0 14px;
-}
+mat-divider { margin: 24px 0 14px; }
 
 .version {
   text-align: center;
