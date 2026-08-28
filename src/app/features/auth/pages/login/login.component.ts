@@ -16,6 +16,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { NotificationService } from '../../../../core/services/notification/notification.service';
 import { AuthService } from '../../../../core/services/auth/auth.service';
 import { UserRole } from '../../../../core/enums/user-role.enum';
+import { StorageService } from '../../../../core/services/storage/storage.service';
 
 @Component({
   selector: 'app-login',
@@ -43,12 +44,23 @@ export class LoginComponent {
     private fb: FormBuilder,
     private notificationService: NotificationService,
     private authService: AuthService,
+    private storageService: StorageService,
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
       rememberMe: [false],
     });
+  }
+
+  ngOnInit() {
+    const rememberedEmail = this.storageService.getRememberedEmail();
+    if (rememberedEmail) {
+      this.loginForm.patchValue({
+        email: rememberedEmail,
+        rememberMe: true,
+      });
+    }
   }
 
   onSubmit() {

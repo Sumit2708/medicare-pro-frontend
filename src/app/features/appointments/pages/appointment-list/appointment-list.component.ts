@@ -19,6 +19,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
 import { SearchBoxComponent } from '../../../../shared/components/search-box/search-box.component';
 import { DialogService } from '../../../../core/services/dialog/dialog.service';
+import { EmptyStateComponent } from "../../../../shared/components/empty-state/empty-state.component";
 
 const SIXTY_DAYS_MS = 60 * 24 * 60 * 60 * 1000;
 
@@ -35,7 +36,8 @@ const SIXTY_DAYS_MS = 60 * 24 * 60 * 60 * 1000;
     MatTooltipModule,
     PageHeaderComponent,
     SearchBoxComponent,
-  ],
+    EmptyStateComponent
+],
   templateUrl: './appointment-list.component.html',
   styleUrl: './appointment-list.component.scss',
 })
@@ -299,5 +301,9 @@ export class AppointmentListComponent {
       next: (doctors) => (this.doctors = doctors),
       error: () => this.notificationService.error('Failed to load doctors'),
     });
+  }
+
+  openNewAppointment(){
+    this.router.navigate(['/appointments/add']);
   }
 }

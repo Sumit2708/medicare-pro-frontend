@@ -148,7 +148,7 @@ export class EditDoctorComponent {
       this.isSubmitting = true;
       this.doctorService.updateDoctor(this.doctorId as any, this.doctorForm.value).subscribe({
         next: () => {
-          this.notificationService.success('Doctor updated successfully');
+          this.notificationService.info('Doctor updated successfully');
           this.router.navigate(['/doctors']);
         },
         error: () => {

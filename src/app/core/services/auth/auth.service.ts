@@ -18,17 +18,37 @@ export class AuthService {
     private storageService: StorageService,
   ) {}
 
+  // login(request: LoginRequest): Observable<boolean | null> {
+  //   return this.http.get<User[]>(`${this.apiUrl}?email=${request.email}`).pipe(
+  //     map((users) => {
+  //       console.log(users, 'users');
+
+  //       if (users.length > 0 && users[0].password === request.password) {
+  //         this.storageService.saveToken(users[0].token);
+  //         this.storageService.saveUser(users[0]);
+  //         return true;
+  //       } else if (users.length === 0) {
+  //         return false;
+  //       }
+  //       return false;
+  //     }),
+  //   );
+  // }
+
   login(request: LoginRequest): Observable<boolean | null> {
     return this.http.get<User[]>(`${this.apiUrl}?email=${request.email}`).pipe(
       map((users) => {
-        console.log(users, 'users');
-
         if (users.length > 0 && users[0].password === request.password) {
-          this.storageService.saveToken(users[0].token);
-          this.storageService.saveUser(users[0]);
+          this.storageService.saveToken(users[0].token, request.rememberMe);
+          this.storageService.saveUser(users[0], request.rememberMe);
+
+          if (request.rememberMe) {
+            this.storageService.saveRememberedEmail(request.email);
+          } else {
+            this.storageService.clearRememberedEmail();
+          }
+
           return true;
-        } else if (users.length === 0) {
-          return false;
         }
         return false;
       }),

@@ -74,4 +74,8 @@ export class DoctorPerformanceReportComponent {
   getTotalAppointments(): number {
     return this.performance.reduce((sum, row) => sum + row.appointments, 0);
   }
+
+    navBack(){
+    window.history.back();
+  }
 }

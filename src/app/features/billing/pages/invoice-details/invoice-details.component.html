@@ -1,5 +1,7 @@
 <!-- invoice-details.component.html -->
-<app-page-header title="Invoice Details" subtitle="View generated invoice"></app-page-header>
+<app-page-header title="Invoice Details" subtitle="View generated invoice"  buttonLabel="Back"
+  buttonIcon="arrow_back"
+  (buttonClick)="navBack()"></app-page-header>
 
 @if (invoiceDetails) {
   <div class="details-container">

@@ -36,8 +36,21 @@ export type ChartOptions = {
 @Component({
   selector: 'app-revenue-chart',
   imports: [NgApexchartsModule, CommonModule],
-  templateUrl: './revenue-chart.component.html',
-  styleUrl: './revenue-chart.component.scss',
+  template: `
+    <apx-chart
+      [series]="chartOptions.series!"
+      [chart]="chartOptions.chart!"
+      [xaxis]="chartOptions.xaxis!"
+      [yaxis]="chartOptions.yaxis!"
+      [grid]="chartOptions.grid!"
+      [colors]="chartOptions.colors!"
+      [stroke]="chartOptions.stroke!"
+      [fill]="chartOptions.fill!"
+      [dataLabels]="chartOptions.dataLabels!"
+      [tooltip]="chartOptions.tooltip!"
+      [legend]="chartOptions.legend!"
+    ></apx-chart>
+  `
 })
 export class RevenueChartComponent {
   @Input({ required: true })

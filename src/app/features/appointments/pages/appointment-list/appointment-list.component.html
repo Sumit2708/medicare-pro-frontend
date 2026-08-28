@@ -30,7 +30,8 @@
       <h3>No appointments found</h3>
       <p>No appointments match your search.</p>
     </div>
-  }
+
+     }
 
   @if (dataSource.data.length === 0) {
     <div class="empty-state">
@@ -160,8 +161,8 @@
 
     <mat-paginator
       [length]="dataSource.filteredData.length"
-      [pageSize]="10"
-      [pageSizeOptions]="[5, 10, 20]"
+      [pageSize]="5"
+      [pageSizeOptions]="[ 10, 25, 50]"
       showFirstLastButtons
     ></mat-paginator>
   }

@@ -1,4 +1,4 @@
-<mat-card class="summary-card">
+<!-- <mat-card class="summary-card">
   <div class="icon" [style.background]="color">
     <mat-icon>
       {{ icon }}
@@ -13,5 +13,17 @@
     <p>
       {{ title }}
     </p>
+  </div>
+</mat-card> -->
+
+
+<mat-card class="summary-card">
+  <div class="icon" [style.background]="iconBg" [style.color]="iconColor">
+    <mat-icon>{{ icon }}</mat-icon>
+  </div>
+
+  <div class="content">
+    <span>{{ title }}</span>
+    <h2>{{ value }}</h2>
   </div>
 </mat-card>

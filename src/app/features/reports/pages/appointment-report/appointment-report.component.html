@@ -1,4 +1,6 @@
-<app-page-header title="Appointment Report" subtitle="Bookings, cancellations & no-shows"></app-page-header>
+<app-page-header title="Appointment Report" subtitle="Bookings, cancellations & no-shows"  buttonLabel="back"
+  buttonIcon="arrow_back"
+  (buttonClick)="navBack()"></app-page-header>
 
 <app-report-filter (generate)="generateReport($event)"></app-report-filter>
 
@@ -9,28 +11,32 @@
         title="Total Appointments"
         [value]="summary.totalAppointments"
         icon="event_note"
-        color="#0f5e5a"
+         iconBg="#e3f5ec"
+        iconColor="var(--color-success)"
       ></app-report-summary-card>
 
       <app-report-summary-card
         title="Completed"
         [value]="summary.completedAppointments"
         icon="event_available"
-        color="#2f9e68"
+        iconBg="var(--color-primary-light)"
+        iconColor="var(--color-primary)"
       ></app-report-summary-card>
 
       <app-report-summary-card
         title="Cancelled"
         [value]="summary.cancelledAppointments"
         icon="event_busy"
-        color="#d64545"
+        iconBg="#fcefda"
+        iconColor="var(--color-accent)"
       ></app-report-summary-card>
 
       <app-report-summary-card
         title="Pending"
         [value]="summary.pendingAppointments"
         icon="person_off"
-        color="#e8a33d"
+        iconBg="var(--color-primary-light)"
+        iconColor="var(--color-primary-dark)"
       ></app-report-summary-card>
     </div>
   }

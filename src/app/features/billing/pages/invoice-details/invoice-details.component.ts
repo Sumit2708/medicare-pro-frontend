@@ -96,4 +96,8 @@ export class InvoiceDetailsComponent {
         },
       });
   }
+
+  navBack() {
+    this.router.navigate(['/billing']);
+  }
 }

@@ -139,4 +139,8 @@ export class RevenueReportComponent {
       queryParams.set('paymentStatus', filter.paymentStatus);
     window.open(`/reports/revenue/print?${queryParams.toString()}`, '_blank');
   }
+
+  navBack(){
+    window.history.back();
+  }
 }

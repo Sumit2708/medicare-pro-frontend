@@ -659,3 +659,19 @@ mat-card {
   border-radius: 16px !important;
   box-shadow: 0 24px 60px rgba(15, 35, 46, 0.18) !important;
 }
+
+/* Add to your global styles.scss (or theme file) so MatSnackBar acts as a
+   transparent wrapper and your ToastComponent's own card styling shows through. */
+
+.app-toast-panel {
+  .mdc-snackbar__surface {
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+  }
+
+  .mat-mdc-snack-bar-label {
+    padding: 0 !important;
+  }
+}

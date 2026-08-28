@@ -1,31 +1,73 @@
-<app-page-header title="Revenue Report" subtitle="Revenue Analytics"></app-page-header>
+<app-page-header
+  title="Revenue Report"
+  subtitle="Revenue Analytics"
+  buttonLabel="back"
+  buttonIcon="arrow_back"
+  (buttonClick)="navBack()"
+></app-page-header>
 
 <app-report-filter (generate)="generateReport($event)"></app-report-filter>
 
 <div #reportContent class="report-content">
   @if (summary) {
     <div class="summary-grid">
-      <app-report-summary-card title="Total Revenue" [value]="summary.totalRevenue | currency: 'INR'" icon="payments" color="#2f9e68"></app-report-summary-card>
-      <app-report-summary-card title="Invoices" [value]="summary.totalInvoices" icon="receipt_long" color="#0f5e5a"></app-report-summary-card>
-      <app-report-summary-card title="Average Invoice" [value]="summary.averageInvoice | currency: 'INR'" icon="analytics" color="#e8a33d"></app-report-summary-card>
-      <app-report-summary-card title="GST" [value]="summary.totalGST | currency: 'INR'" icon="account_balance" color="#0b4744"></app-report-summary-card>
+      <app-report-summary-card
+        title="Total Revenue"
+        [value]="summary.totalRevenue | currency: 'INR'"
+        icon="payments"
+        iconBg="#e3f5ec"
+        iconColor="var(--color-success)"
+      ></app-report-summary-card>
+
+      <app-report-summary-card
+        title="Invoices"
+        [value]="summary.totalInvoices"
+        icon="receipt_long"
+        iconBg="var(--color-primary-light)"
+        iconColor="var(--color-primary)"
+      ></app-report-summary-card>
+
+      <app-report-summary-card
+        title="Average Invoice"
+        [value]="summary.averageInvoice | currency: 'INR'"
+        icon="analytics"
+        iconBg="#fcefda"
+        iconColor="var(--color-accent)"
+      ></app-report-summary-card>
+
+      <app-report-summary-card
+        title="GST"
+        [value]="summary.totalGST | currency: 'INR'"
+        icon="account_balance"
+        iconBg="var(--color-primary-light)"
+        iconColor="var(--color-primary-dark)"
+      ></app-report-summary-card>
     </div>
   }
 
   @if (dataSource.filteredData.length > 0) {
     <div class="table-card">
       <div class="table-container">
-        <table mat-table [dataSource]="dataSource" matSort class="revenue-table">
+        <table
+          mat-table
+          [dataSource]="dataSource"
+          matSort
+          class="revenue-table"
+        >
           <ng-container matColumnDef="invoice">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Invoice</th>
-            <td mat-cell *matCellDef="let row"><span class="row-id">{{ row.invoiceNumber }}</span></td>
+            <td mat-cell *matCellDef="let row">
+              <span class="row-id">{{ row.invoiceNumber }}</span>
+            </td>
           </ng-container>
 
           <ng-container matColumnDef="patient">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Patient</th>
             <td mat-cell *matCellDef="let row">
               <div class="person-chip">
-                <div class="person-avatar patient">{{ getInitials(row.patientName) }}</div>
+                <div class="person-avatar patient">
+                  {{ getInitials(row.patientName) }}
+                </div>
                 <span>{{ row.patientName }}</span>
               </div>
             </td>
@@ -35,7 +77,9 @@
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Doctor</th>
             <td mat-cell *matCellDef="let row">
               <div class="person-chip">
-                <div class="person-avatar doctor">{{ getInitials(row.doctorName) }}</div>
+                <div class="person-avatar doctor">
+                  {{ getInitials(row.doctorName) }}
+                </div>
                 <span>{{ row.doctorName }}</span>
               </div>
             </td>
@@ -43,13 +87,20 @@
 
           <ng-container matColumnDef="date">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
-            <td mat-cell *matCellDef="let row"><span class="date-text">{{ row.invoiceDate | date: "dd MMM yyyy" }}</span></td>
+            <td mat-cell *matCellDef="let row">
+              <span class="date-text">{{
+                row.invoiceDate | date: "dd MMM yyyy"
+              }}</span>
+            </td>
           </ng-container>
 
           <ng-container matColumnDef="status">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
             <td mat-cell *matCellDef="let row">
-              <span class="status-badge" [ngClass]="row.paymentStatus.toLowerCase()">
+              <span
+                class="status-badge"
+                [ngClass]="row.paymentStatus.toLowerCase()"
+              >
                 <span class="status-dot"></span>
                 {{ row.paymentStatus }}
               </span>
@@ -57,11 +108,23 @@
           </ng-container>
 
           <ng-container matColumnDef="amount">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th>
-            <td mat-cell *matCellDef="let row">{{ row.total | currency: "INR" }}</td>
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              class="col-amount"
+            >
+              Amount
+            </th>
+            <td mat-cell *matCellDef="let row" class="col-amount">
+              <span class="amount">{{ row.total | currency: "INR" }}</span>
+            </td>
           </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr
+            mat-header-row
+            *matHeaderRowDef="displayedColumns; sticky: true"
+          ></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
         </table>
       </div>
@@ -69,7 +132,7 @@
 
     <mat-paginator
       [length]="dataSource.filteredData.length"
-      [pageSize]="10"
+      [pageSize]="5"
       [pageSizeOptions]="[10, 25, 50]"
       showFirstLastButtons
     ></mat-paginator>

@@ -1,0 +1,26 @@
+<div class="toast" [class]="'toast--' + data.type">
+  <div class="toast__icon-wrap">
+    <svg
+      class="toast__icon"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path [attr.d]="iconPath"></path>
+    </svg>
+  </div>
+
+  <div class="toast__body">
+    <p class="toast__title" *ngIf="data.title">{{ data.title }}</p>
+    <p class="toast__message">{{ data.message }}</p>
+  </div>
+
+  <button type="button" class="toast__close" (click)="close()" aria-label="Dismiss">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <path d="M18 6 6 18M6 6l12 12"></path>
+    </svg>
+  </button>
+</div>

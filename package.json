@@ -23,6 +23,7 @@
     "apexcharts": "^6.6.1",
     "bootstrap": "^5.3.8",
     "file-saver": "^2.0.5",
+    "html2canvas-pro": "^2.4.0",
     "html2pdf.js": "^0.14.0",
     "ng-apexcharts": "^1.15.0",
     "pdfmake": "^0.3.11",

@@ -1,4 +1,10 @@
-<app-page-header title="Doctor Performance" subtitle="Revenue & Appointment Analytics"></app-page-header>
+<app-page-header
+  title="Doctor Performance"
+  subtitle="Revenue & Appointment Analytics"
+  buttonLabel="back"
+  buttonIcon="arrow_back"
+  (buttonClick)="navBack()"
+></app-page-header>
 
 <div #reportContent class="report-content">
   <div class="summary-grid">
@@ -6,61 +12,82 @@
       title="Doctors"
       [value]="performance.length"
       icon="medical_services"
-      color="#0f5e5a"
+      iconBg="var(--color-primary-light)"
+      iconColor="var(--color-primary)"
     ></app-report-summary-card>
 
     <app-report-summary-card
       title="Appointments"
       [value]="getTotalAppointments()"
       icon="event_note"
-      color="#0b4744"
+      iconBg="var(--color-primary-light)"
+      iconColor="var(--color-primary-dark)"
     ></app-report-summary-card>
 
     <app-report-summary-card
       title="Revenue"
       [value]="getTotalRevenue() | currency: 'INR'"
       icon="payments"
-      color="#2f9e68"
+      iconBg="#e3f5ec"
+      iconColor="var(--color-success)"
     ></app-report-summary-card>
   </div>
 
   @if (dataSource.filteredData.length > 0) {
     <div class="table-card">
       <div class="table-container">
-        <table mat-table [dataSource]="dataSource" matSort class="doctor-performance-table">
+        <table
+          mat-table
+          [dataSource]="dataSource"
+          matSort
+          class="doctor-performance-table"
+        >
           <ng-container matColumnDef="doctor">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Doctor</th>
             <td mat-cell *matCellDef="let row">
               <div class="person-chip">
-                <div class="person-avatar doctor">{{ getInitials(row.doctorName) }}</div>
+                <div class="person-avatar doctor">
+                  {{ getInitials(row.doctorName) }}
+                </div>
                 <span>{{ row.doctorName }}</span>
               </div>
             </td>
           </ng-container>
 
           <ng-container matColumnDef="specialization">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Specialization</th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              Specialization
+            </th>
             <td mat-cell *matCellDef="let row">
               <span class="spec-text">{{ row.specialization }}</span>
             </td>
           </ng-container>
 
           <ng-container matColumnDef="appointments">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Appointments</th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              Appointments
+            </th>
             <td mat-cell *matCellDef="let row">{{ row.appointments }}</td>
           </ng-container>
 
           <ng-container matColumnDef="revenue">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Revenue</th>
-            <td mat-cell *matCellDef="let row">{{ row.revenue | currency: "INR" }}</td>
+            <td mat-cell *matCellDef="let row">
+              {{ row.revenue | currency: "INR" }}
+            </td>
           </ng-container>
 
           <ng-container matColumnDef="average">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Avg Fee</th>
-            <td mat-cell *matCellDef="let row">{{ row.averageFee | currency: "INR" }}</td>
+            <td mat-cell *matCellDef="let row">
+              {{ row.averageFee | currency: "INR" }}
+            </td>
           </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr
+            mat-header-row
+            *matHeaderRowDef="displayedColumns; sticky: true"
+          ></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
         </table>
       </div>
@@ -68,7 +95,7 @@
 
     <mat-paginator
       [length]="dataSource.filteredData.length"
-      [pageSize]="10"
+      [pageSize]="5"
       [pageSizeOptions]="[5, 10, 20]"
       showFirstLastButtons
     ></mat-paginator>

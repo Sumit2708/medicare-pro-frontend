@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import html2pdf from 'html2pdf.js';
+  import html2canvas from 'html2canvas-pro';
+
 
 @Injectable({
   providedIn: 'root',
@@ -69,31 +71,49 @@ export class ExportService {
   
 
 
-  exportPdf(element: HTMLElement, filename: string): void {
-    html2pdf()
-      .from(element)
+  // exportPdf(element: HTMLElement, filename: string): void {
+  //   html2pdf()
+  //     .from(element)
 
-      .set({
-        margin: 10,
+  //     .set({
+  //       margin: 10,
 
-        filename,
+  //       filename,
 
-        image: {
-          type: 'jpeg',
-          quality: 1,
-        },
+  //       image: {
+  //         type: 'jpeg',
+  //         quality: 1,
+  //       },
 
-        html2canvas: {
-          scale: 2,
-        },
+  //       html2canvas: {
+  //         scale: 2,
+  //       },
 
-        jsPDF: {
-          unit: 'mm',
-          format: 'a4',
-          orientation: 'portrait',
-        },
-      })
+  //       jsPDF: {
+  //         unit: 'mm',
+  //         format: 'a4',
+  //         orientation: 'portrait',
+  //       },
+  //     })
 
-      .save();
-  }
+  //     .save();
+  // }
+
+
+
+exportPdf(element: HTMLElement, filename: string): void {
+  html2pdf()
+    .from(element)
+    .set({
+      margin: 10,
+      filename,
+      image: { type: 'jpeg', quality: 1 },
+      html2canvas: {
+        scale: 2,
+        html2canvas: html2canvas // Overrides default html2canvas engine
+      },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    })
+    .save();
+}
 }

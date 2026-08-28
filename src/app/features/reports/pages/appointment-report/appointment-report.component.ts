@@ -65,7 +65,11 @@ export class AppointmentReportComponent {
   }
 
   loadReport(
-    filter: AppointmentReportFilter = { fromDate: null, toDate: null, status: 'ALL' },
+    filter: AppointmentReportFilter = {
+      fromDate: null,
+      toDate: null,
+      status: 'ALL',
+    },
   ): void {
     this.reportService.getAppointmentReport(filter).subscribe({
       next: (response) => {
@@ -88,12 +92,20 @@ export class AppointmentReportComponent {
   }
 
   getInitials(name: string): string {
-    return name.split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase();
+    return name
+      .split(' ')
+      .map((n) => n[0])
+      .join('')
+      .slice(0, 2)
+      .toUpperCase();
   }
 
   exportPdf(): void {
     if (!this.reportContent) return;
-    this.exportService.exportPdf(this.reportContent.nativeElement, 'Appointment Report');
+    this.exportService.exportPdf(
+      this.reportContent.nativeElement,
+      'Appointment Report',
+    );
   }
 
   exportExcel(): void {
@@ -102,5 +114,9 @@ export class AppointmentReportComponent {
 
   printReport(): void {
     window.open(`/reports/appointments/print`, '_blank');
+  }
+
+  navBack() {
+    window.history.back();
   }
 }
