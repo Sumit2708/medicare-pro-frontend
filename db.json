@@ -39,7 +39,48 @@
     },
     "workingHours": {
       "days": [
-       
+        {
+          "day": "Monday",
+          "enabled": true,
+          "startTime": "09:00",
+          "endTime": "17:30"
+        },
+        {
+          "day": "Tuesday",
+          "enabled": true,
+          "startTime": "09:00",
+          "endTime": "17:30"
+        },
+        {
+          "day": "Wednesday",
+          "enabled": true,
+          "startTime": "09:00",
+          "endTime": "17:30"
+        },
+        {
+          "day": "Thursday",
+          "enabled": true,
+          "startTime": "09:00",
+          "endTime": "17:30"
+        },
+        {
+          "day": "Friday",
+          "enabled": true,
+          "startTime": "09:00",
+          "endTime": "17:30"
+        },
+        {
+          "day": "Saturday",
+          "enabled": false,
+          "startTime": "09:00",
+          "endTime": "13:00"
+        },
+        {
+          "day": "Sunday",
+          "enabled": false,
+          "startTime": "09:00",
+          "endTime": "17:30"
+        }
       ]
     }
   },
