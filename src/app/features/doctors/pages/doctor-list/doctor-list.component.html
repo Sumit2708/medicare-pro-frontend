@@ -220,6 +220,15 @@
         Add Doctor
       </button>
     </div>
+
+    <!-- <app-empty-state
+    variant="no-results"
+      icon="medical_services"
+      title="No doctors yet"
+      message="Add your first doctor to start managing your medical team."
+      actionLabel="Add Doctor"
+      (actionClick)="openAddDoctor()"
+    ></app-empty-state> -->
   }
 
   @if (dataSource.filteredData.length > 0) {

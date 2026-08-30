@@ -34,7 +34,7 @@ import {
 import { MatDivider } from '@angular/material/divider';
 import { InvoiceViewModel } from '../../../../shared/models/invoice-view.model';
 import { Invoice } from '../../models/invoice.model';
-import { MatIcon } from "@angular/material/icon";
+import { MatIcon } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 
 @Component({
@@ -54,8 +54,8 @@ import { MatChipsModule } from '@angular/material/chips';
     MatSelect,
     MatDivider,
     MatIcon,
-    MatChipsModule
-],
+    MatChipsModule,
+  ],
   templateUrl: './create-invoice.component.html',
   styleUrl: './create-invoice.component.scss',
 })
@@ -70,10 +70,17 @@ export class CreateInvoiceComponent {
   invoiceExists = false;
 
   paymentStatusOptions = [
-  { value: PaymentStatus.PENDING, icon: 'schedule' },
-  { value: PaymentStatus.PAID, icon: 'task_alt' },
-  { value: PaymentStatus.CANCELLED, icon: 'cancel' },
-];
+    { value: PaymentStatus.PENDING, icon: 'schedule' },
+    { value: PaymentStatus.PAID, icon: 'task_alt' },
+    { value: PaymentStatus.CANCELLED, icon: 'cancel' },
+  ];
+
+  paymentMethodOptions = [
+    { value: PaymentMethod.CASH, icon: 'payments' },
+    { value: PaymentMethod.UPI, icon: 'qr_code_2' },
+    { value: PaymentMethod.CARD, icon: 'credit_card' },
+    { value: PaymentMethod.INSURANCE, icon: 'health_and_safety' },
+  ];
 
   constructor(
     private router: Router,
@@ -193,7 +200,7 @@ export class CreateInvoiceComponent {
           consultationFee: this.invoiceData.doctor.fee,
 
           discount: Number(this.invoiceForm.value.discount),
- 
+
           gst: Number(this.invoiceForm.getRawValue().gst),
 
           total: Number(this.invoiceForm.getRawValue().total),
@@ -203,10 +210,9 @@ export class CreateInvoiceComponent {
           paymentStatus: this.invoiceForm.value.paymentStatus!,
 
           createdDate: new Date().toISOString(),
-
         };
 
-        console.log(invoice,'invoice');
+        console.log(invoice, 'invoice');
 
         this.createInvoice(invoice);
       },

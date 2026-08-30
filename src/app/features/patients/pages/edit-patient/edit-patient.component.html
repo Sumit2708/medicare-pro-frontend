@@ -44,7 +44,7 @@
           </div>
 
           <div class="form-row">
-            <mat-form-field appearance="outline" >
+            <mat-form-field appearance="outline">
               <mat-label>Full Name*</mat-label>
               <mat-icon matPrefix>person_outline</mat-icon>
               <input
@@ -60,7 +60,7 @@
               }
             </mat-form-field>
 
-            <mat-form-field appearance="outline" >
+            <mat-form-field appearance="outline">
               <mat-label>Age*</mat-label>
               <mat-icon matPrefix>calendar_today</mat-icon>
               <input
@@ -79,7 +79,7 @@
           </div>
 
           <div class="form-row">
-            <mat-form-field appearance="outline" >
+            <mat-form-field appearance="outline">
               <mat-label>Gender*</mat-label>
               <mat-icon matPrefix>wc</mat-icon>
               <mat-select formControlName="gender">
@@ -95,7 +95,7 @@
               }
             </mat-form-field>
 
-            <mat-form-field appearance="outline" >
+            <mat-form-field appearance="outline">
               <mat-label>Blood Group</mat-label>
               <mat-icon matPrefix>bloodtype</mat-icon>
               <mat-select formControlName="bloodGroup">
@@ -146,13 +146,15 @@
           </div>
 
           <div class="form-row">
-            <mat-form-field appearance="outline" >
+            <mat-form-field appearance="outline">
               <mat-label>Mobile Number*</mat-label>
               <mat-icon matPrefix>phone</mat-icon>
               <input
                 matInput
                 type="tel"
                 formControlName="mobile"
+                maxlength="10"
+                inputmode="numeric"
                 placeholder="Enter mobile number"
               />
               @if (
@@ -161,26 +163,32 @@
               ) {
                 <mat-error>Mobile number is required</mat-error>
               }
+              <mat-error *ngIf="patientForm.get('mobile')?.hasError('pattern')">
+                Enter a valid 10-digit mobile number
+              </mat-error>
             </mat-form-field>
 
-            <mat-form-field appearance="outline" >
+            <mat-form-field appearance="outline">
               <mat-label>Alternate Number</mat-label>
               <mat-icon matPrefix>phone_forwarded</mat-icon>
               <input
                 matInput
                 type="tel"
                 formControlName="alternateMobile"
+                maxlength="10"
+                inputmode="numeric"
                 placeholder="Optional"
               />
+              <mat-error
+                *ngIf="patientForm.get('alternateMobile')?.hasError('pattern')"
+              >
+                Enter a valid 10-digit mobile number
+              </mat-error>
               <mat-hint>Optional</mat-hint>
             </mat-form-field>
           </div>
 
-          <mat-form-field
-            appearance="outline"
-            class="full-width"
-            
-          >
+          <mat-form-field appearance="outline" class="full-width">
             <mat-label>Address</mat-label>
             <mat-icon matPrefix>location_on</mat-icon>
             <input
@@ -202,11 +210,7 @@
             </div>
           </div>
 
-          <mat-form-field
-            appearance="outline"
-            class="full-width"
-            
-          >
+          <mat-form-field appearance="outline" class="full-width">
             <mat-label>Medical History</mat-label>
             <textarea
               matInput

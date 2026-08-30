@@ -1,6 +1,11 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { Router } from '@angular/router';
 import { PatientService } from '../../services/patient.service';
@@ -43,8 +48,11 @@ export class AddPatientComponent {
       name: ['', Validators.required],
       age: ['', Validators.required],
       gender: ['', Validators.required],
-      mobile: ['', Validators.required],
-      alternateMobile: [''],
+
+      mobile: ['', [Validators.required, Validators.pattern(/^[6-9]\d{9}$/)]],
+
+      alternateMobile: ['', [Validators.pattern(/^[6-9]\d{9}$/)]],
+
       bloodGroup: [''],
       address: [''],
       medicalHistory: [''],
@@ -56,7 +64,10 @@ export class AddPatientComponent {
     const name = this.patientForm.value.name || '';
     const parts = name.trim().split(' ').filter(Boolean);
     if (!parts.length) return 'P';
-    return parts.slice(0, 2).map((p: string) => p[0].toUpperCase()).join('');
+    return parts
+      .slice(0, 2)
+      .map((p: string) => p[0].toUpperCase())
+      .join('');
   }
 
   onSubmit() {
@@ -64,7 +75,9 @@ export class AddPatientComponent {
       this.isSubmitting = true;
       this.patientService.addPatient(this.patientForm.value).subscribe({
         next: (res: any) => {
-          this.notificationService.success(`Patient ${res.name} added successfully`);
+          this.notificationService.success(
+            `Patient ${res.name} added successfully`,
+          );
           this.router.navigate(['/patients']);
         },
         error: () => {
@@ -83,11 +96,11 @@ export class AddPatientComponent {
   }
 
   get completionPercent(): number {
-  const keys = ['name', 'age', 'gender', 'mobile'];
-  const filled = keys.filter((k) => {
-    const v = this.patientForm.get(k)?.value;
-    return v !== null && v !== undefined && v !== '';
-  }).length;
-  return Math.round((filled / keys.length) * 100);
-}
+    const keys = ['name', 'age', 'gender', 'mobile'];
+    const filled = keys.filter((k) => {
+      const v = this.patientForm.get(k)?.value;
+      return v !== null && v !== undefined && v !== '';
+    }).length;
+    return Math.round((filled / keys.length) * 100);
+  }
 }

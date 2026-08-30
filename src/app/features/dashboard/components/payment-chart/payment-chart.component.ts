@@ -13,6 +13,7 @@ import {
   ApexStroke,
   NgApexchartsModule,
 } from 'ng-apexcharts';
+import { ChartEmptyStateComponent } from "../../../../shared/components/chart-empty-state/chart-empty-state.component";
 
 export type PaymentChartOptions = {
   series: ApexNonAxisChartSeries;
@@ -28,7 +29,7 @@ export type PaymentChartOptions = {
 
 @Component({
   selector: 'app-payment-chart',
-  imports: [NgApexchartsModule, CommonModule],
+  imports: [NgApexchartsModule, CommonModule, ChartEmptyStateComponent],
   templateUrl: './payment-chart.component.html',
   styleUrl: './payment-chart.component.scss',
 })
@@ -117,4 +118,9 @@ export class PaymentChartComponent {
       ],
     };
   }
+
+  get hasPaymentsData(): boolean {
+  const series = this.chartOptions?.series as number[];
+  return !!series?.length && series.some(v => v > 0);
+}
 }

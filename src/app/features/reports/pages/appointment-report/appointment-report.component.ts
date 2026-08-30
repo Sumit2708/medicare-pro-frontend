@@ -55,6 +55,8 @@ export class AppointmentReportComponent {
     }
   }
 
+  today: any = new Date().toISOString().split('T')[0];
+
   constructor(
     private reportService: ReportsService,
     private exportService: ExportService,
@@ -100,16 +102,18 @@ export class AppointmentReportComponent {
       .toUpperCase();
   }
 
+
+
   exportPdf(): void {
     if (!this.reportContent) return;
     this.exportService.exportPdf(
       this.reportContent.nativeElement,
-      'Appointment Report',
+      new Date().toLocaleString(),
     );
   }
 
   exportExcel(): void {
-    this.exportService.exportExcel(this.dataSource.data, 'Appointment Report');
+    this.exportService.exportExcel(this.dataSource.data,   new Date().toLocaleString());
   }
 
   printReport(): void {

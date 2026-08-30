@@ -212,6 +212,7 @@ import { SearchBoxComponent } from '../../../../shared/components/search-box/sea
 import { DialogService } from '../../../../core/services/dialog/dialog.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
+import { EmptyStateComponent } from "../../../../shared/components/empty-state/empty-state.component";
 
 @Component({
   selector: 'app-doctor-list',
@@ -225,7 +226,8 @@ import { MatMenuModule } from '@angular/material/menu';
     MatMenuModule,
     PageHeaderComponent,
     SearchBoxComponent,
-  ],
+    EmptyStateComponent
+],
   templateUrl: './doctor-list.component.html',
   styleUrl: './doctor-list.component.scss',
 })

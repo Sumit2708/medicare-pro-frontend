@@ -91,7 +91,7 @@ import { ChartCardComponent } from '../../shared/components/chart-card/chart-car
 import { MatIcon } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
-import { DoctorService } from '../doctors/services/doctor.service'; // ⚠️ adjust path to your project
+import { DoctorService } from '../doctors/services/doctor.service'; 
 import { AlertBannerComponent, AlertItem } from '../../shared/components/alert-baner/alert-baner.component';
 import { MatTooltip } from '@angular/material/tooltip';
 

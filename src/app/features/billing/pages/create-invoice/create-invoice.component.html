@@ -97,7 +97,7 @@
 
       <h3 class="section-title">Payment Method</h3>
       <mat-chip-listbox formControlName="paymentMethod" aria-label="Payment method" class="chip-listbox">
-        @for (option of paymentStatusOptions; track option.value) {
+        @for (option of paymentMethodOptions; track option.value) {
           <mat-chip-option [value]="option.value" class="method-chip">
             <mat-icon class="chip-icon">{{ option.icon }}</mat-icon>
             {{ option.value }}

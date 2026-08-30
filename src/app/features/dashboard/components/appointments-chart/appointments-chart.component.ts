@@ -15,6 +15,7 @@ import {
   NgApexchartsModule,
 } from 'ng-apexcharts';
 import { AppointmentChartModel } from '../../models/appointment-chart.model';
+import { ChartEmptyStateComponent } from "../../../../shared/components/chart-empty-state/chart-empty-state.component";
 
 export type AppointmentChartOptions = {
   series: ApexAxisChartSeries;
@@ -40,13 +41,14 @@ export type AppointmentChartOptions = {
 
 @Component({
   selector: 'app-appointments-chart',
-  imports: [CommonModule, NgApexchartsModule],
+  imports: [CommonModule, NgApexchartsModule, ChartEmptyStateComponent],
   templateUrl: './appointments-chart.component.html',
   styleUrl: './appointments-chart.component.scss',
 })
 export class AppointmentsChartComponent {
   @Input({ required: true })
   data: AppointmentChartModel[] = [];
+  
 
   chartOptions: Partial<AppointmentChartOptions> = {};
 
@@ -119,4 +121,9 @@ export class AppointmentsChartComponent {
       },
     };
   }
+
+  get hasAppointmentsData(): boolean {
+  const series = this.chartOptions?.series as any[];
+  return !!series?.length && series.some(v => v > 0);
+}
 }

@@ -17,6 +17,7 @@ import {
 } from 'ng-apexcharts';
 
 import { CommonModule } from '@angular/common';
+import { ChartEmptyStateComponent } from '../../../../shared/components/chart-empty-state/chart-empty-state.component';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -35,22 +36,9 @@ export type ChartOptions = {
 
 @Component({
   selector: 'app-revenue-chart',
-  imports: [NgApexchartsModule, CommonModule],
-  template: `
-    <apx-chart
-      [series]="chartOptions.series!"
-      [chart]="chartOptions.chart!"
-      [xaxis]="chartOptions.xaxis!"
-      [yaxis]="chartOptions.yaxis!"
-      [grid]="chartOptions.grid!"
-      [colors]="chartOptions.colors!"
-      [stroke]="chartOptions.stroke!"
-      [fill]="chartOptions.fill!"
-      [dataLabels]="chartOptions.dataLabels!"
-      [tooltip]="chartOptions.tooltip!"
-      [legend]="chartOptions.legend!"
-    ></apx-chart>
-  `
+  imports: [NgApexchartsModule, CommonModule, ChartEmptyStateComponent],
+  templateUrl: './revenue-chart.component.html',
+  styleUrl: './revenue-chart.component.scss',
 })
 export class RevenueChartComponent {
   @Input({ required: true })
@@ -156,4 +144,9 @@ export class RevenueChartComponent {
 
     return value.toString();
   }
+
+  get hasRevenueData(): boolean {
+  const series = this.chartOptions?.series as { data: number[] }[];
+  return !!series?.length && series.some(s => s.data?.some(v => v > 0));
+}
 }

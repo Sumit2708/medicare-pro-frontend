@@ -1,4 +1,4 @@
-@if (chartOptions) {
+@if (chartOptions && hasAppointmentsData) {
   <apx-chart
     [series]="chartOptions.series!"
     [chart]="chartOptions.chart!"
@@ -9,6 +9,13 @@
     [grid]="chartOptions.grid!"
     [colors]="chartOptions.colors!"
     [legend]="chartOptions.legend!"
-    [dataLabels]="chartOptions.dataLabels!">
+    [dataLabels]="chartOptions.dataLabels!"
+  >
   </apx-chart>
+} @else {
+  <app-chart-empty-state
+    icon="calendar"
+    title="No appointments yet"
+    subtitle="New bookings will show up here"
+  />
 }

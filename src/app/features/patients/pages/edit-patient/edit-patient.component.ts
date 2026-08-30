@@ -1,6 +1,11 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -10,7 +15,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PatientService } from '../../services/patient.service';
 import { NotificationService } from '../../../../core/services/notification/notification.service';
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
-import { MatChipOption, MatChipsModule } from "@angular/material/chips";
+import { MatChipOption, MatChipsModule } from '@angular/material/chips';
 
 @Component({
   selector: 'app-edit-patient',
@@ -25,8 +30,7 @@ import { MatChipOption, MatChipsModule } from "@angular/material/chips";
     MatIconModule,
     PageHeaderComponent,
     MatChipsModule,
-    
-],
+  ],
   templateUrl: './edit-patient.component.html',
   styleUrl: './edit-patient.component.scss',
 })
@@ -49,8 +53,8 @@ export class EditPatientComponent {
       name: ['', Validators.required],
       age: ['', Validators.required],
       gender: ['', Validators.required],
-      mobile: ['', Validators.required],
-      alternateMobile: [''],
+      mobile: ['', [Validators.required, Validators.pattern(/^[6-9]\d{9}$/)]],
+      alternateMobile: ['', [Validators.pattern(/^[6-9]\d{9}$/)]],
       bloodGroup: [''],
       address: [''],
       medicalHistory: [''],
@@ -71,7 +75,10 @@ export class EditPatientComponent {
     const name = this.patientForm.value.name || '';
     const parts = name.trim().split(' ').filter(Boolean);
     if (!parts.length) return 'P';
-    return parts.slice(0, 2).map((p: string) => p[0].toUpperCase()).join('');
+    return parts
+      .slice(0, 2)
+      .map((p: string) => p[0].toUpperCase())
+      .join('');
   }
 
   getPatientById() {
@@ -90,16 +97,20 @@ export class EditPatientComponent {
   onSubmit() {
     if (this.patientForm.valid) {
       this.isSubmitting = true;
-      this.patientService.updatePatient(this.patientId as any, this.patientForm.value).subscribe({
-        next: (res: any) => {
-          this.notificationService.success(`Patient ${res.name} updated successfully`);
-          this.router.navigate(['/patients']);
-        },
-        error: () => {
-          this.isSubmitting = false;
-          this.notificationService.error('Failed to update patient');
-        },
-      });
+      this.patientService
+        .updatePatient(this.patientId as any, this.patientForm.value)
+        .subscribe({
+          next: (res: any) => {
+            this.notificationService.success(
+              `Patient ${res.name} updated successfully`,
+            );
+            this.router.navigate(['/patients']);
+          },
+          error: () => {
+            this.isSubmitting = false;
+            this.notificationService.error('Failed to update patient');
+          },
+        });
     } else {
       this.patientForm.markAllAsTouched();
       this.notificationService.error('Please fill all required fields');
@@ -110,12 +121,12 @@ export class EditPatientComponent {
     this.router.navigate(['/patients']);
   }
 
-    get completionPercent(): number {
-  const keys = ['name', 'age', 'gender', 'mobile'];
-  const filled = keys.filter((k) => {
-    const v = this.patientForm.get(k)?.value;
-    return v !== null && v !== undefined && v !== '';
-  }).length;
-  return Math.round((filled / keys.length) * 100);
-}
+  get completionPercent(): number {
+    const keys = ['name', 'age', 'gender', 'mobile'];
+    const filled = keys.filter((k) => {
+      const v = this.patientForm.get(k)?.value;
+      return v !== null && v !== undefined && v !== '';
+    }).length;
+    return Math.round((filled / keys.length) * 100);
+  }
 }

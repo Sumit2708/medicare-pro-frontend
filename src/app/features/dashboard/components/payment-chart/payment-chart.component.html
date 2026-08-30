@@ -1,4 +1,4 @@
-@if (chartOptions) {
+@if (chartOptions && hasPaymentsData) {
   <apx-chart
     [series]="chartOptions.series!"
     [chart]="chartOptions.chart!"
@@ -8,6 +8,13 @@
     [colors]="chartOptions.colors!"
     [dataLabels]="chartOptions.dataLabels!"
     [plotOptions]="chartOptions.plotOptions!"
-    [stroke]="chartOptions.stroke!">
+    [stroke]="chartOptions.stroke!"
+  >
   </apx-chart>
+} @else {
+  <app-chart-empty-state
+    icon="pie-chart"
+    title="No payment data yet"
+    subtitle="Try a different date range"
+  />
 }

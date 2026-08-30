@@ -1,5 +1,5 @@
-@if(chartOptions){
-<apx-chart
+@if (chartOptions && hasRevenueData) {
+  <apx-chart
     [series]="chartOptions.series!"
     [chart]="chartOptions.chart!"
     [stroke]="chartOptions.stroke!"
@@ -10,6 +10,14 @@
     [grid]="chartOptions.grid!"
     [tooltip]="chartOptions.tooltip!"
     [legend]="chartOptions.legend!"
-    [dataLabels]="chartOptions.dataLabels!">
-</apx-chart>
+    [dataLabels]="chartOptions.dataLabels!"
+  >
+    ssh dasmbsakdbk
+  </apx-chart>
+} @else {
+  <app-chart-empty-state
+    icon="bar-chart"
+    title="No revenue data yet"
+    subtitle="Data will appear once payments are recorded"
+  />
 }
