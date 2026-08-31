@@ -5,244 +5,267 @@
 >
 </app-page-header>
 
-@if (isLoading) {
+@if (isLoadingPatient) {
   <div class="loading-state">
     <mat-icon class="spin">progress_activity</mat-icon>
     <p>Loading patient details...</p>
   </div>
 } @else {
   <div class="add-patient-layout">
-    <mat-card class="form-card">
-      <div class="form-card-header">
-        <div class="form-icon">
-          <mat-icon>edit</mat-icon>
-        </div>
-        <div>
-          <h3>Patient Details</h3>
-          <p>Fields marked with * are required</p>
-        </div>
-      </div>
-
-      <div class="progress-track">
-        <div class="progress-fill" [style.width.%]="completionPercent"></div>
-      </div>
-      <p class="progress-label">{{ completionPercent }}% complete</p>
-
-      <form
-        [formGroup]="patientForm"
-        (ngSubmit)="onSubmit()"
-        class="patient-form"
-      >
-        <!-- Personal Information -->
-        <div class="form-section">
-          <div class="section-heading">
-            <mat-icon>person</mat-icon>
+    <mat-tab-group [(selectedIndex)]="selectedTabIndex">
+      <mat-tab label="Patient Details">
+        <mat-card class="form-card">
+          <div class="form-card-header">
+            <div class="form-icon">
+              <mat-icon>edit</mat-icon>
+            </div>
             <div>
-              <h4>Personal Information</h4>
-              <p>Patient's basic details</p>
+              <h3>Patient Details</h3>
+              <p>Fields marked with * are required</p>
             </div>
           </div>
 
-          <div class="form-row">
-            <mat-form-field appearance="outline">
-              <mat-label>Full Name*</mat-label>
-              <mat-icon matPrefix>person_outline</mat-icon>
-              <input
-                matInput
-                formControlName="name"
-                placeholder="Enter patient's full name"
-              />
-              @if (
-                patientForm.get("name")?.hasError("required") &&
-                patientForm.get("name")?.touched
-              ) {
-                <mat-error>Name is required</mat-error>
-              }
-            </mat-form-field>
-
-            <mat-form-field appearance="outline">
-              <mat-label>Age*</mat-label>
-              <mat-icon matPrefix>calendar_today</mat-icon>
-              <input
-                matInput
-                type="number"
-                formControlName="age"
-                placeholder="Enter age"
-              />
-              @if (
-                patientForm.get("age")?.hasError("required") &&
-                patientForm.get("age")?.touched
-              ) {
-                <mat-error>Age is required</mat-error>
-              }
-            </mat-form-field>
+          <div class="progress-track">
+            <div
+              class="progress-fill"
+              [style.width.%]="completionPercent"
+            ></div>
           </div>
+          <p class="progress-label">{{ completionPercent }}% complete</p>
 
-          <div class="form-row">
-            <mat-form-field appearance="outline">
-              <mat-label>Gender*</mat-label>
-              <mat-icon matPrefix>wc</mat-icon>
-              <mat-select formControlName="gender">
-                <mat-option value="Male">Male</mat-option>
-                <mat-option value="Female">Female</mat-option>
-                <mat-option value="Other">Other</mat-option>
-              </mat-select>
-              @if (
-                patientForm.get("gender")?.hasError("required") &&
-                patientForm.get("gender")?.touched
-              ) {
-                <mat-error>Gender is required</mat-error>
-              }
-            </mat-form-field>
-
-            <mat-form-field appearance="outline">
-              <mat-label>Blood Group</mat-label>
-              <mat-icon matPrefix>bloodtype</mat-icon>
-              <mat-select formControlName="bloodGroup">
-                @for (bg of bloodGroups; track bg) {
-                  <mat-option [value]="bg">{{ bg }}</mat-option>
-                }
-              </mat-select>
-              <mat-hint>Optional</mat-hint>
-            </mat-form-field>
-          </div>
-
-          <div class="status-row">
-            <span class="status-label">Patient Status</span>
-            <mat-chip-listbox
-              formControlName="status"
-              aria-label="Patient status"
-            >
-              <mat-chip-option
-                value="Active"
-                class="status-chip status-chip--active"
-              >
-                <span class="d-flex align-items-center">
-                  <mat-icon class="chip-icon">check_circle</mat-icon>
-                  <span> Active </span>
-                </span>
-              </mat-chip-option>
-              <mat-chip-option
-                value="Inactive"
-                class="status-chip status-chip--inactive"
-              >
-                <span class="d-flex align-items-center">
-                  <mat-icon class="chip-icon">pause_circle</mat-icon>
-                  <span> Inactive </span>
-                </span>
-              </mat-chip-option>
-            </mat-chip-listbox>
-          </div>
-        </div>
-
-        <!-- Contact Information -->
-        <div class="form-section">
-          <div class="section-heading">
-            <mat-icon>call</mat-icon>
-            <div>
-              <h4>Contact Information</h4>
-              <p>How to reach the patient</p>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <mat-form-field appearance="outline">
-              <mat-label>Mobile Number*</mat-label>
-              <mat-icon matPrefix>phone</mat-icon>
-              <input
-                matInput
-                type="tel"
-                formControlName="mobile"
-                maxlength="10"
-                inputmode="numeric"
-                placeholder="Enter mobile number"
-              />
-              @if (
-                patientForm.get("mobile")?.hasError("required") &&
-                patientForm.get("mobile")?.touched
-              ) {
-                <mat-error>Mobile number is required</mat-error>
-              }
-              <mat-error *ngIf="patientForm.get('mobile')?.hasError('pattern')">
-                Enter a valid 10-digit mobile number
-              </mat-error>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline">
-              <mat-label>Alternate Number</mat-label>
-              <mat-icon matPrefix>phone_forwarded</mat-icon>
-              <input
-                matInput
-                type="tel"
-                formControlName="alternateMobile"
-                maxlength="10"
-                inputmode="numeric"
-                placeholder="Optional"
-              />
-              <mat-error
-                *ngIf="patientForm.get('alternateMobile')?.hasError('pattern')"
-              >
-                Enter a valid 10-digit mobile number
-              </mat-error>
-              <mat-hint>Optional</mat-hint>
-            </mat-form-field>
-          </div>
-
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Address</mat-label>
-            <mat-icon matPrefix>location_on</mat-icon>
-            <input
-              matInput
-              formControlName="address"
-              placeholder="Enter patient's address"
-            />
-            <mat-hint>Optional</mat-hint>
-          </mat-form-field>
-        </div>
-
-        <!-- Medical Information -->
-        <div class="form-section">
-          <div class="section-heading">
-            <mat-icon class="medical-icon">medical_information</mat-icon>
-            <div>
-              <h4>Medical Information</h4>
-              <p>Relevant history for clinical staff</p>
-            </div>
-          </div>
-
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Medical History</mat-label>
-            <textarea
-              matInput
-              formControlName="medicalHistory"
-              rows="4"
-              placeholder="Allergies, chronic conditions, past surgeries, ongoing medication, etc."
-            ></textarea>
-            <mat-hint>Optional — helps doctors during consultations</mat-hint>
-          </mat-form-field>
-        </div>
-
-        <div class="form-actions">
-          <button mat-stroked-button type="button" (click)="navtoPatientList()">
-            Cancel
-          </button>
-          <button
-            mat-raised-button
-            color="primary"
-            type="submit"
-            [disabled]="isSubmitting"
+          <form
+            [formGroup]="patientForm"
+            (ngSubmit)="onSubmit()"
+            class="patient-form"
           >
-            <mat-icon *ngIf="isSubmitting" class="spin"
-              >progress_activity</mat-icon
-            >
-            <mat-icon *ngIf="!isSubmitting">save</mat-icon>
-            {{ isSubmitting ? "Saving..." : "Save Changes" }}
-          </button>
-        </div>
-      </form>
-    </mat-card>
+            <div class="form-section">
+              <div class="section-heading">
+                <mat-icon>person</mat-icon>
+                <div>
+                  <h4>Personal Information</h4>
+                  <p>Patient's basic details</p>
+                </div>
+              </div>
 
-    <!-- Live preview -->
+              <div class="form-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>Full Name*</mat-label>
+                  <mat-icon matPrefix>person_outline</mat-icon>
+                  <input
+                    matInput
+                    formControlName="name"
+                    placeholder="Enter patient's full name"
+                  />
+                  @if (
+                    patientForm.get("name")?.hasError("required") &&
+                    patientForm.get("name")?.touched
+                  ) {
+                    <mat-error>Name is required</mat-error>
+                  }
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Age*</mat-label>
+                  <mat-icon matPrefix>calendar_today</mat-icon>
+                  <input
+                    matInput
+                    type="number"
+                    formControlName="age"
+                    placeholder="Enter age"
+                  />
+                  @if (
+                    patientForm.get("age")?.hasError("required") &&
+                    patientForm.get("age")?.touched
+                  ) {
+                    <mat-error>Age is required</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>Gender*</mat-label>
+                  <mat-icon matPrefix>wc</mat-icon>
+                  <mat-select formControlName="gender">
+                    <mat-option value="Male">Male</mat-option>
+                    <mat-option value="Female">Female</mat-option>
+                    <mat-option value="Other">Other</mat-option>
+                  </mat-select>
+                  @if (
+                    patientForm.get("gender")?.hasError("required") &&
+                    patientForm.get("gender")?.touched
+                  ) {
+                    <mat-error>Gender is required</mat-error>
+                  }
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Blood Group</mat-label>
+                  <mat-icon matPrefix>bloodtype</mat-icon>
+                  <mat-select formControlName="bloodGroup">
+                    @for (bg of bloodGroups; track bg) {
+                      <mat-option [value]="bg">{{ bg }}</mat-option>
+                    }
+                  </mat-select>
+                  <mat-hint>Optional</mat-hint>
+                </mat-form-field>
+              </div>
+
+              <div class="status-row">
+                <span class="status-label">Patient Status</span>
+                <mat-chip-listbox
+                  formControlName="status"
+                  aria-label="Patient status"
+                >
+                  <mat-chip-option
+                    value="Active"
+                    class="status-chip status-chip--active"
+                  >
+                    <span class="d-flex align-items-center">
+                      <mat-icon class="chip-icon">check_circle</mat-icon>
+                      <span> Active </span>
+                    </span>
+                  </mat-chip-option>
+                  <mat-chip-option
+                    value="Inactive"
+                    class="status-chip status-chip--inactive"
+                  >
+                    <span class="d-flex align-items-center">
+                      <mat-icon class="chip-icon">pause_circle</mat-icon>
+                      <span> Inactive </span>
+                    </span>
+                  </mat-chip-option>
+                </mat-chip-listbox>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <div class="section-heading">
+                <mat-icon>call</mat-icon>
+                <div>
+                  <h4>Contact Information</h4>
+                  <p>How to reach the patient</p>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>Mobile Number*</mat-label>
+                  <mat-icon matPrefix>phone</mat-icon>
+                  <input
+                    matInput
+                    type="tel"
+                    formControlName="mobile"
+                    maxlength="10"
+                    inputmode="numeric"
+                    placeholder="Enter mobile number"
+                  />
+                  @if (
+                    patientForm.get("mobile")?.hasError("required") &&
+                    patientForm.get("mobile")?.touched
+                  ) {
+                    <mat-error>Mobile number is required</mat-error>
+                  }
+                  <mat-error
+                    *ngIf="patientForm.get('mobile')?.hasError('pattern')"
+                  >
+                    Enter a valid 10-digit mobile number
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Alternate Number</mat-label>
+                  <mat-icon matPrefix>phone_forwarded</mat-icon>
+                  <input
+                    matInput
+                    type="tel"
+                    formControlName="alternateMobile"
+                    maxlength="10"
+                    inputmode="numeric"
+                    placeholder="Optional"
+                  />
+                  <mat-error
+                    *ngIf="
+                      patientForm.get('alternateMobile')?.hasError('pattern')
+                    "
+                  >
+                    Enter a valid 10-digit mobile number
+                  </mat-error>
+                  <mat-hint>Optional</mat-hint>
+                </mat-form-field>
+              </div>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Address</mat-label>
+                <mat-icon matPrefix>location_on</mat-icon>
+                <input
+                  matInput
+                  formControlName="address"
+                  placeholder="Enter patient's address"
+                />
+                <mat-hint>Optional</mat-hint>
+              </mat-form-field>
+            </div>
+
+            <div class="form-section">
+              <div class="section-heading">
+                <mat-icon class="medical-icon">medical_information</mat-icon>
+                <div>
+                  <h4>Medical Information</h4>
+                  <p>Relevant history for clinical staff</p>
+                </div>
+              </div>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Medical History</mat-label>
+                <textarea
+                  matInput
+                  formControlName="medicalHistory"
+                  rows="4"
+                  placeholder="Allergies, chronic conditions, past surgeries, ongoing medication, etc."
+                ></textarea>
+                <mat-hint
+                  >Optional — helps doctors during consultations</mat-hint
+                >
+              </mat-form-field>
+            </div>
+
+            <div class="form-actions">
+              <button
+                mat-stroked-button
+                type="button"
+                (click)="navtoPatientList()"
+              >
+                Cancel
+              </button>
+              <button
+                mat-raised-button
+                color="primary"
+                type="submit"
+                [disabled]="isSubmitting"
+              >
+                <mat-icon *ngIf="isSubmitting" class="spin"
+                  >progress_activity</mat-icon
+                >
+                <mat-icon *ngIf="!isSubmitting">save</mat-icon>
+                {{ isSubmitting ? "Saving..." : "Save Changes" }}
+              </button>
+            </div>
+          </form>
+        </mat-card>
+      </mat-tab>
+
+      <mat-tab label="Prescriptions">
+        <div class="tab-panel">
+          <app-prescription-history
+            [patientId]="patientId.toString()"
+            [patientName]="patientForm.get('name')?.value"
+          >
+          </app-prescription-history>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+
     <div class="preview-card">
       <div class="preview-header">
         <div class="preview-avatar">{{ initials }}</div>

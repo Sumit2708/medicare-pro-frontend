@@ -1,0 +1,24 @@
+<mat-form-field appearance="outline" class="med-field">
+  <mat-label>Medicine name</mat-label>
+  <input
+    type="text"
+    matInput
+    [formControl]="control"
+    [matAutocomplete]="auto"
+    placeholder="Start typing e.g. Paracetamol" />
+  <mat-icon matSuffix>medication</mat-icon>
+
+  <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)="onSelect($event.option.value)">
+    <mat-option *ngFor="let med of filteredMedicines$ | async" [value]="med">
+      <span class="med-name">{{ med.name }}</span>
+      <span class="med-meta" *ngIf="med.strength || med.dosageForm">
+        {{ med.dosageForm }} <ng-container *ngIf="med.strength">· {{ med.strength }}</ng-container>
+      </span>
+    </mat-option>
+
+    <mat-option *ngIf="(filteredMedicines$ | async)?.length === 0 && control.value" [value]="null" (click)="onAddNew(control.value)">
+      <mat-icon class="add-icon">add_circle_outline</mat-icon>
+      Add "{{ control.value }}" as a new medicine
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>

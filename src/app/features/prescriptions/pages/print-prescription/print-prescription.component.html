@@ -1,0 +1,81 @@
+<div class="print-page" *ngIf="prescription">
+  <div class="no-print toolbar">
+    <button mat-stroked-button (click)="close()"><mat-icon>close</mat-icon> Close</button>
+    <button mat-flat-button color="primary" (click)="print()"><mat-icon>print</mat-icon> Print</button>
+  </div>
+
+  <header class="rx-header">
+    <div class="clinic-info">
+      <h1>{{ clinicName }}</h1>
+      <p>{{ clinicAddress }}</p>
+      <p>{{ clinicPhone }}</p>
+    </div>
+    <div class="rx-mark">Rx</div>
+  </header>
+
+  <hr />
+
+  <section class="meta-grid">
+    <div>
+      <span class="label">Patient</span>
+      <span class="value">{{ prescription.patientName }}</span>
+    </div>
+    <div>
+      <span class="label">Date</span>
+      <span class="value">{{ prescription.date | date: 'd MMM y' }}</span>
+    </div>
+    <div>
+      <span class="label">Doctor</span>
+      <span class="value">{{ prescription.doctorName }}</span>
+    </div>
+    <div *ngIf="prescription.diagnosis">
+      <span class="label">Diagnosis</span>
+      <span class="value">{{ prescription.diagnosis }}</span>
+    </div>
+  </section>
+
+  <section class="items-section">
+    <table class="rx-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Medicine</th>
+          <th>Dosage</th>
+          <th>Frequency</th>
+          <th>Duration</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of prescription.items; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>
+            <strong>{{ item.medicineName }}</strong>
+            <span class="muted" *ngIf="item.strength"> · {{ item.strength }}</span>
+          </td>
+          <td>{{ item.dosage }}</td>
+          <td>{{ item.frequency }}</td>
+          <td>{{ item.duration }}</td>
+          <td>{{ item.notes || '—' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="advice-section" *ngIf="prescription.advice">
+    <span class="label">Advice</span>
+    <p>{{ prescription.advice }}</p>
+  </section>
+
+  <section class="advice-section" *ngIf="prescription.followUpDate">
+    <span class="label">Follow-up</span>
+    <p>{{ prescription.followUpDate | date: 'd MMM y' }}</p>
+  </section>
+
+  <footer class="rx-footer">
+    <div class="signature">
+      <div class="sign-line"></div>
+      <span>{{ prescription.doctorName }}</span>
+    </div>
+  </footer>
+</div>
