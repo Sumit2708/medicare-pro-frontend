@@ -1,81 +1,103 @@
-<div class="print-page" *ngIf="prescription">
-  <div class="no-print toolbar">
-    <button mat-stroked-button (click)="close()"><mat-icon>close</mat-icon> Close</button>
-    <button mat-flat-button color="primary" (click)="print()"><mat-icon>print</mat-icon> Print</button>
+@if (loading) {
+  <div class="no-print state-block">
+    <p>Preparing prescription for print…</p>
   </div>
+}
 
-  <header class="rx-header">
-    <div class="clinic-info">
-      <h1>{{ clinicName }}</h1>
-      <p>{{ clinicAddress }}</p>
-      <p>{{ clinicPhone }}</p>
+@if (!loading && loadFailed) {
+  <div class="no-print state-block">
+    <p>Couldn't load this prescription.</p>
+  </div>
+}
+
+@if (!loading && !loadFailed && prescription) {
+  <div id="prescription-content" class="rx-container">
+
+    <!-- Letterhead -->
+    <div class="rx-header">
+      <div class="clinic-block">
+        <h1>{{ clinicInfo.name }}</h1>
+        <p class="tagline">{{ clinicInfo.tagline }}</p>
+        <p class="contact-line">{{ clinicInfo.address }} &nbsp;•&nbsp; {{ clinicInfo.phone }}</p>
+      </div>
+
+      <div class="doctor-block">
+        <span class="doc-type-badge">Rx</span>
+        <span class="doctor-name">Dr. {{ prescription.doctorName }}</span>
+        <span class="visit-date">{{ prescription.date | date: 'dd MMM yyyy' }}</span>
+      </div>
     </div>
-    <div class="rx-mark">Rx</div>
-  </header>
 
-  <hr />
+    <!-- Compact patient + visit strip -->
+    <div class="patient-strip">
+      <span class="strip-item strip-item--name">{{ patient?.name || prescription.patientName }}</span>
 
-  <section class="meta-grid">
-    <div>
-      <span class="label">Patient</span>
-      <span class="value">{{ prescription.patientName }}</span>
+      <span class="strip-sep" *ngIf="patient?.age || patient?.gender"></span>
+      <span class="strip-item" *ngIf="patient?.age || patient?.gender">
+        {{ patient?.age ? patient.age + ' yrs' : '' }}{{ patient?.age && patient?.gender ? ' · ' : '' }}{{ patient?.gender }}
+      </span>
+
+      <span class="strip-sep" *ngIf="patient?.bloodGroup"></span>
+      <span class="strip-item strip-item--blood" *ngIf="patient?.bloodGroup">{{ patient.bloodGroup }}</span>
+
+      <span class="strip-sep" *ngIf="patient?.mobile"></span>
+      <span class="strip-item" *ngIf="patient?.mobile">{{ patient.mobile }}</span>
+
+      <span class="strip-sep" *ngIf="patient?.address"></span>
+      <span class="strip-item strip-item--address" *ngIf="patient?.address">{{ patient.address }}</span>
+
+      <span class="strip-sep" *ngIf="prescription.diagnosis"></span>
+      <span class="strip-item" *ngIf="prescription.diagnosis">
+        <strong>Dx:</strong> {{ prescription.diagnosis }}
+      </span>
+
+      <span class="strip-sep" *ngIf="prescription.followUpDate"></span>
+      <span class="strip-item" *ngIf="prescription.followUpDate">
+        <strong>Follow-up:</strong> {{ prescription.followUpDate | date: 'dd MMM yyyy' }}
+      </span>
     </div>
-    <div>
-      <span class="label">Date</span>
-      <span class="value">{{ prescription.date | date: 'd MMM y' }}</span>
-    </div>
-    <div>
-      <span class="label">Doctor</span>
-      <span class="value">{{ prescription.doctorName }}</span>
-    </div>
-    <div *ngIf="prescription.diagnosis">
-      <span class="label">Diagnosis</span>
-      <span class="value">{{ prescription.diagnosis }}</span>
-    </div>
-  </section>
 
-  <section class="items-section">
-    <table class="rx-table">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Medicine</th>
-          <th>Dosage</th>
-          <th>Frequency</th>
-          <th>Duration</th>
-          <th>Notes</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of prescription.items; let i = index">
-          <td>{{ i + 1 }}</td>
-          <td>
-            <strong>{{ item.medicineName }}</strong>
-            <span class="muted" *ngIf="item.strength"> · {{ item.strength }}</span>
-          </td>
-          <td>{{ item.dosage }}</td>
-          <td>{{ item.frequency }}</td>
-          <td>{{ item.duration }}</td>
-          <td>{{ item.notes || '—' }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
-
-  <section class="advice-section" *ngIf="prescription.advice">
-    <span class="label">Advice</span>
-    <p>{{ prescription.advice }}</p>
-  </section>
-
-  <section class="advice-section" *ngIf="prescription.followUpDate">
-    <span class="label">Follow-up</span>
-    <p>{{ prescription.followUpDate | date: 'd MMM y' }}</p>
-  </section>
-
-  <footer class="rx-footer">
-    <div class="signature">
-      <div class="sign-line"></div>
-      <span>{{ prescription.doctorName }}</span>
+    <!-- Medicines — the focal section -->
+    <div class="rx-symbol-row">
+      <span class="rx-symbol">℞</span>
+      <span class="rx-symbol-label">Medicines Prescribed</span>
     </div>
-  </footer>
-</div>
+
+    <div class="med-list">
+      <div class="med-line" *ngFor="let item of prescription.items; let i = index">
+        <span class="med-number">{{ i + 1 }}</span>
+
+        <div class="med-body">
+          <div class="med-name-row">
+            <span class="med-name">{{ item.medicineName }}</span>
+            <span class="med-strength" *ngIf="item.strength">{{ item.strength }}</span>
+          </div>
+
+          <div class="med-tags">
+            <span class="med-tag">{{ item.dosage }}</span>
+            <span class="med-tag">{{ item.frequency }}</span>
+            <span class="med-tag">{{ item.duration }}</span>
+          </div>
+
+          <p class="med-notes" *ngIf="item.notes">{{ item.notes }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Advice -->
+    <div class="advice-section" *ngIf="prescription.advice">
+      <span class="section-label">Advice</span>
+      <p>{{ prescription.advice }}</p>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p class="thank-you">Get well soon.</p>
+
+      <div class="signature">
+        <div class="signature-line"></div>
+        <span>Dr. {{ prescription.doctorName }}</span>
+      </div>
+    </div>
+  </div>
+}

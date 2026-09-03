@@ -134,6 +134,7 @@ export class EditPatientComponent {
  
     this.patientService.getPatientById(this.patientId).subscribe({
       next: (patient: Patient) => {
+        console.log(patient);
         this.isLoadingPatient = false;
         this.patientForm.patchValue({
           name: patient.name,
@@ -212,6 +213,10 @@ onSubmit(): void {
   }
 
    onCancel(): void {
+    this.router.navigate(['/patients']);
+  }
+
+  navBack(){
     this.router.navigate(['/patients']);
   }
 }

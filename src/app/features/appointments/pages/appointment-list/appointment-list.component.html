@@ -30,8 +30,7 @@
       <h3>No appointments found</h3>
       <p>No appointments match your search.</p>
     </div>
-
-     }
+  }
 
   @if (dataSource.data.length === 0) {
     <div class="empty-state">
@@ -64,7 +63,11 @@
           <ng-container matColumnDef="patient">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Patient</th>
             <td mat-cell *matCellDef="let appt">
-              <div class="person-chip">
+              <div
+                class="person-chip clickable"
+                matTooltip="View / edit patient"
+                (click)="navEditPatient(appt.patientId)"
+              >
                 <div class="person-avatar patient">
                   {{ getInitials(getPatientName(appt.patientId)) }}
                 </div>
@@ -117,10 +120,12 @@
             </th>
             <td mat-cell *matCellDef="let appt" class="actions-cell">
               @if (appt.status === "Scheduled") {
+                
+            
                 <button
                   mat-icon-button
-                  matTooltip="Edit appointment"
-                  (click)="navEditAppointment(appt.id)"
+                  matTooltip="Edit/Prescription"
+                  (click)="navToPrescription(appt.id)"
                 >
                   <mat-icon>edit</mat-icon>
                 </button>
@@ -135,6 +140,14 @@
               }
 
               @if (appt.status === "Completed") {
+                
+                <button
+                  mat-icon-button
+                  matTooltip="Edit/Prescription"
+                  (click)="navToPrescription(appt.id)"
+                >
+                  <mat-icon>edit</mat-icon>
+                </button>
                 <button
                   mat-icon-button
                   matTooltip="Generate invoice"
@@ -162,7 +175,7 @@
     <mat-paginator
       [length]="dataSource.filteredData.length"
       [pageSize]="5"
-      [pageSizeOptions]="[ 10, 25, 50]"
+      [pageSizeOptions]="[10, 25, 50]"
       showFirstLastButtons
     ></mat-paginator>
   }

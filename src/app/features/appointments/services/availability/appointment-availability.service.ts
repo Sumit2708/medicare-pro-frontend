@@ -27,15 +27,15 @@ export class AppointmentAvailabilityService {
     settings.workingHours.days
   );
 
-console.log('Selected date:', selectedDate);
-console.log(
-  'Working days:',
-  settings.workingHours.days
-);
-console.log(
-  'Matched working day:',
-  workingDay
-);
+// console.log('Selected date:', selectedDate);
+// console.log(
+//   'Working days:',
+//   settings.workingHours.days
+// );
+// console.log(
+//   'Matched working day:',
+//   workingDay
+// );
 
         if (!workingDay || !workingDay.enabled) {
           return of([]);

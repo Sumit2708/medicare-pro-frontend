@@ -37,7 +37,7 @@ export class PrintInvoiceComponent {
       next: (response) => {
         this.invoiceDetails = response;
 
-        console.log(this.invoiceDetails);
+        // console.log(this.invoiceDetails);
         
 
         this.loading = false;

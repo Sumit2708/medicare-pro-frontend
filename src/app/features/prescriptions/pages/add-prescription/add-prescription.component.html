@@ -2,82 +2,163 @@
   <app-page-header
     title="New Prescription"
     subtitle="Add a prescription for this patient"
-    [showButton]="false">
+    buttonLabel="Back"
+    buttonIcon="arrow_back"
+    (buttonClick)="navBack()">
   </app-page-header>
 
   <mat-card class="form-card" *ngIf="form">
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-body">
-      <div class="row two-col">
-        <mat-form-field appearance="outline">
-          <mat-label>Date</mat-label>
-          <input matInput [matDatepicker]="datePicker" formControlName="date" />
-          <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
-          <mat-datepicker #datePicker></mat-datepicker>
-        </mat-form-field>
+    <div class="form-card-header">
+      <div class="form-icon">
+        <mat-icon>medication</mat-icon>
+      </div>
+      <div>
+        <h3>New Prescription</h3>
+        <p>Fields marked with * are required</p>
+      </div>
+    </div>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Follow-up date</mat-label>
-          <input matInput [matDatepicker]="followPicker" formControlName="followUpDate" />
-          <mat-datepicker-toggle matSuffix [for]="followPicker"></mat-datepicker-toggle>
-          <mat-datepicker #followPicker></mat-datepicker>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="prescription-form">
+
+      <div class="form-section">
+        <div class="section-heading">
+          <mat-icon>event</mat-icon>
+          <div>
+            <h4>Visit Details</h4>
+            <p>Date and diagnosis for this visit</p>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Date*</mat-label>
+            <mat-icon matPrefix>calendar_today</mat-icon>
+            <input matInput [matDatepicker]="datePicker" formControlName="date" />
+            <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+            <mat-datepicker #datePicker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Follow-up date</mat-label>
+            <mat-icon matPrefix>event_repeat</mat-icon>
+            <input
+              matInput
+              [matDatepicker]="followPicker"
+              formControlName="followUpDate"
+              [min]="minFollowUpDate()"
+              [max]="maxFollowUpDate()"
+            />
+            <mat-datepicker-toggle matSuffix [for]="followPicker"></mat-datepicker-toggle>
+            <mat-datepicker #followPicker></mat-datepicker>
+            <mat-hint>Defaults to 1 month after visit · editable up to 2 months</mat-hint>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Diagnosis</mat-label>
+          <mat-icon matPrefix>fact_check</mat-icon>
+          <input matInput formControlName="diagnosis" placeholder="e.g. Viral fever" />
+          <mat-hint>Optional</mat-hint>
         </mat-form-field>
       </div>
 
-      <mat-form-field appearance="outline" class="full">
-        <mat-label>Diagnosis</mat-label>
-        <input matInput formControlName="diagnosis" placeholder="e.g. Viral fever" />
-      </mat-form-field>
+      <div class="form-section">
+        <div class="section-heading">
+          <mat-icon class="medical-icon">medication_liquid</mat-icon>
+          <div>
+            <h4>Medicines</h4>
+            <p>Add each medicine with its dosage instructions</p>
+          </div>
+          <span class="count-pill">{{ items.length }}</span>
+        </div>
 
-      <div class="items-header">
-        <h4>Medicines</h4>
-        <button mat-stroked-button type="button" color="primary" (click)="addItem()">
-          <mat-icon>add</mat-icon> Add Medicine
+        <div class="med-list">
+          <div
+            class="med-item"
+            *ngFor="let item of items.controls; let i = index"
+            [formGroup]="asGroup(item)"
+          >
+            <div class="med-item-header">
+              <span class="med-index">{{ i + 1 }}</span>
+              <button
+                mat-icon-button
+                type="button"
+                class="remove-btn"
+                matTooltip="Remove medicine"
+                (click)="removeItem(i)"
+                [disabled]="items.length === 1"
+              >
+                <mat-icon>delete_outline</mat-icon>
+              </button>
+            </div>
+
+            <app-medicine-autocomplete
+              class="full-width"
+              [control]="medicineControl(item)"
+              (medicineSelected)="onMedicineSelected(i, $event)"
+              (addNewMedicine)="onAddNewMedicine(i, $event)"
+            ></app-medicine-autocomplete>
+
+            <div class="form-row three-col">
+              <mat-form-field appearance="outline">
+                <mat-label>Dosage*</mat-label>
+                <input
+                  matInput
+                  formControlName="dosage"
+                  placeholder="e.g. 1-0-1"
+                  [matAutocomplete]="dosageAuto"
+                />
+                <mat-autocomplete #dosageAuto="matAutocomplete">
+                  <mat-option *ngFor="let d of dosagePresets" [value]="d">{{ d }}</mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Frequency*</mat-label>
+                <input matInput formControlName="frequency" placeholder="After food" />
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Duration*</mat-label>
+                <input matInput formControlName="duration" placeholder="5 days" />
+              </mat-form-field>
+            </div>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Notes</mat-label>
+              <input matInput formControlName="notes" placeholder="e.g. Take with warm water" />
+              <mat-hint>Optional</mat-hint>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <button mat-stroked-button type="button" color="primary" class="add-med-btn" (click)="addItem()">
+          <mat-icon>add</mat-icon>
+          Add Medicine
         </button>
       </div>
 
-      <div class="med-row" *ngFor="let item of items.controls; let i = index" [formGroup]="asGroup(item)">
-        <div class="med-row-main">
-          <app-medicine-autocomplete
-            [control]="medicineControl(item)"
-            (medicineSelected)="onMedicineSelected(i, $event)"
-            (addNewMedicine)="onAddNewMedicine(i, $event)">
-          </app-medicine-autocomplete>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Dosage</mat-label>
-            <input matInput formControlName="dosage" placeholder="1-0-1" />
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Frequency</mat-label>
-            <input matInput formControlName="frequency" placeholder="After food" />
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
-            <mat-label>Duration</mat-label>
-            <input matInput formControlName="duration" placeholder="5 days" />
-          </mat-form-field>
-
-          <button mat-icon-button type="button" class="remove-btn" (click)="removeItem(i)" [disabled]="items.length === 1">
-            <mat-icon>delete_outline</mat-icon>
-          </button>
+      <div class="form-section">
+        <div class="section-heading">
+          <mat-icon>notes</mat-icon>
+          <div>
+            <h4>Advice</h4>
+            <p>General advice or precautions for the patient</p>
+          </div>
         </div>
 
-        <mat-form-field appearance="outline" class="full notes-field">
-          <mat-label>Notes (optional)</mat-label>
-          <input matInput formControlName="notes" placeholder="e.g. Take with warm water" />
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Advice</mat-label>
+          <textarea matInput rows="3" formControlName="advice" placeholder="General advice for the patient"></textarea>
+          <mat-hint>Optional</mat-hint>
         </mat-form-field>
       </div>
-
-      <mat-form-field appearance="outline" class="full">
-        <mat-label>Advice</mat-label>
-        <textarea matInput rows="3" formControlName="advice" placeholder="General advice for the patient"></textarea>
-      </mat-form-field>
 
       <div class="form-actions">
         <button mat-stroked-button type="button" (click)="onCancel()">Cancel</button>
         <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || isSubmitting">
           <mat-icon *ngIf="isSubmitting" class="spin">progress_activity</mat-icon>
+          <mat-icon *ngIf="!isSubmitting">save</mat-icon>
           {{ isSubmitting ? 'Saving...' : 'Save Prescription' }}
         </button>
       </div>

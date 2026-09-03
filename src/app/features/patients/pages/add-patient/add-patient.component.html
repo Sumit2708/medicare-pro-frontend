@@ -1,8 +1,9 @@
 <app-page-header
   title="Add Patient"
   subtitle="Create a new patient record"
-  [showButton]="false"
->
+  buttonLabel="Back"
+  buttonIcon="arrow_back"
+  (buttonClick)="navBack()">
 </app-page-header>
 
 <div class="add-patient-layout">
@@ -188,7 +189,7 @@
       </div>
 
       <div class="form-actions">
-        <button mat-stroked-button type="button" (click)="navtoPatientList()">
+        <button mat-stroked-button type="button" (click)="navtoAppointmentList()">
           Cancel
         </button>
         <button

@@ -83,7 +83,7 @@ export class CreateInvoiceComponent {
   ];
 
   constructor(
-    private router: Router,
+    public router: Router,
     private notificationService: NotificationService,
     private route: ActivatedRoute,
     private fb: FormBuilder,
@@ -104,9 +104,9 @@ export class CreateInvoiceComponent {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params: any) => {
-      console.log(params, 'params');
+      // console.log(params, 'params');
       this.appointmentId = params['data'];
-      console.log(this.appointmentId, 'appointmentId test');
+      // console.log(this.appointmentId, 'appointmentId test');
     });
 
     this.loadInvoiceData(this.appointmentId);
@@ -120,7 +120,7 @@ export class CreateInvoiceComponent {
   loadInvoiceData(appointmentId: number): void {
     this.invoiceService.loadInvoiceData(appointmentId).subscribe({
       next: (data) => {
-        console.log(data, 'data');
+        // console.log(data, 'data');
         this.invoiceData = data;
         this.invoiceForm.patchValue({
           patientName: data.patient.name,
@@ -186,8 +186,8 @@ export class CreateInvoiceComponent {
 
     this.invoiceService.generateInvoiceNumber().subscribe({
       next: (invoiceNumber) => {
-        console.log(invoiceNumber);
-        console.log(this.invoiceForm.getRawValue(), 'raw form value');
+        // console.log(invoiceNumber);
+        // console.log(this.invoiceForm.getRawValue(), 'raw form value');
         const invoice: Invoice = {
           invoiceNumber,
 
@@ -212,7 +212,7 @@ export class CreateInvoiceComponent {
           createdDate: new Date().toISOString(),
         };
 
-        console.log(invoice, 'invoice');
+        // console.log(invoice, 'invoice');
 
         this.createInvoice(invoice);
       },

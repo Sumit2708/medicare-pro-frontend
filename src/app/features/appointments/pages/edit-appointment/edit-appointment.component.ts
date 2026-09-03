@@ -10,6 +10,8 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { map, distinctUntilChanged } from 'rxjs/operators';
+
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -22,6 +24,9 @@ import { PatientService } from '../../../patients/services/patient.service';
 import { AppointmentAvailabilityService } from '../../services/availability/appointment-availability.service';
 import { Appointment } from '../../../../shared/models/appointment.model';
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
+import { MatTab, MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
+import { PrescriptionHistoryComponent } from '../../../prescriptions/components/prescription-history/prescription-history.component';
+
 
 @Component({
   selector: 'app-edit-appointment',
@@ -38,6 +43,9 @@ import { PageHeaderComponent } from '../../../../shared/components/page-header/p
     MatChipsModule,
     MatDatepickerModule,
     PageHeaderComponent,
+     MatTab,
+    MatTabGroup,
+    PrescriptionHistoryComponent,
   ],
   templateUrl: './edit-appointment.component.html',
   styleUrl: './edit-appointment.component.scss',
@@ -64,6 +72,14 @@ export class EditAppointmentComponent implements OnInit {
     { value: 'Cancelled', icon: 'cancel' },
   ];
 
+  selectedTabIndex = 0;
+
+  private readonly tabIndexMap: Record<string, number> = {
+    details: 0,
+    prescriptions: 1,
+  };
+
+  
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -87,6 +103,10 @@ export class EditAppointmentComponent implements OnInit {
   ngOnInit() {
     this.route.queryParams.subscribe((params: any) => {
       this.appointmentId = params['id'];
+
+      if (params['tab'] && this.tabIndexMap[params['tab']] !== undefined) {
+        this.selectedTabIndex = this.tabIndexMap[params['tab']];
+      }
 
       if (this.appointmentId) {
         this.getAppointmentById();
@@ -130,7 +150,9 @@ export class EditAppointmentComponent implements OnInit {
       });
   }
 
-  getDoctors() {
+  getDoctors() {[
+
+  ]
     this.loadingDoctors = true;
     this.doctorService.getDoctors().subscribe({
       next: (res: any) => {
@@ -359,4 +381,17 @@ export class EditAppointmentComponent implements OnInit {
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
+
+onTabChange(event: MatTabChangeEvent): void {
+  this.selectedTabIndex = event.index;
+
+  const tabKey = event.index === 1 ? 'prescriptions' : 'details';
+  this.router.navigate([], {
+    relativeTo: this.route,
+    queryParams: { tab: tabKey,appointmentId: this.appointmentId },
+    queryParamsHandling: 'merge',
+    replaceUrl: true,
+
+  });
+}
 }

@@ -1,162 +1,333 @@
-.print-page {
-  max-width: 800px;
+* {
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.state-block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40vh;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--color-ink-soft);
+}
+
+.rx-container {
+  max-width: 780px;
   margin: 0 auto;
-  padding: 32px 40px;
-  background: var(--color-surface);
+  padding: 8px 8px 32px;
   font-family: var(--font-body);
   color: var(--color-ink);
-  min-height: 100vh;
+
+  // Subtle wash so the sheet doesn't read as flat white — fades out
+  // before the medicine section so the drug list sits on pure white.
+  background: linear-gradient(
+    180deg,
+    var(--color-primary-light) 0%,
+    var(--color-surface) 280px,
+    var(--color-surface) 100%
+  );
 }
 
-.toolbar {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-bottom: 20px;
-
-  button mat-icon {
-    margin-right: 4px;
-    font-size: 18px;
-    height: 18px;
-    width: 18px;
-  }
-}
-
+/* ---------- Letterhead ---------- */
 .rx-header {
   display: flex;
-  justify-content: space-between;
   align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px 16px 18px;
+  border-bottom: 3px solid var(--color-primary);
+}
 
-  .clinic-info {
-    h1 {
-      font-family: var(--font-display);
-      color: var(--color-primary-dark);
-      font-size: 22px;
-      margin: 0 0 4px;
-    }
+.clinic-block h1 {
+  font-family: var(--font-display);
+  font-size: 23px;
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  margin: 0 0 3px;
+}
 
-    p {
-      margin: 0;
-      font-size: 13px;
-      color: var(--color-ink-soft);
-    }
-  }
+.tagline {
+  font-size: 12.5px;
+  color: var(--color-accent);
+  font-weight: 500;
+  margin: 0 0 6px;
+}
 
-  .rx-mark {
+.contact-line {
+  font-size: 11.5px;
+  color: var(--color-ink-soft);
+  margin: 0;
+}
+
+.doctor-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+
+  .doc-type-badge {
     font-family: var(--font-display);
-    font-size: 32px;
+    font-size: 16px;
     font-weight: 700;
-    color: var(--color-primary);
     font-style: italic;
-  }
-}
-
-hr {
-  border: none;
-  border-top: 2px solid var(--color-primary);
-  margin: 16px 0 20px;
-}
-
-.meta-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px 24px;
-  margin-bottom: 24px;
-
-  .label {
-    display: block;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: var(--color-ink-soft);
+    color: var(--color-primary-dark);
+    border: 1.5px solid var(--color-primary);
+    border-radius: 4px;
+    padding: 3px 14px;
   }
 
-  .value {
-    display: block;
-    font-size: 14px;
-    font-weight: 600;
+  .doctor-name {
+    font-family: var(--font-display);
+    font-size: 13.5px;
+    font-weight: 700;
     color: var(--color-ink);
   }
+
+  .visit-date {
+    font-size: 11.5px;
+    color: var(--color-ink-soft);
+  }
 }
 
-.rx-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 20px;
+/* ---------- Compact patient/visit strip ---------- */
+.patient-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 0;
+  padding: 10px 16px;
+  margin: 0 0 4px;
+  background: rgba(255, 255, 255, 0.6);
+  border-bottom: 1px dashed var(--color-border);
+  font-size: 12px;
+  color: var(--color-ink);
 
-  th {
-    text-align: left;
+  .strip-item {
+    white-space: nowrap;
+
+    &--name {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    &--blood {
+      font-weight: 700;
+      color: var(--color-danger);
+    }
+
+    &--address {
+      color: var(--color-ink-soft);
+      white-space: normal;
+      max-width: 260px;
+    }
+
+    strong { font-weight: 600; }
+  }
+
+  .strip-sep {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--color-border);
+    margin: 0 8px;
+    flex-shrink: 0;
+  }
+}
+
+/* ---------- Rx symbol row ---------- */
+.rx-symbol-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 18px 16px 10px;
+
+  .rx-symbol {
+    font-family: var(--font-display);
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--color-primary);
+    line-height: 1;
+  }
+
+  .rx-symbol-label {
+    font-family: var(--font-display);
     font-size: 11px;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.06em;
     color: var(--color-ink-soft);
-    border-bottom: 1px solid var(--color-border);
-    padding: 8px 6px;
-  }
-
-  td {
-    font-size: 13px;
-    padding: 10px 6px;
-    border-bottom: 1px solid var(--color-border);
-    vertical-align: top;
-  }
-
-  .muted {
-    color: var(--color-ink-soft);
-    font-size: 12px;
   }
 }
 
+/* ---------- Medicines — the hero section ---------- */
+.med-list {
+  display: flex;
+  flex-direction: column;
+  padding: 0 16px;
+}
+
+.med-line {
+  display: flex;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--color-border);
+
+  &:last-child { border-bottom: none; }
+}
+
+.med-number {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--color-primary-light);
+  color: var(--color-primary-dark);
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.med-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.med-name-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.med-name {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.med-strength {
+  font-size: 12.5px;
+  color: var(--color-ink-soft);
+  font-weight: 500;
+}
+
+.med-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.med-tag {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-primary-dark);
+  background: var(--color-primary-light);
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
+.med-notes {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: var(--color-ink-soft);
+  font-style: italic;
+}
+
+/* ---------- Advice ---------- */
 .advice-section {
-  margin-bottom: 16px;
+  margin: 20px 16px 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--color-border);
 
-  .label {
+  .section-label {
     display: block;
+    font-family: var(--font-display);
     font-size: 11px;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
-    color: var(--color-ink-soft);
-    margin-bottom: 2px;
+    letter-spacing: 0.05em;
+    color: var(--color-primary-dark);
+    margin-bottom: 6px;
   }
 
   p {
     margin: 0;
     font-size: 13px;
+    line-height: 1.5;
   }
 }
 
-.rx-footer {
-  margin-top: 60px;
+/* ---------- Footer ---------- */
+.footer {
   display: flex;
-  justify-content: flex-end;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin: 40px 16px 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-border);
+}
 
-  .signature {
-    text-align: center;
+.thank-you {
+  font-size: 12.5px;
+  color: var(--color-ink-soft);
+  font-style: italic;
+  margin: 0;
+}
 
-    .sign-line {
-      width: 180px;
-      border-top: 1px solid var(--color-ink);
-      margin-bottom: 6px;
-    }
+.signature {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
 
-    span {
-      font-size: 13px;
-      color: var(--color-ink-soft);
-    }
-  }
+.signature-line {
+  width: 150px;
+  border-top: 1px solid var(--color-ink);
+}
+
+.signature span {
+  font-size: 12px;
+  color: var(--color-ink-soft);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 640px) {
+  .rx-header { flex-direction: column; gap: 10px; }
+  .doctor-block { align-items: flex-start; }
+  .patient-strip .strip-item--address { max-width: 100%; }
+}
+
+/* ---------- Print rules ---------- */
+@page {
+  size: A4;
+  margin: 14mm 14mm;
 }
 
 @media print {
+  app-sidebar,
+  app-navbar,
+  app-topbar,
+  app-page-header,
   .no-print {
     display: none !important;
   }
 
-  .print-page {
-    padding: 0;
-    max-width: 100%;
-  }
+  body { background: #fff; }
 
-  @page {
-    margin: 18mm 16mm;
+  .rx-container { max-width: 100%; }
+
+  .med-line,
+  .footer {
+    break-inside: avoid;
   }
 }

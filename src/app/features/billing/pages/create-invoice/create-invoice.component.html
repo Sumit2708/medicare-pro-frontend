@@ -3,7 +3,9 @@
   title="Create Invoice"
   subtitle="Generate invoice for completed appointment"
   buttonLabel="Back"
-  routerLink="/billing">
+  buttonIcon="arrow_back"
+  (buttonClick)="router.navigate(['/appointments'])"
+>
 </app-page-header>
 
 @if (invoiceExists) {
@@ -118,7 +120,7 @@
       </mat-chip-listbox>
 
       <div class="actions">
-        <button mat-stroked-button routerLink="/billing">Cancel</button>
+        <button mat-stroked-button type="button" (click)="router.navigate(['/appointments'])">Cancel</button>
         <button
           mat-raised-button
           color="primary"

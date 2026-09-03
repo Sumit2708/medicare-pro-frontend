@@ -1,7 +1,9 @@
 <app-page-header
   title="Edit Patient"
   subtitle="Update the patient's information"
-  [showButton]="false"
+    buttonLabel="Back"
+  buttonIcon="arrow_back"
+  (buttonClick)="navBack()"
 >
 </app-page-header>
 
@@ -255,12 +257,12 @@
         </mat-card>
       </mat-tab>
 
-      <mat-tab label="Prescriptions">
+           <mat-tab label="Prescriptions">
         <div class="tab-panel">
           <app-prescription-history
             [patientId]="patientId.toString()"
             [patientName]="patientForm.get('name')?.value"
-          >
+            [readOnly]="true">
           </app-prescription-history>
         </div>
       </mat-tab>

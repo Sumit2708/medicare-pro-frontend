@@ -19,7 +19,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
 import { SearchBoxComponent } from '../../../../shared/components/search-box/search-box.component';
 import { DialogService } from '../../../../core/services/dialog/dialog.service';
-import { EmptyStateComponent } from "../../../../shared/components/empty-state/empty-state.component";
+import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state.component';
 
 const SIXTY_DAYS_MS = 60 * 24 * 60 * 60 * 1000;
 
@@ -36,8 +36,8 @@ const SIXTY_DAYS_MS = 60 * 24 * 60 * 60 * 1000;
     MatTooltipModule,
     PageHeaderComponent,
     SearchBoxComponent,
-    EmptyStateComponent
-],
+    EmptyStateComponent,
+  ],
   templateUrl: './appointment-list.component.html',
   styleUrl: './appointment-list.component.scss',
 })
@@ -153,22 +153,22 @@ export class AppointmentListComponent {
       );
     });
 
-    overdue.forEach((a: any) => {
-      a.status = 'Cancelled';
-      this.appointmentService.updateAppointment(a.id, a).subscribe({
-        error: () => {
-          this.notificationService.error(
-            `Failed to auto-cancel appointment #${a.id}`,
-          );
-        },
-      });
-    });
+    // overdue.forEach((a: any) => {
+    //   a.status = 'Cancelled';
+    //   this.appointmentService.updateAppointment(a.id, a).subscribe({
+    //     error: () => {
+    //       this.notificationService.error(
+    //         `Failed to auto-cancel appointment #${a.id}`,
+    //       );
+    //     },
+    //   });
+    // });
 
-    if (overdue.length > 0) {
-      this.notificationService.success(
-        `${overdue.length} overdue appointment${overdue.length > 1 ? 's' : ''} auto-cancelled`,
-      );
-    }
+    // if (overdue.length > 0) {
+    //   this.notificationService.success(
+    //     `${overdue.length} overdue appointment${overdue.length > 1 ? 's' : ''} auto-cancelled`,
+    //   );
+    // }
 
     // Rule 2: mark patients inactive if their most recent appointment was 60+ days ago
     const lastVisitByPatient = new Map<string, number>();
@@ -244,7 +244,12 @@ export class AppointmentListComponent {
       .join('');
   }
 
-  navEditAppointment(appointmentId: any) {
+  // navEditAppointment(appointmentId: any) {
+  //   this.router.navigate(['/appointments/edit'], {
+  //     queryParams: { id: appointmentId },
+  //   });
+  // }
+  navToPrescription(appointmentId: any) {
     this.router.navigate(['/appointments/edit'], {
       queryParams: { id: appointmentId },
     });
@@ -303,7 +308,20 @@ export class AppointmentListComponent {
     });
   }
 
-  openNewAppointment(){
+  openNewAppointment() {
     this.router.navigate(['/appointments/add']);
+  }
+
+  navEditPatient(patientId: string): void {
+    this.router.navigate(['/patients/edit'], {
+      queryParams: { id: patientId },
+    });
+    // this.router.navigate(['/patients', patientId, 'edit']);
+  }
+
+  rescheduleAppointment(appointment: any): void {
+    this.router.navigate(['/appointments/edit'], {
+      queryParams: { id: appointment.id, reschedule: true },
+    });
   }
 }

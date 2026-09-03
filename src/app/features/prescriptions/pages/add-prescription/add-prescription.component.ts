@@ -13,6 +13,7 @@ import { MatCard } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -23,6 +24,8 @@ import { PatientService } from '../../../patients/services/patient.service';
 import { AuthService } from '../../../../core/services/auth/auth.service'; // adjust if path differs
 import { NotificationService } from '../../../../core/services/notification/notification.service';
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
+import { AppointmentService } from '../../../appointments/services/appointment.service';
+import { DoctorService } from '../../../doctors/services/doctor.service';
 
 @Component({
   selector: 'app-add-prescription',
@@ -34,6 +37,7 @@ import { PageHeaderComponent } from '../../../../shared/components/page-header/p
     MatFormFieldModule,
     MatInputModule,
     MatDatepickerModule,
+    MatAutocompleteModule,
     MatButtonModule,
     MatIconModule,
     MedicineAutocompleteComponent,
@@ -46,6 +50,22 @@ export class AddPrescriptionComponent implements OnInit {
   form!: FormGroup;
   isSubmitting = false;
 
+  // Common dosage patterns — shown in the dropdown, but the field still
+  // accepts free text for anything not in this list.
+  readonly dosagePresets: string[] = [
+    '1-0-1',
+    '1-1-1',
+    '0-0-1',
+    '1-0-0',
+    '0-1-0',
+    '1-1-0',
+    '0-1-1',
+    '1-0-1-1',
+    'SOS (as needed)',
+    'Once daily',
+    'Twice daily',
+  ];
+
   private patientId!: string;
   private patientName = '';
 
@@ -56,7 +76,9 @@ export class AddPrescriptionComponent implements OnInit {
     private authService: AuthService,
     private notificationService: NotificationService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private appointmentService: AppointmentService,
+    private doctorService: DoctorService,
   ) {}
 
   ngOnInit(): void {
@@ -70,34 +92,32 @@ export class AddPrescriptionComponent implements OnInit {
       }
 
       this.buildForm();
-
-      this.loadPatientName();
-    //     this.patientService.getPatientById(this.patientId).subscribe({
-    //   next: (patient: any) => (this.patientName = patient.name),
-    //   error: () => this.notificationService.info('No history found'),
-    // });
-    });
-
-
-        const currentUser = this.authService.getCurrentUser();
-
-        console.log(currentUser, 'currentUser');
-  }
-
-  private loadPatientName(): void {
-    this.patientService.getPatientById(this.patientId).subscribe({
-      next: (patient: any) => (this.patientName = patient.name),
-      error: () => this.notificationService.error('Failed to load patient'),
+      this.loadPatientData(this.patientId);
+      
     });
   }
+
+  
 
   private buildForm(): void {
+    const defaultDate = new Date();
+
     this.form = this.fb.group({
-      date: [new Date(), Validators.required],
-      followUpDate: [null],
+      date: [defaultDate, Validators.required],
+      followUpDate: [this.addMonths(defaultDate, 1)],
       diagnosis: [''],
       advice: [''],
       items: this.fb.array([this.buildItem()]),
+    });
+
+    // Keep follow-up date defaulted to "1 month after visit" whenever the
+    // visit date changes — but only while the user hasn't touched the
+    // follow-up field themselves.
+    this.form.get('date')!.valueChanges.subscribe((newDate: Date) => {
+      const followCtrl = this.form.get('followUpDate')!;
+      if (newDate && !followCtrl.dirty) {
+        followCtrl.setValue(this.addMonths(newDate, 1), { emitEvent: false });
+      }
     });
   }
 
@@ -147,43 +167,127 @@ export class AddPrescriptionComponent implements OnInit {
     this.prescriptionService.addMedicine({ name }).subscribe((med) => this.onMedicineSelected(index, med));
   }
 
-  onSubmit(): void {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      this.notificationService.error('Please fill in all required fields.');
-      return;
-    }
-
-    this.isSubmitting = true;
-    const currentUser = this.authService.getCurrentUser();
-    const value = this.form.value;
-
-    const payload: Omit<Prescription, 'id'> = {
-      patientId: this.patientId,
-      patientName: this.patientName,
-      doctorId: String(currentUser?.id ?? ''),
-      doctorName: currentUser?.name ?? '',
-      date: value.date,
-      diagnosis: value.diagnosis,
-      advice: value.advice,
-      followUpDate: value.followUpDate,
-      items: value.items,
-      status: 'active',
-    };
-
-    console.log(payload);
-
-    this.prescriptionService.create(payload).subscribe({
-      next: () => {
-        this.notificationService.success('Prescription saved successfully');
-        this.goBackToPatient();
-      },
-      error: () => {
-        this.notificationService.error('Failed to save prescription');
-        this.isSubmitting = false;
-      },
-    });
+  // Follow-up date can only be moved within [visit date, visit date + 2 months]
+  minFollowUpDate(): Date {
+    return this.form.get('date')?.value ?? new Date();
   }
+
+  maxFollowUpDate(): Date {
+    const base = this.form.get('date')?.value ?? new Date();
+    return this.addMonths(base, 2);
+  }
+
+  private addMonths(date: Date, months: number): Date {
+    const d = new Date(date);
+    d.setMonth(d.getMonth() + months);
+    return d;
+  }
+
+  // onSubmit(): void {
+  //   if (this.form.invalid) {
+  //     this.form.markAllAsTouched();
+  //     this.notificationService.error('Please fill in all required fields.');
+  //     return;
+  //   }
+
+  //   this.isSubmitting = true;
+  //   const currentUser = this.authService.getCurrentUser();
+  //   const value = this.form.value;
+
+  //   const payload: Omit<Prescription, 'id'> = {
+  //     patientId: this.patientId,
+  //     patientName: this.patientName,
+  //     doctorId: String(currentUser?.id ?? ''),
+  //     doctorName: currentUser?.name ?? '',
+  //     date: value.date,
+  //     diagnosis: value.diagnosis,
+  //     advice: value.advice,
+  //     followUpDate: value.followUpDate,
+  //     items: value.items,
+  //     status: 'active',
+  //   };
+
+  //   this.prescriptionService.create(payload).subscribe({
+  //     next: () => {
+  //       this.notificationService.success('Prescription saved successfully');
+  //       this.goBackToPatient();
+  //     },
+  //     error: () => {
+  //       this.notificationService.error('Failed to save prescription');
+  //       this.isSubmitting = false;
+  //     },
+  //   });
+  // }
+
+  private loadPatientData(patientId: string): void {
+  this.prescriptionService.loadPatientData(patientId).subscribe({
+    next: (data) => {
+console.log('Loaded patient data:', data);
+      this.patientName = this.prescriptionService.patient?.name ?? '';
+    },
+    error: (err: Error) => {
+      this.notificationService.error(err.message || 'Failed to load patient data');
+    },
+  });
+}
+
+getDoctorName(doctorID: any) {
+  return this.doctorService.getDoctorById(doctorID).subscribe({
+    next: (doctor) => {
+      console.log('Loaded doctor data:', doctor);
+      return doctor.name;
+    },
+    error: () => {
+      return '';
+    },
+  }); 
+}
+
+onSubmit(): void {
+  if (this.form.invalid) {
+    this.form.markAllAsTouched();
+    this.notificationService.error('Please fill in all required fields.');
+    return;
+  }
+
+  const appointment = this.prescriptionService.appointment;
+  if (!appointment) {
+    this.notificationService.error('No appointment loaded for this prescription');
+    return;
+  }
+
+  this.isSubmitting = true;
+  const currentUser = this.authService.getCurrentUser();
+  const value = this.form.value;
+
+  const doctorName = this.getDoctorName(appointment.doctorId);
+
+  const payload: Omit<Prescription, 'id'> = {
+    patientId: this.patientId,
+    patientName: this.patientName,
+    appointmentId: appointment.id,
+    doctorId: appointment.doctorId,
+    doctorName: doctorName as unknown as string, // Type assertion to string
+    date: value.date,
+    diagnosis: value.diagnosis,
+    advice: value.advice,
+    followUpDate: value.followUpDate,
+    items: value.items,
+    status: 'active',
+  };
+
+  this.prescriptionService.create(payload).subscribe({
+    next: () => {
+      this.isSubmitting = false;
+      this.notificationService.success('Prescription saved successfully');
+      this.goBackToPatient();
+    },
+    error: () => {
+      this.notificationService.error('Failed to save prescription');
+      this.isSubmitting = false;
+    },
+  });
+}
 
   onCancel(): void {
     this.goBackToPatient();
@@ -193,5 +297,9 @@ export class AddPrescriptionComponent implements OnInit {
     this.router.navigate(['/patients/edit'], {
       queryParams: { id: this.patientId, tab: 'prescriptions' },
     });
+  }
+
+  navBack(): void {
+    window.history.back();
   }
 }

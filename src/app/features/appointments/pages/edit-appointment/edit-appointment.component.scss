@@ -559,3 +559,71 @@ mat-form-field {
 
   @media (min-width: 901px) { font-size: 12px; }
 }
+
+/* =========================================================
+   TABS — appointment details / prescriptions
+   ========================================================= */
+
+.add-appointment-layout {
+  ::ng-deep mat-tab-group {
+    width: 100%;
+    min-width: 0;
+  }
+    ::ng-deep .mdc-tab .mdc-tab__text-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .tab-icon {
+    font-size: 18px;
+    height: 18px;
+    width: 18px;
+  }
+
+  ::ng-deep .mat-mdc-tab-header {
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: clamp(12px, 3vw, 20px);
+  }
+
+  ::ng-deep .mat-mdc-tab-labels {
+    gap: 4px;
+  }
+
+  ::ng-deep .mdc-tab {
+    height: 44px;
+    padding: 0 clamp(12px, 3vw, 20px);
+  }
+
+  ::ng-deep .mdc-tab__text-label {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-ink-soft);
+    letter-spacing: normal;
+    transition: color 0.15s ease;
+  }
+
+  ::ng-deep .mdc-tab--active .mdc-tab__text-label {
+    color: var(--color-primary) !important;
+    font-weight: 600;
+  }
+
+  ::ng-deep .mdc-tab-indicator__content--underline {
+    border-color: var(--color-primary) !important;
+    border-top-width: 2.5px !important;
+  }
+
+  ::ng-deep .mat-mdc-tab-body-wrapper {
+    width: 100%;
+  }
+
+  ::ng-deep .mat-mdc-tab-body-content {
+    overflow: visible !important;
+    padding-top: 2px;
+  }
+}
+
+.tab-panel {
+  width: 100%;
+}

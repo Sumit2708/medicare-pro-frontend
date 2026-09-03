@@ -36,6 +36,10 @@ export class AppointmentService {
     return this.http.get(`${this.API_URL}/${appointmentId}`);
   }
 
+  getAppointmentsByPatientId(patientId: number): Observable<Appointment[]> {
+    return this.http.get<Appointment[]>(`${this.API_URL}?patientId=${patientId}`);
+  }
+
   // cancelAppointment(appointmentId: string) {
   //   return this.http.patch(`${this.API_URL}/${appointmentId}/cancel`, {});
   // }

@@ -22,9 +22,12 @@ import { PrescriptionService } from '../../service/prescriptions.service';
   styleUrls: ['./prescription-history.component.scss'],
 })
 export class PrescriptionHistoryComponent implements OnInit {
-  /** Passed in from EditPatientComponent's Prescriptions tab */
+  /** Passed in from EditPatientComponent's / EditAppointmentComponent's Prescriptions tab */
   @Input({ required: true }) patientId!: string;
   @Input({ required: true }) patientName!: string;
+
+  /** When true, hides "New Prescription" and "Edit" actions — view/print only. */
+  @Input() readOnly = false;
 
   prescriptions: Prescription[] = [];
   columns = ['date', 'doctor', 'diagnosis', 'medicines', 'status', 'actions'];
@@ -39,13 +42,8 @@ export class PrescriptionHistoryComponent implements OnInit {
   }
 
   private load(): void {
-    console.log(this.patientId,'id');
-    
     this.prescriptionService.getByPatient(this.patientId).subscribe((data) => {
       this.prescriptions = data;
-      
-
-      console.log(this.prescriptions,'prescriptions');
     });
   }
 

@@ -98,10 +98,7 @@ export class DashboardService {
             };
           });
 
-        // const pendingInvoices = data.invoices.filter(
-        //   (invoice) => invoice.paymentStatus === PaymentStatus.PENDING,
-        // );
-
+    
         const pendingInvoices = data.invoices
 
           .filter((invoice) => invoice.paymentStatus === PaymentStatus.PENDING)
@@ -121,18 +118,6 @@ export class DashboardService {
               paymentStatus: invoice.paymentStatus,
             };
           });
-
-        //     const filteredInvoices =
-        // this.filterInvoices(
-        //     data.invoices,
-        //     filter
-        // );
-
-        // const filteredAppointments =
-        // this.filterAppointments(
-        //     data.appointments,
-        //     filter
-        // );
 
         console.log('data', todayAppointments, todayCollectedRevenue, data , today);
         return {

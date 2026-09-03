@@ -13,6 +13,7 @@ import { MatCard } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -33,6 +34,7 @@ import { PageHeaderComponent } from '../../../../shared/components/page-header/p
     MatFormFieldModule,
     MatInputModule,
     MatDatepickerModule,
+    MatAutocompleteModule,
     MatButtonModule,
     MatIconModule,
     MedicineAutocompleteComponent,
@@ -45,6 +47,23 @@ export class EditPrescriptionComponent implements OnInit {
   form!: FormGroup;
   isSubmitting = false;
   isLoading = false;
+  appointmentId:any;
+
+  // Common dosage patterns — shown in the dropdown, but the field still
+  // accepts free text for anything not in this list.
+  readonly dosagePresets: string[] = [
+    '1-0-1',
+    '1-1-1',
+    '0-0-1',
+    '1-0-0',
+    '0-1-0',
+    '1-1-0',
+    '0-1-1',
+    '1-0-1-1',
+    'SOS (as needed)',
+    'Once daily',
+    'Twice daily',
+  ];
 
   private prescriptionId!: string;
   private patientId!: string;
@@ -60,6 +79,7 @@ export class EditPrescriptionComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe((params: any) => {
+      console.log('Query params:', params);
       this.prescriptionId = params['id'];
       this.patientId = params['patientId'];
 
@@ -79,6 +99,8 @@ export class EditPrescriptionComponent implements OnInit {
     this.prescriptionService.getById(this.prescriptionId).subscribe({
       next: (p) => {
         this.patchForm(p);
+        console.log('Loaded prescription:', p);
+        this.appointmentId = p.appointmentId;
         this.isLoading = false;
       },
       error: () => {
@@ -95,6 +117,16 @@ export class EditPrescriptionComponent implements OnInit {
       diagnosis: [''],
       advice: [''],
       items: this.fb.array([]),
+    });
+
+    // Keep follow-up date defaulted to "1 month after visit" whenever the
+    // visit date changes — but only while the user hasn't touched the
+    // follow-up field themselves.
+    this.form.get('date')!.valueChanges.subscribe((newDate: Date) => {
+      const followCtrl = this.form.get('followUpDate')!;
+      if (newDate && !followCtrl.dirty) {
+        followCtrl.setValue(this.addMonths(newDate, 1), { emitEvent: false });
+      }
     });
   }
 
@@ -115,9 +147,14 @@ export class EditPrescriptionComponent implements OnInit {
     this.items.clear();
     p.items.forEach((item) => this.items.push(this.buildItem(item)));
 
+    const visitDate = new Date(p.date);
+    // If this prescription never had a follow-up date set, default it to
+    // one month after the visit — same rule as a brand-new prescription.
+    const followUp = p.followUpDate ? new Date(p.followUpDate) : this.addMonths(visitDate, 1);
+
     this.form.patchValue({
-      date: new Date(p.date),
-      followUpDate: p.followUpDate ? new Date(p.followUpDate) : null,
+      date: visitDate,
+      followUpDate: followUp,
       diagnosis: p.diagnosis,
       advice: p.advice,
     });
@@ -154,6 +191,22 @@ export class EditPrescriptionComponent implements OnInit {
 
   onAddNewMedicine(index: number, name: string): void {
     this.prescriptionService.addMedicine({ name }).subscribe((med) => this.onMedicineSelected(index, med));
+  }
+
+  // Follow-up date can only be moved within [visit date, visit date + 2 months]
+  minFollowUpDate(): Date {
+    return this.form.get('date')?.value ?? new Date();
+  }
+
+  maxFollowUpDate(): Date {
+    const base = this.form.get('date')?.value ?? new Date();
+    return this.addMonths(base, 2);
+  }
+
+  private addMonths(date: Date, months: number): Date {
+    const d = new Date(date);
+    d.setMonth(d.getMonth() + months);
+    return d;
   }
 
   onSubmit(): void {
@@ -196,6 +249,12 @@ export class EditPrescriptionComponent implements OnInit {
   private goBackToPatient(): void {
     this.router.navigate(['/patients/edit'], {
       queryParams: { id: this.patientId, tab: 'prescriptions' },
+    });
+  }
+
+  navBack() {
+     this.router.navigate(['/appointments/edit'], {
+      queryParams: { id: this.appointmentId },
     });
   }
 }

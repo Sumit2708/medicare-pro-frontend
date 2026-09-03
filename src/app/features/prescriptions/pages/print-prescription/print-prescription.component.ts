@@ -1,47 +1,79 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Prescription } from '../../model/prescription.model';
 import { PrescriptionService } from '../../service/prescriptions.service';
+import { PatientService } from '../../../patients/services/patient.service';
+import { CLINIC_INFO } from '../../../../core/constants/clinic-info';
 
 @Component({
   selector: 'app-print-prescription',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatIconModule],
+  imports: [CommonModule],
   templateUrl: './print-prescription.component.html',
-  styleUrls: ['./print-prescription.component.scss'],
+  styleUrl: './print-prescription.component.scss',
 })
-export class PrintPrescriptionComponent implements OnInit {
-  prescription?: Prescription;
-
-  clinicName = 'Your Clinic Name';
-  clinicAddress = '123 Health Street, Pune, Maharashtra';
-  clinicPhone = '+91 98765 43210';
+export class PrintPrescriptionComponent {
+  prescription!: Prescription;
+  patient: any = null;
+  clinicInfo = CLINIC_INFO;
+  loading = true;
+  loadFailed = false;
 
   constructor(
-    private route: ActivatedRoute,
     private prescriptionService: PrescriptionService,
+    private patientService: PatientService,
+    private route: ActivatedRoute,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
-    console.log(id,'id');
-    
-    if (!id) return;
 
-    this.prescriptionService
-      .getById(id)
-      .subscribe((p) => (this.prescription = p));
-    console.log(this.prescription , 'prescription');
+    if (!id) {
+      this.loading = false;
+      this.loadFailed = true;
+      return;
+    }
+
+    window.onafterprint = () => {
+      this.router.navigate(['/patients/edit'], {
+        queryParams: { id: this.prescription?.patientId, tab: 'prescriptions' },
+      });
+    };
+
+    this.loadPrescription(id);
   }
 
-  print(): void {
-    window.print();
+  private loadPrescription(id: string): void {
+    this.prescriptionService.getById(id).subscribe({
+      next: (p) => {
+        this.prescription = p;
+        this.loadPatient(p.patientId);
+      },
+      error: () => {
+        this.loading = false;
+        this.loadFailed = true;
+      },
+    });
   }
 
-  close(): void {
-    window.close();
+  private loadPatient(patientId: string): void {
+    this.patientService.getPatientById(patientId).subscribe({
+      next: (patient: any) => {
+        this.patient = patient;
+        this.finishLoading();
+      },
+      error: () => {
+        // Missing patient details shouldn't block printing the
+        // prescription itself — just fall back to '—' in the template.
+        this.finishLoading();
+      },
+    });
+  }
+
+  private finishLoading(): void {
+    this.loading = false;
+    setTimeout(() => window.print(), 10);
   }
 }

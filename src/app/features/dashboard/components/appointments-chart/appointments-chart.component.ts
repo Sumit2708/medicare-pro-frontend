@@ -124,6 +124,7 @@ export class AppointmentsChartComponent {
 
   get hasAppointmentsData(): boolean {
   const series = this.chartOptions?.series as any[];
+  console.log(series, 'series');
   return !!series?.length && series.some(v => v > 0);
 }
 }

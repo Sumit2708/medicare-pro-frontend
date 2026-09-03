@@ -91,8 +91,8 @@ export class AddPatientComponent {
     }
   }
 
-  navtoPatientList() {
-    this.router.navigate(['/patients']);
+  navtoAppointmentList() {
+    this.router.navigate(['/appointments']);
   }
 
   get completionPercent(): number {
@@ -102,5 +102,9 @@ export class AddPatientComponent {
       return v !== null && v !== undefined && v !== '';
     }).length;
     return Math.round((filled / keys.length) * 100);
+  }
+
+  navBack() {
+    this.router.navigate(['/patients']);
   }
 }
