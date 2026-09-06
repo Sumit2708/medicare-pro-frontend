@@ -86,6 +86,8 @@ export class AppointmentListComponent {
     return this._sort;
   }
 
+  hideEdit = false;
+
   constructor(
     private router: Router,
     private appointmentService: AppointmentService,
@@ -139,36 +141,50 @@ export class AppointmentListComponent {
    * to apply continuously in the background.
    */
   private runAutomationRules(
-    appointments: Appointment[],
-    patients: Patient[],
-  ): void {
-    const now = Date.now();
+  appointments: Appointment[],
+  patients: Patient[],
+): void {
+  const now = Date.now();
+  const currentHour = new Date().getHours();
+  const pastSevenPM = currentHour >= 19;
 
-    // Rule 1: auto-cancel overdue, non-completed appointments
-    const overdue = appointments.filter((a: any) => {
-      return (
-        a.status !== 'Completed' &&
-        a.status !== 'Cancelled' &&
-        this.getAppointmentDateTime(a).getTime() < now
-      );
+  // Rule 1: auto-cancel overdue, still-Scheduled appointments — only checked after 7 PM.
+  // getAppointmentDateTime(a) < now covers BOTH:
+  //   - appointments from a past date (any time of day — always < now)
+  //   - today's appointments whose time has already passed
+  const overdue = pastSevenPM
+    ? appointments.filter((a: any) => {
+        return (
+          a.status === 'Scheduled' &&
+          this.getAppointmentDateTime(a).getTime() < now
+        );
+      })
+    : [];
+
+  overdue.forEach((a: any) => {
+    a.status = 'Cancelled';
+    this.hideEdit = true;
+    this.appointmentService.updateAppointment(a.id, a).subscribe({
+      next: () => {
+        this.notificationService.info(
+          `Auto-cancelled overdue appointment #${a.id}`,
+        );
+      },
+      error: () => {
+        this.notificationService.error(
+          `Failed to auto-cancel appointment #${a.id}`,
+        );
+      },
     });
+  });
 
-    // overdue.forEach((a: any) => {
-    //   a.status = 'Cancelled';
-    //   this.appointmentService.updateAppointment(a.id, a).subscribe({
-    //     error: () => {
-    //       this.notificationService.error(
-    //         `Failed to auto-cancel appointment #${a.id}`,
-    //       );
-    //     },
-    //   });
-    // });
+  if (overdue.length > 0) {
+    this.notificationService.success(
+      `${overdue.length} overdue appointment${overdue.length > 1 ? 's' : ''} auto-cancelled`,
+    );
+  }
 
-    // if (overdue.length > 0) {
-    //   this.notificationService.success(
-    //     `${overdue.length} overdue appointment${overdue.length > 1 ? 's' : ''} auto-cancelled`,
-    //   );
-    // }
+  // Rule 2 unchanged...
 
     // Rule 2: mark patients inactive if their most recent appointment was 60+ days ago
     const lastVisitByPatient = new Map<string, number>();

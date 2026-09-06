@@ -23,6 +23,7 @@ import { PrescriptionService } from '../../service/prescriptions.service';
 import { AuthService } from '../../../../core/services/auth/auth.service'; // adjust if path differs
 import { NotificationService } from '../../../../core/services/notification/notification.service';
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
+import { DoctorService } from '../../../doctors/services/doctor.service';
 
 @Component({
   selector: 'app-edit-prescription',
@@ -47,7 +48,7 @@ export class EditPrescriptionComponent implements OnInit {
   form!: FormGroup;
   isSubmitting = false;
   isLoading = false;
-  appointmentId:any;
+  appointmentId: any;
 
   // Common dosage patterns — shown in the dropdown, but the field still
   // accepts free text for anything not in this list.
@@ -67,6 +68,7 @@ export class EditPrescriptionComponent implements OnInit {
 
   private prescriptionId!: string;
   private patientId!: string;
+  patientName: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -74,7 +76,8 @@ export class EditPrescriptionComponent implements OnInit {
     private authService: AuthService,
     private notificationService: NotificationService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private doctorService: DoctorService,
   ) {}
 
   ngOnInit(): void {
@@ -91,6 +94,21 @@ export class EditPrescriptionComponent implements OnInit {
 
       this.buildForm();
       this.loadPrescription();
+      
+    });
+  }
+
+  private loadPatientData(patientId: string): void {
+    this.prescriptionService.loadPatientData(patientId).subscribe({
+      next: (data) => {
+        console.log('Loaded patient data:', data);
+        this.patientName = this.prescriptionService.patient?.name ?? '';
+      },
+      error: (err: Error) => {
+        this.notificationService.error(
+          err.message || 'Failed to load patient data',
+        );
+      },
     });
   }
 
@@ -101,6 +119,10 @@ export class EditPrescriptionComponent implements OnInit {
         this.patchForm(p);
         console.log('Loaded prescription:', p);
         this.appointmentId = p.appointmentId;
+        this.loadPatientData(p.patientId);
+
+
+       
         this.isLoading = false;
       },
       error: () => {
@@ -150,7 +172,9 @@ export class EditPrescriptionComponent implements OnInit {
     const visitDate = new Date(p.date);
     // If this prescription never had a follow-up date set, default it to
     // one month after the visit — same rule as a brand-new prescription.
-    const followUp = p.followUpDate ? new Date(p.followUpDate) : this.addMonths(visitDate, 1);
+    const followUp = p.followUpDate
+      ? new Date(p.followUpDate)
+      : this.addMonths(visitDate, 1);
 
     this.form.patchValue({
       date: visitDate,
@@ -190,7 +214,9 @@ export class EditPrescriptionComponent implements OnInit {
   }
 
   onAddNewMedicine(index: number, name: string): void {
-    this.prescriptionService.addMedicine({ name }).subscribe((med) => this.onMedicineSelected(index, med));
+    this.prescriptionService
+      .addMedicine({ name })
+      .subscribe((med) => this.onMedicineSelected(index, med));
   }
 
   // Follow-up date can only be moved within [visit date, visit date + 2 months]
@@ -209,6 +235,18 @@ export class EditPrescriptionComponent implements OnInit {
     return d;
   }
 
+  getDoctorData(doctorID: any) {
+    return this.doctorService.getDoctorById(doctorID).subscribe({
+      next: (doctor) => {
+        console.log('Loaded doctor data:', doctor);
+        return doctor
+      },
+      error: () => {
+        return '';
+      },
+    });
+  }
+
   onSubmit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -216,18 +254,47 @@ export class EditPrescriptionComponent implements OnInit {
       return;
     }
 
-    this.isSubmitting = true;
-    const currentUser = this.authService.getCurrentUser();
-    const value = this.form.value;
+    const appointment = this.prescriptionService.appointment;
+    if (!appointment) {
+      this.notificationService.error(
+        'No appointment loaded for this prescription',
+      );
+      return;
+    }
+    
 
-    const payload: Partial<Prescription> = {
-      doctorId: String(currentUser?.id ?? ''),
-      doctorName: currentUser?.name ?? '',
+    this.isSubmitting = true;
+    // const currentUser = this.authService.getCurrentUser();
+    const value = this.form.value;
+    const doctorData = this.getDoctorData(appointment.doctorId);
+
+    console.log(doctorData,'doctorData');
+    
+
+    // const payload: Partial<Prescription> = {
+    //   doctorId: String(currentUser?.id ?? ''),
+    //   doctorName: currentUser?.name ?? '',
+    //   date: value.date,
+    //   diagnosis: value.diagnosis,
+    //   advice: value.advice,
+    //   followUpDate: value.followUpDate,
+    //   items: value.items,
+    // };
+
+    const payload: Omit<Prescription, 'id'> = {
+      patientId: this.patientId,
+      patientName: this.patientName,
+      appointmentId: appointment.id,
+      doctorId: appointment.doctorId,
+      // doctorName: doctorData.name as unknown as string,
+      // doctorQualification: doctorData.qualification as unknown as string,
+      // Type assertion to string
       date: value.date,
       diagnosis: value.diagnosis,
       advice: value.advice,
       followUpDate: value.followUpDate,
       items: value.items,
+      status: 'active',
     };
 
     this.prescriptionService.update(this.prescriptionId, payload).subscribe({
@@ -253,7 +320,7 @@ export class EditPrescriptionComponent implements OnInit {
   }
 
   navBack() {
-     this.router.navigate(['/appointments/edit'], {
+    this.router.navigate(['/appointments/edit'], {
       queryParams: { id: this.appointmentId },
     });
   }

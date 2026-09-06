@@ -24,7 +24,8 @@ export interface Prescription {
   patientName: string;
   appointmentId?: string | number;
   doctorId?: string | number;
-  doctorName: string;
+  doctorName?: string;
+  doctorQualification?: string; 
   date: string;             // ISO date
   diagnosis?: string;
   items: PrescriptionItem[];

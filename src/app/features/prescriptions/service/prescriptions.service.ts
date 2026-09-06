@@ -99,16 +99,9 @@ export class PrescriptionService {
     );
   }
 
-  /** Clears context — call when leaving the prescription flow. */
-  resetContext(): void {
-    this.patient = null;
-    this.appointment = null;
-    this.doctor = null;
-    this.patientName = '';
-  }
-
+ 
   private pickRelevantAppointment(appointments: Appointment[]): Appointment | null {
-    const scheduled = appointments?.filter((a) => a.status === 'Scheduled' ) ?? [];
+    const scheduled = appointments?.filter((a) => a.status === 'Scheduled' || a.status === 'Completed' ) ?? [];
     if (!scheduled.length) return null;
 
     const today = new Date().toDateString();
@@ -121,4 +114,14 @@ export class PrescriptionService {
         .find((a) => new Date(a.date) >= new Date()) ?? null
     );
   }
+
+
+   /** Clears context — call when leaving the prescription flow. */
+  resetContext(): void {
+    this.patient = null;
+    this.appointment = null;
+    this.doctor = null;
+    this.patientName = '';
+  }
+
 }

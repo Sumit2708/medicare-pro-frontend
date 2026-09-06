@@ -40,15 +40,25 @@ export class PrintPrescriptionComponent {
       this.router.navigate(['/patients/edit'], {
         queryParams: { id: this.prescription?.patientId, tab: 'prescriptions' },
       });
+      window.close();
     };
 
     this.loadPrescription(id);
+  }
+
+  ngViewAfterInit(): void {
+    window.onafterprint = () => {
+      this.router.navigate(['/patients/edit'], {
+        queryParams: { id: this.prescription?.patientId, tab: 'prescriptions' },
+      });
+    };
   }
 
   private loadPrescription(id: string): void {
     this.prescriptionService.getById(id).subscribe({
       next: (p) => {
         this.prescription = p;
+        console.log(p,'prescription');
         this.loadPatient(p.patientId);
       },
       error: () => {

@@ -257,7 +257,7 @@ onSubmit(): void {
   }
 
   this.isSubmitting = true;
-  const currentUser = this.authService.getCurrentUser();
+  // const currentUser = this.authService.getCurrentUser();
   const value = this.form.value;
 
   const doctorName = this.getDoctorName(appointment.doctorId);

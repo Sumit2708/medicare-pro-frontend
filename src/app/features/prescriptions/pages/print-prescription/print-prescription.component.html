@@ -15,70 +15,66 @@
 
     <!-- Letterhead -->
     <div class="rx-header">
-      <div class="clinic-block">
-        <h1>{{ clinicInfo.name }}</h1>
-        <p class="tagline">{{ clinicInfo.tagline }}</p>
-        <p class="contact-line">{{ clinicInfo.address }} &nbsp;•&nbsp; {{ clinicInfo.phone }}</p>
-      </div>
+      <h1>{{ clinicInfo.name }}</h1>
+      <span class="tagline">{{ clinicInfo.tagline }}</span>
+      <p class="contact-line">{{ clinicInfo.address }} &nbsp;•&nbsp; {{ clinicInfo.phone }}</p>
+    </div>
 
-      <div class="doctor-block">
-        <span class="doc-type-badge">Rx</span>
+    <!-- Doctor credentials row -->
+    <div class="doctor-row">
+      <div class="doctor-card">
         <span class="doctor-name">Dr. {{ prescription.doctorName }}</span>
-        <span class="visit-date">{{ prescription.date | date: 'dd MMM yyyy' }}</span>
+        <span class="doctor-qualification" *ngIf="prescription.doctorQualification">{{ prescription.doctorQualification }}</span>
+        <span class="doctor-reg" *ngIf="prescription.id">Reg. No: {{ prescription.id}}</span>
       </div>
     </div>
 
-    <!-- Compact patient + visit strip -->
+    <!-- Reg / Date meta -->
+    <div class="meta-row">
+      <span *ngIf="prescription.id">Reg. No: {{ prescription.id }}</span>
+      <span>Date: {{ prescription.date | date: 'dd-MM-yyyy' }}</span>
+    </div>
+
+    <!-- Patient strip -->
     <div class="patient-strip">
       <span class="strip-item strip-item--name">{{ patient?.name || prescription.patientName }}</span>
 
-      <span class="strip-sep" *ngIf="patient?.age || patient?.gender"></span>
+      <span class="strip-sep" *ngIf="patient?.age || patient?.gender">/</span>
       <span class="strip-item" *ngIf="patient?.age || patient?.gender">
-        {{ patient?.age ? patient.age + ' yrs' : '' }}{{ patient?.age && patient?.gender ? ' · ' : '' }}{{ patient?.gender }}
+        {{ patient?.age ? patient.age + ' years' : '' }}{{ patient?.age && patient?.gender ? ' / ' : '' }}{{ patient?.gender }}
       </span>
 
-      <span class="strip-sep" *ngIf="patient?.bloodGroup"></span>
+      <span class="strip-sep" *ngIf="patient?.bloodGroup">/</span>
       <span class="strip-item strip-item--blood" *ngIf="patient?.bloodGroup">{{ patient.bloodGroup }}</span>
 
-      <span class="strip-sep" *ngIf="patient?.mobile"></span>
+      <span class="strip-sep" *ngIf="patient?.mobile">•</span>
       <span class="strip-item" *ngIf="patient?.mobile">{{ patient.mobile }}</span>
 
-      <span class="strip-sep" *ngIf="patient?.address"></span>
+      <span class="strip-sep" *ngIf="patient?.address">•</span>
       <span class="strip-item strip-item--address" *ngIf="patient?.address">{{ patient.address }}</span>
-
-      <span class="strip-sep" *ngIf="prescription.diagnosis"></span>
-      <span class="strip-item" *ngIf="prescription.diagnosis">
-        <strong>Dx:</strong> {{ prescription.diagnosis }}
-      </span>
-
-      <span class="strip-sep" *ngIf="prescription.followUpDate"></span>
-      <span class="strip-item" *ngIf="prescription.followUpDate">
-        <strong>Follow-up:</strong> {{ prescription.followUpDate | date: 'dd MMM yyyy' }}
-      </span>
     </div>
 
-    <!-- Medicines — the focal section -->
+    <!-- Rx symbol + diagnosis/notes line -->
     <div class="rx-symbol-row">
-      <span class="rx-symbol">℞</span>
-      <span class="rx-symbol-label">Medicines Prescribed</span>
+      <span class="rx-symbol">Rx</span>
+      <span class="rx-note" *ngIf="prescription.diagnosis">{{ prescription.diagnosis }}</span>
     </div>
 
+    <!-- Medicines -->
     <div class="med-list">
       <div class="med-line" *ngFor="let item of prescription.items; let i = index">
         <span class="med-number">{{ i + 1 }}</span>
 
         <div class="med-body">
           <div class="med-name-row">
-            <span class="med-name">{{ item.medicineName }}</span>
-            <span class="med-strength" *ngIf="item.strength">{{ item.strength }}</span>
+            <div class="med-name-group">
+              <span class="med-name">{{ item.medicineName }}</span>
+              <span class="med-strength" *ngIf="item.strength">{{ item.strength }}</span>
+            </div>
+            <span class="med-quantity" *ngIf="item.duration">({{ item.duration }})</span>
           </div>
 
-          <div class="med-tags">
-            <span class="med-tag">{{ item.dosage }}</span>
-            <span class="med-tag">{{ item.frequency }}</span>
-            <span class="med-tag">{{ item.duration }}</span>
-          </div>
-
+          <p class="med-sig">{{ item.dosage }} · {{ item.frequency }} · {{ item.duration }}</p>
           <p class="med-notes" *ngIf="item.notes">{{ item.notes }}</p>
         </div>
       </div>
@@ -90,14 +86,21 @@
       <p>{{ prescription.advice }}</p>
     </div>
 
-    <!-- Footer -->
-    <div class="footer">
-      <p class="thank-you">Get well soon.</p>
-
+    <!-- Follow-up + signature -->
+    <div class="footer-top">
+      <p class="followup" *ngIf="prescription.followUpDate">
+        Follow-up date: <span>{{ prescription.followUpDate | date: 'dd-MM-yyyy' }}</span>
+      </p>
       <div class="signature">
         <div class="signature-line"></div>
         <span>Dr. {{ prescription.doctorName }}</span>
       </div>
+    </div>
+
+    <!-- Bottom contact band -->
+    <div class="footer-band">
+      <p>Please bring this prescription and file on your next visit.</p>
+      <p>{{ clinicInfo.phone }} &nbsp;•&nbsp; ABCClinic.com</p>
     </div>
   </div>
 }
