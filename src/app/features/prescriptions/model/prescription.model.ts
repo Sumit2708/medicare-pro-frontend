@@ -12,7 +12,8 @@ export interface PrescriptionItem {
   strength?: string;
   dosage: string;          // e.g. "1-0-1"
   frequency: string;       // e.g. "After food"
-  duration: string;        // e.g. "5 days"
+  duration: string;  
+  quantity?: number;        // e.g. "5 days"
   notes?: string;
 }
 

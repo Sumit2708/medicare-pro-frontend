@@ -94,7 +94,6 @@ export class EditPrescriptionComponent implements OnInit {
 
       this.buildForm();
       this.loadPrescription();
-      
     });
   }
 
@@ -121,8 +120,6 @@ export class EditPrescriptionComponent implements OnInit {
         this.appointmentId = p.appointmentId;
         this.loadPatientData(p.patientId);
 
-
-       
         this.isLoading = false;
       },
       error: () => {
@@ -153,7 +150,7 @@ export class EditPrescriptionComponent implements OnInit {
   }
 
   private buildItem(item?: Partial<Prescription['items'][number]>): FormGroup {
-    return this.fb.group({
+    const group = this.fb.group({
       medicineId: [item?.medicineId ?? ''],
       medicineName: [item?.medicineName ?? '', Validators.required],
       dosageForm: [item?.dosageForm ?? ''],
@@ -161,8 +158,65 @@ export class EditPrescriptionComponent implements OnInit {
       dosage: [item?.dosage ?? '', Validators.required],
       frequency: [item?.frequency ?? '', Validators.required],
       duration: [item?.duration ?? '', Validators.required],
+      quantity: [item?.quantity ?? '', Validators.required],
       notes: [item?.notes ?? ''],
     });
+
+    // Auto-calculate quantity live from dosage + duration. This only fires
+    // on dosage/duration edits (not on initial patch), so loading an
+    // existing prescription won't clobber a previously saved quantity.
+    const recalc = () => {
+      const qty = this.calculateQuantity(
+        group.get('dosage')!.value,
+        group.get('duration')!.value,
+      );
+
+      if (qty !== null) {
+        group.get('quantity')!.setValue(qty, { emitEvent: false });
+      }
+    };
+
+    group.get('dosage')!.valueChanges.subscribe(recalc);
+    group.get('duration')!.valueChanges.subscribe(recalc);
+
+    return group;
+  }
+
+  // "1-0-1" -> 2 doses/day. "1-0-1-1" -> 3. "Once daily" -> 1, "Twice daily" -> 2.
+  // "SOS (as needed)" or anything unparseable -> null (leave quantity manual).
+  private parseDosesPerDay(dosage: string | null): number | null {
+    if (!dosage) return null;
+    const value = dosage.trim().toLowerCase();
+
+    if (value === 'once daily') return 1;
+    if (value === 'twice daily') return 2;
+    if (value.includes('sos')) return null;
+
+    const numbers = value.split('-').map((p) => parseFloat(p.trim()));
+    if (numbers.length > 0 && numbers.every((n) => !isNaN(n))) {
+      return numbers.reduce((sum, n) => sum + n, 0);
+    }
+    return null;
+  }
+
+  // "5 days" -> 5, "2 weeks" -> 14, "1 month" -> 30. Returns null if no
+  // recognizable unit is found (free text like "till symptoms resolve").
+  private parseDurationDays(duration: string | null): number | null {
+    if (!duration) return null;
+    const match = duration.trim().toLowerCase().match(/(\d+(\.\d+)?)\s*(day|week|month)/);
+    if (!match) return null;
+
+    const amount = parseFloat(match[1]);
+    if (match[3].startsWith('day')) return amount;
+    if (match[3].startsWith('week')) return amount * 7;
+    return amount * 30; // month
+  }
+
+  private calculateQuantity(dosage: string | null, duration: string | null): number | null {
+    const dosesPerDay = this.parseDosesPerDay(dosage);
+    const days = this.parseDurationDays(duration);
+    if (dosesPerDay === null || days === null) return null;
+    return Math.round(dosesPerDay * days);
   }
 
   private patchForm(p: Prescription): void {
@@ -239,7 +293,7 @@ export class EditPrescriptionComponent implements OnInit {
     return this.doctorService.getDoctorById(doctorID).subscribe({
       next: (doctor) => {
         console.log('Loaded doctor data:', doctor);
-        return doctor
+        return doctor;
       },
       error: () => {
         return '';
@@ -261,15 +315,13 @@ export class EditPrescriptionComponent implements OnInit {
       );
       return;
     }
-    
 
     this.isSubmitting = true;
     // const currentUser = this.authService.getCurrentUser();
     const value = this.form.value;
     const doctorData = this.getDoctorData(appointment.doctorId);
 
-    console.log(doctorData,'doctorData');
-    
+    console.log(doctorData, 'doctorData');
 
     // const payload: Partial<Prescription> = {
     //   doctorId: String(currentUser?.id ?? ''),

@@ -93,11 +93,8 @@ export class AddPrescriptionComponent implements OnInit {
 
       this.buildForm();
       this.loadPatientData(this.patientId);
-      
     });
   }
-
-  
 
   private buildForm(): void {
     const defaultDate = new Date();
@@ -122,16 +119,77 @@ export class AddPrescriptionComponent implements OnInit {
   }
 
   private buildItem(): FormGroup {
-    return this.fb.group({
-      medicineId: [''],
-      medicineName: ['', Validators.required],
-      dosageForm: [''],
-      strength: [''],
-      dosage: ['', Validators.required],
-      frequency: ['', Validators.required],
-      duration: ['', Validators.required],
-      notes: [''],
-    });
+  const group = this.fb.group({
+    medicineId: [''],
+    medicineName: ['', Validators.required],
+    dosageForm: [''],
+    strength: [''],
+    dosage: ['', Validators.required],
+    frequency: ['', Validators.required],
+    duration: ['', Validators.required],
+    quantity: ['', Validators.required],
+    notes: [''],
+  });
+
+  const recalc = () => {
+    const qty:any = this.calculateQuantity(
+      group.get('dosage')!.value,
+      group.get('duration')!.value,
+    );
+
+    if (qty !== null) {
+      group.get('quantity')!.setValue(qty, { emitEvent: false });
+    }
+  };
+
+  group.get('dosage')!.valueChanges.subscribe(recalc);
+  group.get('duration')!.valueChanges.subscribe(recalc);
+
+  return group;
+}
+
+  // "1-0-1" -> 2 doses/day. "1-0-1-1" -> 3. "Once daily" -> 1, "Twice daily" -> 2.
+  // "SOS (as needed)" or anything unparseable -> null (leave quantity manual).
+  private parseDosesPerDay(dosage: string | null): number | null {
+    if (!dosage) return null;
+    const value = dosage.trim().toLowerCase();
+
+    if (value === 'once daily') return 1;
+    if (value === 'twice daily') return 2;
+    if (value.includes('sos')) return null;
+
+    const numbers = value.split('-').map((p) => parseFloat(p.trim()));
+    if (numbers.length > 0 && numbers.every((n) => !isNaN(n))) {
+      return numbers.reduce((sum, n) => sum + n, 0);
+    }
+    return null;
+  }
+
+  // "5 days" -> 5, "2 weeks" -> 14, "1 month" -> 30. Returns null if no
+  // recognizable unit is found (free text like "till symptoms resolve").
+
+  private parseDurationDays(duration: string | null): number | null {
+    if (!duration) return null;
+    const match = duration
+      .trim()
+      .toLowerCase()
+      .match(/(\d+(\.\d+)?)\s*(day|week|month)/);
+    if (!match) return null;
+
+    const amount = parseFloat(match[1]);
+    if (match[3].startsWith('day')) return amount;
+    if (match[3].startsWith('week')) return amount * 7;
+    return amount * 30; // month
+  }
+
+  private calculateQuantity(
+    dosage: string | null,
+    duration: string | null,
+  ): number | null {
+    const dosesPerDay = this.parseDosesPerDay(dosage);
+    const days = this.parseDurationDays(duration);
+    if (dosesPerDay === null || days === null) return null;
+    return Math.round(dosesPerDay * days);
   }
 
   get items(): FormArray {
@@ -164,7 +222,9 @@ export class AddPrescriptionComponent implements OnInit {
   }
 
   onAddNewMedicine(index: number, name: string): void {
-    this.prescriptionService.addMedicine({ name }).subscribe((med) => this.onMedicineSelected(index, med));
+    this.prescriptionService
+      .addMedicine({ name })
+      .subscribe((med) => this.onMedicineSelected(index, med));
   }
 
   // Follow-up date can only be moved within [visit date, visit date + 2 months]
@@ -183,111 +243,79 @@ export class AddPrescriptionComponent implements OnInit {
     return d;
   }
 
-  // onSubmit(): void {
-  //   if (this.form.invalid) {
-  //     this.form.markAllAsTouched();
-  //     this.notificationService.error('Please fill in all required fields.');
-  //     return;
-  //   }
-
-  //   this.isSubmitting = true;
-  //   const currentUser = this.authService.getCurrentUser();
-  //   const value = this.form.value;
-
-  //   const payload: Omit<Prescription, 'id'> = {
-  //     patientId: this.patientId,
-  //     patientName: this.patientName,
-  //     doctorId: String(currentUser?.id ?? ''),
-  //     doctorName: currentUser?.name ?? '',
-  //     date: value.date,
-  //     diagnosis: value.diagnosis,
-  //     advice: value.advice,
-  //     followUpDate: value.followUpDate,
-  //     items: value.items,
-  //     status: 'active',
-  //   };
-
-  //   this.prescriptionService.create(payload).subscribe({
-  //     next: () => {
-  //       this.notificationService.success('Prescription saved successfully');
-  //       this.goBackToPatient();
-  //     },
-  //     error: () => {
-  //       this.notificationService.error('Failed to save prescription');
-  //       this.isSubmitting = false;
-  //     },
-  //   });
-  // }
-
   private loadPatientData(patientId: string): void {
-  this.prescriptionService.loadPatientData(patientId).subscribe({
-    next: (data) => {
-console.log('Loaded patient data:', data);
-      this.patientName = this.prescriptionService.patient?.name ?? '';
-    },
-    error: (err: Error) => {
-      this.notificationService.error(err.message || 'Failed to load patient data');
-    },
-  });
-}
-
-getDoctorName(doctorID: any) {
-  return this.doctorService.getDoctorById(doctorID).subscribe({
-    next: (doctor) => {
-      console.log('Loaded doctor data:', doctor);
-      return doctor.name;
-    },
-    error: () => {
-      return '';
-    },
-  }); 
-}
-
-onSubmit(): void {
-  if (this.form.invalid) {
-    this.form.markAllAsTouched();
-    this.notificationService.error('Please fill in all required fields.');
-    return;
+    this.prescriptionService.loadPatientData(patientId).subscribe({
+      next: (data) => {
+        console.log('Loaded patient data:', data);
+        this.patientName = this.prescriptionService.patient?.name ?? '';
+      },
+      error: (err: Error) => {
+        this.notificationService.error(
+          err.message || 'Failed to load patient data',
+        );
+      },
+    });
   }
 
-  const appointment = this.prescriptionService.appointment;
-  if (!appointment) {
-    this.notificationService.error('No appointment loaded for this prescription');
-    return;
+  getDoctorName(doctorID: any) {
+    return this.doctorService.getDoctorById(doctorID).subscribe({
+      next: (doctor) => {
+        console.log('Loaded doctor data:', doctor);
+        return doctor.name;
+      },
+      error: () => {
+        return '';
+      },
+    });
   }
 
-  this.isSubmitting = true;
-  // const currentUser = this.authService.getCurrentUser();
-  const value = this.form.value;
+  onSubmit(): void {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      this.notificationService.error('Please fill in all required fields.');
+      return;
+    }
 
-  const doctorName = this.getDoctorName(appointment.doctorId);
+    const appointment = this.prescriptionService.appointment;
+    if (!appointment) {
+      this.notificationService.error(
+        'No appointment loaded for this prescription',
+      );
+      return;
+    }
 
-  const payload: Omit<Prescription, 'id'> = {
-    patientId: this.patientId,
-    patientName: this.patientName,
-    appointmentId: appointment.id,
-    doctorId: appointment.doctorId,
-    doctorName: doctorName as unknown as string, // Type assertion to string
-    date: value.date,
-    diagnosis: value.diagnosis,
-    advice: value.advice,
-    followUpDate: value.followUpDate,
-    items: value.items,
-    status: 'active',
-  };
+    this.isSubmitting = true;
+    // const currentUser = this.authService.getCurrentUser();
+    const value = this.form.value;
 
-  this.prescriptionService.create(payload).subscribe({
-    next: () => {
-      this.isSubmitting = false;
-      this.notificationService.success('Prescription saved successfully');
-      this.goBackToPatient();
-    },
-    error: () => {
-      this.notificationService.error('Failed to save prescription');
-      this.isSubmitting = false;
-    },
-  });
-}
+    const doctorName = this.getDoctorName(appointment.doctorId);
+
+    const payload: Omit<Prescription, 'id'> = {
+      patientId: this.patientId,
+      patientName: this.patientName,
+      appointmentId: appointment.id,
+      doctorId: appointment.doctorId,
+      doctorName: doctorName as unknown as string, // Type assertion to string
+      date: value.date,
+      diagnosis: value.diagnosis,
+      advice: value.advice,
+      followUpDate: value.followUpDate,
+      items: value.items,
+      status: 'active',
+    };
+
+    this.prescriptionService.create(payload).subscribe({
+      next: () => {
+        this.isSubmitting = false;
+        this.notificationService.success('Prescription saved successfully');
+        this.goBackToPatient();
+      },
+      error: () => {
+        this.notificationService.error('Failed to save prescription');
+        this.isSubmitting = false;
+      },
+    });
+  }
 
   onCancel(): void {
     this.goBackToPatient();

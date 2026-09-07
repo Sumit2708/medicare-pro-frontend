@@ -3,5 +3,8 @@ export const CLINIC_INFO = {
   tagline: 'Healthcare Management System',
   address: 'Pune, Maharashtra',
   phone: '+91 98765 43210',
-  email: 'info@abcclinic.com'
+  email: 'info@abcclinic.com',
+  website: 'www.abcclinic.com',
+  logoUrl: 'assets/images/clinic-logo.png',
+  gstNumber: '27ABCDE1234F1Z5',
 };

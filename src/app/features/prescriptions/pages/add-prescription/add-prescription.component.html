@@ -4,7 +4,8 @@
     subtitle="Add a prescription for this patient"
     buttonLabel="Back"
     buttonIcon="arrow_back"
-    (buttonClick)="navBack()">
+    (buttonClick)="navBack()"
+  >
   </app-page-header>
 
   <mat-card class="form-card" *ngIf="form">
@@ -19,7 +20,6 @@
     </div>
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="prescription-form">
-
       <div class="form-section">
         <div class="section-heading">
           <mat-icon>event</mat-icon>
@@ -33,8 +33,15 @@
           <mat-form-field appearance="outline">
             <mat-label>Date*</mat-label>
             <mat-icon matPrefix>calendar_today</mat-icon>
-            <input matInput [matDatepicker]="datePicker" formControlName="date" />
-            <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+            <input
+              matInput
+              [matDatepicker]="datePicker"
+              formControlName="date"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="datePicker"
+            ></mat-datepicker-toggle>
             <mat-datepicker #datePicker></mat-datepicker>
           </mat-form-field>
 
@@ -48,16 +55,26 @@
               [min]="minFollowUpDate()"
               [max]="maxFollowUpDate()"
             />
-            <mat-datepicker-toggle matSuffix [for]="followPicker"></mat-datepicker-toggle>
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="followPicker"
+            ></mat-datepicker-toggle>
             <mat-datepicker #followPicker></mat-datepicker>
-            <mat-hint>Defaults to 1 month after visit · editable up to 2 months</mat-hint>
+            <mat-hint
+              >Defaults to 1 month after visit · editable up to 2
+              months</mat-hint
+            >
           </mat-form-field>
         </div>
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Diagnosis</mat-label>
           <mat-icon matPrefix>fact_check</mat-icon>
-          <input matInput formControlName="diagnosis" placeholder="e.g. Viral fever" />
+          <input
+            matInput
+            formControlName="diagnosis"
+            placeholder="e.g. Viral fever"
+          />
           <mat-hint>Optional</mat-hint>
         </mat-form-field>
       </div>
@@ -99,7 +116,7 @@
               (addNewMedicine)="onAddNewMedicine(i, $event)"
             ></app-medicine-autocomplete>
 
-            <div class="form-row three-col">
+            <div class="form-row four-col">
               <mat-form-field appearance="outline">
                 <mat-label>Dosage*</mat-label>
                 <input
@@ -109,30 +126,63 @@
                   [matAutocomplete]="dosageAuto"
                 />
                 <mat-autocomplete #dosageAuto="matAutocomplete">
-                  <mat-option *ngFor="let d of dosagePresets" [value]="d">{{ d }}</mat-option>
+                  <mat-option *ngFor="let d of dosagePresets" [value]="d">{{
+                    d
+                  }}</mat-option>
                 </mat-autocomplete>
               </mat-form-field>
 
               <mat-form-field appearance="outline">
                 <mat-label>Frequency*</mat-label>
-                <input matInput formControlName="frequency" placeholder="After food" />
+                <input
+                  matInput
+                  formControlName="frequency"
+                  placeholder="After food"
+                />
               </mat-form-field>
 
               <mat-form-field appearance="outline">
                 <mat-label>Duration*</mat-label>
-                <input matInput formControlName="duration" placeholder="5 days" />
+                <input
+                  matInput
+                  formControlName="duration"
+                  placeholder="5 days"
+                />
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Quantity*</mat-label>
+                <input
+                  matInput
+                  type="number"
+                  min="0"
+                  formControlName="quantity"
+                  placeholder="e.g. 10"
+                />
+                <mat-hint
+                  >Auto-calculated from dosage & duration · editable</mat-hint
+                >
               </mat-form-field>
             </div>
-
-            <mat-form-field appearance="outline" class="full-width">
+            <mat-form-field appearance="outline" class="full-width mt-3">
               <mat-label>Notes</mat-label>
-              <input matInput formControlName="notes" placeholder="e.g. Take with warm water" />
+              <input
+                matInput
+                formControlName="notes"
+                placeholder="e.g. Take with warm water"
+              />
               <mat-hint>Optional</mat-hint>
             </mat-form-field>
           </div>
         </div>
 
-        <button mat-stroked-button type="button" color="primary" class="add-med-btn" (click)="addItem()">
+        <button
+          mat-stroked-button
+          type="button"
+          color="primary"
+          class="add-med-btn"
+          (click)="addItem()"
+        >
           <mat-icon>add</mat-icon>
           Add Medicine
         </button>
@@ -149,17 +199,31 @@
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Advice</mat-label>
-          <textarea matInput rows="3" formControlName="advice" placeholder="General advice for the patient"></textarea>
+          <textarea
+            matInput
+            rows="3"
+            formControlName="advice"
+            placeholder="General advice for the patient"
+          ></textarea>
           <mat-hint>Optional</mat-hint>
         </mat-form-field>
       </div>
 
       <div class="form-actions">
-        <button mat-stroked-button type="button" (click)="onCancel()">Cancel</button>
-        <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || isSubmitting">
-          <mat-icon *ngIf="isSubmitting" class="spin">progress_activity</mat-icon>
+        <button mat-stroked-button type="button" (click)="onCancel()">
+          Cancel
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="form.invalid || isSubmitting"
+        >
+          <mat-icon *ngIf="isSubmitting" class="spin"
+            >progress_activity</mat-icon
+          >
           <mat-icon *ngIf="!isSubmitting">save</mat-icon>
-          {{ isSubmitting ? 'Saving...' : 'Save Prescription' }}
+          {{ isSubmitting ? "Saving..." : "Save Prescription" }}
         </button>
       </div>
     </form>

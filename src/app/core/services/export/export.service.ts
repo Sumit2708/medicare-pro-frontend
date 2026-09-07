@@ -113,18 +113,23 @@ async exportPdf(
 
   const element = reportElement;
 
-  const pdfHeader = element.querySelector('.pdf-header') as HTMLElement;
+  const pdfHeader = element.querySelector('.pdf-header') as HTMLElement | null;
 
+if (pdfHeader) {
   pdfHeader.style.display = 'flex';
+}
 
-  const canvas = await html2canvas(element, {
+ const canvas = await html2canvas(element, {
     scale: 2,
     useCORS: true,
     backgroundColor: '#ffffff',
     logging: false
   });
 
+if (pdfHeader) {
   pdfHeader.style.display = '';
+}
+
 
   const imgData = canvas.toDataURL('image/png');
 

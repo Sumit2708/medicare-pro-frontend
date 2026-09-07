@@ -27,6 +27,13 @@ export class PrintPrescriptionComponent {
     private router: Router,
   ) {}
 
+  get doctorDisplayName(): string {
+    const name = this.prescription?.doctorName?.trim() ?? '';
+    return name.toLowerCase().startsWith('dr.') || name.toLowerCase().startsWith('dr ')
+      ? name
+      : `Dr. ${name}`;
+  }
+
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
 
@@ -46,19 +53,10 @@ export class PrintPrescriptionComponent {
     this.loadPrescription(id);
   }
 
-  ngViewAfterInit(): void {
-    window.onafterprint = () => {
-      this.router.navigate(['/patients/edit'], {
-        queryParams: { id: this.prescription?.patientId, tab: 'prescriptions' },
-      });
-    };
-  }
-
   private loadPrescription(id: string): void {
     this.prescriptionService.getById(id).subscribe({
       next: (p) => {
         this.prescription = p;
-        console.log(p,'prescription');
         this.loadPatient(p.patientId);
       },
       error: () => {
@@ -75,8 +73,6 @@ export class PrintPrescriptionComponent {
         this.finishLoading();
       },
       error: () => {
-        // Missing patient details shouldn't block printing the
-        // prescription itself — just fall back to '—' in the template.
         this.finishLoading();
       },
     });

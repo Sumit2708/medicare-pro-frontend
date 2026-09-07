@@ -5,7 +5,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { CLINIC_INFO } from '../../../../core/constants/clinic-info';
 
-
 @Component({
   selector: 'app-print-invoice',
   imports: [CurrencyPipe, DatePipe],
@@ -24,7 +23,7 @@ export class PrintInvoiceComponent {
   ) {}
 
   ngOnInit(): void {
-    const id = (this.route.snapshot.paramMap.get('id'));
+    const id = this.route.snapshot.paramMap.get('id');
     this.loadInvoice(id);
 
     window.onafterprint = () => {
@@ -37,12 +36,17 @@ export class PrintInvoiceComponent {
       next: (response) => {
         this.invoiceDetails = response;
 
-        // console.log(this.invoiceDetails);
-        
+        console.log(this.invoiceDetails);
 
         this.loading = false;
 
+        // const originalTitle = document.title;
+
+        // // 2. Set the new title you want on the print page
+        // document.title = `${response.patient.name} - ${response.invoice.invoiceNumber}`;
+
         setTimeout(() => {
+          // document.title = originalTitle;
           window.print();
         }, 10);
       },

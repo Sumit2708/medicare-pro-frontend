@@ -20,43 +20,48 @@
       <p class="contact-line">{{ clinicInfo.address }} &nbsp;•&nbsp; {{ clinicInfo.phone }}</p>
     </div>
 
-    <!-- Doctor credentials row -->
+    <!-- Doctor + Reg + Date row -->
     <div class="doctor-row">
       <div class="doctor-card">
-        <span class="doctor-name">Dr. {{ prescription.doctorName }}</span>
-        <span class="doctor-qualification" *ngIf="prescription.doctorQualification">{{ prescription.doctorQualification }}</span>
-        <span class="doctor-reg" *ngIf="prescription.id">Reg. No: {{ prescription.id}}</span>
+        <span class="doctor-name">{{ doctorDisplayName }}</span>
+        <span class="doctor-qualification" *ngIf="prescription.doctorQualification">
+          {{ prescription.doctorQualification }}
+        </span>
       </div>
-    </div>
-
-    <!-- Reg / Date meta -->
-    <div class="meta-row">
-      <span *ngIf="prescription.id">Reg. No: {{ prescription.id }}</span>
-      <span>Date: {{ prescription.date | date: 'dd-MM-yyyy' }}</span>
+      <div class="meta-card">
+        <span *ngIf="prescription.id">Reg. No: {{ prescription.id }}</span>
+        <span>Date: {{ prescription.date | date: 'dd-MM-yyyy' }}</span>
+      </div>
     </div>
 
     <!-- Patient strip -->
     <div class="patient-strip">
       <span class="strip-item strip-item--name">{{ patient?.name || prescription.patientName }}</span>
 
-      <span class="strip-sep" *ngIf="patient?.age || patient?.gender">/</span>
       <span class="strip-item" *ngIf="patient?.age || patient?.gender">
-        {{ patient?.age ? patient.age + ' years' : '' }}{{ patient?.age && patient?.gender ? ' / ' : '' }}{{ patient?.gender }}
+        <span class="strip-sep">/</span>
+        {{ patient?.age ? patient.age + ' yrs' : '' }}{{ patient?.age && patient?.gender ? ' / ' : '' }}{{ patient?.gender }}
       </span>
 
-      <span class="strip-sep" *ngIf="patient?.bloodGroup">/</span>
-      <span class="strip-item strip-item--blood" *ngIf="patient?.bloodGroup">{{ patient.bloodGroup }}</span>
+      <span class="strip-item strip-item--blood" *ngIf="patient?.bloodGroup">
+        <span class="strip-sep">/</span>
+        {{ patient.bloodGroup }}
+      </span>
 
-      <span class="strip-sep" *ngIf="patient?.mobile">•</span>
-      <span class="strip-item" *ngIf="patient?.mobile">{{ patient.mobile }}</span>
+      <span class="strip-item" *ngIf="patient?.mobile">
+        <span class="strip-sep">•</span>
+        {{ patient.mobile }}
+      </span>
 
-      <span class="strip-sep" *ngIf="patient?.address">•</span>
-      <span class="strip-item strip-item--address" *ngIf="patient?.address">{{ patient.address }}</span>
+      <span class="strip-item strip-item--address" *ngIf="patient?.address">
+        <span class="strip-sep">•</span>
+        {{ patient.address }}
+      </span>
     </div>
 
-    <!-- Rx symbol + diagnosis/notes line -->
+    <!-- Rx symbol + diagnosis -->
     <div class="rx-symbol-row">
-      <span class="rx-symbol">Rx</span>
+      <span class="rx-symbol">℞</span>
       <span class="rx-note" *ngIf="prescription.diagnosis">{{ prescription.diagnosis }}</span>
     </div>
 
@@ -93,14 +98,14 @@
       </p>
       <div class="signature">
         <div class="signature-line"></div>
-        <span>Dr. {{ prescription.doctorName }}</span>
+        <span>{{ doctorDisplayName }}</span>
       </div>
     </div>
 
     <!-- Bottom contact band -->
     <div class="footer-band">
       <p>Please bring this prescription and file on your next visit.</p>
-      <p>{{ clinicInfo.phone }} &nbsp;•&nbsp; ABCClinic.com</p>
+      <p>{{ clinicInfo.phone }} &nbsp;•&nbsp; {{ clinicInfo.website }}</p>
     </div>
   </div>
 }

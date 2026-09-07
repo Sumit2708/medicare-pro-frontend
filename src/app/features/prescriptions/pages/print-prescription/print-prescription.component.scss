@@ -16,97 +16,86 @@
 .rx-container {
   max-width: 780px;
   margin: 0 auto;
-  padding: 0 0 0;
   font-family: var(--font-body);
   color: var(--color-ink);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
 }
 
-/* ---------- Letterhead ---------- */
+/* ---------- Letterhead — full-bleed banner ---------- */
 .rx-header {
+  width: 100%;
   text-align: center;
-  padding: 22px 20px 14px;
-  border-top: 4px solid var(--color-primary);
-  border-bottom: 4px solid var(--color-primary);
+  padding: 26px 24px 20px;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
 
   h1 {
     font-family: var(--font-display);
-    font-size: 26px;
+    font-size: 27px;
     font-weight: 700;
     letter-spacing: 0.01em;
-    color: var(--color-primary-dark);
-    margin: 0 0 6px;
+    color: #ffffff;
+    margin: 0 0 5px;
   }
 
   .tagline {
-    display: inline-block;
+    display: block;
     font-family: var(--font-display);
-    font-size: 13px;
+    font-size: 11.5px;
     font-weight: 600;
-    color: var(--color-primary-dark);
-    border-top: 1px solid var(--color-primary);
-    border-bottom: 1px solid var(--color-primary);
-    padding: 3px 18px;
-    margin: 0 0 8px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.85);
+    margin: 0 0 10px;
   }
 
   .contact-line {
     font-size: 11.5px;
-    color: var(--color-ink-soft);
+    color: rgba(255, 255, 255, 0.75);
     margin: 0;
   }
 }
 
-/* ---------- Doctor credentials row ---------- */
+/* ---------- Doctor + Reg/Date row ---------- */
 .doctor-row {
   display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 28px;
-  flex-wrap: wrap;
-  padding: 12px 16px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 20px;
   border-bottom: 1px solid var(--color-border);
   background: var(--color-primary-light);
 
   .doctor-card {
-    text-align: center;
-    min-width: 150px;
+    display: flex;
+    flex-direction: column;
 
     .doctor-name {
-      display: block;
       font-family: var(--font-display);
       font-weight: 700;
-      font-size: 13px;
+      font-size: 13.5px;
       color: var(--color-ink);
     }
 
     .doctor-qualification {
-      display: block;
       font-size: 11px;
       color: var(--color-ink-soft);
       margin-top: 2px;
     }
-
-    .doctor-reg {
-      display: block;
-      font-size: 10.5px;
-      color: var(--color-ink-soft);
-      margin-top: 1px;
-    }
   }
-}
 
-/* ---------- Reg / Date meta row ---------- */
-.meta-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 16px;
-  font-size: 12.5px;
-  font-weight: 600;
-  color: var(--color-ink);
-  border-bottom: 1px dashed var(--color-border);
+  .meta-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 3px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-ink);
+    white-space: nowrap;
+  }
 }
 
 /* ---------- Patient strip ---------- */
@@ -114,8 +103,8 @@
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 6px 4px;
-  padding: 10px 16px;
+  gap: 4px;
+  padding: 10px 20px;
   border-bottom: 1px solid var(--color-border);
   font-size: 12.5px;
   color: var(--color-ink);
@@ -138,13 +127,11 @@
       color: var(--color-ink-soft);
       white-space: normal;
     }
-
-    strong { font-weight: 600; }
   }
 
   .strip-sep {
     color: var(--color-ink-soft);
-    margin: 0 4px;
+    margin-right: 4px;
   }
 }
 
@@ -153,13 +140,12 @@
   display: flex;
   align-items: baseline;
   gap: 10px;
-  padding: 18px 16px 8px;
+  padding: 18px 20px 8px;
 
   .rx-symbol {
     font-family: var(--font-display);
-    font-size: 32px;
+    font-size: 30px;
     font-weight: 700;
-    font-style: italic;
     color: var(--color-primary);
     line-height: 1;
   }
@@ -176,7 +162,7 @@
 .med-list {
   display: flex;
   flex-direction: column;
-  padding: 4px 16px 8px;
+  padding: 4px 20px 8px;
 }
 
 .med-line {
@@ -203,10 +189,7 @@
   font-weight: 700;
 }
 
-.med-body {
-  flex: 1;
-  min-width: 0;
-}
+.med-body { flex: 1; min-width: 0; }
 
 .med-name-row {
   display: flex;
@@ -243,22 +226,12 @@
   color: var(--color-ink);
 }
 
-.med-sig {
-  margin: 3px 0 0;
-  font-size: 12.5px;
-  color: var(--color-ink);
-}
-
-.med-notes {
-  margin: 3px 0 0;
-  font-size: 12px;
-  color: var(--color-ink-soft);
-  font-style: italic;
-}
+.med-sig { margin: 3px 0 0; font-size: 12.5px; color: var(--color-ink); }
+.med-notes { margin: 3px 0 0; font-size: 12px; color: var(--color-ink-soft); font-style: italic; }
 
 /* ---------- Advice ---------- */
 .advice-section {
-  margin: 6px 16px 0;
+  margin: 6px 20px 0;
   padding: 12px 0 0;
   border-top: 1px solid var(--color-border);
 
@@ -273,11 +246,7 @@
     margin-bottom: 6px;
   }
 
-  p {
-    margin: 0;
-    font-size: 13px;
-    line-height: 1.5;
-  }
+  p { margin: 0; font-size: 13px; line-height: 1.5; }
 }
 
 /* ---------- Follow-up + signature ---------- */
@@ -285,7 +254,7 @@
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  margin: 26px 16px 0;
+  margin: 26px 20px 0;
   padding-top: 14px;
 
   .followup {
@@ -293,10 +262,7 @@
     font-weight: 600;
     color: var(--color-ink);
 
-    span {
-      font-weight: 400;
-      color: var(--color-ink-soft);
-    }
+    span { font-weight: 400; color: var(--color-ink-soft); }
   }
 
   .signature {
@@ -306,22 +272,14 @@
     gap: 6px;
   }
 
-  .signature-line {
-    width: 150px;
-    border-top: 1px solid var(--color-ink);
-  }
-
-  .signature span {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--color-ink-soft);
-  }
+  .signature-line { width: 150px; border-top: 1px solid var(--color-ink); }
+  .signature span { font-size: 12px; font-weight: 600; color: var(--color-ink-soft); }
 }
 
 /* ---------- Bottom contact band ---------- */
 .footer-band {
-  margin-top: 18px;
-  padding: 12px 16px;
+  margin-top: auto;
+  padding: 12px 20px;
   text-align: center;
   background: var(--color-primary-light);
   border-top: 1px solid var(--color-border);
@@ -335,10 +293,10 @@
   }
 }
 
-/* ---------- Responsive ---------- */
+/* ---------- Responsive (screen preview only) ---------- */
 @media (max-width: 640px) {
-  .doctor-row { gap: 16px; }
-  .meta-row { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .doctor-row { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .meta-card { align-items: flex-start; }
 }
 
 /* ---------- Print rules ---------- */
@@ -358,7 +316,23 @@
 
   body { background: #fff; }
 
-  .rx-container { max-width: 100%; border: none; }
+  .rx-container {
+    max-width: 100%;
+    border: none;
+    min-height: 269mm; /* A4 height (297mm) minus 14mm top/bottom @page margins */
+    padding-bottom: 56px; /* reserve space so content never runs under the fixed footer */
+  }
+
+  /* Fixed footer: position: fixed inside @media print repeats at the same
+     spot on every printed page in Chrome/Firefox — this is what actually
+     pins it to the bottom of the physical page, not just the content flow. */
+  .footer-band {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin-top: 0;
+  }
 
   .med-line,
   .footer-top {

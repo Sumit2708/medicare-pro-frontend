@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -34,8 +34,17 @@ import { AppointmentReportFilter } from '../../models/appointment-report-filter.
 })
 export class AppointmentReportComponent {
   summary!: AppointmentSummaryModel;
+
+  // Screen view: paginated
   dataSource = new MatTableDataSource<AppointmentReportModel>([]);
+
+  // Export view: full, unpaginated dataset for PDF capture
+  exportDataSource = new MatTableDataSource<AppointmentReportModel>([]);
+
   displayedColumns = ['id', 'patient', 'doctor', 'date', 'time', 'status'];
+
+  generatedDate = '';
+  isExporting = false;
 
   @ViewChild('reportContent') reportContent!: ElementRef<HTMLElement>;
 
@@ -75,10 +84,10 @@ export class AppointmentReportComponent {
   ): void {
     this.reportService.getAppointmentReport(filter).subscribe({
       next: (response) => {
+        console.log(response);
         this.summary = response.summary;
         this.dataSource.data = response.appointments;
-        // paginator is guaranteed set by now via the setter above,
-        // since the @if condition becomes true right as this assigns
+        this.exportDataSource.data = response.appointments; // full set, no paginator attached
         this._paginator?.firstPage();
       },
     });
@@ -102,18 +111,28 @@ export class AppointmentReportComponent {
       .toUpperCase();
   }
 
-
-
-  exportPdf(): void {
+  async exportPdf(): Promise<void> {
+    // console.log('Exporting PDF...', this.reportContent.nativeElement);
     if (!this.reportContent) return;
-    this.exportService.exportPdf(
-      this.reportContent.nativeElement,
-      new Date().toLocaleString(),
-    );
+
+    this.generatedDate = new Date().toLocaleString();
+    this.isExporting = true;
+
+    // let Angular flush the DOM (swap to full table + show pdf-header) before capture
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    try {
+      await this.exportService.exportPdf(
+        this.reportContent.nativeElement,
+        this.generatedDate,
+      );
+    } finally {
+      this.isExporting = false;
+    }
   }
 
   exportExcel(): void {
-    this.exportService.exportExcel(this.dataSource.data,   new Date().toLocaleString());
+    this.exportService.exportExcel(this.dataSource.data, new Date().toLocaleString());
   }
 
   printReport(): void {
