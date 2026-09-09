@@ -7,4 +7,5 @@ export const CLINIC_INFO = {
   website: 'www.abcclinic.com',
   logoUrl: 'assets/images/clinic-logo.png',
   gstNumber: '27ABCDE1234F1Z5',
+  copyright: '© 2023 ABC Clinic. All rights reserved.'
 };

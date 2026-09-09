@@ -175,7 +175,9 @@ if (pdfHeader) {
 
     heightLeft -= pageHeight - margin * 2;
   }
+  
+ let PdfName = `Report-${generatedDate}.pdf`;
 
-  pdf.save('appointments-report.pdf');
+  pdf.save(PdfName);
 }
 }

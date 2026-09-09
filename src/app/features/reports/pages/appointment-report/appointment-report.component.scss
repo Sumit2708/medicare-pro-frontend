@@ -1,12 +1,885 @@
-.summary-grid {
-  margin-bottom: 4px;
-}
+/* ============================================================
+   APPOINTMENT REPORT — PDF DOCUMENT
+   Uses project design tokens
+   ============================================================ */
 
-.appointments-report-table {
-  width: 100%;
-}
+.pdf-report {
+  width: 794px;
+  min-height: 1123px;
 
-::ng-deep mat-paginator {
-  background: transparent;
+  box-sizing: border-box;
+
+  padding: 42px 46px 34px;
+
+  background: var(--color-surface);
+  color: var(--color-ink);
+
   font-family: var(--font-body);
+
+  line-height: 1.4;
+
+  position: relative;
+
+  overflow: visible;
+}
+
+
+/* ============================================================
+   PDF HEADER
+   ============================================================ */
+
+.pdf-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 30px;
+}
+
+
+/* ---------- Brand ---------- */
+
+.pdf-brand {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+}
+
+
+.pdf-brand-mark {
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: linear-gradient(
+    135deg,
+    var(--color-primary),
+    var(--color-accent)
+  );
+
+  color: #fff;
+}
+
+
+.pdf-brand-mark mat-icon {
+  width: 21px;
+  height: 21px;
+
+  font-size: 21px;
+
+  line-height: 21px;
+}
+
+
+.pdf-brand-info {
+  display: flex;
+  flex-direction: column;
+}
+
+
+.pdf-brand-name {
+  font-family: var(--font-display);
+
+  font-size: 18px;
+  font-weight: 600;
+
+  line-height: 1.2;
+
+  color: var(--color-ink);
+}
+
+
+.pdf-brand-subtitle {
+  margin-top: 3px;
+
+  font-size: 9px;
+
+  color: var(--color-ink-soft);
+
+  letter-spacing: 0.15px;
+}
+
+
+/* ---------- Right side ---------- */
+
+.pdf-header-right {
+  text-align: right;
+
+  padding-top: 2px;
+}
+
+
+.pdf-document-label {
+  font-size: 8px;
+
+  font-weight: 700;
+
+  color: var(--color-primary);
+
+  letter-spacing: 1.5px;
+}
+
+
+.pdf-document-type {
+  margin-top: 2px;
+
+  font-size: 10px;
+
+  font-weight: 600;
+
+  color: var(--color-ink);
+
+  letter-spacing: 0.4px;
+}
+
+
+.pdf-header-caption {
+  margin-top: 5px;
+
+  font-size: 7.5px;
+
+  color: var(--color-ink-soft);
+}
+
+
+/* ---------- Divider ---------- */
+
+.pdf-divider {
+  height: 2px;
+
+  margin-top: 22px;
+
+  background: linear-gradient(
+    90deg,
+    var(--color-primary),
+    var(--color-accent)
+  );
+
+  border-radius: 2px;
+}
+
+
+/* ============================================================
+   TITLE
+   ============================================================ */
+
+.pdf-title-section {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: flex-start;
+
+  gap: 35px;
+
+  margin-top: 25px;
+}
+
+
+.pdf-title-section h1 {
+  margin: 0;
+
+  font-family: var(--font-display);
+
+  font-size: 25px;
+  line-height: 1.2;
+
+  font-weight: 600;
+
+  color: var(--color-ink);
+
+  letter-spacing: -0.4px;
+}
+
+
+.pdf-title-section p {
+  margin: 6px 0 0;
+
+  font-size: 10px;
+
+  color: var(--color-ink-soft);
+}
+
+
+/* ============================================================
+   META
+   ============================================================ */
+
+.pdf-meta {
+  min-width: 225px;
+
+  padding-top: 2px;
+}
+
+
+.pdf-meta-row {
+  display: grid;
+
+  grid-template-columns: 75px 1fr;
+
+  gap: 12px;
+
+  margin-bottom: 6px;
+
+  font-size: 8.5px;
+}
+
+
+.pdf-meta-row span {
+  color: var(--color-ink-soft);
+}
+
+
+.pdf-meta-row strong {
+  color: var(--color-ink);
+
+  font-weight: 600;
+
+  text-align: right;
+}
+
+
+/* ============================================================
+   FILTER / REPORT INFORMATION
+   ============================================================ */
+
+.pdf-filter-bar {
+  display: flex;
+
+  align-items: center;
+
+  min-height: 60px;
+
+  margin-top: 22px;
+
+  padding: 0 17px;
+
+  background: var(--color-bg);
+
+  border: 1px solid var(--color-border);
+
+  border-radius: 8px;
+
+  box-sizing: border-box;
+}
+
+
+.pdf-filter-item {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  flex: 1;
+}
+
+
+.pdf-filter-icon {
+  width: 31px;
+  height: 31px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  background: var(--color-primary-light);
+
+  color: var(--color-primary);
+}
+
+
+.pdf-filter-icon mat-icon {
+  width: 16px;
+  height: 16px;
+
+  font-size: 16px;
+}
+
+
+.pdf-filter-label {
+  display: block;
+
+  margin-bottom: 2px;
+
+  font-size: 7.5px;
+
+  color: var(--color-ink-soft);
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.6px;
+}
+
+
+.pdf-filter-item strong {
+  display: block;
+
+  font-size: 9.5px;
+
+  color: var(--color-ink);
+
+  font-weight: 600;
+}
+
+
+.pdf-filter-separator {
+  width: 1px;
+  height: 30px;
+
+  margin: 0 24px;
+
+  background: var(--color-border);
+}
+
+
+/* ============================================================
+   SECTION
+   ============================================================ */
+
+.pdf-section {
+  margin-top: 24px;
+
+  page-break-inside: avoid;
+
+  break-inside: avoid;
+}
+
+
+.pdf-section-header {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 9px;
+}
+
+
+.pdf-section-title {
+  font-family: var(--font-display);
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  color: var(--color-ink);
+}
+
+
+.pdf-record-count {
+  padding: 4px 8px;
+
+  border-radius: 5px;
+
+  background: var(--color-primary-light);
+
+  color: var(--color-primary);
+
+  font-size: 7.5px;
+
+  font-weight: 600;
+}
+
+
+/* ============================================================
+   SUMMARY
+   ============================================================ */
+
+.pdf-summary-grid {
+  display: grid;
+
+  grid-template-columns: repeat(4, 1fr);
+
+  gap: 10px;
+}
+
+
+.pdf-summary-card {
+  min-height: 68px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  padding: 10px;
+
+  border-radius: 8px;
+
+  box-sizing: border-box;
+
+  border: 1px solid var(--color-border);
+}
+
+
+/* Total */
+
+.pdf-summary-card.total {
+  background: var(--color-primary-light);
+
+  border-color: #cfe3df;
+}
+
+
+/* Completed */
+
+.pdf-summary-card.completed {
+  background: #eaf6f0;
+
+  border-color: #d2e9dc;
+}
+
+
+/* Cancelled */
+
+.pdf-summary-card.cancelled {
+  background: #fdf0ed;
+
+  border-color: #f4d8d2;
+}
+
+
+/* Pending */
+
+.pdf-summary-card.pending {
+  background: var(--color-accent-light);
+
+  border-color: #f2dfbd;
+}
+
+
+/* Icons */
+
+.pdf-summary-icon {
+  width: 31px;
+  height: 31px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  color: #fff;
+}
+
+
+.pdf-summary-card.total .pdf-summary-icon {
+  background: var(--color-primary);
+}
+
+
+.pdf-summary-card.completed .pdf-summary-icon {
+  background: var(--color-success);
+}
+
+
+.pdf-summary-card.cancelled .pdf-summary-icon {
+  background: var(--color-danger);
+}
+
+
+.pdf-summary-card.pending .pdf-summary-icon {
+  background: var(--color-accent);
+}
+
+
+.pdf-summary-icon mat-icon {
+  width: 16px;
+  height: 16px;
+
+  font-size: 16px;
+}
+
+
+/* Summary text */
+
+.pdf-summary-content {
+  min-width: 0;
+}
+
+
+.pdf-summary-content span {
+  display: block;
+
+  font-size: 7.5px;
+
+  color: var(--color-ink-soft);
+
+  white-space: nowrap;
+}
+
+
+.pdf-summary-content strong {
+  display: block;
+
+  margin-top: 3px;
+
+  font-family: var(--font-display);
+
+  font-size: 17px;
+
+  line-height: 1;
+
+  font-weight: 600;
+
+  color: var(--color-ink);
+}
+
+
+/* ============================================================
+   APPOINTMENT TABLE
+   ============================================================ */
+
+.pdf-table {
+  width: 100%;
+
+  border-collapse: separate;
+
+  border-spacing: 0;
+
+  table-layout: fixed;
+
+  border: 1px solid var(--color-border);
+
+  border-radius: 8px;
+
+  overflow: hidden;
+
+  font-family: var(--font-body);
+
+  font-size: 8.5px;
+}
+
+
+.pdf-table thead {
+  background: var(--color-primary);
+}
+
+
+.pdf-table th {
+  height: 34px;
+
+  padding: 0 9px;
+
+  text-align: left;
+
+  font-size: 8px;
+
+  font-weight: 600;
+
+  color: #ffffff;
+
+  border-bottom: none;
+
+  letter-spacing: 0.2px;
+
+  white-space: nowrap;
+}
+
+
+.pdf-table td {
+  height: 31px;
+
+  padding: 0 9px;
+
+  vertical-align: middle;
+
+  color: var(--color-ink);
+
+  border-bottom: 1px solid var(--color-border);
+}
+
+
+.pdf-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+
+.pdf-table tbody tr:nth-child(even) {
+  background: #fbfcfc;
+}
+
+
+.pdf-table .col-number {
+  width: 35px;
+
+  text-align: center;
+
+  padding-left: 5px;
+  padding-right: 5px;
+
+  color: var(--color-ink-soft);
+}
+
+
+.pdf-table th:nth-child(2),
+.pdf-table td:nth-child(2) {
+  width: 24%;
+}
+
+
+.pdf-table th:nth-child(3),
+.pdf-table td:nth-child(3) {
+  width: 24%;
+}
+
+
+.pdf-table th:nth-child(4),
+.pdf-table td:nth-child(4) {
+  width: 16%;
+}
+
+
+.pdf-table th:nth-child(5),
+.pdf-table td:nth-child(5) {
+  width: 13%;
+}
+
+
+.pdf-table th:nth-child(6),
+.pdf-table td:nth-child(6) {
+  width: 17%;
+}
+
+
+.pdf-table .patient-cell {
+  font-weight: 600;
+
+  color: var(--color-ink);
+}
+
+
+/* ============================================================
+   STATUS
+   ============================================================ */
+
+.pdf-status {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 5px;
+
+  min-width: 56px;
+
+  padding: 4px 7px;
+
+  border-radius: 14px;
+
+  font-size: 7px;
+
+  font-weight: 600;
+}
+
+
+.pdf-status-dot {
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+}
+
+
+/* Completed */
+
+.pdf-status.completed {
+  background: #e3f5ec;
+
+  color: var(--color-success);
+}
+
+
+.pdf-status.completed .pdf-status-dot {
+  background: var(--color-success);
+}
+
+
+/* Pending */
+
+.pdf-status.pending,
+.pdf-status.scheduled {
+  background: var(--color-primary-light);
+
+  color: var(--color-primary);
+}
+
+
+.pdf-status.pending .pdf-status-dot,
+.pdf-status.scheduled .pdf-status-dot {
+  background: var(--color-primary);
+}
+
+
+/* Cancelled */
+
+.pdf-status.cancelled {
+  background: #fbe7e7;
+
+  color: var(--color-danger);
+}
+
+
+.pdf-status.cancelled .pdf-status-dot {
+  background: var(--color-danger);
+}
+
+
+/* No show */
+
+.pdf-status.no-show {
+  background: #fcefda;
+
+  color: #9a681e;
+}
+
+
+.pdf-status.no-show .pdf-status-dot {
+  background: var(--color-accent);
+}
+
+
+/* ============================================================
+   REPORT TOTAL
+   ============================================================ */
+
+.pdf-report-total {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  margin-top: 12px;
+
+  padding: 9px 2px;
+
+  font-size: 8px;
+
+  color: var(--color-ink-soft);
+}
+
+
+.pdf-report-total strong {
+  font-size: 9px;
+
+  color: var(--color-ink);
+
+  font-weight: 600;
+}
+
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+.pdf-footer {
+  display: flex;
+
+  justify-content: space-between;
+
+  margin-top: 26px;
+
+  padding-top: 14px;
+
+  border-top: 1px solid var(--color-border);
+
+  font-size: 7.5px;
+
+  color: var(--color-ink-soft);
+}
+
+
+.pdf-footer strong {
+  display: block;
+
+  font-size: 8.5px;
+
+  font-weight: 600;
+
+  color: var(--color-ink);
+}
+
+
+.pdf-footer span {
+  display: block;
+
+  margin-top: 2px;
+}
+
+
+.pdf-footer-right {
+  text-align: right;
+}
+
+
+/* ============================================================
+   EMPTY
+   ============================================================ */
+
+.pdf-empty {
+  padding: 35px;
+
+  text-align: center;
+
+  border: 1px solid var(--color-border);
+
+  border-radius: 8px;
+
+  color: var(--color-ink-soft);
+
+  font-size: 9px;
+}
+
+
+/* ============================================================
+   PAGE / PRINT
+   ============================================================ */
+
+.pdf-report,
+.pdf-report * {
+  box-sizing: border-box;
+}
+
+
+.pdf-table thead {
+  display: table-header-group;
+}
+
+
+.pdf-table tr {
+  page-break-inside: avoid;
+
+  break-inside: avoid;
+}
+
+
+.pdf-section {
+  page-break-inside: avoid;
+
+  break-inside: avoid;
+}
+
+
+@media print {
+
+  .pdf-report {
+    width: 100%;
+
+    min-height: auto;
+  }
+
 }

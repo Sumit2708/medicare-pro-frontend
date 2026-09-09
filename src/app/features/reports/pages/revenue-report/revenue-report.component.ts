@@ -1,4 +1,9 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
@@ -73,10 +78,21 @@ export class RevenueReportComponent {
     }
   }
 
+  isExporting = false;
+
+  generatedDate = '';
+
+  pdfFromDate = 'All Dates';
+
+  pdfToDate = 'All Dates';
+
+  pdfPaymentStatus = 'ALL';
+
   constructor(
     private reportService: ReportsService,
     private exportService: ExportService,
     private fb: FormBuilder,
+    private cdr: ChangeDetectorRef,
   ) {
     this.filterForm = this.fb.group({
       fromDate: [null],
@@ -118,16 +134,86 @@ export class RevenueReportComponent {
       .toUpperCase();
   }
 
-  exportPdf(): void {
-    if (!this.reportContent) return;
-    this.exportService.exportPdf(
-      this.reportContent.nativeElement,
-      'Revenue Report',
-    );
+  async exportPdf(): Promise<void> {
+
+  this.generatedDate = new Date().toLocaleString();
+
+  const filter = this.filterForm.getRawValue();
+
+  this.pdfFromDate = filter.fromDate
+    ? String(filter.fromDate)
+    : 'All Dates';
+
+  this.pdfToDate = filter.toDate
+    ? String(filter.toDate)
+    : 'All Dates';
+
+  this.pdfPaymentStatus =
+    filter.paymentStatus || 'ALL';
+
+  // Show PDF DOM
+  this.isExporting = true;
+
+  // Force Angular to render it
+  this.cdr.detectChanges();
+
+  // Wait for browser rendering
+  await new Promise<void>((resolve) => {
+    requestAnimationFrame(() => resolve());
+  });
+
+  if (!this.reportContent) {
+    console.error('PDF content was not rendered.');
+
+    this.isExporting = false;
+    this.cdr.detectChanges();
+
+    return;
   }
+
+  try {
+
+    await this.exportService.exportPdf(
+      this.reportContent.nativeElement,
+      this.generatedDate
+    );
+
+  } catch (error) {
+
+    console.error(
+      'Revenue PDF export failed:',
+      error
+    );
+
+  } finally {
+
+    this.isExporting = false;
+
+    this.cdr.detectChanges();
+  }
+}
 
   exportExcel(): void {
     this.exportService.exportExcel(this.dataSource.data, 'Revenue Report');
+  }
+
+  getPdfStatusClass(status: any): string {
+    switch (status?.toUpperCase()) {
+      case 'PAID':
+        return 'paid';
+
+      case 'PENDING':
+        return 'pending';
+
+      case 'CANCELLED':
+        return 'cancelled';
+
+      case 'PARTIAL':
+        return 'partial';
+
+      default:
+        return 'default';
+    }
   }
 
   printReport(): void {
@@ -140,7 +226,7 @@ export class RevenueReportComponent {
     window.open(`/reports/revenue/print?${queryParams.toString()}`, '_blank');
   }
 
-  navBack(){
+  navBack() {
     window.history.back();
   }
 }

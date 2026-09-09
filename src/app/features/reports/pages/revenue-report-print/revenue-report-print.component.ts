@@ -1,104 +1,138 @@
 import { Component, OnInit } from '@angular/core';
-
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
-
 import { ActivatedRoute } from '@angular/router';
-
 import { MatTableModule } from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
 
 import { RevenueReportModel } from '../../models/revenue-report.model';
-
 import { RevenueSummaryModel } from '../../models/revenue-summary.model';
 import { ReportsService } from '../../service/reports.service';
 import { RevenueReportFilter } from '../../models/report-filter.model';
 
 @Component({
-  selector: 'app-revenue-report-print',
-  standalone: true,
-  imports: [CommonModule, CurrencyPipe, DatePipe, MatTableModule],
-  templateUrl: './revenue-report-print.component.html',
-  styleUrl: './revenue-report-print.component.scss',
+selector: 'app-revenue-report-print',
+standalone: true,
+imports: [
+CommonModule,
+CurrencyPipe,
+DatePipe,
+MatTableModule,
+MatIconModule,
+],
+templateUrl: './revenue-report-print.component.html',
+styleUrl: './revenue-report-print.component.scss',
 })
 export class RevenueReportPrintComponent implements OnInit {
-  summary!: RevenueSummaryModel;
 
-  invoices: RevenueReportModel[] = [];
+summary!: RevenueSummaryModel;
 
-  displayedColumns: string[] = [
-    'invoice',
-    'patient',
-    'doctor',
-    'date',
-    'status',
-    'amount',
-  ];
+invoices: RevenueReportModel[] = [];
 
-  loading = true;
+displayedColumns: string[] = [
+'invoice',
+'patient',
+'doctor',
+'date',
+'status',
+'amount',
+];
 
-  currentDate = new Date();
+loading = true;
 
-  fromDate = '';
+currentDate = new Date();
 
-  toDate = '';
+fromDate = '';
 
-  paymentStatus = 'ALL';
+toDate = '';
 
-  constructor(
-    private route: ActivatedRoute,
-    private reportsService: ReportsService,
-  ) {}
+paymentStatus = 'ALL';
 
-  ngOnInit(): void {
-    this.loadReport();
-  }
+private reportLoaded = false;
 
-  ngAfterViewInit(): void {
+constructor(
+private route: ActivatedRoute,
+private reportsService: ReportsService,
+) {}
 
-  setTimeout(() => {
-    window.print();
-  }, 500);
+ngOnInit(): void {
+this.loadReport();
+}
 
-  window.addEventListener('afterprint', () => {
-    window.close();
-  });
+ngAfterViewInit(): void {
+window.addEventListener(
+'afterprint',
+() => {
+window.close();
+},
+{ once: true }
+);
+
+
+this.tryPrint();
+
 
 }
 
-  private loadReport(): void {
-    const params = this.route.snapshot.queryParamMap;
+private loadReport(): void {
+const params = this.route.snapshot.queryParamMap;
 
-    this.fromDate = params.get('fromDate') ?? '';
 
-    this.toDate = params.get('toDate') ?? '';
+this.fromDate = params.get('fromDate') ?? '';
 
-    this.paymentStatus = params.get('paymentStatus') ?? 'ALL';
+this.toDate = params.get('toDate') ?? '';
 
-    const filter: RevenueReportFilter = {
-      fromDate: this.fromDate || null,
+this.paymentStatus =
+  params.get('paymentStatus') ?? 'ALL';
 
-      toDate: this.toDate || null,
+const filter: RevenueReportFilter = {
+  fromDate: this.fromDate || null,
 
-      paymentStatus: this.paymentStatus,
-    };
+  toDate: this.toDate || null,
 
-    this.reportsService.getRevenueReport(filter).subscribe({
-      next: (response) => {
-        this.summary = response.summary;
+  paymentStatus: this.paymentStatus,
+};
 
-        this.invoices = response.invoices;
+this.reportsService
+  .getRevenueReport(filter)
+  .subscribe({
+    next: (response) => {
 
-        this.loading = false;
+      this.summary = response.summary;
 
-        setTimeout(() => {
-          window.print();
-        }, 500);
-      },
+      this.invoices = response.invoices;
 
-      error: (error) => {
-        console.error('Unable to load revenue report', error);
+      this.loading = false;
 
-        this.loading = false;
-      },
-    });
-  }
+      this.reportLoaded = true;
+
+      this.tryPrint();
+    },
+
+    error: (error) => {
+
+      console.error(
+        'Unable to load revenue report',
+        error
+      );
+
+      this.loading = false;
+    },
+  });
+
+
+}
+
+private tryPrint(): void {
+
+
+if (!this.reportLoaded) {
+  return;
+}
+
+setTimeout(() => {
+  window.print();
+}, 500);
+
+
+}
 }

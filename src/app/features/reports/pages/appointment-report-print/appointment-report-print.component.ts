@@ -1,29 +1,41 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  AfterViewInit,
+} from '@angular/core';
 
 import { CommonModule, DatePipe } from '@angular/common';
-
 import { ActivatedRoute } from '@angular/router';
-
 import { MatTableModule } from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
 
 import { AppointmentReportModel } from '../../models/appointment-report.model';
-
 import { AppointmentSummaryModel } from '../../models/appointment-summary.model';
-
 import { AppointmentReportFilter } from '../../models/appointment-report-filter.model';
 import { ReportsService } from '../../service/reports.service';
 
 @Component({
   selector: 'app-appointment-report-print',
   standalone: true,
-  imports: [CommonModule, DatePipe, MatTableModule],
+
+  imports: [
+    CommonModule,
+    DatePipe,
+    MatTableModule,
+    MatIconModule,
+  ],
+
   templateUrl: './appointment-report-print.component.html',
+
   styleUrl: './appointment-report-print.component.scss',
 })
-export class AppointmentReportPrintComponent implements OnInit {
+export class AppointmentReportPrintComponent
+  implements OnInit, AfterViewInit {
+
   appointments: AppointmentReportModel[] = [];
 
   summary!: AppointmentSummaryModel;
+
 
   displayedColumns: string[] = [
     'date',
@@ -34,79 +46,142 @@ export class AppointmentReportPrintComponent implements OnInit {
     'status',
   ];
 
+
   loading = true;
+
   fromDate = '';
+
   toDate = '';
+
   status = 'ALL';
 
   currentDate = new Date();
 
-  //   ngAfterViewInit(): void {
 
-  //   setTimeout(() => {
-  //     window.print();
-  //   }, 500);
+  private reportLoaded = false;
 
-  // }
-
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      window.print();
-    }, 500);
-
-    window.addEventListener('afterprint', () => {
-      window.close();
-    });
-  }
 
   constructor(
     private route: ActivatedRoute,
+
     private reportsService: ReportsService,
   ) {}
+
 
   ngOnInit(): void {
     this.loadReport();
   }
 
+
+  ngAfterViewInit(): void {
+
+    // Print only after data has actually loaded.
+    this.tryPrint();
+
+    window.addEventListener(
+      'afterprint',
+      () => window.close(),
+      { once: true }
+    );
+
+  }
+
+
   private loadReport(): void {
-    const params = this.route.snapshot.queryParamMap;
 
-    this.fromDate = params.get('fromDate') ?? '';
+    const params =
+      this.route.snapshot.queryParamMap;
 
-    this.toDate = params.get('toDate') ?? '';
 
-    this.status = params.get('status') ?? 'ALL';
+    this.fromDate =
+      params.get('fromDate') ?? '';
 
-    const doctorIdParam = params.get('doctorId');
+
+    this.toDate =
+      params.get('toDate') ?? '';
+
+
+    this.status =
+      params.get('status') ?? 'ALL';
+
+
+    const doctorIdParam =
+      params.get('doctorId');
+
 
     const filter: AppointmentReportFilter = {
-      fromDate: this.fromDate || null,
 
-      toDate: this.toDate || null,
+      fromDate:
+        this.fromDate || null,
 
-      doctorId: doctorIdParam ? Number(doctorIdParam) : null,
+      toDate:
+        this.toDate || null,
 
-      status: this.status,
+      doctorId:
+        doctorIdParam
+          ? Number(doctorIdParam)
+          : null,
+
+      status:
+        this.status,
     };
 
-    this.reportsService.getAppointmentReport(filter).subscribe({
-      next: (response) => {
-        this.appointments = response.appointments;
 
-        this.summary = response.summary;
+    this.reportsService
+      .getAppointmentReport(filter)
+      .subscribe({
 
-        this.loading = false;
+        next: (response) => {
 
-        setTimeout(() => {
-          window.print();
-        }, 500);
-      },
+          this.appointments =
+            response.appointments;
 
-      error: (error) => {
-        console.error('Unable to load appointment report', error);
 
-        this.loading = false;
-      },
-    });
+          this.summary =
+            response.summary;
+
+
+          this.loading = false;
+
+
+          this.reportLoaded = true;
+
+
+          this.tryPrint();
+
+        },
+
+
+        error: (error) => {
+
+          console.error(
+            'Unable to load appointment report',
+            error
+          );
+
+
+          this.loading = false;
+
+        },
+
+      });
+
   }
+
+
+  private tryPrint(): void {
+
+    if (!this.reportLoaded) {
+      return;
+    }
+
+
+    setTimeout(() => {
+
+      window.print();
+
+    }, 500);
+
+  }
+
 }

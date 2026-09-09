@@ -1,47 +1,866 @@
-* {
-  min-width: 0;
-  box-sizing: border-box;
-}
+/* =========================================================
+PDF REPORT
+========================================================= */
 
-.summary-grid {
-  margin-bottom: 4px;
-  width: 100%;
+.pdf-report {
+width: 794px;
+min-height: 1123px;
+
+padding: 42px 44px;
+
+box-sizing: border-box;
+
+background: #ffffff;
+
+color: #12232e;
+
+font-family:
+"Inter",
+Arial,
+Helvetica,
+sans-serif;
 }
 
 /* =========================================================
-   TABLE — same pattern as the invoice table: only the table's
-   own scroll container scrolls horizontally, never the page.
-   Wrap this in a container div if one doesn't already exist:
-   <div class="table-container"><table class="revenue-table">…
-   ========================================================= */
+HEADER
+========================================================= */
 
-.table-container {
-  width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
+.pdf-header {
+display: flex;
+
+justify-content: space-between;
+align-items: flex-start;
+
+padding-bottom: 18px;
 }
 
-.revenue-table {
-  width: 100%;
-  min-width: 640px; // below this, columns get unreadably cramped — container scrolls instead
+.pdf-brand {
+display: flex;
 
-  th.mat-mdc-header-cell,
-  td.mat-mdc-cell {
-    white-space: nowrap;
-  }
+align-items: center;
+
+gap: 12px;
 }
 
-::ng-deep mat-paginator {
-  background: transparent;
-  font-family: var(--font-body);
+.pdf-logo {
+width: 42px;
+height: 42px;
 
-  .mat-mdc-paginator-container {
-    flex-wrap: wrap;
-    justify-content: center;
-    padding: 8px;
+display: flex;
 
-    @media (min-width: 640px) {
-      justify-content: flex-end;
-    }
-  }
+align-items: center;
+justify-content: center;
+
+border-radius: 11px;
+
+background: linear-gradient(
+135deg,
+#0f5e5a,
+#e8a33d
+);
+
+color: #ffffff;
+}
+
+.pdf-logo mat-icon {
+width: 22px;
+height: 22px;
+
+font-size: 22px;
+
+display: flex;
+
+align-items: center;
+justify-content: center;
+}
+
+.pdf-brand-text h1 {
+margin: 0;
+
+font-family:
+"Lexend",
+Arial,
+sans-serif;
+
+font-size: 24px;
+
+font-weight: 700;
+
+letter-spacing: -0.4px;
+
+color: #0f5e5a;
+}
+
+.pdf-brand-text p {
+margin: 4px 0 0;
+
+font-size: 10px;
+
+color: #5b6b72;
+}
+
+.pdf-header-right {
+text-align: right;
+}
+
+.pdf-report-badge {
+display: inline-block;
+
+padding: 5px 10px;
+
+border-radius: 5px;
+
+background: #e4f0ee;
+
+color: #0f5e5a;
+
+font-size: 8px;
+
+font-weight: 700;
+
+letter-spacing: 0.8px;
+}
+
+.pdf-header-right h2 {
+margin: 7px 0 3px;
+
+font-family:
+"Lexend",
+Arial,
+sans-serif;
+
+font-size: 19px;
+
+font-weight: 700;
+
+color: #12232e;
+}
+
+.pdf-header-right p {
+margin: 0;
+
+font-size: 9px;
+
+color: #5b6b72;
+}
+
+.pdf-header-divider {
+height: 3px;
+
+border-radius: 8px;
+
+background: linear-gradient(
+90deg,
+#0f5e5a 0%,
+#0f5e5a 72%,
+#e8a33d 72%,
+#e8a33d 100%
+);
+}
+
+/* =========================================================
+FILTERS
+========================================================= */
+
+.pdf-filter-section {
+margin-top: 18px;
+
+padding: 12px 14px;
+
+border: 1px solid #dce3e1;
+
+border-radius: 8px;
+
+background: #f7f9f8;
+}
+
+.pdf-filter-title {
+display: flex;
+
+align-items: center;
+
+gap: 6px;
+
+margin-bottom: 10px;
+
+color: #0f5e5a;
+
+font-size: 9px;
+
+font-weight: 700;
+
+letter-spacing: 0.7px;
+
+text-transform: uppercase;
+}
+
+.pdf-filter-title mat-icon {
+width: 15px;
+height: 15px;
+
+font-size: 15px;
+}
+
+.pdf-filter-grid {
+display: grid;
+
+grid-template-columns:
+repeat(3, 1fr);
+
+gap: 12px;
+}
+
+.pdf-filter-item {
+padding-left: 10px;
+
+border-left: 3px solid #e8a33d;
+}
+
+.pdf-filter-item span {
+display: block;
+
+margin-bottom: 3px;
+
+font-size: 7px;
+
+font-weight: 700;
+
+letter-spacing: 0.6px;
+
+color: #5b6b72;
+}
+
+.pdf-filter-item strong {
+display: block;
+
+font-size: 10px;
+
+font-weight: 600;
+
+color: #12232e;
+}
+
+/* =========================================================
+SECTIONS
+========================================================= */
+
+.pdf-section {
+margin-top: 22px;
+}
+
+.pdf-section-heading {
+display: flex;
+
+justify-content: space-between;
+
+align-items: flex-end;
+
+margin-bottom: 11px;
+}
+
+.pdf-eyebrow {
+display: block;
+
+margin-bottom: 3px;
+
+font-size: 7px;
+
+font-weight: 700;
+
+letter-spacing: 0.9px;
+
+color: #0f5e5a;
+}
+
+.pdf-section-heading h3 {
+margin: 0;
+
+font-family:
+"Lexend",
+Arial,
+sans-serif;
+
+font-size: 15px;
+
+font-weight: 700;
+
+color: #12232e;
+}
+
+.pdf-record-count {
+padding: 5px 9px;
+
+border-radius: 5px;
+
+background: #eef1f0;
+
+color: #5b6b72;
+
+font-size: 8px;
+
+font-weight: 600;
+}
+
+/* =========================================================
+SUMMARY CARDS
+========================================================= */
+
+.pdf-summary-grid {
+display: grid;
+
+grid-template-columns:
+repeat(4, 1fr);
+
+gap: 10px;
+}
+
+.pdf-summary-card {
+position: relative;
+
+display: flex;
+
+align-items: flex-start;
+
+gap: 9px;
+
+min-height: 82px;
+
+padding: 12px;
+
+box-sizing: border-box;
+
+border: 1px solid #dce3e1;
+
+border-radius: 9px;
+
+background: #ffffff;
+
+overflow: hidden;
+}
+
+.pdf-summary-card::before {
+content: "";
+
+position: absolute;
+
+top: 0;
+left: 0;
+
+width: 4px;
+height: 100%;
+}
+
+.pdf-summary-icon {
+width: 31px;
+height: 31px;
+
+flex-shrink: 0;
+
+display: flex;
+
+align-items: center;
+justify-content: center;
+
+border-radius: 8px;
+}
+
+.pdf-summary-icon mat-icon {
+width: 17px;
+height: 17px;
+
+font-size: 17px;
+}
+
+.pdf-summary-content span {
+display: block;
+
+margin-bottom: 3px;
+
+font-size: 8px;
+
+font-weight: 600;
+
+color: #5b6b72;
+}
+
+.pdf-summary-content strong {
+display: block;
+
+font-family:
+"Lexend",
+Arial,
+sans-serif;
+
+font-size: 14px;
+
+font-weight: 700;
+
+line-height: 1.25;
+
+color: #12232e;
+}
+
+.pdf-summary-content small {
+display: block;
+
+margin-top: 4px;
+
+font-size: 7px;
+
+color: #7b898e;
+}
+
+/* Revenue */
+
+.pdf-summary-card.revenue-card::before {
+background: #0f5e5a;
+}
+
+.pdf-summary-card.revenue-card
+.pdf-summary-icon {
+background: #e4f0ee;
+
+color: #0f5e5a;
+}
+
+/* Invoice */
+
+.pdf-summary-card.invoice-card::before {
+background: #e8a33d;
+}
+
+.pdf-summary-card.invoice-card
+.pdf-summary-icon {
+background: #fcefda;
+
+color: #b87513;
+}
+
+/* Average */
+
+.pdf-summary-card.average-card::before {
+background: #5f7f96;
+}
+
+.pdf-summary-card.average-card
+.pdf-summary-icon {
+background: #edf2f5;
+
+color: #496a80;
+}
+
+/* GST */
+
+.pdf-summary-card.gst-card::before {
+background: #2f9e68;
+}
+
+.pdf-summary-card.gst-card
+.pdf-summary-icon {
+background: #e8f5ee;
+
+color: #2f9e68;
+}
+
+/* =========================================================
+TABLE
+========================================================= */
+
+.pdf-table-section {
+margin-top: 24px;
+}
+
+.pdf-table {
+width: 100%;
+
+border-collapse: collapse;
+
+table-layout: fixed;
+
+border: 1px solid #dce3e1;
+
+overflow: hidden;
+
+border-radius: 7px;
+}
+
+.pdf-table th {
+padding: 9px 8px;
+
+background: #0f5e5a;
+
+color: #ffffff;
+
+border: none;
+
+font-size: 8px;
+
+font-weight: 700;
+
+text-align: left;
+}
+
+.pdf-table td {
+padding: 8px;
+
+border-bottom: 1px solid #e7ecea;
+
+font-size: 8px;
+
+color: #35464e;
+
+background: #ffffff;
+
+vertical-align: middle;
+
+word-wrap: break-word;
+}
+
+.pdf-table tbody tr:nth-child(even) td {
+background: #f8faf9;
+}
+
+.pdf-table tbody tr:last-child td {
+border-bottom: none;
+}
+
+/* Column sizing */
+
+.pdf-table th:nth-child(1),
+.pdf-table td:nth-child(1) {
+width: 17%;
+}
+
+.pdf-table th:nth-child(2),
+.pdf-table td:nth-child(2) {
+width: 20%;
+}
+
+.pdf-table th:nth-child(3),
+.pdf-table td:nth-child(3) {
+width: 20%;
+}
+
+.pdf-table th:nth-child(4),
+.pdf-table td:nth-child(4) {
+width: 14%;
+}
+
+.pdf-table th:nth-child(5),
+.pdf-table td:nth-child(5) {
+width: 13%;
+}
+
+.pdf-table th:nth-child(6),
+.pdf-table td:nth-child(6) {
+width: 16%;
+
+text-align: right;
+}
+
+/* Invoice */
+
+.invoice-number {
+font-weight: 700;
+
+color: #0f5e5a;
+}
+
+.patient-name {
+font-weight: 600;
+
+color: #12232e;
+}
+
+/* Amount */
+
+.amount-cell {
+font-weight: 700;
+
+font-size: 9px !important;
+
+color: #0f5e5a !important;
+
+text-align: right;
+}
+
+/* =========================================================
+STATUS
+========================================================= */
+
+.pdf-status {
+display: inline-flex;
+
+align-items: center;
+
+gap: 4px;
+
+padding: 3px 6px;
+
+border-radius: 20px;
+
+font-size: 7px;
+
+font-weight: 700;
+
+white-space: nowrap;
+}
+
+.pdf-status-dot {
+width: 5px;
+height: 5px;
+
+flex-shrink: 0;
+
+border-radius: 50%;
+
+background: currentColor;
+}
+
+.pdf-status.paid {
+color: #267c53;
+
+background: #e8f5ee;
+}
+
+.pdf-status.pending {
+color: #a96d13;
+
+background: #fcefda;
+}
+
+.pdf-status.cancelled {
+color: #b53d3d;
+
+background: #fbeaea;
+}
+
+.pdf-status.partial {
+color: #496a80;
+
+background: #edf2f5;
+}
+
+.pdf-status.default {
+color: #5b6b72;
+
+background: #eef1f0;
+}
+
+/* =========================================================
+EMPTY STATE
+========================================================= */
+
+.pdf-empty {
+min-height: 130px;
+
+display: flex;
+
+flex-direction: column;
+
+align-items: center;
+
+justify-content: center;
+
+border: 1px dashed #cbd6d3;
+
+border-radius: 8px;
+
+background: #f7f9f8;
+
+text-align: center;
+}
+
+.pdf-empty mat-icon {
+width: 26px;
+height: 26px;
+
+margin-bottom: 7px;
+
+font-size: 26px;
+
+color: #0f5e5a;
+}
+
+.pdf-empty strong {
+font-size: 11px;
+
+color: #12232e;
+}
+
+.pdf-empty span {
+margin-top: 4px;
+
+font-size: 8px;
+
+color: #5b6b72;
+}
+
+/* =========================================================
+REPORT TOTAL
+========================================================= */
+
+.pdf-report-total {
+display: flex;
+
+align-items: center;
+
+justify-content: space-between;
+
+margin-top: 16px;
+
+padding: 11px 14px;
+
+border: 1px solid #c9dedb;
+
+border-radius: 7px;
+
+background: #e4f0ee;
+}
+
+.pdf-report-total span {
+display: block;
+
+margin-bottom: 2px;
+
+font-size: 7px;
+
+font-weight: 700;
+
+letter-spacing: 0.5px;
+
+color: #5b6b72;
+}
+
+.pdf-report-total strong {
+font-family:
+"Lexend",
+Arial,
+sans-serif;
+
+font-size: 13px;
+
+color: #0f5e5a;
+}
+
+.pdf-total-revenue {
+text-align: right;
+}
+
+.pdf-total-revenue strong {
+font-size: 16px;
+}
+
+/* =========================================================
+FOOTER
+========================================================= */
+
+.pdf-footer {
+display: flex;
+
+justify-content: space-between;
+
+align-items: flex-end;
+
+margin-top: 24px;
+
+padding-top: 11px;
+
+border-top: 1px solid #dce3e1;
+
+color: #7b898e;
+
+font-size: 7px;
+}
+
+.pdf-footer strong {
+display: block;
+
+margin-bottom: 2px;
+
+color: #0f5e5a;
+
+font-size: 9px;
+}
+
+.pdf-footer span {
+display: block;
+}
+
+.pdf-footer-right {
+text-align: right;
+}
+
+/* =========================================================
+PDF CAPTURE / PRINT SAFETY
+========================================================= */
+
+.pdf-report *,
+.pdf-report *::before,
+.pdf-report *::after {
+box-sizing: border-box;
+}
+
+.pdf-report mat-icon {
+font-family: "Material Icons";
+font-weight: normal;
+font-style: normal;
+
+line-height: 1;
+
+letter-spacing: normal;
+text-transform: none;
+
+display: inline-block;
+
+white-space: nowrap;
+
+word-wrap: normal;
+
+direction: ltr;
+
+-webkit-font-feature-settings: "liga";
+-webkit-font-smoothing: antialiased;
+font-feature-settings: "liga";
+}
+
+@media print {
+
+.pdf-report {
+width: 100%;
+
+
+min-height: auto;
+
+padding: 0;
+
+-webkit-print-color-adjust: exact;
+
+print-color-adjust: exact;
+
+
+}
+
+.pdf-summary-card,
+.pdf-filter-section,
+.pdf-report-total {
+break-inside: avoid;
+}
+
+.pdf-table {
+page-break-inside: auto;
+}
+
+.pdf-table tr {
+page-break-inside: avoid;
+
+
+page-break-after: auto;
+
+
+}
+
+.pdf-table thead {
+display: table-header-group;
+}
 }
