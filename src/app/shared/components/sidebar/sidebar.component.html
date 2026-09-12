@@ -1,15 +1,39 @@
-<div class="sidebar">
+<div class="sidebar" [class.open]="sidebarService.isOpen()">
   <div class="logo">
     <span class="logo-mark"><mat-icon>local_hospital</mat-icon></span>
     <span class="logo-text">MediCare <b>Pro</b></span>
   </div>
 
   <nav class="nav-list">
-    @for (item of visibleMenuItems; track item.route) {
-      <a class="nav-item" [routerLink]="item.route" routerLinkActive="active">
-        <mat-icon>{{ item.icon }}</mat-icon>
-        <span>{{ item.label }}</span>
-      </a>
+    @for (section of groupedMenuItems; track section.label) {
+      <div class="nav-section">
+        <span class="nav-section-label">{{ section.label }}</span>
+        @for (item of section.items; track item.route) {
+          <a
+            class="nav-item"
+            [routerLink]="item.route"
+            routerLinkActive="active"
+            (click)="sidebarService.close()"
+          >
+            <mat-icon>{{ item.icon }}</mat-icon>
+            <span>{{ item.label }}</span>
+          </a>
+        }
+      </div>
     }
   </nav>
+
+  <div class="sidebar-footer">
+    <div class="footer-user">
+      <span class="footer-avatar">{{
+        (currentUser?.name || currentUser?.email || "U").charAt(0)
+      }}</span>
+      <div class="footer-meta">
+        <span class="footer-name">{{
+          currentUser?.name || currentUser?.email
+        }}</span>
+        <span class="footer-role">{{ currentUser?.role }}</span>
+      </div>
+    </div>
+  </div>
 </div>

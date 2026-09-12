@@ -1,0 +1,21 @@
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F5E5A"/>
+      <stop offset="100%" stop-color="#0B4744"/>
+    </linearGradient>
+    <linearGradient id="pulse" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#E8A33D"/>
+      <stop offset="100%" stop-color="#FFD08A"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="120" height="120" rx="28" fill="url(#bg)"/>
+
+  <path d="M52 30 H68 V52 H90 V68 H68 V90 H52 V68 H30 V52 H52 Z"
+        fill="#ffffff" fill-opacity="0.95"/>
+
+  <path d="M14 62 H40 L47 46 L57 78 L65 58 L71 62 H106"
+        stroke="url(#pulse)" stroke-width="5" fill="none"
+        stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

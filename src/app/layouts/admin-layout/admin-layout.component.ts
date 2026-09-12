@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
 import { SidebarComponent } from '../../shared/components/sidebar/sidebar.component';
 import { RouterOutlet } from "@angular/router";
+import { SidebarService } from '../../shared/components/sidebar/service/sidebar.service';
 
 @Component({
   selector: 'app-admin-layout',
@@ -11,4 +12,7 @@ import { RouterOutlet } from "@angular/router";
 })
 export class AdminLayoutComponent {
 
+  constructor(
+    public sidebarService: SidebarService
+  ) { }
 }

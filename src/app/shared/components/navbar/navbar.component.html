@@ -1,30 +1,90 @@
 <mat-toolbar class="app-navbar">
+  <button class="menu-toggle" mat-icon-button (click)="sidebarService.toggle()">
+    <mat-icon>{{ sidebarService.isOpen() ? "close" : "menu" }}</mat-icon>
+  </button>
+
   <div class="brand">
     <span class="brand-mark">
       <mat-icon>local_hospital</mat-icon>
     </span>
-    <span class="brand-name">MediCare <b>Pro</b></span>
+    <div class="brand-text">
+      <span class="brand-name">Gajanan Hospital</span>
+      <span class="brand-tagline">MediCare Pro</span>
+    </div>
   </div>
 
   <span class="spacer"></span>
 
+  <div class="nav-actions">
+    <div class="search-wrap" [class.open]="searchOpen">
+      <button class="action-btn" mat-icon-button (click)="toggleSearch()">
+        <mat-icon>search</mat-icon>
+      </button>
+      <input
+        #searchInput
+        class="search-input"
+        type="text"
+        placeholder="Search patients, doctors, appointments..."
+        (input)="onSearchInput(searchInput.value)"
+        (blur)="onSearchBlur()"
+      />
+
+      <div
+        class="search-results"
+        *ngIf="searchOpen && searchTerm.length > 0"
+        (mousedown)="$event.preventDefault()"
+      >
+        <ng-container *ngIf="groupedResults.length; else noResults">
+          <div class="result-group" *ngFor="let group of groupedResults">
+            <span class="group-label">{{ group.label }}</span>
+            <button
+              class="result-row"
+              *ngFor="let item of group.items"
+              (click)="goToResult(item.route)"
+            >
+              <span
+                class="chip"
+                [style.background]="item.chipBg"
+                [style.color]="item.chipColor"
+                >{{ item.initials }}</span
+              >
+              <span class="result-name">{{ item.name }}</span>
+              <span class="result-meta">{{ item.meta }}</span>
+            </button>
+          </div>
+        </ng-container>
+        <ng-template #noResults>
+          <div class="no-results">No matches for "{{ searchTerm }}"</div>
+        </ng-template>
+      </div>
+    </div>
+
+    <button
+      class="action-btn mobile-search-btn"
+      mat-icon-button
+      (click)="toggleSearch()"
+    >
+      <mat-icon>search</mat-icon>
+    </button>
+
     <app-notification-bell></app-notification-bell>
 
+    <span class="nav-divider"></span>
 
-  <button
-    class="profile-trigger"
-    mat-button
-    disableRipple
-    [matMenuTriggerFor]="profileMenu"
-  >
-    <span class="avatar">
-      <mat-icon>account_circle</mat-icon>
-    </span>
-    <span class="profile-meta">
-      <span class="profile-role">{{ currentUser?.role }}</span>
-    </span>
-    <mat-icon class="chevron">expand_more</mat-icon>
-  </button>
+    <button
+      class="profile-trigger"
+      mat-button
+      disableRipple
+      [matMenuTriggerFor]="profileMenu"
+    >
+      <span class="avatar">{{ getInitials(currentUser?.name) }}</span>
+      <span class="profile-meta">
+        <span class="profile-name">{{ currentUser?.name }}</span>
+        <span class="profile-role">{{ currentUser?.role }}</span>
+      </span>
+      <mat-icon class="chevron">expand_more</mat-icon>
+    </button>
+  </div>
 
   <mat-menu #profileMenu="matMenu" xPosition="before" class="profile-menu">
     <button mat-menu-item (click)="navProfile()">
@@ -37,3 +97,16 @@
     </button>
   </mat-menu>
 </mat-toolbar>
+
+@if (searchOpen) {
+  <input
+    #searchInput
+    class="search-input"
+    type="text"
+    placeholder="Search patients, doctors, appointments..."
+    [(ngModel)]="searchTerm"
+    (input)="onSearchInput(searchTerm)"
+    (keydown.escape)="closeSearch()"
+    (blur)="onSearchBlur()"
+  />
+}

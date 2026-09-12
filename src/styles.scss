@@ -102,17 +102,14 @@ mat-card {
 }
 
 .profile-menu {
-  --mat-menu-container-color: var(--color-surface); // forces pure white panel
+  --mat-menu-container-color: var(--color-surface);
   border-radius: 12px !important;
   overflow: hidden;
-  margin-top: 8px;
-  box-shadow:
-    0 10px 30px rgba(15, 35, 46, 0.14),
-    0 2px 8px rgba(15, 35, 46, 0.06) !important;
-
-  .mat-mdc-menu-content {
-    padding: 6px !important;
-  }
+  margin-top: 8px; // <- this line is the fix for the "glued" look
+  box-shadow: 0 10px 30px rgba(15, 35, 46, 0.14), 0 2px 8px rgba(15, 35, 46, 0.06) !important;
+  min-width: min(180px, calc(100vw - 32px)) !important;
+  max-width: min(220px, calc(100vw - 24px)) !important;
+  .mat-mdc-menu-content { padding: 6px !important; }
 
   .mat-mdc-menu-item {
     border-radius: 8px;
@@ -674,4 +671,9 @@ mat-card {
   .mat-mdc-snack-bar-label {
     padding: 0 !important;
   }
+}
+
+.notif-menu {
+  min-width: min(360px, calc(100vw - 32px)) !important;
+  max-width: min(380px, calc(100vw - 32px)) !important;
 }

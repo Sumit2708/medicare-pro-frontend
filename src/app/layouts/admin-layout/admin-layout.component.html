@@ -1,11 +1,13 @@
 <app-navbar></app-navbar>
 
 <div class="layout-container">
-
   <app-sidebar></app-sidebar>
+
+  @if (sidebarService.isOpen()) {
+    <div class="sidebar-backdrop" (click)="sidebarService.close()"></div>
+  }
 
   <div class="page-content">
     <router-outlet></router-outlet>
   </div>
-
 </div>
