@@ -32,6 +32,7 @@ import { ForgotPasswordComponent } from './features/auth/pages/forgot-password/f
 import { AddPrescriptionComponent } from './features/prescriptions/pages/add-prescription/add-prescription.component';
 import { EditPrescriptionComponent } from './features/prescriptions/pages/edit-prescription/edit-prescription.component';
 import { PrintPrescriptionComponent } from './features/prescriptions/pages/print-prescription/print-prescription.component';
+import { ProfileComponent } from './features/auth/pages/profile/profile.component';
 
 const ADMIN = [UserRole.ADMIN];
 const ADMIN_RECEPTION = [UserRole.ADMIN, UserRole.RECEPTIONIST];
@@ -273,6 +274,15 @@ export const routes: Routes = [
         canActivate: [roleGuard],
         data: {
           roles: [UserRole.ADMIN],
+        },
+      },
+       {
+        path: 'profile',
+        component: ProfileComponent,
+        canActivate: [roleGuard],
+        data: {
+          roles: ALL_USERS,
+          title: 'My Profile',
         },
       },
     ],

@@ -1,1 +1,85 @@
-<p>profile works!</p>
+<div class="profile-page">
+
+  <!-- Hero -->
+  <div class="profile-hero">
+    <div class="hero-banner"></div>
+
+    <div class="hero-content">
+      <div class="hero-avatar-wrap">
+        <span class="hero-avatar">{{ getInitials(currentUser?.name) }}</span>
+      </div>
+
+      <div class="hero-identity">
+        <h1>{{ currentUser?.name || currentUser?.email }}</h1>
+        <span class="hero-role-badge">
+          <span class="role-dot"></span>
+          {{ currentUser?.role }}
+        </span>
+      </div>
+
+      <button mat-stroked-button class="hero-edit-btn" type="button" (click)="editProfile()">
+        <mat-icon>edit</mat-icon>
+        Edit profile
+      </button>
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div class="profile-body">
+
+    <div class="profile-card contact-card">
+      <span class="card-label">Contact information</span>
+
+      <div class="info-row">
+        <mat-icon>mail</mat-icon>
+        <div class="info-text">
+          <span class="info-label">Email</span>
+          <span class="info-value">{{ currentUser?.email || '—' }}</span>
+        </div>
+      </div>
+
+      <div class="info-row">
+        <mat-icon>badge</mat-icon>
+        <div class="info-text">
+          <span class="info-label">Role</span>
+          <span class="info-value">{{ currentUser?.role || '—' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-card security-card">
+      <span class="card-label">Security</span>
+
+      <div class="security-row">
+        <div class="security-text">
+          <span class="info-label">Password</span>
+          <span class="info-value">Last changed — unknown</span>
+        </div>
+        <button mat-flat-button color="primary" type="button" (click)="changePassword()">
+          Change password
+        </button>
+      </div>
+    </div>
+
+    <div class="profile-card preferences-card">
+      <span class="card-label">Preferences</span>
+
+      <div class="toggle-row">
+        <div class="toggle-text">
+          <span class="info-value">Email notifications</span>
+          <span class="toggle-hint">Get emailed about appointment and billing updates</span>
+        </div>
+        <mat-slide-toggle [(ngModel)]="emailNotifications"></mat-slide-toggle>
+      </div>
+
+      <div class="toggle-row">
+        <div class="toggle-text">
+          <span class="info-value">Appointment reminders</span>
+          <span class="toggle-hint">Reminders sent ahead of scheduled appointments</span>
+        </div>
+        <mat-slide-toggle [(ngModel)]="appointmentReminders"></mat-slide-toggle>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -184,6 +184,8 @@ export class AddAppointmentComponent implements OnInit {
 
         form.date = form.date ? this.formatDate(form.date) : null;
 
+        form.patientName = this.selectedPatient?.name;
+        form.doctorName = this.selectedDoctor?.name;
         this.appointmentService.createAppointment(form).subscribe({
           next: () => {
             this.notificationService.success(

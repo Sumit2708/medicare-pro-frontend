@@ -1,7 +1,7 @@
 <div class="sidebar" [class.open]="sidebarService.isOpen()">
-  <div class="logo">
-    <span class="logo-mark"><mat-icon>local_hospital</mat-icon></span>
-    <span class="logo-text">MediCare <b>Pro</b></span>
+  <div class="brand-strap">
+    <mat-icon>verified_user</mat-icon>
+    <span class="mt-1">Powered by MediCare Pro</span>
   </div>
 
   <nav class="nav-list">
@@ -24,16 +24,28 @@
   </nav>
 
   <div class="sidebar-footer">
-    <div class="footer-user">
-      <span class="footer-avatar">{{
-        (currentUser?.name || currentUser?.email || "U").charAt(0)
-      }}</span>
+    <div class="footer-identity" (click)="navProfile()">
+      <div class="footer-avatar-wrap">
+        <span class="footer-avatar">{{
+          (currentUser?.name || currentUser?.email || "U").charAt(0)
+        }}</span>
+        <span class="status-dot"></span>
+      </div>
       <div class="footer-meta">
         <span class="footer-name">{{
           currentUser?.name || currentUser?.email
         }}</span>
-        <span class="footer-role">{{ currentUser?.role }}</span>
+        <span class="footer-email">{{ currentUser?.email }}</span>
       </div>
+      <mat-icon class="chevron">chevron_right</mat-icon>
+    </div>
+
+    <div class="footer-strip">
+      <span class="role-badge">
+        <mat-icon>verified_user</mat-icon>
+        {{ currentUser?.role }}
+      </span>
+      <span class="app-version">v{{ appVersion }}</span>
     </div>
   </div>
 </div>

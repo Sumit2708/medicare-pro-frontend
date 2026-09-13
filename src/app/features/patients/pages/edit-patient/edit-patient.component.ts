@@ -91,6 +91,8 @@ export class EditPatientComponent {
 
    ngOnInit(): void {
     this.route.queryParams.subscribe((params: any) => {
+
+      console.log('Query Params:', params); // Log the query parameters for debugging
       this.patientId = params['id'];
  
       if (params['tab'] && this.tabIndexMap[params['tab']] !== undefined) {

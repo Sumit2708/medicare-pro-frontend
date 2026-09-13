@@ -1,27 +1,19 @@
 .layout-container {
   display: flex;
-
   min-height: 100vh;
-
   padding-top: 64px;
-
   box-sizing: border-box;
-
   background: var(--color-bg);
 }
 
 .page-content {
   flex: 1;
-
   min-width: 0;
-
   margin-left: 260px;
-
   padding: 28px 32px;
-
   overflow-x: hidden;
-
   box-sizing: border-box;
+  transition: margin-left 0.2s ease;
 }
 
 @media (max-width: 900px) {
@@ -33,14 +25,7 @@
 
 @media (max-width: 640px) {
   .page-content {
-    margin-left: 0;
-    padding: 18px 14px;
-  }
-}
-
-@media (max-width: 640px) {
-  .page-content {
-    margin-left: 0; // correct now — sidebar is off-canvas, not 76px
+    margin-left: 0; // sidebar is off-canvas here, not pushing content
     padding: 18px 14px;
   }
 }
@@ -50,6 +35,11 @@
   inset: 0;
   top: 64px;
   background: rgba(0, 0, 0, 0.4);
-  z-index: 1050; // just below sidebar (1100), above navbar (1000) and all page content
+  z-index: 1050; // above navbar (1000) and mobile search overlay (999), below the drawer (1100)
   animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }

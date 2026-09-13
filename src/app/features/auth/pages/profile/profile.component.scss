@@ -1,0 +1,237 @@
+.profile-page {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+// ---------- Hero ----------
+
+.profile-hero {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  margin-bottom: 28px;
+}
+
+.hero-banner {
+  height: 128px;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(255, 255, 255, 0.06), transparent 45%),
+    radial-gradient(circle at 85% 75%, rgba(255, 255, 255, 0.05), transparent 50%),
+    linear-gradient(135deg, #12232e 0%, #0b1a22 100%);
+}
+
+.hero-content {
+   display: flex;
+  align-items: flex-end;
+  gap: 18px;
+  padding: 14px 28px 22px;
+}
+
+.hero-avatar-wrap {
+  flex-shrink: 0;
+  margin-top: -48px; // only the avatar overlaps the banner, isolated from the text below
+  padding: 4px;
+  border-radius: 50%;
+  background: var(--color-surface);
+}
+
+.hero-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.hero-identity {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-bottom: 6px;
+
+  h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--color-ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.hero-role-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+
+  .role-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-primary);
+  }
+}
+
+.hero-edit-btn {
+  flex-shrink: 0;
+  margin-bottom: 6px;
+  border-radius: 10px !important;
+
+  mat-icon {
+    font-size: 18px;
+    height: 18px;
+    width: 18px;
+    margin-right: 4px;
+  }
+}
+
+// ---------- Body ----------
+
+.profile-body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.profile-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  padding: 20px 22px;
+
+  .card-label {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-ink-soft);
+    margin-bottom: 14px;
+  }
+}
+
+.info-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 12px 0;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  mat-icon {
+    color: var(--color-ink-soft);
+    font-size: 20px;
+    height: 20px;
+    width: 20px;
+    margin-top: 2px;
+  }
+
+  .info-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+}
+
+.info-label {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.info-value {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-ink);
+  word-break: break-word;
+}
+
+.security-row,
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 0;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid var(--color-border);
+  }
+}
+
+.security-text,
+.toggle-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.toggle-hint {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--color-ink-soft);
+  max-width: 380px;
+}
+
+// ---------- Responsive ----------
+
+@media (max-width: 640px) {
+  .hero-content {
+    flex-wrap: wrap;
+    padding: 10px 18px 18px;
+  }
+
+  .hero-avatar-wrap {
+    margin-top: -40px;
+  }
+
+  .hero-avatar {
+    width: 68px;
+    height: 68px;
+    font-size: 22px;
+  }
+
+  .hero-edit-btn {
+    width: 100%;
+    margin-top: 4px;
+  }
+
+  .profile-card { padding: 16px 18px; }
+
+  .security-row,
+  .toggle-row {
+    flex-direction: column;
+    align-items: flex-start;
+
+    button, mat-slide-toggle { align-self: flex-start; }
+  }
+
+}

@@ -45,6 +45,7 @@ export class InvoiceDetailsComponent {
 
   ngOnInit() {
     const invoiceId: any = this.route.snapshot.paramMap.get('id');
+    console.log('Invoice ID from route:', invoiceId);
     if (invoiceId) {
       this.loadInvoiceDetails(invoiceId);
     }
