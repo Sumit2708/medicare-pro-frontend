@@ -12,14 +12,14 @@ export interface DoctorPatientItem {
 }
 
 export interface DoctorDashboardViewModel {
-  doctorName: string;
-  specialization: string;
+  doctorName?: string;
+  specialization?: string;
   photoUrl?: string;
-  todayAppointmentsCount: number;
-  totalPatients: number;
-  monthlyAppointmentsCount: number;
-  todaySchedule: DoctorScheduleItem[];
-  upcomingAppointments: DoctorScheduleItem[];
-  recentPatients: DoctorPatientItem[];
-  monthlyTrend: { month: string; appointments: number }[];
+  todayAppointmentsCount?: number;
+  totalPatients?: number;
+  monthlyAppointmentsCount?: number;
+  todaySchedule?: DoctorScheduleItem[];
+  upcomingAppointments?: DoctorScheduleItem[];
+  recentPatients?: DoctorPatientItem[];
+  monthlyTrend?: { month: string; appointments: number }[];
 }

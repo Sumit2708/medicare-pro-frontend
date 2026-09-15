@@ -22,21 +22,21 @@ export class SidebarComponent implements OnInit {
 
   menuItems = [
     { label: 'Dashboard', icon: 'dashboard', route: '/dashboard', section: 'Overview',
-      roles: [UserRole.ADMIN, UserRole.RECEPTIONIST] },
-    { label: 'Doctor Dashboard', icon: 'dashboard', route: '/doctor-dashboard', section: 'Overview',
-      roles: [UserRole.DOCTOR] },
+      roles: [UserRole.ADMIN, UserRole.RECEPTIONIST, UserRole.DOCTOR] },
+    // { label: 'Doctor Dashboard', icon: 'dashboard', route: '/doctor-dashboard', section: 'Overview',
+    //   roles: [UserRole.DOCTOR] },
     { label: 'Doctors', icon: 'medical_services', route: '/doctors', section: 'Patient care',
       roles: [UserRole.ADMIN] },
     { label: 'Patients', icon: 'groups', route: '/patients', section: 'Patient care',
-      roles: [UserRole.ADMIN] },
+      roles: [UserRole.ADMIN , UserRole.RECEPTIONIST, UserRole.DOCTOR] },
     { label: 'Appointments', icon: 'event', route: '/appointments', section: 'Patient care',
       roles: [UserRole.ADMIN, UserRole.DOCTOR, UserRole.RECEPTIONIST] },
-    { label: 'Billing', icon: 'receipt', route: '/billing', section: 'Admin',
+    { label: 'Billing', icon: 'receipt', route: '/billing', section: 'General',
       roles: [UserRole.ADMIN, UserRole.RECEPTIONIST] },
     { label: 'Reports', icon: 'assessment', route: '/reports', section: 'Admin',
       roles: [UserRole.ADMIN] },
-    { label: 'Settings', icon: 'settings', route: '/settings', section: 'Admin',
-      roles: [UserRole.ADMIN] },
+    { label: 'Settings', icon: 'settings', route: '/settings', section: 'General',
+      roles: [UserRole.ADMIN, UserRole.RECEPTIONIST, UserRole.DOCTOR] },
   ];
 
   constructor(

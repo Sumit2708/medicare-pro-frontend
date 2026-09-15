@@ -40,6 +40,11 @@ export class AppointmentService {
     return this.http.get<Appointment[]>(`${this.API_URL}?patientId=${patientId}`);
   }
 
+  updateAppointmentStatus(appointmentId: string, status: string) {
+    return this.http.patch(`${this.API_URL}/${appointmentId}/status`, { status });
+  }
+
+
   // cancelAppointment(appointmentId: string) {
   //   return this.http.patch(`${this.API_URL}/${appointmentId}/cancel`, {});
   // }

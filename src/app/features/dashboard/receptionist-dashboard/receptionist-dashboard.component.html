@@ -1,0 +1,262 @@
+<div class="dash-header">
+  <div>
+    <h2>Front Desk</h2>
+    <p>
+      {{ today | date: "EEEE, MMMM d, y" }} — today's check-ins and schedule
+    </p>
+  </div>
+
+  <div class="quick-actions">
+    <button mat-stroked-button (click)="goTo('/patients/add')">
+      <mat-icon>personal_injury</mat-icon>
+      Add Patient
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="goTo('/appointments/add')"
+    >
+      <mat-icon>add</mat-icon>
+      New Appointment
+    </button>
+  </div>
+</div>
+
+<app-alert-banner [alerts]="getAlerts(dashboard)"></app-alert-banner>
+
+<div class="cards-grid">
+  <mat-card class="dashboard-card appointment">
+    <div class="icon"><mat-icon>event</mat-icon></div>
+    <div class="content">
+      <span>Today's Appointments</span>
+      <div class="sub-content">
+        <h2>{{ dashboard.todayAppointmentsCount }}</h2>
+        <small>Scheduled Today</small>
+      </div>
+    </div>
+  </mat-card>
+
+  <mat-card class="dashboard-card patient">
+    <div class="icon"><mat-icon>how_to_reg</mat-icon></div>
+    <div class="content">
+      <span>Checked In</span>
+      <div class="sub-content">
+        <h2>{{ dashboard.checkedInCount }}</h2>
+        <small>Completed Today</small>
+      </div>
+    </div>
+  </mat-card>
+
+  <mat-card class="dashboard-card doctor">
+    <div class="icon"><mat-icon>hourglass_empty</mat-icon></div>
+    <div class="content">
+      <span>Waiting</span>
+      <div class="sub-content">
+        <h2>{{ dashboard.waitingCount }}</h2>
+        <small>Yet to be Seen</small>
+      </div>
+    </div>
+  </mat-card>
+
+  <mat-card class="dashboard-card revenue">
+    <div class="icon"><mat-icon>payments</mat-icon></div>
+    <div class="content">
+      <span>Collected Today</span>
+      <div class="sub-content">
+        <h2>
+          {{
+            dashboard.todayCollectedRevenue
+              | currency: "INR" : "symbol" : "1.0-0"
+          }}
+        </h2>
+        <small
+          >({{
+            dashboard.todayPendingAmount | currency: "INR" : "symbol" : "1.0-0"
+          }}
+          pending)</small
+        >
+      </div>
+    </div>
+  </mat-card>
+</div>
+
+@if (dashboard.doctorsAvailability.length > 0) {
+  <section class="duty-section mt-3">
+    <div class="duty-header">
+      <h3>Doctor Availability</h3>
+      <a (click)="goTo('/doctors')">View all</a>
+    </div>
+
+    <div class="duty-strip">
+      @for (doc of dashboard.doctorsAvailability; track doc.id) {
+        <div class="duty-chip" [matTooltip]="doc.specialization">
+          <div class="duty-avatar">
+            @if (doc.photoUrl) {
+              <img [src]="doc.photoUrl" [alt]="doc.name" />
+            } @else {
+              <span>{{ getInitials(doc.name) }}</span>
+            }
+            <span
+              class="duty-dot"
+              [class.inactive]="doc.status !== 'Active'"
+            ></span>
+          </div>
+          <span class="duty-name">{{ doc.name }}</span>
+          <small>{{ doc.todayAppointmentsCount }} today</small>
+        </div>
+      }
+    </div>
+  </section>
+}
+
+<section class="dashboard-layout">
+ <app-chart-card
+  title="Today's Check-ins"
+  subtitle="All doctors' appointments for today"
+  icon="event_available"
+  class="full-width"
+>
+  <a actions class="chart-card-action" routerLink="/appointments">View all</a>
+
+  @if (dashboard.todayCheckIns.length > 0) {
+    <table class="dash-table">
+      <thead>
+        <tr>
+          <th>Time</th>
+          <th>Patient</th>
+          <th>Doctor</th>
+          <th>Payement Status</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (
+          item of dashboard.todayCheckIns.slice(0, 5);
+          track trackByCheckIn($index, item)
+        ) {
+          <tr>
+            <td>{{ item.time }}</td>
+            <td>
+              <div class="person-cell">
+                <span class="avatar">{{ getInitials(item.patientName) }}</span>
+                {{ item.patientName }}
+              </div>
+            </td>
+            <td>{{ item.doctorName }}</td>
+            <td>{{ item.paymentStatus }}</td>
+            <td>
+              <span class="status-badge" [ngClass]="statusClass(item.status)">
+                <span class="dot"></span>{{ item.status }}
+              </span>
+            </td>
+            <td class="actions-cell">
+              @if (item.status === 'Scheduled') {
+                <button
+                  mat-stroked-button
+                  color="primary"
+                  class="row-action-btn"
+                  [disabled]="checkingInId === item.appointmentId"
+                  (click)="checkInPatient(item)"
+                >
+                  <mat-icon>login</mat-icon>
+                  Check In
+                </button>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else {
+    <app-empty-state
+      title="No Check-ins for today"
+      message="There's nothing to show here yet."
+      variant="empty"
+    />
+  }
+</app-chart-card>
+
+
+
+<app-chart-card
+  title="Currently Waiting"
+  subtitle="Checked-in patients yet to be seen"
+  icon="hourglass_empty"
+>
+  <a actions class="chart-card-action" (click)="navigateToWaitingQueue()">View all</a>
+
+  @if (waitingQueue.length > 0) {
+    <table class="dash-table">
+      <thead>
+        <tr>
+          <th>Patient</th>
+          <th>Doctor</th>
+          <th>Waiting Since</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of waitingQueue; track trackByWaiting($index, item)) {
+          <tr>
+            <td>
+              <div class="person-cell">
+                <span class="avatar">{{ getInitials(item.patientName) }}</span>
+                {{ item.patientName }}
+              </div>
+            </td>
+            <td>{{ item.doctorName }}</td>
+            <td>{{ item.checkedInAt | date: 'shortTime' }}</td>
+            <td class="actions-cell">
+              <button
+                mat-stroked-button
+                color="primary"
+                class="row-action-btn"
+                (click)="markAsSeen(item)"
+              >
+                <mat-icon>check_circle</mat-icon>
+                Mark Seen
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else {
+    <app-empty-state
+      title="No one waiting"
+      message="All checked-in patients have been seen."
+      variant="empty"
+    />
+  }
+</app-chart-card>
+
+  <app-chart-card
+    title="Billing Summary"
+    subtitle="Today's payment status"
+    icon="receipt_long"
+  >
+    <div class="billing-summary">
+      <div class="billing-row">
+        <span>Collected Today</span>
+        <strong class="text-success">{{
+          dashboard.todayCollectedRevenue | currency: "INR" : "symbol" : "1.0-0"
+        }}</strong>
+      </div>
+      <div class="billing-row">
+        <span>Pending Today</span>
+        <strong class="text-warning">{{
+          dashboard.todayPendingAmount | currency: "INR" : "symbol" : "1.0-0"
+        }}</strong>
+      </div>
+      <div class="billing-row">
+        <span>Total Pending Invoices</span>
+        <strong class="text-danger">{{ dashboard.pendingInvoicesCount }}</strong>
+      </div>
+      <button mat-stroked-button class="full-btn" (click)="goTo('/billing')">
+        <mat-icon>arrow_forward</mat-icon>
+        Go to Billing
+      </button>
+    </div>
+  </app-chart-card>
+</section>

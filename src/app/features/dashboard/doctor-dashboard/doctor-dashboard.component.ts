@@ -1,66 +1,56 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Observable, of, switchMap } from 'rxjs';
-import { MatIconModule } from '@angular/material/icon';
+import { Component, Input } from '@angular/core';
+import { MatCard, MatCardContent } from '@angular/material/card';
+import { MatIcon } from '@angular/material/icon';
+import { DoctorDashboardViewModel, DoctorScheduleItem } from '../../../shared/models/doctor-dashboard.viewmodel';
 import { ChartCardComponent } from '../../../shared/components/chart-card/chart-card.component';
 import { AppointmentsChartComponent } from '../components/appointments-chart/appointments-chart.component';
-import { DoctorDashboardViewModel } from '../../../shared/models/doctor-dashboard.viewmodel';
-import { DashboardService } from '../services/dashboard/dashboard.service';
 import { AuthService } from '../../../core/services/auth/auth.service';
+import { ChartEmptyStateComponent } from '../../../shared/components/chart-empty-state/chart-empty-state.component';
+import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
+
 
 @Component({
   selector: 'app-doctor-dashboard',
   standalone: true,
-  imports: [
-    CommonModule,
-    ChartCardComponent,
-    AppointmentsChartComponent,
-    MatIconModule,
-  ],
+  imports: [CommonModule, MatCard, MatCardContent, MatIcon, ChartCardComponent, AppointmentsChartComponent, ChartCardComponent, ChartEmptyStateComponent, EmptyStateComponent],
   templateUrl: './doctor-dashboard.component.html',
   styleUrl: './doctor-dashboard.component.scss',
 })
 export class DoctorDashboardComponent {
-  dashboard$: Observable<DoctorDashboardViewModel | null>;
-  greeting = '';
+  @Input({ required: true }) dashboard!: DoctorDashboardViewModel;
+
   today = new Date();
 
+
   constructor(
-    private dashboardService: DashboardService,
-    private authService: AuthService,
-  ) {
-    const user = this.authService.getCurrentUser();
-    console.log(user, 'user');
-
-    this.dashboard$ = user?.doctorId
-      ? this.dashboardService.getDoctorDashboardData(user.doctorId)
-      : of(null);
-
-      console.log(this.dashboard$, 'dashboard');
-  }
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
-    // const user = this.authService.getCurrentUser();
-    // console.log(user, 'user');
-
-    // this.dashboard$ = user?.doctorId
-    //   ? this.dashboardService.getDoctorDashboardData(user.doctorId)
-    //   : of(null);
-
-    // console.log(this.dashboard$, 'dashboard');
-
-    const hour = new Date().getHours();
-    if (hour < 12) this.greeting = 'Good morning';
-    else if (hour < 17) this.greeting = 'Good afternoon';
-    else this.greeting = 'Good evening';
+    // Any initialization logic can go here
+    // let currentUser = this.authService.getCurrentUser();
+    // console.log('Current User:', currentUser); // Debugging line
   }
 
   getInitials(name: string): string {
     if (!name) return 'DR';
     const parts = name.trim().split(' ').filter(Boolean);
-    return parts
-      .slice(0, 2)
-      .map((p) => p[0].toUpperCase())
-      .join('');
+    return parts.slice(0, 2).map((p) => p[0].toUpperCase()).join('');
+  }
+
+  statusClass(status: string): string {
+    switch (status) {
+      case 'Completed':
+        return 'status-success';
+      case 'Cancelled':
+        return 'status-danger';
+      default:
+        return 'status-info';
+    }
+  }
+
+  trackByAppt(index: number, item: DoctorScheduleItem): string {
+    return item.patientName + item.date + item.time;
   }
 }

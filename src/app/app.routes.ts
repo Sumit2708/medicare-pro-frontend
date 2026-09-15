@@ -62,23 +62,23 @@ export const routes: Routes = [
         component: DashboardComponent,
         canActivate: [roleGuard],
         data: {
-          roles: ADMIN_RECEPTION,
+          roles: ALL_USERS,
         },
       },
-      {
-        path: 'doctor-dashboard',
-        component: DoctorDashboardComponent,
-        canActivate: [roleGuard],
-        data: {
-          roles: [UserRole.DOCTOR],
-        },
-      },
+      // {
+      //   path: 'doctor-dashboard',
+      //   component: DoctorDashboardComponent,
+      //   canActivate: [roleGuard],
+      //   data: {
+      //     roles: [UserRole.DOCTOR],
+      //   },
+      // },
       {
         path: '',
         component: DashboardComponent,
         canActivate: [roleGuard],
         data: {
-          roles: ADMIN_RECEPTION,
+          roles: ALL_USERS,
         },
       },
 
@@ -87,7 +87,7 @@ export const routes: Routes = [
         component: DoctorListComponent,
         canActivate: [roleGuard],
         data: {
-          roles: ADMIN,
+          roles: ALL_USERS,
         },
       },
 
@@ -273,7 +273,7 @@ export const routes: Routes = [
         component: SettingsComponent,
         canActivate: [roleGuard],
         data: {
-          roles: [UserRole.ADMIN],
+          roles: ALL_USERS,
         },
       },
        {
