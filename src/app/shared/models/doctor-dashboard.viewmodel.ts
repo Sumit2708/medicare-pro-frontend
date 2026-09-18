@@ -22,4 +22,6 @@ export interface DoctorDashboardViewModel {
   upcomingAppointments?: DoctorScheduleItem[];
   recentPatients?: DoctorPatientItem[];
   monthlyTrend?: { month: string; appointments: number }[];
+  monthlyIncome?: number;
+  totalIncome?: number;
 }

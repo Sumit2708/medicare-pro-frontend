@@ -8,6 +8,7 @@ import { AppointmentService } from '../../../features/appointments/services/appo
 import { InvoiceService } from '../../../features/billing/services/invoice.service';
 import { InvoiceTable } from '../../../features/billing/models/invoice-table.model';
 import { PaymentStatus } from '../../../core/enums/payment-status.enum';
+import { AuthService } from '../auth/auth.service';
 
 export interface SearchResultItem {
   name: string;
@@ -40,7 +41,11 @@ export class GlobalSearchService {
     private doctorService: DoctorService,
     private appointmentService: AppointmentService,
     private invoiceService: InvoiceService,
+    private AuthService: AuthService
   ) {
+
+    let user = AuthService.getCurrentUser();
+    console.log(user,'user');
     // Initialize AFTER services are available
     this.searchData$ = forkJoin({
       patients: this.patientService

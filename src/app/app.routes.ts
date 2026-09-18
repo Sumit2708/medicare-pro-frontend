@@ -167,7 +167,7 @@ export const routes: Routes = [
         component: InvoiceListComponent,
         canActivate: [roleGuard],
         data: {
-          roles: ADMIN_RECEPTION,
+          roles: ALL_USERS,
         },
       },
       {
@@ -175,7 +175,7 @@ export const routes: Routes = [
         component: CreateInvoiceComponent,
         canActivate: [roleGuard],
         data: {
-          roles: ADMIN_RECEPTION,
+          roles: ALL_USERS,
         },
       },
       {
@@ -183,7 +183,7 @@ export const routes: Routes = [
         component: InvoiceDetailsComponent,
         canActivate: [roleGuard],
         data: {
-          roles: ADMIN_RECEPTION,
+          roles: ALL_USERS,
         },
       },
       {
@@ -191,7 +191,7 @@ export const routes: Routes = [
         component: PrintInvoiceComponent,
         canActivate: [roleGuard],
         data: {
-          roles: ADMIN_RECEPTION,
+          roles: ALL_USERS,
         },
       },
       {

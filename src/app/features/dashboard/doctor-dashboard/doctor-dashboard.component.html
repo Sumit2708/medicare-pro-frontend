@@ -1,147 +1,245 @@
 @if (dashboard) {
-<div class="dash-header">
-  <div>
-    <h2>Welcome, Dr. {{ dashboard.doctorName ? dashboard.doctorName : 'vikas'}}</h2>
+  <div class="dash-header">
+    <div>
+      <h2>Welcome, Dr. {{ dashboard.doctorName || currentUserName }}</h2>
+      <p>
+        {{ dashboard.specialization }} &middot;
+        {{ today | date: "EEEE, MMMM d, y" }}
+      </p>
+    </div>
 
-    <p>{{ dashboard.specialization }} &middot; {{ today | date: 'EEEE, MMMM d, y' }}</p>
+    <div class="quick-actions">
+      <button
+        mat-stroked-button
+        color="primary"
+        routerLink="/appointments"
+        [queryParams]="{ filter: 'today' }"
+      >
+        <mat-icon>event</mat-icon>
+        View Full Schedule
+      </button>
+      <button mat-flat-button color="primary" routerLink="/patients">
+        <mat-icon>groups</mat-icon>
+        View All Patients
+      </button>
+    </div>
   </div>
-</div>
 
-<div class="cards-grid">
-  <mat-card class="dashboard-card appointment">
-    <div class="icon"><mat-icon>event</mat-icon></div>
-    <div class="content">
-      <span>Today's Appointments</span>
-      <div class="sub-content">
-        <h2>{{ dashboard.todayAppointmentsCount ? dashboard.todayAppointmentsCount : 0 }}</h2>
-        <small>Scheduled Today</small>
+  <div class="cards-grid">
+    <mat-card class="dashboard-card appointment">
+      <div class="icon"><mat-icon>event</mat-icon></div>
+      <div class="content">
+        <span>Today's Appointments</span>
+        <div class="sub-content">
+          <h2>
+            {{
+              dashboard.todayAppointmentsCount
+                ? dashboard.todayAppointmentsCount
+                : 0
+            }}
+          </h2>
+          <small>Scheduled Today</small>
+        </div>
       </div>
-    </div>
-  </mat-card>
+    </mat-card>
 
-  <mat-card class="dashboard-card patient">
-    <div class="icon"><mat-icon>groups</mat-icon></div>
-    <div class="content">
-      <span>Total Patients</span>
-      <div class="sub-content">
-        <h2>{{ dashboard.totalPatients ? dashboard.totalPatients : 0 }}</h2>
-        <small>Under Your Care</small>
+    <mat-card class="dashboard-card patient">
+      <div class="icon"><mat-icon>groups</mat-icon></div>
+      <div class="content">
+        <span>Total Patients</span>
+        <div class="sub-content">
+          <h2>{{ dashboard.totalPatients ? dashboard.totalPatients : 0 }}</h2>
+          <small>Under Your Care</small>
+        </div>
       </div>
-    </div>
-  </mat-card>
+    </mat-card>
 
-  <mat-card class="dashboard-card doctor">
-    <div class="icon"><mat-icon>calendar_month</mat-icon></div>
-    <div class="content">
-      <span>This Month</span>
-      <div class="sub-content">
-        <h2>{{ dashboard.monthlyAppointmentsCount ? dashboard.monthlyAppointmentsCount : 0 }}</h2>
-        <small>Appointments</small>
+    <mat-card class="dashboard-card doctor">
+      <div class="icon"><mat-icon>calendar_month</mat-icon></div>
+      <div class="content">
+        <span>This Month</span>
+        <div class="sub-content">
+          <h2>
+            {{
+              dashboard.monthlyAppointmentsCount
+                ? dashboard.monthlyAppointmentsCount
+                : 0
+            }}
+          </h2>
+          <small>Appointments</small>
+        </div>
       </div>
-    </div>
-  </mat-card>
-</div>
+    </mat-card>
+    
+    <mat-card class="dashboard-card revenue">
+      <div class="icon">
+        <mat-icon>payments</mat-icon>
+      </div>
+      <div class="content">
+        <span>This Month's Income</span>
+        <div class="sub-content">
+          <h2>
+            ₹{{
+              dashboard.monthlyIncome ? (dashboard.monthlyIncome | number) : 0
+            }}
+          </h2>
+          <small>Earned</small>
+        </div>
+      </div>
+    </mat-card>
+  </div>
 
-<section class="dashboard-layout">
-  <app-chart-card
-    title="Today's Schedule"
-    subtitle="Your appointments for today"
-    icon="schedule"
-    class="full-width mt-3"
-  >
-    @if (dashboard.todaySchedule && dashboard.todaySchedule.length > 0) {
-      <table class="dash-table">
-        <thead>
-          <tr>
-            <th>Time</th>
-            <th>Patient</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (item of dashboard.todaySchedule; track trackByAppt($index, item)) {
+  <section class="dashboard-layout">
+    <app-chart-card
+      title="Today's Schedule"
+      subtitle="Your appointments for today"
+      icon="schedule"
+      class="full-width mt-3"
+    >
+      @if (dashboard.todaySchedule && dashboard.todaySchedule.length > 0) {
+        <table class="dash-table">
+          <thead>
             <tr>
-              <td>{{ item.time }}</td>
-              <td>
-                <div class="person-cell">
-                  <span class="avatar">{{ getInitials(item.patientName) }}</span>
-                  {{ item.patientName }}
-                </div>
-              </td>
-              <td>
-                <span class="status-badge" [ngClass]="statusClass(item.status)">
-                  <span class="dot"></span>{{ item.status }}
-                </span>
-              </td>
+              <th>Time</th>
+              <th>Patient</th>
+              <th>Status</th>
             </tr>
+          </thead>
+          <tbody>
+            @for (
+              item of dashboard.todaySchedule;
+              track trackBySchedule($index, item)
+            ) {
+              <tr>
+                <td>{{ item.time }}</td>
+                <td>
+                  <div class="person-cell">
+                    <span class="avatar">{{
+                      getInitials(item.patientName)
+                    }}</span>
+                    {{ item.patientName }}
+                  </div>
+                </td>
+                <td>
+                  <span
+                    class="status-badge"
+                    [ngClass]="statusClass(item.status)"
+                  >
+                    <span class="dot"></span>{{ item.status }}
+                  </span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+        <div class="card-footer-link">
+          <a routerLink="/appointments" [queryParams]="{ filter: 'today' }">
+            View All Appointments <mat-icon>arrow_forward</mat-icon>
+          </a>
+        </div>
+      } @else {
+        <app-empty-state
+          icon="schedule"
+          title="No schedule for today"
+          description="You don't have any appointments scheduled for today."
+        />
+      }
+    </app-chart-card>
+
+    <app-chart-card
+      title="Upcoming Appointments"
+      subtitle="Next scheduled visits"
+      icon="upcoming"
+    >
+      @if (
+        dashboard.upcomingAppointments &&
+        dashboard.upcomingAppointments.length > 0
+      ) {
+        <ul class="simple-list">
+          @for (
+            item of dashboard.upcomingAppointments;
+            track trackByAppt($index, item)
+          ) {
+            <li>
+              <div class="person-cell">
+                <span class="avatar">{{ getInitials(item.patientName) }}</span>
+                <div>
+                  <div class="name">{{ item.patientName }}</div>
+                  <small
+                    >{{ item.date | date: "MMM d" }} &middot;
+                    {{ item.time }}</small
+                  >
+                </div>
+              </div>
+              <span class="status-badge" [ngClass]="statusClass(item.status)">
+                <span class="dot"></span>{{ item.status }}
+              </span>
+            </li>
           }
-        </tbody>
-      </table>
-    } @else {
-     <app-empty-state
-        icon="schedule"
-        title="No schedule for today"
-        description="You don't have any appointments scheduled for today."
-      />
-    }
-  </app-chart-card>
+        </ul>
+        <div class="card-footer-link">
+          <a routerLink="/appointments" [queryParams]="{ filter: 'upcoming' }">
+            View All Upcoming <mat-icon>arrow_forward</mat-icon>
+          </a>
+        </div>
+      } @else {
+        <app-empty-state
+          icon="upcoming"
+          title="No Upcoming Appointments"
+          description="You don't have any upcoming appointments."
+        />
+      }
+    </app-chart-card>
 
-  <app-chart-card title="Upcoming Appointments" subtitle="Next scheduled visits" icon="upcoming">
-    @if (dashboard.upcomingAppointments && dashboard.upcomingAppointments.length > 0) {
-      <ul class="simple-list">
-        @for (item of dashboard.upcomingAppointments; track trackByAppt($index, item)) {
-          <li>
-            <div class="person-cell">
-              <span class="avatar">{{ getInitials(item.patientName) }}</span>
-              <div>
-                <div class="name">{{ item.patientName }}</div>
-                <small>{{ item.date | date: 'MMM d' }} &middot; {{ item.time }}</small>
+    <app-chart-card
+      title="Recent Patients"
+      subtitle="Recently seen"
+      icon="folder_shared"
+    >
+      @if (dashboard.recentPatients && dashboard.recentPatients.length > 0) {
+        <ul class="simple-list">
+          @for (p of dashboard.recentPatients; track p.name) {
+            <li>
+              <div class="person-cell">
+                <span class="avatar">{{ getInitials(p.name) }}</span>
+                <div>
+                  <div class="name">{{ p.name }}</div>
+                  <small
+                    >Last visit: {{ p.lastVisit | date: "MMM d, y" }}</small
+                  >
+                </div>
               </div>
-            </div>
-            <span class="status-badge" [ngClass]="statusClass(item.status)">
-              <span class="dot"></span>{{ item.status }}
-            </span>
-          </li>
-        }
-      </ul>
-    } @else {
-      <!-- <p class="empty-state">No upcoming appointments.</p> -->
-      <app-empty-state
-        icon="upcoming"
-        title="No Upcoming Appointments"
-        description="You don't have any upcoming appointments."
-      />
-    }
-  </app-chart-card>
+              <small
+                >{{ p.visitCount }} visit{{
+                  p.visitCount > 1 ? "s" : ""
+                }}</small
+              >
+            </li>
+          }
+        </ul>
+        <div class="card-footer-link">
+          <a routerLink="/patients">
+            View All Patients <mat-icon>arrow_forward</mat-icon>
+          </a>
+        </div>
+      } @else {
+        <app-empty-state
+          icon="folder_shared"
+          title="No Patient History"
+          description="You don't have any patient history yet."
+        />
+      }
+    </app-chart-card>
 
-  <app-chart-card title="Recent Patients" subtitle="Recently seen" icon="folder_shared">
-    @if (dashboard.recentPatients && dashboard.recentPatients.length > 0) {
-      <ul class="simple-list">
-        @for (p of dashboard.recentPatients; track p.name) {
-          <li>
-            <div class="person-cell">
-              <span class="avatar">{{ getInitials(p.name) }}</span>
-              <div>
-                <div class="name">{{ p.name }}</div>
-                <small>Last visit: {{ p.lastVisit | date: 'MMM d, y' }}</small>
-              </div>
-            </div>
-            <small>{{ p.visitCount }} visit{{ p.visitCount > 1 ? 's' : '' }}</small>
-          </li>
-        }
-      </ul>
-    } @else {
-      <!-- <p class="empty-state">No patient history yet.</p> -->
-      <app-empty-state
-        icon="folder_shared"
-        title="No Patient History"
-        description="You don't have any patient history yet."
-      />
-    }
-  </app-chart-card>
-
-  <app-chart-card title="Monthly Trend" subtitle="Appointments over the year" icon="trending_up" class="full-width">
-    <app-appointments-chart [data]="dashboard.monthlyTrend ?? []"></app-appointments-chart>
-  </app-chart-card>
-</section>
+    <app-chart-card
+      title="Monthly Trend"
+      subtitle="Appointments over the year"
+      icon="trending_up"
+      class="full-width"
+    >
+      <app-appointments-chart
+        [data]="dashboard.monthlyTrend ?? []"
+      ></app-appointments-chart>
+    </app-chart-card>
+  </section>
 }

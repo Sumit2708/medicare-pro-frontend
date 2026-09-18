@@ -22,6 +22,8 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { PaymentMethod, PaymentStatus } from '../../../../core/enums/payment-status.enum';
+import { AuthService } from '../../../../core/services/auth/auth.service'; // adjust path if different
+import { UserRole } from '../../../../core/enums/user-role.enum';
 
 @Component({
   selector: 'app-invoice-list',
@@ -64,6 +66,10 @@ export class InvoiceListComponent {
   paidAmount = 0;
   pendingAmount = 0;
 
+  // set when the logged-in user is a doctor; scopes the invoice list to their own
+  private currentDoctorId: string | undefined;
+  isDoctorView = false;
+
   private _paginator!: MatPaginator;
   @ViewChild(MatPaginator) set paginator(mp: MatPaginator) {
     this._paginator = mp;
@@ -81,27 +87,38 @@ export class InvoiceListComponent {
   selectedStatus = '';
   selectedPaymentMethod = '';
 
+  paymentMethodOptions = [
+    { value: PaymentMethod.CASH, icon: 'payments' },
+    { value: PaymentMethod.UPI, icon: 'qr_code_2' },
+    { value: PaymentMethod.CARD, icon: 'credit_card' },
+    { value: PaymentMethod.INSURANCE, icon: 'health_and_safety' },
+  ];
 
-  // invoice-list.component.ts — add near the top of the class
-paymentMethodOptions = [
-  { value: PaymentMethod.CASH, icon: 'payments' },
-  { value: PaymentMethod.UPI, icon: 'qr_code_2' },
-  { value: PaymentMethod.CARD, icon: 'credit_card' },
-  { value: PaymentMethod.INSURANCE, icon: 'health_and_safety' },
-];
-
-paymentStatusOptions = [
-  { value: PaymentStatus.PENDING, icon: 'schedule' },
-  { value: PaymentStatus.PAID, icon: 'task_alt' },
-  { value: PaymentStatus.CANCELLED, icon: 'cancel' },
-];
+  paymentStatusOptions = [
+    { value: PaymentStatus.PENDING, icon: 'schedule' },
+    { value: PaymentStatus.PAID, icon: 'task_alt' },
+    { value: PaymentStatus.CANCELLED, icon: 'cancel' },
+  ];
 
   constructor(
     private router: Router,
     private invoiceService: InvoiceService,
+    private authService: AuthService,
   ) {}
 
   ngOnInit(): void {
+    const currentUser:any = this.authService.getCurrentUser();
+    if (currentUser?.role === UserRole.DOCTOR) {
+      this.currentDoctorId = currentUser.doctorId
+        ? String(currentUser.doctorId)
+        : undefined;
+      this.isDoctorView = true;
+      // doctor already knows every row is theirs — drop the doctor column
+      // this.displayedColumns = this.displayedColumns.filter(
+      //   (col) => col !== 'doctorName',
+      // );
+    }
+
     this.configureFilter();
     this.loadInvoices();
   }
@@ -109,7 +126,7 @@ paymentStatusOptions = [
   loadInvoices(): void {
     this.loading = true;
 
-    this.invoiceService.getInvoiceTableData().subscribe({
+    this.invoiceService.getInvoiceTableData(this.currentDoctorId).subscribe({
       next: (response) => {
         this.dataSource.data = response;
         this.computeStats(response);

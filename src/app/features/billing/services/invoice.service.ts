@@ -25,9 +25,23 @@ export class InvoiceService {
     private patientService: PatientService,
   ) {}
 
-  getInvoices(): Observable<Invoice[]> {
-    return this.http.get<Invoice[]>(this.apiUrl);
-  }
+  // getInvoices(doctorId?: string): Observable<Invoice[]> {
+  //   // json-server supports query-param filtering directly
+  //   const url = doctorId ? `${this.apiUrl}?doctorId=${doctorId}` : this.apiUrl;
+  //   return this.http.get<Invoice[]>(url);
+  // }
+
+
+  getInvoices(doctorId?: string): Observable<Invoice[]> {
+  const url = doctorId ? `${this.apiUrl}?doctorId=${doctorId}` : this.apiUrl;
+  return this.http.get<Invoice[]>(url).pipe(
+    map((invoices) =>
+      doctorId
+        ? invoices.filter((inv) => String(inv.doctorId) === String(doctorId))
+        : invoices,
+    ),
+  );
+}
 
   createInvoice(invoice: Invoice): Observable<Invoice> {
     return this.http.post<Invoice>(this.apiUrl, invoice);
@@ -64,43 +78,35 @@ export class InvoiceService {
     return this.getInvoices().pipe(
       map((invoices) => {
         const nextNumber = invoices.length + 1;
-
         const year = new Date().getFullYear();
-
         return `INV-${year}-${nextNumber.toString().padStart(5, '0')}`;
       }),
     );
   }
 
-  getInvoiceTableData(): Observable<InvoiceTable[]> {
+  /**
+   * @param doctorId When provided, scopes the table data to a single doctor's invoices
+   * (e.g. for the doctor-role invoice list, or a doctor's own income view).
+   */
+  getInvoiceTableData(doctorId?: string): Observable<InvoiceTable[]> {
     return forkJoin({
-      invoices: this.getInvoices(),
-
+      invoices: this.getInvoices(doctorId),
       patients: this.patientService.getPatients(),
-
       doctors: this.doctorService.getDoctors(),
     }).pipe(
       map(({ invoices, patients, doctors }) => {
         return invoices.map((invoice) => {
           const patient = patients.find((p) => p.id === invoice.patientId);
-
           const doctor = doctors.find((d) => d.id === invoice.doctorId);
 
           return {
             id: invoice.id!,
-
             invoiceNumber: invoice.invoiceNumber,
-
             patientName: patient?.name ?? '-',
-
             doctorName: doctor?.name ?? '-',
-
             total: invoice.total,
-
             paymentMethod: invoice.paymentMethod,
-
             paymentStatus: invoice.paymentStatus,
-
             createdDate: invoice.createdDate,
           };
         });
@@ -113,14 +119,11 @@ export class InvoiceService {
       switchMap((invoice) => {
         return forkJoin({
           patient: this.patientService.getPatientById(invoice.patientId),
-
           doctor: this.doctorService.getDoctorById(invoice.doctorId),
         }).pipe(
           map(({ patient, doctor }) => ({
             invoice,
-
             patient,
-
             doctor,
           })),
         );
@@ -136,5 +139,27 @@ export class InvoiceService {
     return this.http.patch<Invoice>(`${this.apiUrl}/${id}`, {
       paymentStatus: PaymentStatus.PAID,
     });
+  }
+
+  /**
+   * Sum of PAID invoice totals for a given doctor — the doctor's realized income.
+   * Pass a date range if you want "this month's income" rather than all-time.
+   */
+  getDoctorIncome(
+    doctorId: string,
+    range?: { from: Date; to: Date },
+  ): Observable<number> {
+    return this.getInvoices(doctorId).pipe(
+      map((invoices) =>
+        invoices
+          .filter((inv) => {
+            if (inv.paymentStatus !== PaymentStatus.PAID) return false;
+            if (!range) return true;
+            const created = new Date(inv.createdDate);
+            return created >= range.from && created <= range.to;
+          })
+          .reduce((sum, inv) => sum + inv.total, 0),
+      ),
+    );
   }
 }

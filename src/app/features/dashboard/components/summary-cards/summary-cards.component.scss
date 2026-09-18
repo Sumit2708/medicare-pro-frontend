@@ -84,13 +84,15 @@
     background: #fcefda;
     color: var(--color-accent);
   }
-  &.appointment .icon {
-    background: var(--color-info-light);
+&.appointment .icon {
+  background: #e8eafc;
+  color: #4f46e5;
 
-    mat-icon {
-      color: var(--color-info) !important;
-    }
+  mat-icon {
+    color: #4f46e5 !important;
   }
+
+}
   &.revenue .icon {
     background: #e3f5ec;
     color: var(--color-success);

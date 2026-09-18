@@ -76,11 +76,11 @@ export class LoginComponent {
         this.isSubmitting = false;
         if (isLoggedin) {
           const user = this.authService.getCurrentUser();
-          if (user?.role === UserRole.DOCTOR) {
-            this.router.navigate(['/doctor-dashboard']);
-          } else {
-            this.router.navigate(['/dashboard']);
-          }
+          // if (user?.role === UserRole.DOCTOR) {
+          //   this.router.navigate(['/doctor-dashboard']);
+          // } else {
+          this.router.navigate(['/dashboard']);
+          // }
         } else {
           this.notificationService.error('Invalid email or password');
         }

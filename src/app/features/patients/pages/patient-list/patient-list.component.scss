@@ -4,12 +4,17 @@
   gap: 20px;
 }
 
+/* ============================================
+   TOOLBAR
+   ============================================ */
+
 .list-toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 16px;
+
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 16px;
@@ -24,14 +29,20 @@
       display: flex;
       align-items: center;
       justify-content: center;
+
       width: 42px;
       height: 42px;
       min-width: 42px;
+
       border-radius: 12px;
       background: var(--color-primary-light);
       color: var(--color-primary);
 
-      mat-icon { font-size: 22px; height: 22px; width: 22px; }
+      mat-icon {
+        font-size: 22px;
+        height: 22px;
+        width: 22px;
+      }
     }
 
     h3 {
@@ -51,13 +62,20 @@
   }
 }
 
+/* ============================================
+   EMPTY STATE
+   ============================================ */
+
 .empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
   padding: 60px 20px;
+
   text-align: center;
+
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 16px;
@@ -66,98 +84,195 @@
     display: flex;
     align-items: center;
     justify-content: center;
+
     width: 64px;
     height: 64px;
+
     border-radius: 50%;
+
     background: var(--color-bg);
     color: var(--color-border);
+
     margin-bottom: 16px;
 
-    mat-icon { font-size: 30px; height: 30px; width: 30px; }
+    mat-icon {
+      font-size: 30px;
+      height: 30px;
+      width: 30px;
+    }
   }
 
   h3 {
     font-family: var(--font-display);
     font-size: 16px;
     font-weight: 600;
+
     color: var(--color-ink);
+
     margin: 0 0 6px;
   }
 
   p {
     font-family: var(--font-body);
     font-size: 13px;
+
     color: var(--color-ink-soft);
+
     margin: 0 0 20px;
+
     max-width: 320px;
   }
 
-  button { border-radius: 10px; text-transform: none; }
+  button {
+    border-radius: 10px;
+    text-transform: none;
+  }
 }
+
+/* ============================================
+   TABLE CARD
+   ============================================ */
 
 .table-card {
   background: var(--color-surface);
+
+  // margin-top: px;
   border: 1px solid var(--color-border);
-  border-radius: 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(15, 35, 46, 0.06);
+
   overflow: hidden;
 }
 
-.table-container {
-  overflow-x: auto;
+/* ============================================
+   TABLE
+   Same scroll-container approach as the
+   receptionist dashboard's .table-scroll:
+   only the table scrolls horizontally, the
+   page itself never does.
+   ============================================ */
 
-  table { width: 100%; background: transparent; }
+.table-container {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+
+  table {
+    width: 100%;
+    min-width: 960px; // room for two labeled action buttons at full size
+    background: transparent;
+    border-collapse: collapse;
+  }
+
+  /* ==========================================
+     TABLE HEADER
+     No background color
+     ========================================== */
+
+  .mat-mdc-header-row {
+    background: transparent !important;
+  }
 
   th.mat-mdc-header-cell {
     font-family: var(--font-body);
+
     font-size: 12px;
     font-weight: 600;
+
     color: var(--color-ink-soft);
+
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    background: var(--color-bg);
+
+    background: transparent !important;
+
     border-bottom: 1px solid var(--color-border);
+
     padding: 14px 16px;
+
     white-space: nowrap;
   }
 
+  .mat-mdc-table {
+    .mat-mdc-header-row,
+    .mat-mdc-header-cell {
+      background: transparent !important;
+    }
+  }
+
+  /* ==========================================
+     TABLE BODY
+     ========================================== */
+
   td.mat-mdc-cell {
     font-family: var(--font-body);
+
     font-size: 14px;
+
     color: var(--color-ink);
+
     border-bottom: 1px solid var(--color-border);
+
     padding: 14px 16px;
   }
 
   tr.mat-mdc-row {
     transition: background 0.15s ease;
 
-    &:hover { background: var(--color-primary-light); }
-    &:last-child td { border-bottom: none; }
+    &:hover {
+      background: var(--color-primary-light);
+    }
+
+    &:last-child td {
+      border-bottom: none;
+    }
   }
+
+  /* ==========================================
+     PATIENT ID
+     ========================================== */
 
   .patient-id {
     font-family: var(--font-body);
+
     font-size: 13px;
     font-weight: 600;
+
     color: var(--color-ink-soft);
   }
+
+  /* ==========================================
+     PATIENT INFO
+     ========================================== */
 
   .patient-info {
     display: flex;
     align-items: center;
+
     gap: 12px;
+
     min-width: 180px;
 
     .patient-avatar {
       display: flex;
       align-items: center;
       justify-content: center;
+
       width: 38px;
       height: 38px;
       min-width: 38px;
+
       border-radius: 50%;
-      background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+
+      background: linear-gradient(
+        135deg,
+        var(--color-primary),
+        var(--color-primary-dark)
+      );
+
       color: #fff;
+
       font-family: var(--font-display);
       font-size: 13px;
       font-weight: 700;
@@ -170,108 +285,320 @@
 
     .patient-name {
       font-family: var(--font-body);
+
       font-weight: 600;
       font-size: 14px;
+
       color: var(--color-ink);
     }
 
     .patient-meta {
+      font-family: var(--font-body);
+
       font-size: 12px;
+
       color: var(--color-ink-soft);
+
       margin-top: 1px;
     }
   }
 
+  /* ==========================================
+     BLOOD GROUP
+     ========================================== */
+
   .blood-chip {
     display: inline-flex;
     align-items: center;
+
     gap: 5px;
+
     padding: 4px 11px;
+
     border-radius: 20px;
-    background: #FBE7E7;
+
+    background: #fbe7e7;
     color: var(--color-danger);
+
     font-family: var(--font-display);
+
     font-size: 12.5px;
     font-weight: 700;
 
-    mat-icon { font-size: 14px; height: 14px; width: 14px; }
+    mat-icon {
+      font-size: 14px;
+      height: 14px;
+      width: 14px;
+    }
 
     &.empty {
       background: var(--color-bg);
       color: var(--color-ink-soft);
+
       font-weight: 500;
     }
   }
 
+  /* ==========================================
+     CONTACT
+     ========================================== */
+
   .contact-link {
     display: flex;
     align-items: center;
+
     gap: 6px;
+
     color: var(--color-ink);
+
     text-decoration: none;
+
     font-weight: 500;
 
-    mat-icon { font-size: 15px; height: 15px; width: 15px; color: var(--color-accent); }
+    mat-icon {
+      font-size: 15px;
+      height: 15px;
+      width: 15px;
 
-    &:hover { color: var(--color-primary); }
+      color: var(--color-accent);
+    }
+
+    &:hover {
+      color: var(--color-primary);
+    }
   }
 
   .contact-alt {
     display: block;
+
+    font-family: var(--font-body);
+
     font-size: 11.5px;
+
     color: var(--color-ink-soft);
+
     margin-top: 2px;
     margin-left: 21px;
   }
 
+  /* ==========================================
+     ADDRESS
+     ========================================== */
+
   .address-text {
     display: block;
+
     max-width: 200px;
+
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+
     color: var(--color-ink-soft);
+
     font-size: 13px;
   }
+
+  /* ==========================================
+     STATUS
+     ========================================== */
 
   .status-badge {
     display: inline-flex;
     align-items: center;
+
     gap: 6px;
+
     padding: 4px 12px;
+
     border-radius: 20px;
+
     font-size: 12px;
     font-weight: 600;
 
-    .status-dot { width: 6px; height: 6px; border-radius: 50%; }
+    white-space: nowrap;
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+
+      border-radius: 50%;
+    }
 
     &.status-active {
-      background: #E3F5EC;
+      background: #e3f5ec;
       color: var(--color-success);
-      .status-dot { background: var(--color-success); }
+
+      .status-dot {
+        background: var(--color-success);
+      }
     }
 
     &.status-inactive {
-      background: #F1F2F4;
+      background: #f1f2f4;
       color: var(--color-ink-soft);
-      .status-dot { background: var(--color-ink-soft); }
+
+      .status-dot {
+        background: var(--color-ink-soft);
+      }
     }
   }
 
-  .actions-header { text-align: right; }
+  /* ==========================================
+     ACTIONS
+     Same row-action-btn treatment as the
+     receptionist dashboard's Check In / Mark
+     Seen buttons: stroked, icon+label, and the
+     label collapses on narrow screens.
+     ========================================== */
+
+  .actions-header {
+    text-align: right;
+  }
+
   .actions-cell {
     text-align: right;
     white-space: nowrap;
+  }
 
-    button {
-      color: var(--color-ink-soft);
-      &:hover { color: var(--color-primary); }
-      &[color="warn"]:hover { color: var(--color-danger); }
+  // wrapper INSIDE the td carries the flex layout, so the td itself
+  // keeps its default table-cell display and the row border still
+  // spans the full column width
+  .action-btns {
+    display: inline-flex;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  .row-action-btn {
+    font-size: 12px;
+    height: 32px;
+    padding: 0 12px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+    text-transform: none;
+
+    mat-icon {
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
     }
   }
 }
 
+/* ============================================
+   PAGINATOR
+   ============================================ */
+
 ::ng-deep mat-paginator {
-  background: transparent;
+  background: transparent !important;
+
   font-family: var(--font-body);
+}
+
+::ng-deep .mat-mdc-paginator {
+  background: transparent !important;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+  .list-toolbar {
+    align-items: stretch;
+
+    .toolbar-info {
+      width: 100%;
+    }
+  }
+
+  .table-container {
+    table {
+      min-width: 760px; // action buttons drop their labels below, so less width is needed
+    }
+
+    td.mat-mdc-cell,
+    th.mat-mdc-header-cell {
+      padding: 10px 12px;
+    }
+
+    // icon-only action buttons, same collapse rule as receptionist's row-action-btn
+    .row-action-btn {
+      min-width: 32px !important;
+      width: 32px;
+      height: 32px;
+      padding: 0 !important;
+      border: none !important;
+
+      .mdc-button__label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .btn-label {
+        display: none;
+      }
+
+      mat-icon {
+        margin: 0 !important;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .patient-page {
+    gap: 16px;
+  }
+
+  .list-toolbar {
+    padding: 16px;
+
+    .toolbar-info {
+      gap: 10px;
+
+      .toolbar-icon {
+        width: 38px;
+        height: 38px;
+        min-width: 38px;
+
+        mat-icon {
+          font-size: 20px;
+          height: 20px;
+          width: 20px;
+        }
+      }
+
+      h3 {
+        font-size: 14px;
+      }
+
+      p {
+        font-size: 12px;
+      }
+    }
+  }
+
+  .table-card {
+    border-radius: 10px;
+  }
+
+  .table-container {
+    .patient-info .patient-avatar {
+      width: 30px;
+      height: 30px;
+      min-width: 30px;
+      font-size: 11px;
+    }
+
+    .status-badge {
+      padding: 3px 8px;
+      font-size: 10.5px;
+    }
+  }
 }

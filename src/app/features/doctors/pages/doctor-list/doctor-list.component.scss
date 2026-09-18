@@ -1,17 +1,20 @@
-
 .doctor-page {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-/* Toolbar */
+/* ============================================
+   TOOLBAR
+   ============================================ */
+
 .list-toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 16px;
+
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 16px;
@@ -21,19 +24,26 @@
     display: flex;
     align-items: center;
     gap: 14px;
+    flex: 1 1 240px;
 
     .toolbar-icon {
       display: flex;
       align-items: center;
       justify-content: center;
+
       width: 42px;
       height: 42px;
       min-width: 42px;
+
       border-radius: 12px;
       background: var(--color-primary-light);
       color: var(--color-primary);
 
-      mat-icon { font-size: 22px; height: 22px; width: 22px; }
+      mat-icon {
+        font-size: 22px;
+        height: 22px;
+        width: 22px;
+      }
     }
 
     h3 {
@@ -51,16 +61,32 @@
       margin: 0;
     }
   }
+
+  .toolbar-search {
+    flex: 1 1 260px;
+    max-width: 320px;
+    min-width: 200px;
+
+    ::ng-deep .search-box,
+    ::ng-deep input {
+      width: 100%;
+    }
+  }
 }
 
-/* Empty states */
+/* ============================================
+   EMPTY STATE
+   ============================================ */
+
 .empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
   padding: 60px 20px;
   text-align: center;
+
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 16px;
@@ -69,14 +95,21 @@
     display: flex;
     align-items: center;
     justify-content: center;
+
     width: 64px;
     height: 64px;
+
     border-radius: 50%;
     background: var(--color-bg);
     color: var(--color-border);
+
     margin-bottom: 16px;
 
-    mat-icon { font-size: 30px; height: 30px; width: 30px; }
+    mat-icon {
+      font-size: 30px;
+      height: 30px;
+      width: 30px;
+    }
   }
 
   h3 {
@@ -101,30 +134,39 @@
   }
 }
 
-/* Card grid */
-.doctor-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 18px;
-  align-items: stretch;
-}
+/* ============================================
+   DOCTOR GRID
+   flex instead of CSS grid so a partial last
+   row never stretches a lone card full-width
+   ============================================ */
 
 .doctor-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 20px;
   align-items: stretch;
 }
 
+/* ============================================
+   DOCTOR CARD
+   ============================================ */
+
 .doctor-card {
   display: flex;
   flex-direction: column;
-  height: 100%;
+
+  flex: 1 1 280px;
+  max-width: 320px;
+
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 20px;
+
   overflow: hidden;
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
+
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
 
   &:hover {
     transform: translateY(-4px);
@@ -132,142 +174,239 @@
   }
 }
 
-/* ---------- Wash header ---------- */
+/* ============================================
+   CARD HEADER / WASH
+   ============================================ */
+
 .card-wash {
   position: relative;
+
   padding: 30px 20px 22px;
+
   text-align: center;
-  background:
-    radial-gradient(circle at 50% 0%, rgba(15, 94, 90, 0.14), transparent 65%),
-    linear-gradient(180deg, var(--color-primary-light) 0%, var(--color-surface) 100%);
+
+  background: linear-gradient(
+    180deg,
+    var(--color-primary-light) 0%,
+    var(--color-surface) 100%
+  );
+
+  /* --------------------------------------------
+     Card Menu Button
+     -------------------------------------------- */
 
   .card-menu-trigger {
     position: absolute;
     top: 8px;
     right: 8px;
-    color: var(--color-ink-soft);
+
     width: 32px;
     height: 32px;
+
+    color: var(--color-ink-soft);
+
     line-height: 32px;
 
-    mat-icon { font-size: 18px; height: 18px; width: 18px; }
+    background: transparent !important;
 
-    &:hover { color: var(--color-ink); background: rgba(255, 255, 255, 0.6); }
+    &:hover {
+      color: var(--color-ink);
+      background: rgba(255, 255, 255, 0.6) !important;
+    }
+
+    mat-icon {
+      font-size: 18px;
+      height: 18px;
+      width: 18px;
+    }
   }
+
+  /* --------------------------------------------
+     Avatar
+     -------------------------------------------- */
 
   .avatar-wrap {
     width: 84px;
     height: 84px;
+
     margin: 0 auto 12px;
+
     border-radius: 50%;
     overflow: hidden;
+
     border: 3px solid var(--color-surface);
+
     box-shadow: 0 4px 14px rgba(15, 35, 46, 0.12);
 
     .avatar-photo {
       width: 100%;
       height: 100%;
+
       object-fit: cover;
+      display: block;
     }
 
     .avatar-initials {
       display: flex;
       align-items: center;
       justify-content: center;
+
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+
+      background: linear-gradient(
+        135deg,
+        var(--color-primary),
+        var(--color-primary-dark)
+      );
+
       color: #fff;
+
       font-family: var(--font-display);
       font-size: 24px;
       font-weight: 700;
     }
   }
 
+  /* --------------------------------------------
+     Status Pill
+     -------------------------------------------- */
+
   .status-pill {
     display: inline-flex;
     align-items: center;
     gap: 5px;
+
     padding: 3px 11px;
+
     border-radius: 20px;
-    background: #E3F5EC;
+
+    background: #e3f5ec;
     color: var(--color-success);
+
     font-family: var(--font-body);
     font-size: 11px;
     font-weight: 600;
+
     margin-bottom: 10px;
 
     .dot {
       width: 5px;
       height: 5px;
+
       border-radius: 50%;
+
       background: var(--color-success);
     }
 
     &.inactive {
-      background: #F1F2F4;
+      background: #f1f2f4;
       color: var(--color-ink-soft);
-      .dot { background: var(--color-ink-soft); }
+
+      .dot {
+        background: var(--color-ink-soft);
+      }
     }
   }
 
+  /* --------------------------------------------
+     Doctor ID
+     -------------------------------------------- */
+
   .doctor-id {
     display: block;
+
     font-family: var(--font-body);
     font-size: 10px;
     font-weight: 600;
+
     color: var(--color-ink-soft);
+
     letter-spacing: 0.03em;
+
     margin-bottom: 4px;
   }
+
+  /* --------------------------------------------
+     Doctor Name
+     -------------------------------------------- */
 
   .doctor-name {
     font-family: var(--font-display);
     font-size: 17px;
     font-weight: 600;
+
     color: var(--color-ink);
+
     margin: 0 0 6px;
   }
+
+  /* --------------------------------------------
+     Specialization
+     -------------------------------------------- */
 
   .specialization-row {
     display: inline-flex;
     align-items: center;
+
     gap: 5px;
+
     font-family: var(--font-body);
     font-size: 13px;
     font-weight: 500;
+
     color: var(--color-primary);
 
-    mat-icon { font-size: 15px; height: 15px; width: 15px; }
+    mat-icon {
+      font-size: 15px;
+      height: 15px;
+      width: 15px;
+    }
   }
 }
 
-/* ---------- White body ---------- */
+/* ============================================
+   CARD BODY
+   ============================================ */
+
 .card-body {
   display: flex;
   flex-direction: column;
+
   flex: 1;
+
   padding: 18px 20px 20px;
+
+  background: var(--color-surface);
 }
+
+/* ============================================
+   CARD META
+   ============================================ */
 
 .card-meta {
   display: flex;
   align-items: center;
   justify-content: center;
+
   gap: 20px;
+
   padding-bottom: 16px;
 
   .meta-item {
     display: flex;
     flex-direction: column;
     align-items: center;
+
     gap: 2px;
 
     .meta-label {
       font-family: var(--font-body);
       font-size: 10.5px;
       font-weight: 600;
+
       color: var(--color-ink-soft);
+
       text-transform: uppercase;
       letter-spacing: 0.04em;
     }
@@ -276,6 +415,7 @@
       font-family: var(--font-display);
       font-size: 15px;
       font-weight: 700;
+
       color: var(--color-ink);
     }
   }
@@ -283,32 +423,262 @@
   .meta-divider {
     width: 1px;
     height: 26px;
+
     background: var(--color-border);
   }
 }
 
+/* ============================================
+   QUALIFICATION CHIPS
+   ============================================ */
+
 .qual-chips {
   display: flex;
   flex-wrap: wrap;
+
   justify-content: center;
+
   gap: 6px;
+
   margin-top: auto;
   padding-top: 14px;
+
   border-top: 1px solid var(--color-border);
 
   .qual-chip {
     padding: 3px 11px;
+
     border-radius: 12px;
+
     background: var(--color-bg);
     border: 1px solid var(--color-border);
+
     font-family: var(--font-body);
     font-size: 11px;
     font-weight: 500;
+
     color: var(--color-ink-soft);
   }
 }
 
-::ng-deep mat-paginator {
-  background: transparent;
-  font-family: var(--font-body);
+/* ============================================
+   ANGULAR MATERIAL MENU
+   ============================================ */
+
+::ng-deep .card-menu-trigger.mat-mdc-icon-button {
+  background: transparent !important;
+}
+
+::ng-deep .mat-mdc-menu-panel {
+  background: var(--color-surface) !important;
+}
+
+/* ============================================
+   PAGINATOR
+   ============================================ */
+
+.paginator-wrap {
+  display: flex;
+  justify-content: center;
+
+  margin-top: 4px;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-border);
+
+  ::ng-deep mat-paginator,
+  ::ng-deep .mat-mdc-paginator {
+    background: transparent !important;
+    font-family: var(--font-body);
+  }
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+  .list-toolbar {
+    align-items: stretch;
+
+    .toolbar-info {
+      width: 100%;
+    }
+
+    .toolbar-search {
+      flex-basis: 100%;
+      max-width: none;
+    }
+  }
+
+  .doctor-grid {
+    gap: 16px;
+  }
+
+  .doctor-card {
+    flex-basis: 260px;
+  }
+}
+
+/* ============================================
+   SMALL SCREENS
+   Below 600px a 2-up card grid gets cramped and
+   text-heavy vertical cards force too much
+   scrolling, so cards switch to a compact,
+   list-style layout: avatar + info side by side
+   up top, meta/chips below, full width.
+   ============================================ */
+
+@media (max-width: 600px) {
+  .doctor-page {
+    gap: 16px;
+  }
+
+  .list-toolbar {
+    padding: 16px;
+
+    .toolbar-info {
+      gap: 10px;
+
+      .toolbar-icon {
+        width: 38px;
+        height: 38px;
+        min-width: 38px;
+
+        mat-icon {
+          font-size: 20px;
+          height: 20px;
+          width: 20px;
+        }
+      }
+
+      h3 {
+        font-size: 14px;
+      }
+
+      p {
+        font-size: 12px;
+      }
+    }
+  }
+
+  .doctor-grid {
+    gap: 12px;
+  }
+
+  .doctor-card {
+    flex-basis: 100%;
+    max-width: none;
+    border-radius: 16px;
+  }
+
+  .card-wash {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    column-gap: 14px;
+    row-gap: 4px;
+    padding: 14px 46px 14px 14px;
+    text-align: left;
+
+    background: linear-gradient(
+      120deg,
+      var(--color-primary-light) 0%,
+      var(--color-surface) 85%
+    );
+
+    .card-menu-trigger {
+      top: 6px;
+      right: 6px;
+      width: 40px;
+      height: 40px;
+      line-height: 40px;
+
+      mat-icon {
+        font-size: 20px;
+        height: 20px;
+        width: 20px;
+      }
+    }
+
+    .avatar-wrap {
+      grid-column: 1;
+      grid-row: 1 / span 4;
+      align-self: center;
+
+      width: 56px;
+      height: 56px;
+      margin: 0;
+
+      .avatar-initials {
+        font-size: 19px;
+      }
+    }
+
+    .doctor-id {
+      grid-column: 2;
+      grid-row: 1;
+      margin-bottom: 0;
+    }
+
+    .doctor-name {
+      grid-column: 2;
+      grid-row: 2;
+      margin: 0;
+      font-size: 15px;
+    }
+
+    .specialization-row {
+      grid-column: 2;
+      grid-row: 3;
+    }
+
+    .status-pill {
+      grid-column: 2;
+      grid-row: 4;
+      justify-self: start;
+      margin-bottom: 0;
+    }
+  }
+
+  .card-body {
+    padding: 12px 16px 14px;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .card-meta {
+    justify-content: flex-start;
+    gap: 28px;
+    padding-bottom: 10px;
+
+    .meta-item {
+      align-items: flex-start;
+    }
+  }
+
+  .qual-chips {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 360px) {
+  .card-wash {
+    grid-template-columns: 48px 1fr;
+    padding: 12px 40px 12px 12px;
+
+    .avatar-wrap {
+      width: 48px;
+      height: 48px;
+
+      .avatar-initials {
+        font-size: 16px;
+      }
+    }
+  }
+
+  .card-body {
+    padding: 10px 12px 12px;
+  }
+
+  .card-meta {
+    gap: 20px;
+  }
 }

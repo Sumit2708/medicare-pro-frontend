@@ -18,15 +18,8 @@
 
 @media (max-width: 900px) {
   .page-content {
-    margin-left: 76px;
-    padding: 20px 16px;
-  }
-}
-
-@media (max-width: 640px) {
-  .page-content {
     margin-left: 0; // sidebar is off-canvas here, not pushing content
-    padding: 18px 14px;
+    padding: 20px 16px;
   }
 }
 
@@ -35,7 +28,7 @@
   inset: 0;
   top: 64px;
   background: rgba(0, 0, 0, 0.4);
-  z-index: 1050; // above navbar (1000) and mobile search overlay (999), below the drawer (1100)
+  z-index: 1050; // above navbar (1000), below the drawer (1100)
   animation: fadeIn 0.2s ease;
 }
 

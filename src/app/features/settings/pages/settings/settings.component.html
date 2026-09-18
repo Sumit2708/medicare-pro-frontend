@@ -7,21 +7,21 @@
 
 <div class="settings-shell">
   <!-- Nav rail -->
-  <nav class="settings-nav">
-    @for (section of sections; track section.id) {
-      <button
-        type="button"
-        class="nav-item"
-        [class.active]="activeSection === section.id"
-        (click)="activeSection = section.id">
-        <div class="nav-icon"><mat-icon>{{ section.icon }}</mat-icon></div>
-        <div class="nav-text">
-          <span class="nav-label">{{ section.label }}</span>
-          <span class="nav-description">{{ section.description }}</span>
-        </div>
-      </button>
-    }
-  </nav>
+ <nav class="settings-nav">
+  @for (section of visibleSections; track section.id) {
+    <button
+      type="button"
+      class="nav-item"
+      [class.active]="activeSection === section.id"
+      (click)="activeSection = section.id">
+      <div class="nav-icon"><mat-icon>{{ section.icon }}</mat-icon></div>
+      <div class="nav-text">
+        <span class="nav-label">{{ section.label }}</span>
+        <span class="nav-description">{{ section.description }}</span>
+      </div>
+    </button>
+  }
+</nav>
 
   <!-- Content -->
   <div class="settings-content">

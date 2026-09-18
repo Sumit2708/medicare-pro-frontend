@@ -32,7 +32,7 @@ export class SidebarComponent implements OnInit {
     { label: 'Appointments', icon: 'event', route: '/appointments', section: 'Patient care',
       roles: [UserRole.ADMIN, UserRole.DOCTOR, UserRole.RECEPTIONIST] },
     { label: 'Billing', icon: 'receipt', route: '/billing', section: 'General',
-      roles: [UserRole.ADMIN, UserRole.RECEPTIONIST] },
+      roles: [UserRole.ADMIN, UserRole.RECEPTIONIST, UserRole.DOCTOR] },
     { label: 'Reports', icon: 'assessment', route: '/reports', section: 'Admin',
       roles: [UserRole.ADMIN] },
     { label: 'Settings', icon: 'settings', route: '/settings', section: 'General',

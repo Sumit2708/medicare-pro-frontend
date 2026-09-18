@@ -620,7 +620,7 @@ mat-card {
       .status-dot { background: var(--color-danger); }
     }
 
-    &.partial {
+    &.chekedIn {
       background: #fcefda;
       color: var(--color-accent);
       .status-dot { background: var(--color-accent); }

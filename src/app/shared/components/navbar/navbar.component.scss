@@ -127,9 +127,6 @@
     flex-shrink: 0;
   }
 
-  // Constrain the bell's host element directly — this works even though the
-  // component has its own template, because we're styling the host tag from
-  // the parent, not reaching inside its view.
   app-notification-bell {
     display: flex;
     align-items: center;
@@ -200,7 +197,6 @@
                   background 0.15s ease;
     }
 
-    // Morph into an X when open
     &.is-open {
       .menu-toggle-bar:nth-child(1) {
         transform: translateY(6px) rotate(45deg);
@@ -341,10 +337,16 @@
     }
   }
 
-  @media (max-width: 960px) {
+  // Tablet and below: menu-toggle appears here too now, matching the
+  // sidebar's off-canvas breakpoint, so there's always a way to open it.
+  @media (max-width: 900px) {
     .brand-tagline { display: none; }
     .profile-meta .profile-role { display: none; }
     .profile-meta .profile-name { max-width: 90px; }
+
+    .menu-toggle {
+      display: inline-flex;
+    }
   }
 
   // Below this point the navbar has to fit: menu-toggle + full brand name +
@@ -356,7 +358,6 @@
     gap: 4px;
 
     .menu-toggle {
-      display: inline-flex;
       width: 32px;
       height: 32px;
     }
@@ -369,10 +370,8 @@
     }
     .nav-divider { display: none; }
 
-    // Spacer no longer forces 8px of dead space it can't spare.
     .spacer { min-width: 0; }
 
-    // Brand is fixed — it will never be the thing that gets squeezed.
     .brand {
       flex-shrink: 0;
       gap: 6px;
@@ -390,8 +389,6 @@
       font-size: 12.5px;
     }
 
-    // Every remaining action shrinks to make room — nothing here is load-
-    // bearing for reading the clinic name, unlike the brand.
     app-notification-bell {
       width: 32px;
       height: 32px;
@@ -410,8 +407,6 @@
     }
   }
 
-  // Extra-small phones (iPhone SE and similar ~320-360px). Shrinks a little
-  // further for headroom, still never touching the brand name's visibility.
   @media (max-width: 360px) {
     padding: 0 8px !important;
     gap: 2px;

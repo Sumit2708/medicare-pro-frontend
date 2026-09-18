@@ -25,6 +25,8 @@ import { AuthService } from '../../../../core/services/auth/auth.service';
 import { ProfileService } from '../../services/profile/profile.service';
 import { MatIcon } from '@angular/material/icon';
 import { NotificationService } from '../../../../core/services/notification/notification.service';
+import { UserRole } from '../../../../core/enums/user-role.enum';
+import { SettingsSection } from '../../model/settings.model';
 type WorkingDayForm = FormGroup<{
   day: FormControl<string>;
   enabled: FormControl<boolean>;
@@ -49,8 +51,6 @@ type WorkingDayForm = FormGroup<{
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.scss',
 })
-
-
 export class SettingsComponent {
   clinicForm: FormGroup;
   billingForm: FormGroup;
@@ -67,15 +67,42 @@ export class SettingsComponent {
   showConfirmPassword = false;
 
   // Add near the top of the class:
-sections = [
-  { id: 'clinic', label: 'Clinic Information', description: 'Name, address, contact details', icon: 'storefront' },
-  { id: 'billing', label: 'Billing', description: 'Fees, GST, invoice defaults', icon: 'payments' },
-  { id: 'hours', label: 'Working Hours', description: 'Weekly schedule', icon: 'schedule' },
-  { id: 'profile', label: 'Profile', description: 'Your account details', icon: 'person' },
-  { id: 'security', label: 'Security', description: 'Password & login', icon: 'lock' },
-];
-activeSection = 'clinic';
-  
+  sections: SettingsSection[] = [
+    {
+      id: 'profile',
+      label: 'Profile',
+      description: 'Your account details',
+      icon: 'person',
+    }, // all roles
+    {
+      id: 'clinic',
+      label: 'Clinic Information',
+      description: 'Name, address, contact details',
+      icon: 'storefront',
+      roles: [UserRole.ADMIN],
+    },
+    {
+      id: 'hours',
+      label: 'Working Hours',
+      description: 'Weekly schedule',
+      icon: 'schedule',
+      roles: [UserRole.ADMIN, UserRole.RECEPTIONIST],
+    },
+    {
+      id: 'billing',
+      label: 'Billing',
+      description: 'Fees, GST, invoice defaults',
+      icon: 'payments',
+      roles: [UserRole.ADMIN],
+    },
+    {
+      id: 'security',
+      label: 'Security',
+      description: 'Password & login',
+      icon: 'lock',
+    }, // all roles
+  ];
+  activeSection = 'clinic';
 
   constructor(
     private fb: FormBuilder,
@@ -134,57 +161,82 @@ activeSection = 'clinic';
     });
   }
 
+  // NEW: sections filtered by the logged-in user's role
+  get visibleSections(): SettingsSection[] {
+    const role = this.currentUser?.role;
+    return this.sections.filter(
+      (s) => !s.roles || (role && s.roles.includes(role)),
+    );
+  }
+
   ngOnInit(): void {
     this.loadSettings();
     this.loadProfile();
   }
 
-
-
-
-
-
-get activeSectionMeta() {
-  return this.sections.find(s => s.id === this.activeSection)!;
-}
-
-get activeForm(): FormGroup {
-  switch (this.activeSection) {
-    case 'clinic': return this.clinicForm;
-    case 'billing': return this.billingForm;
-    case 'hours': return this.workingHoursForm;
-    case 'profile': return this.profileForm;
-    case 'security': return this.passwordForm;
-    default: return this.clinicForm;
+  get activeSectionMeta() {
+    return this.sections.find((s) => s.id === this.activeSection)!;
   }
-}
 
-saveActiveSection(): void {
-  switch (this.activeSection) {
-    case 'clinic': return this.saveClinicInformation();
-    case 'billing': return this.saveBillingSettings();
-    case 'hours': return this.saveWorkingHours();
-    case 'profile': return this.saveProfile();
-    case 'security': return this.changePassword();
+  get activeForm(): FormGroup {
+    switch (this.activeSection) {
+      case 'clinic':
+        return this.clinicForm;
+      case 'billing':
+        return this.billingForm;
+      case 'hours':
+        return this.workingHoursForm;
+      case 'profile':
+        return this.profileForm;
+      case 'security':
+        return this.passwordForm;
+      default:
+        return this.clinicForm;
+    }
   }
-}
 
-discardChanges(): void {
-  switch (this.activeSection) {
-    case 'clinic': this.clinicForm.patchValue(this.settings.clinic); break;
-    case 'billing': this.billingForm.patchValue(this.settings.billing); break;
-    case 'hours':
-      this.workingHoursForm.setControl(
-        'days',
-        new FormArray(this.settings.workingHours.days.map((day) => this.createWorkingDay(day))),
-      );
-      break;
-    case 'profile': this.loadProfile(); break;
-    case 'security': this.passwordForm.reset(); break;
+  saveActiveSection(): void {
+    switch (this.activeSection) {
+      case 'clinic':
+        return this.saveClinicInformation();
+      case 'billing':
+        return this.saveBillingSettings();
+      case 'hours':
+        return this.saveWorkingHours();
+      case 'profile':
+        return this.saveProfile();
+      case 'security':
+        return this.changePassword();
+    }
   }
-  this.activeForm.markAsPristine();
-}
 
+  discardChanges(): void {
+    switch (this.activeSection) {
+      case 'clinic':
+        this.clinicForm.patchValue(this.settings.clinic);
+        break;
+      case 'billing':
+        this.billingForm.patchValue(this.settings.billing);
+        break;
+      case 'hours':
+        this.workingHoursForm.setControl(
+          'days',
+          new FormArray(
+            this.settings.workingHours.days.map((day) =>
+              this.createWorkingDay(day),
+            ),
+          ),
+        );
+        break;
+      case 'profile':
+        this.loadProfile();
+        break;
+      case 'security':
+        this.passwordForm.reset();
+        break;
+    }
+    this.activeForm.markAsPristine();
+  }
 
   saveClinicInformation(): void {
     if (this.clinicForm.invalid || !this.settings) {
@@ -431,6 +483,10 @@ discardChanges(): void {
 
       role: user.role,
     });
+
+    if (!this.visibleSections.some((s) => s.id === this.activeSection)) {
+      this.activeSection = this.visibleSections[0]?.id ?? 'profile';
+    }
   }
 
   saveProfile(): void {

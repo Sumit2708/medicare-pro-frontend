@@ -1,237 +1,48 @@
-// import { Component, ViewChild } from '@angular/core';
-// import { MatPaginator } from '@angular/material/paginator';
-// import { MatSort, MatSortHeader } from '@angular/material/sort';
-// import {
-//   MatTableDataSource,
-//   MatTable,
-//   MatColumnDef,
-//   MatHeaderCell,
-//   MatHeaderCellDef,
-//   MatCell,
-//   MatCellDef,
-//   MatHeaderRowDef,
-//   MatRowDef,
-//   MatTableModule,
-// } from '@angular/material/table';
-// import { MatIconModule } from '@angular/material/icon';
-// import { DoctorService } from '../../services/doctor.service';
-// import { MatButton, MatIconButton } from '@angular/material/button';
-// import { MatCard } from '@angular/material/card';
-// import { Router } from '@angular/router';
-// import { MatIcon } from '@angular/material/icon';
-// import {
-//   MatFormField,
-//   MatFormFieldControl,
-//   MatFormFieldModule,
-//   MatLabel,
-// } from '@angular/material/form-field';
-// import { MatInputModule } from '@angular/material/input';
-// import { CommonModule } from '@angular/common';
-// import { MatDialog } from '@angular/material/dialog';
-// import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
-// import { NotificationService } from '../../../../core/services/notification/notification.service';
-// import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
-// import { SearchBoxComponent } from '../../../../shared/components/search-box/search-box.component';
-// import { DialogService } from '../../../../core/services/dialog/dialog.service';
-
-// @Component({
-//   selector: 'app-doctor-list',
-//   imports: [
-//     MatButton,
-//     MatCard,
-//     MatTable,
-//     MatSort,
-//     MatColumnDef,
-//     MatHeaderCell,
-//     MatHeaderCellDef,
-//     MatSortHeader,
-//     MatCell,
-//     MatCellDef,
-//     MatPaginator,
-//     MatHeaderRowDef,
-//     MatRowDef,
-//     MatTableModule,
-//     MatIcon,
-//     MatFormFieldModule,
-//     MatInputModule,
-//     MatIconModule,
-//     CommonModule,
-//     PageHeaderComponent,
-//     SearchBoxComponent,
-//     MatIconButton,
-//   ],
-//   templateUrl: './doctor-list.component.html',
-//   styleUrl: './doctor-list.component.scss',
-// })
-// // export class DoctorListComponent {
-// //   displayedColumns: string[] = [
-// //     'id',
-// //     'name',
-// //     'specialization',
-// //     'fee',
-// //     'status',
-// //     'actions',
-// //   ];
-// //   dataSource = new MatTableDataSource<any>();
-
-// //   private _paginator!: MatPaginator;
-// //   @ViewChild(MatPaginator) set paginator(mp: MatPaginator) {
-// //     this._paginator = mp;
-// //     if (mp) {
-// //       this.dataSource.paginator = mp;
-// //     }
-// //   }
-// //   get paginator(): MatPaginator {
-// //     return this._paginator;
-// //   }
-
-// //   @ViewChild(MatSort) set sort(ms: MatSort) {
-// //     if (ms) {
-// //       this.dataSource.sort = ms;
-// //     }
-// //   } // displayedColumns: string[] = [
-// //   //   'id',
-// //   //   'name',
-// //   //   'specialization',
-// //   //   'fee',
-// //   //   'status',
-// //   //   'actions',
-// //   // ];
-// //   // dataSource = new MatTableDataSource<any>();
-
-// //   // @ViewChild(MatPaginator) paginator!: MatPaginator;
-// //   // @ViewChild(MatSort) sort!: MatSort;
-
-// //   constructor(
-// //     private doctorService: DoctorService,
-// //     private router: Router,
-// //     private notificationService: NotificationService,
-// //     private dialog: MatDialog,
-// //     private dialogService: DialogService,
-// //   ) {}
-
-// //   ngOnInit() {
-// //     this.getDoctors();
-// //   }
-
-// //   ngAfterViewInit() {
-// //     this.dataSource.paginator = this.paginator;
-// //     this.dataSource.sort = this.sort;
-// //   }
-
-// //   getDoctors() {
-// //     this.doctorService.getDoctors().subscribe((data: any) => {
-// //       this.dataSource.data = data;
-// //       // remove the two paginator/sort lines from here — no longer needed
-// //     });
-// //   }
-
-// //   getDoctorIndex(index: number): number {
-// //     if (!this.paginator) return index + 1;
-// //     return this.paginator.pageIndex * this.paginator.pageSize + index + 1;
-// //   }
-
-// //   // deleteDoctor(id: number) {
-// //   //   const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-// //   //     width: '400px',
-// //   //     data: {
-// //   //       title: 'Delete Doctor',
-// //   //       message: 'Are you sure you want to delete this doctor?',
-// //   //     },
-// //   //   });
-
-// //   //   dialogRef.afterClosed().subscribe((result) => {
-// //   //     if (result) {
-// //   //       this.doctorService.deleteDoctor(id).subscribe({
-// //   //         next: () => {
-// //   //           this.notificationService.success('Doctor deleted successfully');
-// //   //           this.getDoctors();
-// //   //         },
-// //   //         error: () => {
-// //   //           this.notificationService.error('Failed to delete doctor');
-// //   //         },
-// //   //       });
-// //   //     }
-// //   //   });
-// //   // }
-
-// //   deleteDoctor(id: number): void {
-// //     this.dialogService
-// //       .confirm({
-// //         title: 'Delete Doctor',
-
-// //         message: 'Are you sure you want to delete this doctor?',
-
-// //         confirmText: 'Delete',
-
-// //         cancelText: 'Cancel',
-// //       })
-// //       .subscribe((result) => {
-// //         if (result) {
-// //           this.doctorService.deleteDoctor(id).subscribe({
-// //             next: () => {
-// //               this.notificationService.success('Doctor deleted successfully');
-// //               this.getDoctors();
-// //             },
-// //             error: () => {
-// //               this.notificationService.error('Failed to delete doctor');
-// //             },
-// //           });
-// //         }
-// //       });
-// //   }
-
-// //   navToEditDoctor(data: any) {
-// //     this.router.navigate(['doctors/edit'], { queryParams: { id: data.id } });
-// //     console.log(data.id, 'data of docInfo');
-// //   }
-
-// //   applyFilter(value: string) {
-// //     this.dataSource.filter = value.trim().toLowerCase();
-// //   }
-
-// //   openAddDoctor() {
-// //     this.router.navigate(['doctors/add']);
-// //   }
-// // }
-
-
-
-
-import { Component, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatIconModule } from '@angular/material/icon';
-import { DoctorService } from '../../services/doctor.service';
-import { MatButtonModule } from '@angular/material/button';
-import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { Component, Input, ViewChild } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { MatCard, MatCardContent } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { AppointmentsChartComponent } from '../../../dashboard/components/appointments-chart/appointments-chart.component';
+import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state.component';
+import { ChartCardComponent } from '../../../../shared/components/chart-card/chart-card.component';
+import { DoctorDashboardViewModel, DoctorScheduleItem } from '../../../../shared/models/doctor-dashboard.viewmodel';
+import { AuthService } from '../../../../core/services/auth/auth.service';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { DialogService } from '../../../../core/services/dialog/dialog.service';
+import { DoctorService } from '../../services/doctor.service';
 import { NotificationService } from '../../../../core/services/notification/notification.service';
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
 import { SearchBoxComponent } from '../../../../shared/components/search-box/search-box.component';
-import { DialogService } from '../../../../core/services/dialog/dialog.service';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatMenuModule } from '@angular/material/menu';
-import { EmptyStateComponent } from "../../../../shared/components/empty-state/empty-state.component";
+import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
+
 
 @Component({
-  selector: 'app-doctor-list',
+  selector: 'app-doctor-dashboard',
+  standalone: true,
   imports: [
     CommonModule,
-    MatTableModule,
-    MatPaginator,
-    MatIconModule,
+    RouterLink,
+    MatCard,
+    MatCardContent,
     MatButtonModule,
-    MatTooltipModule,
-    MatMenuModule,
+    MatIcon,
+    ChartCardComponent,
+    AppointmentsChartComponent,
+    EmptyStateComponent,
     PageHeaderComponent,
     SearchBoxComponent,
-    EmptyStateComponent
+    MatPaginator,
+    MatMenu,
+    MatMenuTrigger
 ],
-  templateUrl: './doctor-list.component.html',
+    templateUrl: './doctor-list.component.html',
   styleUrl: './doctor-list.component.scss',
 })
 export class DoctorListComponent {
+
   dataSource = new MatTableDataSource<any>();
 
   private _paginator!: MatPaginator;
@@ -245,12 +56,22 @@ export class DoctorListComponent {
     return this._paginator;
   }
 
-  constructor(
-    private doctorService: DoctorService,
-    private router: Router,
-    private notificationService: NotificationService,
+
+
+  @Input({ required: true }) dashboard!: DoctorDashboardViewModel;
+
+  today = new Date();
+   
+  constructor(private authService: AuthService,
     private dialogService: DialogService,
+    private router: Router,
+    private doctorService: DoctorService,
+    private notificationService: NotificationService
   ) {}
+
+  get currentUserName(): string {
+    return this.authService.getCurrentUser()?.name ?? 'Doctor';
+  }
 
   ngOnInit() {
     this.getDoctors();
@@ -269,6 +90,24 @@ export class DoctorListComponent {
     return parts.slice(0, 2).map((p) => p[0].toUpperCase()).join('');
   }
 
+  statusClass(status: string): string {
+    switch (status) {
+      case 'Completed':
+        return 'status-success';
+      case 'Cancelled':
+        return 'status-danger';
+      default:
+        return 'status-info';
+    }
+  }
+
+  trackBySchedule(index: number, item: DoctorScheduleItem): string {
+    return item.patientName + item.time;
+  }
+
+  trackByAppt(index: number, item: DoctorScheduleItem): string {
+    return item.patientName + item.date + item.time;
+  }
   getQualifications(raw: string): string[] {
     if (!raw) return [];
     return raw.split(',').map((q) => q.trim()).filter(Boolean);

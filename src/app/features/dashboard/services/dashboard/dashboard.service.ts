@@ -14,7 +14,11 @@ import { AppointmentChartModel } from '../../models/appointment-chart.model';
 import { PaymentChartModel } from '../../models/payment-summary.model';
 import { DashboardFilter } from '../../../../core/enums/dashboard-filter.enum';
 import { DoctorDashboardViewModel } from '../../../../shared/models/doctor-dashboard.viewmodel';
-import { CheckInItem, DoctorAvailabilityItem, ReceptionistDashboardViewModel } from '../../../../shared/models/receptionist-dashboard.viewmodel';
+import {
+  CheckInItem,
+  DoctorAvailabilityItem,
+  ReceptionistDashboardViewModel,
+} from '../../../../shared/models/receptionist-dashboard.viewmodel';
 
 @Injectable({
   providedIn: 'root',
@@ -45,7 +49,7 @@ export class DashboardService {
         const totalDoctors = data.doctors.length;
 
         const todayAppointments = data.appointments.filter(
-          (appointment: any) => appointment.date == today
+          (appointment: any) => appointment.date == today,
         ).length;
 
         const todayCollectedRevenue = data.invoices
@@ -55,8 +59,6 @@ export class DashboardService {
               invoice.createdDate.split('T')[0] === today,
           )
           .reduce((sum, invoice) => sum + invoice.total, 0);
-
-
 
         // const recentAppointments = [...data.appointments]
         //   .sort(
@@ -68,9 +70,7 @@ export class DashboardService {
 
         const recentAppointments = [...data.appointments]
           .sort(
-            (a, b) =>
-              new Date(b.date).getTime() -
-              new Date(a.date).getTime(),
+            (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
           )
           .slice(0, 5)
           .map((appointment) => {
@@ -99,7 +99,6 @@ export class DashboardService {
             };
           });
 
-    
         const pendingInvoices = data.invoices
 
           .filter((invoice) => invoice.paymentStatus === PaymentStatus.PENDING)
@@ -120,7 +119,13 @@ export class DashboardService {
             };
           });
 
-        console.log('data', todayAppointments, todayCollectedRevenue, data , today);
+        console.log(
+          'data',
+          todayAppointments,
+          todayCollectedRevenue,
+          data,
+          today,
+        );
         return {
           totalPatients,
 
@@ -265,82 +270,117 @@ export class DashboardService {
 
   // }
 
-
-
-
-  getDoctorDashboardData(doctorId: number): Observable<DoctorDashboardViewModel> {
+ getDoctorDashboardData(
+  doctorId: number,
+): Observable<DoctorDashboardViewModel> {
   console.log('Doctor Dashboard ID:', doctorId);
 
   return forkJoin({
     patients: this.patientService.getPatients(),
     doctors: this.doctorService.getDoctors(),
     appointments: this.appointmentService.getAppointments(),
+    invoices: this.invoiceService.getInvoices(),
   }).pipe(
     map((data) => {
-
-      console.log('========== DOCTOR DASHBOARD DATA ==========');
-      console.log('Doctor ID:', doctorId);
-      console.log('Patients:', data.patients);
-      console.log('Doctors:', data.doctors);
-      console.log('Appointments:', data.appointments);
-
-      const doctor = data.doctors.find(
-        (d) => d.id === doctorId
-      );
-
-      console.log('Matched doctor:', doctor);
+      const doctor = data.doctors.find((d) => d.id === doctorId);
 
       const myAppointments = (data.appointments as any[]).filter(
-        (a) => a.doctorId === doctorId
+        (a) => a.doctorId === doctorId,
       );
 
-      console.log('My appointments:', myAppointments);
+      const myInvoices = (data.invoices as any[]).filter(
+        (inv) => inv.doctorId === doctorId,
+      );
 
-      // rest of your code...
       const today = new Date().toISOString().split('T')[0];
       const now = new Date();
 
       const todaySchedule = myAppointments
         .filter((a) => (a.appointmentDate ?? a.date) === today)
         .sort((a, b) =>
-          (a.appointmentTime ?? a.time).localeCompare(b.appointmentTime ?? b.time),
+          (a.appointmentTime ?? a.time).localeCompare(
+            b.appointmentTime ?? b.time,
+          ),
         )
         .map((a) => this.toScheduleItem(a, data.patients));
 
+      const nowDate = new Date();
       const upcomingAppointments = myAppointments
-        .filter((a) => (a.appointmentDate ?? a.date) > today)
-        .sort(
-          (a, b) =>
-            new Date(a.appointmentDate ?? a.date).getTime() -
-            new Date(b.appointmentDate ?? b.date).getTime(),
-        )
+        .filter((a) => {
+          const time = a.appointmentTime ?? a.time;
+          const apptDateTime = new Date(
+            `${a.appointmentDate ?? a.date}T${time}`,
+          );
+          return (
+            apptDateTime > nowDate &&
+            a.status !== 'Cancelled' &&
+            a.status !== 'Completed'
+          );
+        })
+        .sort((a, b) => {
+          const aTime = new Date(
+            `${a.appointmentDate ?? a.date}T${a.appointmentTime ?? a.time}`,
+          ).getTime();
+          const bTime = new Date(
+            `${b.appointmentDate ?? b.date}T${b.appointmentTime ?? b.time}`,
+          ).getTime();
+          return aTime - bTime;
+        })
         .slice(0, 5)
         .map((a) => this.toScheduleItem(a, data.patients));
 
-      const patientIds = Array.from(new Set(myAppointments.map((a) => a.patientId)));
+      const patientIds = Array.from(
+        new Set(myAppointments.map((a) => a.patientId)),
+      );
 
-      const recentPatients: DoctorDashboardViewModel['recentPatients'] = patientIds
-        .map((pid) => {
-          const patient = data.patients.find((p: any) => p.id === pid);
-          const visits = myAppointments.filter((a) => a.patientId === pid);
-          const last = [...visits].sort(
+      const recentPatients: DoctorDashboardViewModel['recentPatients'] =
+        patientIds
+          .map((pid) => {
+            const patient = data.patients.find((p: any) => p.id === pid);
+            const visits = myAppointments.filter((a) => a.patientId === pid);
+            const last = [...visits].sort(
+              (a, b) =>
+                new Date(b.appointmentDate ?? b.date).getTime() -
+                new Date(a.appointmentDate ?? a.date).getTime(),
+            )[0];
+            return {
+              name: patient?.name ?? 'Unknown',
+              lastVisit: last ? (last.appointmentDate ?? last.date) : '',
+              visitCount: visits.length,
+            };
+          })
+          .sort(
             (a, b) =>
-              new Date(b.appointmentDate ?? b.date).getTime() -
-              new Date(a.appointmentDate ?? a.date).getTime(),
-          )[0];
-          return {
-            name: patient?.name ?? 'Unknown',
-            lastVisit: last ? last.appointmentDate ?? last.date : '',
-            visitCount: visits.length,
-          };
-        })
-        .sort((a, b) => new Date(b.lastVisit).getTime() - new Date(a.lastVisit).getTime())
-        .slice(0, 6);
+              new Date(b.lastVisit).getTime() -
+              new Date(a.lastVisit).getTime(),
+          )
+          .slice(0, 5);
 
       const monthlyAppointmentsCount = myAppointments.filter((a) => {
         const d = new Date(a.appointmentDate ?? a.date);
-        return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+        return (
+          d.getMonth() === now.getMonth() &&
+          d.getFullYear() === now.getFullYear()
+        );
       }).length;
+
+      // This month's realized income: PAID invoices only, created this month
+      const monthlyIncome = myInvoices
+        .filter((inv) => {
+          if (inv.paymentStatus !== 'Paid') return false;
+          const d = new Date(inv.createdDate);
+          return (
+            d.getMonth() === now.getMonth() &&
+            d.getFullYear() === now.getFullYear()
+          );
+        })
+        .reduce((sum, inv) => sum + (inv.total ?? 0), 0);
+
+      // All-time total, in case you want to show both on the card
+      const totalIncome = myInvoices
+        .filter((inv) => inv.paymentStatus === 'Paid')
+        .reduce((sum, inv) => sum + (inv.total ?? 0), 0);
+
       return {
         doctorName: doctor?.name ?? 'Doctor',
         specialization: doctor?.specialization ?? '',
@@ -348,6 +388,8 @@ export class DashboardService {
         todayAppointmentsCount: todaySchedule.length,
         totalPatients: patientIds.length,
         monthlyAppointmentsCount,
+        monthlyIncome,
+        totalIncome,
         todaySchedule,
         upcomingAppointments,
         recentPatients,
@@ -358,112 +400,150 @@ export class DashboardService {
 }
 
 private toScheduleItem(a: any, patients: any[]): any {
-  const patient = patients.find((p) => p.id === a.patientId);
-  return {
-    patientName: patient?.name ?? 'Unknown',
-    date: a.appointmentDate ?? a.date,
-    time: a.appointmentTime ?? a.time,
-    status: a.status,
-  };
-}
+    const patient = patients.find((p) => p.id === a.patientId);
+    return {
+      patientName: patient?.name ?? 'Unknown',
+      date: a.appointmentDate ?? a.date,
+      time: a.appointmentTime ?? a.time,
+      status: a.status,
+    };
+  }
 
-private buildDoctorMonthlyTrend(appointments: any[]) {
-  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  return months.map((month, index) => ({
-    month,
-    appointments: appointments.filter(
-      (a) => new Date(a.appointmentDate ?? a.date).getMonth() === index,
-    ).length,
-  }));
-}
+  private buildDoctorMonthlyTrend(appointments: any[]) {
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    return months.map((month, index) => ({
+      month,
+      appointments: appointments.filter(
+        (a) => new Date(a.appointmentDate ?? a.date).getMonth() === index,
+      ).length,
+    }));
+  }
 
+  getReceptionistDashboardData(): Observable<ReceptionistDashboardViewModel> {
+    return forkJoin({
+      patients: this.patientService.getPatients(),
+      doctors: this.doctorService.getDoctors(),
+      appointments: this.appointmentService.getAppointments(),
+      invoices: this.invoiceService.getInvoices(),
+    }).pipe(
+      map((data) => {
+        const today = new Date().toISOString().split('T')[0];
 
-  
-getReceptionistDashboardData(): Observable<ReceptionistDashboardViewModel> {
-  return forkJoin({
-    patients: this.patientService.getPatients(),
-    doctors: this.doctorService.getDoctors(),
-    appointments: this.appointmentService.getAppointments(),
-    invoices: this.invoiceService.getInvoices(),
-  }).pipe(
-    map((data) => {
-      const today = new Date().toISOString().split('T')[0];
+        const todaysAppointments = (data.appointments as any[]).filter(
+          (a) => (a.appointmentDate ?? a.date) === today,
+        );
 
-      const todaysAppointments = (data.appointments as any[]).filter(
-        (a) => (a.appointmentDate ?? a.date) === today,
-      );
+        const todayCheckIns: CheckInItem[] = [...todaysAppointments]
+          .sort((a, b) =>
+            (a.appointmentTime ?? a.time ?? '').localeCompare(
+              a.appointmentTime ?? b.time ?? '',
+            ),
+          )
+          .map((a) => {
+            const patient = data.patients.find(
+              (p: any) => p.id === a.patientId,
+            );
+            const doctor = data.doctors.find((d: any) => d.id === a.doctorId);
+            const invoice = data.invoices.find(
+              (i: any) => i.appointmentId == a.id,
+            );
+            console.log('a:', a);
+            console.log('Invoice:', invoice);
+            return {
+              appointmentId: a.id,
+              patientName: patient?.name ?? 'Unknown',
+              doctorName: doctor?.name ?? 'Unknown',
+              time: a.appointmentTime ?? a.time,
+              date: a.appointmentDate ?? a.date,
+              status: a.status,
+              payemntAmount: invoice?.total ?? 0,
+              paymentStatus: invoice?.paymentStatus,
+            };
+          });
 
-      const todayCheckIns: CheckInItem[] = [...todaysAppointments]
-        .sort((a, b) =>
-          (a.appointmentTime ?? a.time ?? '').localeCompare(a.appointmentTime ?? b.time ?? ''),
-        )
-        .map((a) => {
-          const patient = data.patients.find((p: any) => p.id === a.patientId);
-          const doctor = data.doctors.find((d: any) => d.id === a.doctorId);
-          const invoice = data.invoices.find((i: any) => i.appointmentId == a.id);
-          console.log('a:', a);
-          console.log('Invoice:', invoice);
-          return {
-            appointmentId: a.id,
-            patientName: patient?.name ?? 'Unknown',
-            doctorName: doctor?.name ?? 'Unknown',
-            time: a.appointmentTime ?? a.time,
-            date: a.appointmentDate ?? a.date,
-            status: a.status,
-            payemntAmount: invoice?.total ?? 0,
-            paymentStatus: invoice?.paymentStatus,
-          };
-        });
+        const checkedInCount = todaysAppointments.filter(
+          (a) => a.status === 'Completed',
+        ).length;
 
-      const checkedInCount = todaysAppointments.filter(
-        (a) => a.status === 'Completed',
-      ).length;
+        const waitingCount = todaysAppointments.filter(
+          (a) => a.status === 'Scheduled',
+        ).length;
 
-      const waitingCount = todaysAppointments.filter(
-        (a) => a.status === 'Scheduled',
-      ).length;
-
-      const doctorsAvailability: DoctorAvailabilityItem[] = (data.doctors as any[]).map(
-        (d) => ({
+        const doctorsAvailability: DoctorAvailabilityItem[] = (
+          data.doctors as any[]
+        ).map((d) => ({
           id: d.id,
           name: d.name,
           specialization: d.specialization,
           photoUrl: d.photoUrl,
           status: d.status,
-          todayAppointmentsCount: todaysAppointments.filter((a) => a.doctorId === d.id)
-            .length,
-        }),
-      );
+          todayAppointmentsCount: todaysAppointments.filter(
+            (a) => a.doctorId === d.id,
+          ).length,
+        }));
 
-      const todayInvoices = data.invoices.filter(
-        (inv) => inv.createdDate?.split('T')[0] === today,
-      );
+        const todayInvoices = data.invoices.filter(
+          (inv) => inv.createdDate?.split('T')[0] === today,
+        );
 
-      const todayCollectedRevenue = todayInvoices
-        .filter((inv) => inv.paymentStatus === PaymentStatus.PAID)
-        .reduce((sum, inv) => sum + inv.total, 0);
+        const todayCollectedRevenue = todayInvoices
+          .filter((inv) => inv.paymentStatus === PaymentStatus.PAID)
+          .reduce((sum, inv) => sum + inv.total, 0);
 
-      const pendingToday = todayInvoices.filter(
-        (inv) => inv.paymentStatus === PaymentStatus.PENDING,
-      );
+        const pendingToday = todayInvoices.filter(
+          (inv) => inv.paymentStatus === PaymentStatus.PENDING,
+        );
 
-      const todayPendingAmount = pendingToday.reduce((sum, inv) => sum + inv.total, 0);
+        const todayPendingAmount = pendingToday.reduce(
+          (sum, inv) => sum + inv.total,
+          0,
+        );
 
-      const pendingInvoicesCount = data.invoices.filter(
-        (inv) => inv.paymentStatus === PaymentStatus.PENDING,
-      ).length;
+        const pendingInvoicesCount = data.invoices.filter(
+          (inv) => inv.paymentStatus === PaymentStatus.PENDING,
+        ).length;
 
-      return {
-        todayAppointmentsCount: todaysAppointments.length,
-        checkedInCount,
-        waitingCount,
-        todayCollectedRevenue,
-        todayPendingAmount,
-        pendingInvoicesCount,
-        todayCheckIns,
-        doctorsAvailability,
-      };
-    }),
-  );
-}
+        return {
+          todayAppointmentsCount: todaysAppointments.length,
+          checkedInCount,
+          waitingCount,
+          todayCollectedRevenue,
+          todayPendingAmount,
+          pendingInvoicesCount,
+          todayCheckIns,
+          doctorsAvailability,
+        };
+      }),
+    );
+  }
+
+
+
+//   getDoctorDashboardData(doctorId: string): Observable<DoctorDashboardViewModel> {
+//   return forkJoin({
+//     // ...existing forkJoin members (todaySchedule, upcomingAppointments, recentPatients, monthlyTrend)...
+//     monthlyIncome: this.invoiceService.getDoctorIncome(doctorId, {
+//       from: startOfMonth(new Date()),
+//       to: endOfMonth(new Date()),
+//     }),
+//   }).pipe(
+//     map((data) => ({
+//       ...data,
+//       // shape into DoctorDashboardViewModel
+//     })),
+//   );
+// }
 }

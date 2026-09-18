@@ -106,19 +106,36 @@
   }
 }
 
+/* Same card treatment as Patients/Receptionist: border + 12px radius + subtle shadow */
 .table-card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(15, 35, 46, 0.06);
   overflow: hidden;
 }
 
+/* Same scroll-container approach as receptionist's .table-scroll:
+   only the table scrolls horizontally, never the page. */
 .table-container {
+  width: 100%;
+  max-width: 100%;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 
   table {
     width: 100%;
+    min-width: 920px; // room for two labeled action buttons at full size
     background: transparent;
+    border-collapse: collapse;
+  }
+
+  // ============================================
+  // TABLE HEADER - NO BACKGROUND COLOR
+  // ============================================
+
+  .mat-mdc-header-row {
+    background: transparent !important;
   }
 
   th.mat-mdc-header-cell {
@@ -128,11 +145,27 @@
     color: var(--color-ink-soft);
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    background: var(--color-bg);
-    border-bottom: 1px solid var(--color-border);
+
+    background: transparent !important;
     padding: 14px 16px;
     white-space: nowrap;
+
+    border-bottom: 1px solid var(--color-border);
   }
+
+  .mat-mdc-table {
+    .mat-mdc-header-cell {
+      background: transparent !important;
+    }
+
+    .mat-mdc-header-row {
+      background: transparent !important;
+    }
+  }
+
+  // ============================================
+  // TABLE BODY
+  // ============================================
 
   td.mat-mdc-cell {
     font-family: var(--font-body);
@@ -148,10 +181,15 @@
     &:hover {
       background: var(--color-primary-light);
     }
+
     &:last-child td {
       border-bottom: none;
     }
   }
+
+  // ============================================
+  // ROW ID
+  // ============================================
 
   .row-id {
     font-family: var(--font-body);
@@ -159,6 +197,10 @@
     font-weight: 600;
     color: var(--color-ink-soft);
   }
+
+  // ============================================
+  // PERSON CHIP
+  // ============================================
 
   .person-chip {
     display: flex;
@@ -169,11 +211,14 @@
       display: flex;
       align-items: center;
       justify-content: center;
+
       width: 32px;
       height: 32px;
       min-width: 32px;
+
       border-radius: 50%;
       color: #fff;
+
       font-family: var(--font-display);
       font-size: 12px;
       font-weight: 700;
@@ -185,6 +230,7 @@
           var(--color-primary-dark)
         );
       }
+
       &.doctor {
         background: linear-gradient(135deg, var(--color-accent), #c97f1f);
       }
@@ -197,23 +243,39 @@
     }
   }
 
+  // ============================================
+  // DATE
+  // ============================================
+
   .date-text {
     font-weight: 500;
   }
+
+  // ============================================
+  // TIME
+  // ============================================
+
   .time-text {
     color: var(--color-ink-soft);
     font-size: 13px;
   }
 
+  // ============================================
+  // STATUS BADGE
+  // ============================================
+
   .status-badge {
     display: inline-flex;
     align-items: center;
     gap: 6px;
+
     padding: 4px 12px;
     border-radius: 20px;
+
     font-size: 12px;
     font-weight: 600;
     text-transform: capitalize;
+    white-space: nowrap;
 
     .status-dot {
       width: 6px;
@@ -224,14 +286,25 @@
     &.scheduled {
       background: var(--color-primary-light);
       color: var(--color-primary);
+
       .status-dot {
         background: var(--color-primary);
+      }
+    }
+
+    &.CheckedIn {
+      background: #e0f7f5;
+      color: #00897b;
+
+      .status-dot {
+        background: #00897b;
       }
     }
 
     &.completed {
       background: #e3f5ec;
       color: var(--color-success);
+
       .status-dot {
         background: var(--color-success);
       }
@@ -240,37 +313,168 @@
     &.cancelled {
       background: #fbe7e7;
       color: var(--color-danger);
+
       .status-dot {
         background: var(--color-danger);
       }
     }
   }
 
+  // ============================================
+  // ACTIONS
+  // Same row-action-btn treatment as Patients/
+  // Receptionist: stroked, icon+label buttons.
+  // The flex layout lives on the wrapper div
+  // INSIDE the td, not on the td itself — an
+  // MDC table td needs to keep its default
+  // table-cell display or the row border breaks
+  // before reaching this column.
+  // ============================================
+
   .actions-header {
     text-align: right;
   }
+
   .actions-cell {
     text-align: right;
     white-space: nowrap;
+  }
 
-    button {
-      color: var(--color-ink-soft);
-      &:hover {
-        color: var(--color-primary);
-      }
-      &[color="warn"]:hover {
-        color: var(--color-danger);
-      }
+  .action-btns {
+    display: inline-flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .row-action-btn {
+    font-size: 12px;
+    height: 32px;
+    padding: 0 12px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+    text-transform: none;
+
+    mat-icon {
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  .no-action {
+    color: var(--color-ink-soft);
+    font-size: 13px;
+  }
+}
+
+// ============================================
+// PAGINATOR
+// ============================================
+
+::ng-deep mat-paginator {
+  background: transparent !important;
+  font-family: var(--font-body);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+  .list-toolbar {
+    align-items: stretch;
+
+    .toolbar-info {
+      width: 100%;
+    }
+  }
+
+  .table-container {
+    table {
+      min-width: 720px; // buttons drop labels below, so less width is needed
     }
 
-    .no-action {
-      color: var(--color-ink-soft);
-      font-size: 13px;
+    td.mat-mdc-cell,
+    th.mat-mdc-header-cell {
+      padding: 10px 12px;
+    }
+
+    .row-action-btn {
+      min-width: 32px !important;
+      width: 32px;
+      height: 32px;
+      padding: 0 !important;
+      border: none !important;
+
+      .mdc-button__label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .btn-label {
+        display: none;
+      }
+
+      mat-icon {
+        margin: 0 !important;
+      }
     }
   }
 }
 
-::ng-deep mat-paginator {
-  background: transparent;
-  font-family: var(--font-body);
+@media (max-width: 480px) {
+  .appointment-page {
+    gap: 16px;
+  }
+
+  .list-toolbar {
+    padding: 16px;
+
+    .toolbar-info {
+      gap: 10px;
+
+      .toolbar-icon {
+        width: 38px;
+        height: 38px;
+        min-width: 38px;
+
+        mat-icon {
+          font-size: 20px;
+          height: 20px;
+          width: 20px;
+        }
+      }
+
+      h3 {
+        font-size: 14px;
+      }
+
+      p {
+        font-size: 12px;
+      }
+    }
+  }
+
+  .table-card {
+    border-radius: 10px;
+  }
+
+  .table-container {
+    .person-chip .person-avatar {
+      width: 26px;
+      height: 26px;
+      min-width: 26px;
+      font-size: 10px;
+    }
+
+    .status-badge {
+      padding: 3px 8px;
+      font-size: 10.5px;
+    }
+  }
 }

@@ -34,6 +34,9 @@ getStatusClass(status: string): string {
     case 'cancelled':
       return 'cancelled';
 
+      case 'checked-in':
+      return 'checked-in';  
+      
     default:
       return '';
   }

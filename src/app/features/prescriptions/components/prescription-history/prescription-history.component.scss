@@ -4,6 +4,13 @@
   gap: 20px;
 }
 
+/* ============================================
+   TOOLBAR
+   Now only ever holds toolbar-info + the button —
+   empty-state and table-card are siblings of this,
+   not children (that nesting was the layout bug).
+   ============================================ */
+
 .list-toolbar {
   display: flex;
   align-items: center;
@@ -58,6 +65,10 @@
   }
 }
 
+/* ============================================
+   EMPTY STATE
+   ============================================ */
+
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -101,6 +112,10 @@
 
   button { border-radius: 10px; text-transform: none; }
 }
+
+/* ============================================
+   TABLE CARD
+   ============================================ */
 
 .table-card {
   background: var(--color-surface);
@@ -234,6 +249,98 @@
     button {
       color: var(--color-ink-soft);
       &:hover { color: var(--color-primary); }
+    }
+  }
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+  .list-toolbar {
+    align-items: stretch;
+
+    .toolbar-info { width: 100%; }
+
+    button[color="primary"] {
+      width: 100%;
+      justify-content: center;
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  .empty-state {
+    padding: 44px 18px;
+  }
+}
+
+/* Below 640px a scrollable table is a poor fit on a
+   phone-width card, so each row becomes a compact,
+   labeled card instead — no horizontal scrolling needed. */
+@media (max-width: 640px) {
+  .table-container {
+    overflow-x: visible;
+
+    table {
+      min-width: 0;
+      display: block;
+    }
+
+    thead { display: none; }
+
+    tbody {
+      display: flex;
+      flex-direction: column;
+    }
+
+    tr.mat-mdc-row {
+      display: flex;
+      flex-direction: column;
+      padding: 14px 16px;
+      gap: 2px;
+
+      &:hover { background: transparent; }
+    }
+
+    td.mat-mdc-cell {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 6px 0;
+      border-bottom: none;
+
+      &::before {
+        content: attr(data-label);
+        flex-shrink: 0;
+        font-family: var(--font-body);
+        font-size: 10.5px;
+        font-weight: 600;
+        color: var(--color-ink-soft);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+    }
+
+    .doctor-info {
+      min-width: 0;
+      justify-content: flex-end;
+    }
+
+    .diagnosis-text {
+      max-width: 60%;
+      text-align: right;
+    }
+
+    .actions-cell {
+      justify-content: flex-end;
+      padding-top: 8px;
+      margin-top: 4px;
+      border-top: 1px solid var(--color-border);
+
+      &::before { display: none; }
     }
   }
 }

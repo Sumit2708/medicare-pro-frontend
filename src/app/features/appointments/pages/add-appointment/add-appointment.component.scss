@@ -286,6 +286,10 @@ mat-form-field {
     background: #fbe9e9 !important;
     color: var(--color-danger) !important;
   }
+  &--checkdIn.mat-mdc-chip-selected {
+    background: #e8f3ff !important;
+    color: var(--color-primary) !important;
+  }
 }
 
 ::ng-deep mat-chip-listbox {

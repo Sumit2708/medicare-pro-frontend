@@ -42,7 +42,7 @@
       <span>Checked In</span>
       <div class="sub-content">
         <h2>{{ dashboard.checkedInCount }}</h2>
-        <small>Completed Today</small>
+        <small>Checked In Today</small>
       </div>
     </div>
   </mat-card>
@@ -110,126 +110,127 @@
 }
 
 <section class="dashboard-layout">
- <app-chart-card
-  title="Today's Check-ins"
-  subtitle="All doctors' appointments for today"
-  icon="event_available"
-  class="full-width"
->
-  <a actions class="chart-card-action" routerLink="/appointments">View all</a>
+  <app-chart-card
+    title="Today's Check-ins"
+    subtitle="All doctors' appointments for today"
+    icon="event_available"
+    class="full-width"
+  >
+    <!-- <a actions class="chart-card-action" routerLink="/appointments">View all</a> -->
 
-  @if (dashboard.todayCheckIns.length > 0) {
-    <table class="dash-table">
-      <thead>
-        <tr>
-          <th>Time</th>
-          <th>Patient</th>
-          <th>Doctor</th>
-          <th>Payement Status</th>
-          <th>Status</th>
-        </tr>
-      </thead>
+    @if (dashboard.todayCheckIns.length > 0) {
+      <div class="table-scroll">
+        <table class="dash-table">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Patient</th>
+              <th>Doctor</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
 
-      <tbody>
-        @for (
-          item of dashboard.todayCheckIns.slice(0, 5);
-          track trackByCheckIn($index, item)
-        ) {
-          <tr>
-            <td>{{ item.time }}</td>
-            <td>
-              <div class="person-cell">
-                <span class="avatar">{{ getInitials(item.patientName) }}</span>
-                {{ item.patientName }}
-              </div>
-            </td>
-            <td>{{ item.doctorName }}</td>
-            <td>{{ item.paymentStatus }}</td>
-            <td>
-              <span class="status-badge" [ngClass]="statusClass(item.status)">
-                <span class="dot"></span>{{ item.status }}
-              </span>
-            </td>
-            <td class="actions-cell">
-              @if (item.status === 'Scheduled') {
-                <button
-                  mat-stroked-button
-                  color="primary"
-                  class="row-action-btn"
-                  [disabled]="checkingInId === item.appointmentId"
-                  (click)="checkInPatient(item)"
-                >
-                  <mat-icon>login</mat-icon>
-                  Check In
-                </button>
-              }
-            </td>
-          </tr>
-        }
-      </tbody>
-    </table>
-  } @else {
-    <app-empty-state
-      title="No Check-ins for today"
-      message="There's nothing to show here yet."
-      variant="empty"
-    />
-  }
-</app-chart-card>
+          <tbody>
+            @for (
+              item of dashboard.todayCheckIns.slice(0, 5);
+              track trackByCheckIn($index, item)
+            ) {
+              <tr>
+                <td>{{ item.time }}</td>
+                <td>
+                  <div class="person-cell">
+                    <span class="avatar">{{ getInitials(item.patientName) }}</span>
+                    {{ item.patientName }}
+                  </div>
+                </td>
+                <td>{{ item.doctorName }}</td>
+                <td>
+                  <span class="status-badge" [ngClass]="statusClass(item.status)">
+                    <span class="dot"></span>{{ item.status }}
+                  </span>
+                </td>
+                <td class="actions-cell">
+                  @if (item.status === 'Scheduled') {
+                    <button
+                      mat-stroked-button
+                      color="primary"
+                      class="row-action-btn"
+                      [disabled]="checkingInId === item.appointmentId"
+                      (click)="checkInPatient(item)"
+                    >
+                      <mat-icon>login</mat-icon>
+                      <span class="btn-label">Check In</span>
+                    </button>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    } @else {
+      <app-empty-state
+        title="No Check-ins for today"
+        message="There's nothing to show here yet."
+        variant="empty"
+      />
+    }
+  </app-chart-card>
 
+  <app-chart-card
+    title="Currently Waiting"
+    subtitle="Checked-in patients yet to be seen"
+    icon="hourglass_empty"
+  >
+    <a actions class="chart-card-action" (click)="navigateToWaitingQueue()">View all</a>
 
-
-<app-chart-card
-  title="Currently Waiting"
-  subtitle="Checked-in patients yet to be seen"
-  icon="hourglass_empty"
->
-  <a actions class="chart-card-action" (click)="navigateToWaitingQueue()">View all</a>
-
-  @if (waitingQueue.length > 0) {
-    <table class="dash-table">
-      <thead>
-        <tr>
-          <th>Patient</th>
-          <th>Doctor</th>
-          <th>Waiting Since</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (item of waitingQueue; track trackByWaiting($index, item)) {
-          <tr>
-            <td>
-              <div class="person-cell">
-                <span class="avatar">{{ getInitials(item.patientName) }}</span>
-                {{ item.patientName }}
-              </div>
-            </td>
-            <td>{{ item.doctorName }}</td>
-            <td>{{ item.checkedInAt | date: 'shortTime' }}</td>
-            <td class="actions-cell">
-              <button
-                mat-stroked-button
-                color="primary"
-                class="row-action-btn"
-                (click)="markAsSeen(item)"
-              >
-                <mat-icon>check_circle</mat-icon>
-                Mark Seen
-              </button>
-            </td>
-          </tr>
-        }
-      </tbody>
-    </table>
-  } @else {
-    <app-empty-state
-      title="No one waiting"
-      message="All checked-in patients have been seen."
-      variant="empty"
-    />
-  }
-</app-chart-card>
+    @if (waitingQueue.length > 0) {
+      <div class="table-scroll">
+        <table class="dash-table">
+          <thead>
+            <tr>
+              <th>Patient</th>
+              <th>Doctor</th>
+              <th>Waiting Since</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of waitingQueue; track trackByWaiting($index, item)) {
+              <tr>
+                <td>
+                  <div class="person-cell">
+                    <span class="avatar">{{ getInitials(item.patientName) }}</span>
+                    {{ item.patientName }}
+                  </div>
+                </td>
+                <td>{{ item.doctorName }}</td>
+                <td>{{ item.checkedInAt | date: 'shortTime' }}</td>
+                <td class="actions-cell">
+                  <button
+                    mat-stroked-button
+                    color="primary"
+                    class="row-action-btn px-4"
+                    (click)="markAsSeen(item)"
+                  >
+                    <mat-icon>check_circle</mat-icon>
+                    <span class="btn-label">Mark Seen</span>
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    } @else {
+      <app-empty-state
+        title="No one waiting"
+        message="All checked-in patients have been seen."
+        variant="empty"
+      />
+    }
+  </app-chart-card>
 
   <app-chart-card
     title="Billing Summary"

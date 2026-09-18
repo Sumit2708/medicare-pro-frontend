@@ -10,7 +10,7 @@ import { DashboardViewModel } from './models/dashboard.viewmodel';
 import { DashboardService } from './services/dashboard/dashboard.service';
 import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
 import { SummaryCardsComponent } from './components/summary-cards/summary-cards.component';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { PaymentChartComponent } from './components/payment-chart/payment-chart.component';
 import { RevenueChartComponent } from './components/revenue-chart/revenue-chart.component';
@@ -99,12 +99,18 @@ export class DashboardComponent {
       this.currentUser?.role === UserRole.DOCTOR &&
       this.currentUser.doctorId
     ) {
-      console.log('Loading Doctor Dashboard');
+      
+      // this.doctorDashboard$ =
+      // this.dashboardService.getDoctorDashboardData(
+      //   this.currentUser.doctorId
+      // );
+      // console.log('Loading Doctor Dashboard', this.doctorDashboard$);
 
-      this.doctorDashboard$ =
-        this.dashboardService.getDoctorDashboardData(
-          this.currentUser.doctorId
-        );
+       this.doctorDashboard$ = this.dashboardService
+    .getDoctorDashboardData(this.currentUser.doctorId)
+    .pipe(
+      tap(data => console.log('Loading Doctor Dashboard Data:', data))
+    );
 
     } else if (this.currentUser?.role === UserRole.RECEPTIONIST) {
       console.log('Loading Receptionist Dashboard');

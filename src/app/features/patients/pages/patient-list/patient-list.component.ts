@@ -15,6 +15,7 @@ import { DialogService } from '../../../../core/services/dialog/dialog.service';
 import { Patient } from '../../../../shared/models/patient.model';
 import { ConfirmDialogComponent } from '../../../../shared/components/confirm-dialog/confirm-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state.component';
 
 @Component({
   selector: 'app-patient-list',
@@ -29,7 +30,8 @@ import { MatDialog } from '@angular/material/dialog';
     MatTooltipModule,
     PageHeaderComponent,
     SearchBoxComponent,
-  ],
+    EmptyStateComponent
+],
   templateUrl: './patient-list.component.html',
   styleUrl: './patient-list.component.scss',
 })

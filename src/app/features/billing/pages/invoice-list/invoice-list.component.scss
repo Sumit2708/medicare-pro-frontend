@@ -364,14 +364,68 @@ table {
 .actions-header { text-align: right; }
 .actions-column { text-align: right; }
 
+/* =========================================================
+   ROW ACTION BUTTONS (View / Print)
+   Stroked buttons with an icon + text label. Styled to
+   match the app's chip/pill language (thin border, teal on
+   hover). Below 860px — the same point the table itself
+   tightens up — the text label hides and only the icon
+   shows, so two buttons never crowd a table row on a
+   tablet/phone-width screen. The existing matTooltip on
+   each button still explains what it does either way.
+   ========================================================= */
+
 .action-buttons {
   display: flex;
   justify-content: flex-end;
-  gap: 4px;
+  gap: 6px;
+  flex-wrap: nowrap;
+}
 
-  button {
-    color: var(--color-ink-soft);
-    &:hover { color: var(--color-primary); }
+.row-action-btn {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  min-width: 0;
+  padding: 0 12px !important;
+  line-height: 1;
+  border-radius: 8px !important;
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: normal;
+
+  color: var(--color-ink-soft) !important;
+  border-color: var(--color-border) !important;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    margin: 0;
+  }
+
+  .btn-label {
+    white-space: nowrap;
+  }
+
+  &:hover {
+    color: var(--color-primary) !important;
+    border-color: var(--color-primary) !important;
+    background: var(--color-primary-light) !important;
+  }
+
+  @media (max-width: 860px) {
+    width: 32px;
+    padding: 0 !important;
+    justify-content: center;
+    border: none !important;
+
+    .btn-label {
+      display: none;
+    }
   }
 }
 
@@ -385,9 +439,8 @@ table {
   align-items: center;
   justify-content: center;
   padding: clamp(40px, 10vw, 64px) 20px;
-// padding: 60px 20px;
   text-align: center;
-   background: var(--color-surface);
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 16px;
 
@@ -396,7 +449,7 @@ table {
     font-size: 16px;
     font-weight: 600;
     color: var(--color-ink);
-    margin: 0 0 6 px;
+    margin: 0 0 6px;
 
     @media (min-width: 640px) { font-size: 18px; }
   }
@@ -405,28 +458,25 @@ table {
     font-family: var(--font-body);
     font-size: 13px;
     color: var(--color-ink-soft);
-margin: 0 0 20px;    max-width: 320px;
+    margin: 0 0 20px;
+    max-width: 320px;
 
     @media (min-width: 640px) { font-size: 14px; }
   }
 }
 
 .empty-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--color-bg);
+  color: var(--color-border);
+  margin-bottom: 16px;
 
-
-.empty-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    background: var(--color-bg);
-    color: var(--color-border);
-    margin-bottom: 16px;
-
-    mat-icon { font-size: 30px; height: 30px; width: 30px; }
-  }
+  mat-icon { font-size: 30px; height: 30px; width: 30px; }
 
   @media (min-width: 640px) {
     width: 56px;

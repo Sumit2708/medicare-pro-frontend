@@ -20,6 +20,8 @@ import { PageHeaderComponent } from '../../../../shared/components/page-header/p
 import { SearchBoxComponent } from '../../../../shared/components/search-box/search-box.component';
 import { DialogService } from '../../../../core/services/dialog/dialog.service';
 import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state.component';
+import { AuthService } from '../../../../core/services/auth/auth.service'; // adjust path to match your project
+import { UserRole } from '../../../../core/enums/user-role.enum';
 
 const SIXTY_DAYS_MS = 60 * 24 * 60 * 60 * 1000;
 
@@ -88,6 +90,9 @@ export class AppointmentListComponent {
 
   hideEdit = false;
 
+  /** Set when the logged-in user is a doctor; used to scope the appointment list. */
+  private currentDoctorId: string | null = null;
+
   constructor(
     private router: Router,
     private appointmentService: AppointmentService,
@@ -95,9 +100,19 @@ export class AppointmentListComponent {
     private patientService: PatientService,
     private doctorService: DoctorService,
     private dialogService: DialogService,
+    private authService: AuthService,
   ) {}
 
   ngOnInit(): void {
+    const currentUser:any = this.authService.getCurrentUser();
+    if (currentUser?.role === UserRole.DOCTOR) {
+      this.currentDoctorId = currentUser.doctorId ?? null;
+      // Doctors shouldn't see the "which doctor" column since it's always themselves
+      this.displayedColumns = this.displayedColumns.filter(
+        (col) => col !== 'doctor',
+      );
+    }
+
     this.loadDoctors();
     this.loadAll();
   }
@@ -109,8 +124,13 @@ export class AppointmentListComponent {
     }).subscribe({
       next: ({ appointments, patients }) => {
         this.patients = patients;
-        this.runAutomationRules(appointments, patients);
-        this.setSortedData(appointments);
+
+        const scopedAppointments = this.currentDoctorId
+          ? appointments.filter((a:any) => a.doctorId === this.currentDoctorId)
+          : appointments;
+
+        this.runAutomationRules(scopedAppointments, patients);
+        this.setSortedData(scopedAppointments);
       },
       error: () => {
         this.notificationService.error('Failed to load appointments');
@@ -133,7 +153,6 @@ export class AppointmentListComponent {
 
     this.dataSource.data = sorted;
   }
-
   /**
    * Client-side sweep: runs whenever this page loads.
    * NOTE: this only enforces the rules when someone visits this page —
@@ -146,7 +165,7 @@ export class AppointmentListComponent {
 ): void {
   const now = Date.now();
   const currentHour = new Date().getHours();
-  const pastSevenPM = currentHour >= 19;
+  const pastSevenPM = currentHour >= 20;
 
   // Rule 1: auto-cancel overdue, still-Scheduled appointments — only checked after 7 PM.
   // getAppointmentDateTime(a) < now covers BOTH:
@@ -155,7 +174,7 @@ export class AppointmentListComponent {
   const overdue = pastSevenPM
     ? appointments.filter((a: any) => {
         return (
-          a.status === 'Scheduled' &&
+          (a.status === 'Scheduled' || a.status === "CheckedIn") &&
           this.getAppointmentDateTime(a).getTime() < now
         );
       })

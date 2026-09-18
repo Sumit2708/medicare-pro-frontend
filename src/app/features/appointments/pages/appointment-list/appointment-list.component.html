@@ -119,46 +119,63 @@
               Actions
             </th>
             <td mat-cell *matCellDef="let appt" class="actions-cell">
-              @if (appt.status === "Scheduled") {
-                <button
-                  mat-icon-button
-                  matTooltip="Edit/Prescription"
-                  (click)="navToPrescription(appt.id)"
-                >
-                  <mat-icon>edit</mat-icon>
-                </button>
-                <button
-                  mat-icon-button
-                  color="warn"
-                  matTooltip="Cancel appointment"
-                  (click)="cancelAppointment(appt)"
-                >
-                  <mat-icon>event_busy</mat-icon>
-                </button>
-              }
-
-              @if (appt.status === "Completed") {
-                @if (hideEdit) {
+              <div class="action-btns">
+                @if (appt.status === "Scheduled" || appt.status == "CheckedIn") {
                   <button
-                    mat-icon-button
+                    mat-stroked-button
+                    color="primary"
+                    type="button"
+                    class="row-action-btn"
                     matTooltip="Edit/Prescription"
                     (click)="navToPrescription(appt.id)"
                   >
                     <mat-icon>edit</mat-icon>
+                    <span class="btn-label">Edit</span>
+                  </button>
+                  <button
+                    mat-stroked-button
+                    color="warn"
+                    type="button"
+                    class="row-action-btn"
+                    matTooltip="Cancel appointment"
+                    (click)="cancelAppointment(appt)"
+                  >
+                    <mat-icon>event_busy</mat-icon>
+                    <span class="btn-label">Cancel</span>
                   </button>
                 }
-                <button
-                  mat-icon-button
-                  matTooltip="Generate invoice"
-                  (click)="generateInvoice(appt)"
-                >
-                  <mat-icon>receipt_long</mat-icon>
-                </button>
-              }
 
-              @if (appt.status === "Cancelled") {
-                <span class="no-action">—</span>
-              }
+                @if (appt.status === "Completed") {
+                  @if (hideEdit) {
+                    <button
+                      mat-stroked-button
+                      color="primary"
+                      type="button"
+                      class="row-action-btn"
+                      matTooltip="Edit/Prescription"
+                      (click)="navToPrescription(appt.id)"
+                    >
+                      <mat-icon>edit</mat-icon>
+                      <span class="btn-label">Edit</span>
+                    </button>
+                  }
+                  <button
+                    mat-stroked-button
+                    color="primary"
+                    type="button"
+                    class="row-action-btn"
+                    matTooltip="Generate invoice"
+                    (click)="generateInvoice(appt)"
+                  >
+                    <mat-icon>receipt_long</mat-icon>
+                    <span class="btn-label">Invoice</span>
+                  </button>
+                }
+
+                @if (appt.status === "Cancelled") {
+                  <span class="no-action">—</span>
+                }
+              </div>
             </td>
           </ng-container>
 

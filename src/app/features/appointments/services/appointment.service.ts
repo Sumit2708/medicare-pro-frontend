@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Appointment } from '../../../shared/models/appointment.model';
 import { Observable } from 'rxjs';
 import { RecentAppointmentViewModel } from '../../dashboard/components/recent-appointments/model/recent-appointment.viewmodel';
+import { AppointmentStatus } from '../../../core/enums/appointment-status.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -39,9 +40,8 @@ export class AppointmentService {
   getAppointmentsByPatientId(patientId: number): Observable<Appointment[]> {
     return this.http.get<Appointment[]>(`${this.API_URL}?patientId=${patientId}`);
   }
-
-  updateAppointmentStatus(appointmentId: string, status: string) {
-    return this.http.patch(`${this.API_URL}/${appointmentId}/status`, { status });
+  updateAppointmentStatus(appointmentId: string, status: AppointmentStatus | string): Observable<Appointment> {
+    return this.http.patch<Appointment>(`${this.API_URL}/${appointmentId}`, { status });
   }
 
 

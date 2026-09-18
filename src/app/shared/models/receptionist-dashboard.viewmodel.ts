@@ -1,12 +1,13 @@
 export interface CheckInItem {
-  appointmentId?: any;
+  appointmentId: string;
   patientName: string;
   doctorName: string;
-  paymentStatus?: String;
+  paymentStatus?: string;
   total?: number;
   time: string;
   date: string;
   status: string;
+  checkedInAt?: string;
 }
 
 export interface DoctorAvailabilityItem {
@@ -18,6 +19,13 @@ export interface DoctorAvailabilityItem {
   todayAppointmentsCount: number;
 }
 
+export interface WaitingQueueItem {
+  appointmentId: string;
+  patientName: string;
+  doctorName: string;
+  checkedInAt: Date;
+}
+
 export interface ReceptionistDashboardViewModel {
   todayAppointmentsCount: number;
   checkedInCount: number;
@@ -27,19 +35,4 @@ export interface ReceptionistDashboardViewModel {
   pendingInvoicesCount: number;
   todayCheckIns: CheckInItem[];
   doctorsAvailability: DoctorAvailabilityItem[];
-}
-
-export interface WaitingQueueItem {
-  appointmentId?: any;
-  patientName?: any;
-  doctorName?: string;
-  checkedInAt?: Date;
-}
-
-export interface CheckInRow {
-  appointmentId?: any;
-  patientName?: string;
-  doctorName?: string;
-  status?: string;
-  waitingQueue?: WaitingQueueItem[];
 }
