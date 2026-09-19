@@ -4,8 +4,6 @@
       <app-doctor-dashboard
         [dashboard]="doctorDashboard"
       ></app-doctor-dashboard>
-    } @else {
-      <p>Loading...</p>
     }
   }
   @case (UserRole.RECEPTIONIST) {
@@ -13,8 +11,6 @@
       <app-receptionist-dashboard
         [dashboard]="receptionistDashboard"
       ></app-receptionist-dashboard>
-    } @else {
-      <p>Loading...</p>
     }
   }
   @default {
