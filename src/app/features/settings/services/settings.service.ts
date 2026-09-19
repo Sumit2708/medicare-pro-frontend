@@ -5,12 +5,14 @@ import { Settings } from '../model/settings.model';
 import { ClinicSettings } from '../model/clinic-settings.model';
 import { BillingSettings } from '../model/billing-settings.model';
 import { WorkingHours } from '../model/working-hours.model';
+import { API_ENDPOINTS } from '../../../core/constants/api-endpoints';
+import { environment } from '../../../../environment/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SettingsService {
-  private readonly apiUrl = 'http://localhost:3000/settings';
+  private readonly apiUrl = `${environment.API_URL}${API_ENDPOINTS.SETTINGS}`;
 
   constructor(private http: HttpClient) {}
 

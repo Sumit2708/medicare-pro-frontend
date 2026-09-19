@@ -11,5 +11,11 @@ export const API_ENDPOINTS = {
 
   APPOINTMENTS: '/appointments',
 
-  INVOICES:'/invoices'
+  INVOICES:'/invoices',
+
+  PRESCRIPTIONS: '/prescriptions',
+
+  MEDICINES: '/medicines',
+
+  SETTINGS: '/settings',
 };

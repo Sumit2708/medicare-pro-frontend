@@ -10,11 +10,12 @@ import { DoctorService } from '../../doctors/services/doctor.service';
 import { Patient } from '../../../shared/models/patient.model';
 import { Appointment } from '../../../shared/models/appointment.model';
 import { Doctor } from '../../../shared/models/doctor.model';
+import { API_ENDPOINTS } from '../../../core/constants/api-endpoints';
 
 @Injectable({ providedIn: 'root' })
 export class PrescriptionService {
-  private readonly baseUrl = `${environment.API_URL}/prescriptions`;
-  private readonly medicinesUrl = `${environment.API_URL}/medicines`;
+  private baseUrl = `${environment.API_URL}${API_ENDPOINTS.PRESCRIPTIONS}`;
+  private medicinesUrl = `${environment.API_URL}${API_ENDPOINTS.MEDICINES}`;
 
   patient: Patient | null = null;
   appointment: Appointment | null = null;

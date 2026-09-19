@@ -4,6 +4,8 @@ import { Appointment } from '../../../shared/models/appointment.model';
 import { Observable } from 'rxjs';
 import { RecentAppointmentViewModel } from '../../dashboard/components/recent-appointments/model/recent-appointment.viewmodel';
 import { AppointmentStatus } from '../../../core/enums/appointment-status.enum';
+import { environment } from '../../../../environment/environment';
+import { API_ENDPOINTS } from '../../../core/constants/api-endpoints';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +16,7 @@ export class AppointmentService {
     private http: HttpClient
   ) { }
 
-   API_URL = 'http://localhost:3000/appointments';
+   API_URL = `${environment.API_URL}${API_ENDPOINTS.APPOINTMENTS}`;
 
 
   getAppointments(): Observable<Appointment[]> {
