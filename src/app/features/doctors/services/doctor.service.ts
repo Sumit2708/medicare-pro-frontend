@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Doctor } from '../../../shared/models/doctor.model';
-import { environment } from '../../../../environment/environment';
+import { environment } from '../../../../environments/environment';
 import { API_ENDPOINTS } from '../../../core/constants/api-endpoints';
 
 @Injectable({

@@ -1,14 +1,15 @@
 {
   "name": "medicare-pro-frontend",
   "version": "0.0.0",
-  "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "mock-server": "json-server --watch db.json --port 3000"
-  },
+"scripts": {
+  "ng": "ng",
+  "start": "ng serve",
+  "build": "ng build",
+  "watch": "ng build --watch --configuration development",
+  "test": "ng test",
+  "mock-server": "json-server --watch db.json --host 0.0.0.0 --port 3000",
+  "mock-server:prod": "json-server db.json --host 0.0.0.0 --port $PORT"
+},
   "private": true,
   "dependencies": {
     "@angular/cdk": "^19.2.19",
@@ -25,6 +26,7 @@
     "file-saver": "^2.0.5",
     "html2canvas-pro": "^2.4.0",
     "html2pdf.js": "^0.14.0",
+    "json-server": "^1.0.0-beta.15",
     "jspdf": "^4.2.1",
     "jspdf-autotable": "^5.0.8",
     "ng-apexcharts": "^1.15.0",

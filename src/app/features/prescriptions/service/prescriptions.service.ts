@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, EMPTY, throwError } from 'rxjs';
 import { switchMap, tap, catchError } from 'rxjs/operators';
-import { environment } from '../../../../environment/environment';
+import { environment } from '../../../../environments/environment';
 import { Medicine, Prescription } from '../model/prescription.model';
 import { PatientService } from '../../patients/services/patient.service';
 import { AppointmentService } from '../../appointments/services/appointment.service';

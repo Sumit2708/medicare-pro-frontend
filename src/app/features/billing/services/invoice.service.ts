@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../../../environment/environment';
+import { environment } from '../../../../environments/environment';
 import { API_ENDPOINTS } from '../../../core/constants/api-endpoints';
 import { Invoice } from '../models/invoice.model';
 import { forkJoin, map, Observable, switchMap } from 'rxjs';

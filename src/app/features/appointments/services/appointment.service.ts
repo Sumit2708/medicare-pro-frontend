@@ -4,7 +4,7 @@ import { Appointment } from '../../../shared/models/appointment.model';
 import { Observable } from 'rxjs';
 import { RecentAppointmentViewModel } from '../../dashboard/components/recent-appointments/model/recent-appointment.viewmodel';
 import { AppointmentStatus } from '../../../core/enums/appointment-status.enum';
-import { environment } from '../../../../environment/environment';
+import { environment } from '../../../../environments/environment';
 import { API_ENDPOINTS } from '../../../core/constants/api-endpoints';
 
 @Injectable({

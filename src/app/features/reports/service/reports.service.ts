@@ -6,7 +6,7 @@ import { DoctorPerformanceModel } from '../models/doctor-performance.model';
 import { HttpClient } from '@angular/common/http';
 import { Appointment } from '../../../shared/models/appointment.model';
 import { Invoice } from '../../billing/models/invoice.model';
-import { environment } from '../../../../environment/environment';
+import { environment } from '../../../../environments/environment';
 import { DoctorService } from '../../doctors/services/doctor.service';
 import { AppointmentService } from '../../appointments/services/appointment.service';
 import { InvoiceService } from '../../billing/services/invoice.service';

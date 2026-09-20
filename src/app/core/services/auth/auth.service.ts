@@ -4,7 +4,7 @@ import { StorageService } from '../storage/storage.service';
 import { LoginRequest } from '../../../shared/models/login-request.model';
 import { map, Observable } from 'rxjs';
 import { User } from '../../../shared/models/user.model';
-import { environment } from '../../../../environment/environment';
+import { environment } from '../../../../environments/environment';
 import { API_ENDPOINTS } from '../../constants/api-endpoints';
 
 @Injectable({
