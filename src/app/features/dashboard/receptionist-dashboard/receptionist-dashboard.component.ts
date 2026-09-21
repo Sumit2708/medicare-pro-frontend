@@ -16,7 +16,7 @@ import { NotificationService } from '../../../core/services/notification/notific
 @Component({
   selector: 'app-receptionist-dashboard',
   standalone: true,
-  imports: [CommonModule, MatCard, MatCardContent, MatIcon, MatTooltip, ChartCardComponent, SummaryCardsComponent, MatButtonModule, AlertBannerComponent, EmptyStateComponent],
+  imports: [CommonModule, MatCard, MatIcon, MatTooltip, ChartCardComponent, MatButtonModule, AlertBannerComponent, EmptyStateComponent],
   templateUrl: './receptionist-dashboard.component.html',
   styleUrl: './receptionist-dashboard.component.scss',
 })

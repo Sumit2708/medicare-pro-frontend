@@ -29,8 +29,6 @@ import { UserRole } from '../../../../core/enums/user-role.enum';
   selector: 'app-invoice-list',
   imports: [
     PageHeaderComponent,
-    MatOption,
-    MatSelect,
     MatLabel,
     MatFormField,
     MatCard,

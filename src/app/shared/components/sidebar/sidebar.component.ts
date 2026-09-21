@@ -10,7 +10,7 @@ import { SidebarService } from './service/sidebar.service';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [CommonModule, MatNavList, RouterLink, MatIcon],
+  imports: [CommonModule  , RouterLink, MatIcon],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss',
 })

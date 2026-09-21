@@ -16,7 +16,7 @@ export type SparklineOptions = {
 
 @Component({
   selector: 'app-summary-cards',
-  imports: [CurrencyPipe, MatCard, MatCardContent, MatIcon],
+  imports: [CurrencyPipe, MatCard, MatIcon],
   templateUrl: './summary-cards.component.html',
   styleUrl: './summary-cards.component.scss'
 })

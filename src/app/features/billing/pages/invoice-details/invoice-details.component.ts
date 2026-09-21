@@ -18,9 +18,6 @@ import { BillingPdfService } from '../../services/pdf/billing-pdf.service';
   imports: [
     PageHeaderComponent,
     MatCard,
-    MatCardTitle,
-    MatDivider,
-    MatChip,
     MatIcon,
     CurrencyPipe,
     DatePipe,

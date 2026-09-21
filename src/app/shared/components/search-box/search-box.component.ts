@@ -7,7 +7,7 @@ import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-search-box',
-  imports: [MatFormField, MatLabel, MatIcon,MatInputModule],
+  imports: [ MatIcon,MatInputModule],
   templateUrl: './search-box.component.html',
   styleUrl: './search-box.component.scss'
 })

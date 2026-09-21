@@ -15,12 +15,11 @@ import { PatientService } from '../../../patients/services/patient.service';
 import { Patient } from '../../../../shared/models/patient.model';
 import { Doctor } from '../../../../shared/models/doctor.model';
 import { Appointment } from '../../../../shared/models/appointment.model';
-import { MatDialog } from '@angular/material/dialog';
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
 import { SearchBoxComponent } from '../../../../shared/components/search-box/search-box.component';
 import { DialogService } from '../../../../core/services/dialog/dialog.service';
 import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state.component';
-import { AuthService } from '../../../../core/services/auth/auth.service'; // adjust path to match your project
+import { AuthService } from '../../../../core/services/auth/auth.service';
 import { UserRole } from '../../../../core/enums/user-role.enum';
 
 const SIXTY_DAYS_MS = 60 * 24 * 60 * 60 * 1000;
@@ -38,7 +37,6 @@ const SIXTY_DAYS_MS = 60 * 24 * 60 * 60 * 1000;
     MatTooltipModule,
     PageHeaderComponent,
     SearchBoxComponent,
-    EmptyStateComponent,
   ],
   templateUrl: './appointment-list.component.html',
   styleUrl: './appointment-list.component.scss',

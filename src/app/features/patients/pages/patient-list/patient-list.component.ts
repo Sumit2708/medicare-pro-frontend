@@ -30,7 +30,6 @@ import { EmptyStateComponent } from '../../../../shared/components/empty-state/e
     MatTooltipModule,
     PageHeaderComponent,
     SearchBoxComponent,
-    EmptyStateComponent
 ],
   templateUrl: './patient-list.component.html',
   styleUrl: './patient-list.component.scss',

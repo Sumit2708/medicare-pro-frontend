@@ -1,91 +1,392 @@
+// import { Routes } from '@angular/router';
+// import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
+// import { DashboardComponent } from './features/dashboard/dashboard.component';
+// import { DoctorListComponent } from './features/doctors/pages/doctor-list/doctor-list.component';
+// import { AddDoctorComponent } from './features/doctors/pages/add-doctor/add-doctor.component';
+// import { EditDoctorComponent } from './features/doctors/pages/edit-doctor/edit-doctor.component';
+// import { PatientListComponent } from './features/patients/pages/patient-list/patient-list.component';
+// import { EditPatientComponent } from './features/patients/pages/edit-patient/edit-patient.component';
+// import { AddPatientComponent } from './features/patients/pages/add-patient/add-patient.component';
+// import { AppointmentListComponent } from './features/appointments/pages/appointment-list/appointment-list.component';
+// import { AddAppointmentComponent } from './features/appointments/pages/add-appointment/add-appointment.component';
+// import { EditAppointmentComponent } from './features/appointments/pages/edit-appointment/edit-appointment.component';
+// import { LoginComponent } from './features/auth/pages/login/login.component';
+// import { authGuard } from './core/guards/auth/auth.guard';
+// import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
+// import { roleGuard } from './core/guards/role/role.guard';
+// import { UserRole } from './core/enums/user-role.enum';
+// import { AccessDeniedComponent } from './shared/components/access-denied/access-denied.component';
+// import { InvoiceListComponent } from './features/billing/pages/invoice-list/invoice-list.component';
+// import { CreateInvoiceComponent } from './features/billing/pages/create-invoice/create-invoice.component';
+// import { InvoiceDetailsComponent } from './features/billing/pages/invoice-details/invoice-details.component';
+// import { PrintInvoiceComponent } from './features/billing/pages/print-invoice/print-invoice.component';
+// import { DoctorPerformanceReportComponent } from './features/reports/pages/doctor-performance-report/doctor-performance-report.component';
+// import { AppointmentReportComponent } from './features/reports/pages/appointment-report/appointment-report.component';
+// import { RevenueReportComponent } from './features/reports/pages/revenue-report/revenue-report.component';
+// import { ReportsDashboardComponent } from './features/reports/pages/reports-dashboard/reports-dashboard.component';
+// import { RevenueReportPrintComponent } from './features/reports/pages/revenue-report-print/revenue-report-print.component';
+// import { AppointmentReportPrintComponent } from './features/reports/pages/appointment-report-print/appointment-report-print.component';
+// import { SettingsComponent } from './features/settings/pages/settings/settings.component';
+// import { DoctorDashboardComponent } from './features/dashboard/doctor-dashboard/doctor-dashboard.component';
+// import { ForgotPasswordComponent } from './features/auth/pages/forgot-password/forgot-password.component';
+// import { AddPrescriptionComponent } from './features/prescriptions/pages/add-prescription/add-prescription.component';
+// import { EditPrescriptionComponent } from './features/prescriptions/pages/edit-prescription/edit-prescription.component';
+// import { PrintPrescriptionComponent } from './features/prescriptions/pages/print-prescription/print-prescription.component';
+// import { ProfileComponent } from './features/auth/pages/profile/profile.component';
+
+// const ADMIN = [UserRole.ADMIN];
+// const ADMIN_RECEPTION = [UserRole.ADMIN, UserRole.RECEPTIONIST];
+// const DOCTOR_RECEPTION = [UserRole.DOCTOR, UserRole.RECEPTIONIST];
+// const ALL_USERS = [UserRole.ADMIN, UserRole.DOCTOR, UserRole.RECEPTIONIST];
+
+// export const routes: Routes = [
+//   {
+//     path: 'login',
+//     component: LoginComponent,
+//   },
+//   {
+//     path: 'auth/forgot-password',
+//     component: ForgotPasswordComponent,
+//   },
+//   {
+//     path: 'access-denied',
+//     component: AccessDeniedComponent,
+//   },
+//   {
+//     path: '',
+//     component: AdminLayoutComponent,
+//     canActivate: [authGuard],
+//     children: [
+//       {
+//         path: 'dashboard',
+//         component: DashboardComponent,
+//         canActivate: [roleGuard],
+//         data: {
+//           roles: ALL_USERS,
+//         },
+//       },
+//       // {
+//       //   path: 'doctor-dashboard',
+//       //   component: DoctorDashboardComponent,
+//       //   canActivate: [roleGuard],
+//       //   data: {
+//       //     roles: [UserRole.DOCTOR],
+//       //   },
+//       // },
+//       {
+//         path: '',
+//         component: DashboardComponent,
+//         canActivate: [roleGuard],
+//         data: {
+//           roles: ALL_USERS,
+//         },
+//       },
+
+//       {
+//         path: 'doctors',
+//         component: DoctorListComponent,
+//         canActivate: [roleGuard],
+//         data: {
+//           roles: ALL_USERS,
+//         },
+//       },
+
+//       {
+//         path: 'doctors/add',
+//         component: AddDoctorComponent,
+//         canActivate: [roleGuard],
+//         data: {
+//           roles: ADMIN,
+//         },
+//       },
+
+//       {
+//         path: 'doctors/edit',
+//         component: EditDoctorComponent,
+//         canActivate: [roleGuard],
+//         data: {
+//           roles: ADMIN,
+//         },
+//       },
+
+//       {
+//         path: 'patients',
+//         component: PatientListComponent,
+//         canActivate: [roleGuard],
+//         data: {
+//           roles: ALL_USERS,
+//         },
+//       },
+
+//       {
+//         path: 'patients/add',
+//         component: AddPatientComponent,
+//         canActivate: [roleGuard],
+//         data: {
+//           roles: ALL_USERS,
+//         },
+//       },
+
+//       {
+//         path: 'patients/edit',
+//         component: EditPatientComponent,
+//         canActivate: [roleGuard],
+//         data: {
+//           roles: ALL_USERS,
+//         },
+//       },
+
+//       {
+//         path: 'appointments',
+//         component: AppointmentListComponent,
+//         canActivate: [roleGuard],
+//         data: {
+//           roles: ALL_USERS,
+//         },
+//       },
+
+//       {
+//         path: 'appointments/add',
+//         component: AddAppointmentComponent,
+//         canActivate: [roleGuard],
+//         data: {
+//           roles: ALL_USERS,
+//         },
+//       },
+
+//       {
+//         path: 'appointments/edit',
+//         component: EditAppointmentComponent,
+//         canActivate: [roleGuard],
+//         data: {
+//           roles: ALL_USERS,
+//         },
+//       },
+//       {
+//         path: 'billing',
+//         component: InvoiceListComponent,
+//         canActivate: [roleGuard],
+//         data: {
+//           roles: ALL_USERS,
+//         },
+//       },
+//       {
+//         path: 'billing/create',
+//         component: CreateInvoiceComponent,
+//         canActivate: [roleGuard],
+//         data: {
+//           roles: ALL_USERS,
+//         },
+//       },
+//       {
+//         path: 'billing/:id',
+//         component: InvoiceDetailsComponent,
+//         canActivate: [roleGuard],
+//         data: {
+//           roles: ALL_USERS,
+//         },
+//       },
+//       {
+//         path: 'billing/print/:id',
+//         component: PrintInvoiceComponent,
+//         canActivate: [roleGuard],
+//         data: {
+//           roles: ALL_USERS,
+//         },
+//       },
+//       {
+//         path: 'prescriptions/add',
+//         component: AddPrescriptionComponent,
+//         canActivate: [roleGuard],
+//         data: {
+//           // roles: DOCTOR_RECEPTION,
+//           roles: ALL_USERS,
+//         },
+//       },
+//       {
+//         path: 'prescriptions/edit',
+//         component: EditPrescriptionComponent,
+//         canActivate: [roleGuard],
+//         data: {
+//           // roles: DOCTOR_RECEPTION,
+//           roles: ALL_USERS,
+//         },
+//       },
+//       {
+//         path: 'prescriptions/print/:id',
+//         component: PrintPrescriptionComponent,
+//         canActivate: [roleGuard],
+//         data: {
+//           roles: ALL_USERS,
+//         },
+//       },
+//       {
+//         path: 'reports',
+//         component: ReportsDashboardComponent,
+//         canActivate: [roleGuard],
+//         data: {
+//           roles: [UserRole.ADMIN],
+//         },
+//       },
+//       {
+//         path: 'reports/revenue',
+//         component: RevenueReportComponent,
+//         canActivate: [roleGuard],
+//         data: {
+//           roles: [UserRole.ADMIN],
+//         },
+//       },
+//       {
+//         path: 'reports/appointments',
+//         component: AppointmentReportComponent,
+//         canActivate: [roleGuard],
+//         data: {
+//           roles: [UserRole.ADMIN],
+//         },
+//       },
+//       {
+//         path: 'reports/doctors',
+//         component: DoctorPerformanceReportComponent,
+//         canActivate: [roleGuard],
+//         data: {
+//           roles: [UserRole.ADMIN],
+//         },
+//       },
+//       {
+//         path: 'reports/revenue/print',
+//         component: RevenueReportPrintComponent,
+//         canActivate: [roleGuard],
+//         data: {
+//           roles: [UserRole.ADMIN],
+//         },
+//       },
+//       {
+//         path: 'reports/appointments/print',
+//         component: AppointmentReportPrintComponent,
+//         canActivate: [roleGuard],
+//         data: {
+//           roles: [UserRole.ADMIN],
+//         },
+//       },
+//       {
+//         path: 'settings',
+//         component: SettingsComponent,
+//         canActivate: [roleGuard],
+//         data: {
+//           roles: ALL_USERS,
+//         },
+//       },
+//        {
+//         path: 'profile',
+//         component: ProfileComponent,
+//         canActivate: [roleGuard],
+//         data: {
+//           roles: ALL_USERS,
+//           title: 'My Profile',
+//         },
+//       },
+//     ],
+//   },
+
+//   {
+//     path: '**',
+//     component: PageNotFoundComponent,
+//   },
+// ];
+
+
 import { Routes } from '@angular/router';
+
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
-import { DashboardComponent } from './features/dashboard/dashboard.component';
-import { DoctorListComponent } from './features/doctors/pages/doctor-list/doctor-list.component';
-import { AddDoctorComponent } from './features/doctors/pages/add-doctor/add-doctor.component';
-import { EditDoctorComponent } from './features/doctors/pages/edit-doctor/edit-doctor.component';
-import { PatientListComponent } from './features/patients/pages/patient-list/patient-list.component';
-import { EditPatientComponent } from './features/patients/pages/edit-patient/edit-patient.component';
-import { AddPatientComponent } from './features/patients/pages/add-patient/add-patient.component';
-import { AppointmentListComponent } from './features/appointments/pages/appointment-list/appointment-list.component';
-import { AddAppointmentComponent } from './features/appointments/pages/add-appointment/add-appointment.component';
-import { EditAppointmentComponent } from './features/appointments/pages/edit-appointment/edit-appointment.component';
+
 import { LoginComponent } from './features/auth/pages/login/login.component';
-import { authGuard } from './core/guards/auth/auth.guard';
+import { ForgotPasswordComponent } from './features/auth/pages/forgot-password/forgot-password.component';
+
+import { AccessDeniedComponent } from './shared/components/access-denied/access-denied.component';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
+
+import { authGuard } from './core/guards/auth/auth.guard';
 import { roleGuard } from './core/guards/role/role.guard';
 import { UserRole } from './core/enums/user-role.enum';
-import { AccessDeniedComponent } from './shared/components/access-denied/access-denied.component';
-import { InvoiceListComponent } from './features/billing/pages/invoice-list/invoice-list.component';
-import { CreateInvoiceComponent } from './features/billing/pages/create-invoice/create-invoice.component';
-import { InvoiceDetailsComponent } from './features/billing/pages/invoice-details/invoice-details.component';
-import { PrintInvoiceComponent } from './features/billing/pages/print-invoice/print-invoice.component';
-import { DoctorPerformanceReportComponent } from './features/reports/pages/doctor-performance-report/doctor-performance-report.component';
-import { AppointmentReportComponent } from './features/reports/pages/appointment-report/appointment-report.component';
-import { RevenueReportComponent } from './features/reports/pages/revenue-report/revenue-report.component';
-import { ReportsDashboardComponent } from './features/reports/pages/reports-dashboard/reports-dashboard.component';
-import { RevenueReportPrintComponent } from './features/reports/pages/revenue-report-print/revenue-report-print.component';
-import { AppointmentReportPrintComponent } from './features/reports/pages/appointment-report-print/appointment-report-print.component';
-import { SettingsComponent } from './features/settings/pages/settings/settings.component';
-import { DoctorDashboardComponent } from './features/dashboard/doctor-dashboard/doctor-dashboard.component';
-import { ForgotPasswordComponent } from './features/auth/pages/forgot-password/forgot-password.component';
-import { AddPrescriptionComponent } from './features/prescriptions/pages/add-prescription/add-prescription.component';
-import { EditPrescriptionComponent } from './features/prescriptions/pages/edit-prescription/edit-prescription.component';
-import { PrintPrescriptionComponent } from './features/prescriptions/pages/print-prescription/print-prescription.component';
-import { ProfileComponent } from './features/auth/pages/profile/profile.component';
 
 const ADMIN = [UserRole.ADMIN];
-const ADMIN_RECEPTION = [UserRole.ADMIN, UserRole.RECEPTIONIST];
-const DOCTOR_RECEPTION = [UserRole.DOCTOR, UserRole.RECEPTIONIST];
-const ALL_USERS = [UserRole.ADMIN, UserRole.DOCTOR, UserRole.RECEPTIONIST];
+const ALL_USERS = [
+  UserRole.ADMIN,
+  UserRole.DOCTOR,
+  UserRole.RECEPTIONIST,
+];
 
 export const routes: Routes = [
+
+  // =========================
+  // PUBLIC ROUTES
+  // =========================
+
   {
     path: 'login',
     component: LoginComponent,
   },
+
   {
     path: 'auth/forgot-password',
     component: ForgotPasswordComponent,
   },
+
   {
     path: 'access-denied',
     component: AccessDeniedComponent,
   },
+
+
+  // =========================
+  // AUTHENTICATED APPLICATION
+  // =========================
+
   {
     path: '',
     component: AdminLayoutComponent,
     canActivate: [authGuard],
+
     children: [
+
+      // =========================
+      // DASHBOARD
+      // =========================
+
       {
         path: 'dashboard',
-        component: DashboardComponent,
+        loadComponent: () =>
+          import('./features/dashboard/dashboard.component')
+            .then(m => m.DashboardComponent),
+
         canActivate: [roleGuard],
-        data: {
-          roles: ALL_USERS,
-        },
-      },
-      // {
-      //   path: 'doctor-dashboard',
-      //   component: DoctorDashboardComponent,
-      //   canActivate: [roleGuard],
-      //   data: {
-      //     roles: [UserRole.DOCTOR],
-      //   },
-      // },
-      {
-        path: '',
-        component: DashboardComponent,
-        canActivate: [roleGuard],
+
         data: {
           roles: ALL_USERS,
         },
       },
 
+      // Default route
+      {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'dashboard',
+      },
+
+
+      // =========================
+      // DOCTORS
+      // =========================
+
       {
         path: 'doctors',
-        component: DoctorListComponent,
+
+        loadComponent: () =>
+          import('./features/doctors/pages/doctor-list/doctor-list.component')
+            .then(m => m.DoctorListComponent),
+
         canActivate: [roleGuard],
+
         data: {
           roles: ALL_USERS,
         },
@@ -93,8 +394,13 @@ export const routes: Routes = [
 
       {
         path: 'doctors/add',
-        component: AddDoctorComponent,
+
+        loadComponent: () =>
+          import('./features/doctors/pages/add-doctor/add-doctor.component')
+            .then(m => m.AddDoctorComponent),
+
         canActivate: [roleGuard],
+
         data: {
           roles: ADMIN,
         },
@@ -102,17 +408,32 @@ export const routes: Routes = [
 
       {
         path: 'doctors/edit',
-        component: EditDoctorComponent,
+
+        loadComponent: () =>
+          import('./features/doctors/pages/edit-doctor/edit-doctor.component')
+            .then(m => m.EditDoctorComponent),
+
         canActivate: [roleGuard],
+
         data: {
           roles: ADMIN,
         },
       },
 
+
+      // =========================
+      // PATIENTS
+      // =========================
+
       {
         path: 'patients',
-        component: PatientListComponent,
+
+        loadComponent: () =>
+          import('./features/patients/pages/patient-list/patient-list.component')
+            .then(m => m.PatientListComponent),
+
         canActivate: [roleGuard],
+
         data: {
           roles: ALL_USERS,
         },
@@ -120,8 +441,13 @@ export const routes: Routes = [
 
       {
         path: 'patients/add',
-        component: AddPatientComponent,
+
+        loadComponent: () =>
+          import('./features/patients/pages/add-patient/add-patient.component')
+            .then(m => m.AddPatientComponent),
+
         canActivate: [roleGuard],
+
         data: {
           roles: ALL_USERS,
         },
@@ -129,17 +455,32 @@ export const routes: Routes = [
 
       {
         path: 'patients/edit',
-        component: EditPatientComponent,
+
+        loadComponent: () =>
+          import('./features/patients/pages/edit-patient/edit-patient.component')
+            .then(m => m.EditPatientComponent),
+
         canActivate: [roleGuard],
+
         data: {
           roles: ALL_USERS,
         },
       },
 
+
+      // =========================
+      // APPOINTMENTS
+      // =========================
+
       {
         path: 'appointments',
-        component: AppointmentListComponent,
+
+        loadComponent: () =>
+          import('./features/appointments/pages/appointment-list/appointment-list.component')
+            .then(m => m.AppointmentListComponent),
+
         canActivate: [roleGuard],
+
         data: {
           roles: ALL_USERS,
         },
@@ -147,8 +488,13 @@ export const routes: Routes = [
 
       {
         path: 'appointments/add',
-        component: AddAppointmentComponent,
+
+        loadComponent: () =>
+          import('./features/appointments/pages/add-appointment/add-appointment.component')
+            .then(m => m.AddAppointmentComponent),
+
         canActivate: [roleGuard],
+
         data: {
           roles: ALL_USERS,
         },
@@ -156,137 +502,261 @@ export const routes: Routes = [
 
       {
         path: 'appointments/edit',
-        component: EditAppointmentComponent,
+
+        loadComponent: () =>
+          import('./features/appointments/pages/edit-appointment/edit-appointment.component')
+            .then(m => m.EditAppointmentComponent),
+
         canActivate: [roleGuard],
+
         data: {
           roles: ALL_USERS,
         },
       },
+
+
+      // =========================
+      // BILLING
+      // =========================
+
       {
         path: 'billing',
-        component: InvoiceListComponent,
+
+        loadComponent: () =>
+          import('./features/billing/pages/invoice-list/invoice-list.component')
+            .then(m => m.InvoiceListComponent),
+
         canActivate: [roleGuard],
+
         data: {
           roles: ALL_USERS,
         },
       },
+
       {
         path: 'billing/create',
-        component: CreateInvoiceComponent,
+
+        loadComponent: () =>
+          import('./features/billing/pages/create-invoice/create-invoice.component')
+            .then(m => m.CreateInvoiceComponent),
+
         canActivate: [roleGuard],
+
         data: {
           roles: ALL_USERS,
         },
       },
-      {
-        path: 'billing/:id',
-        component: InvoiceDetailsComponent,
-        canActivate: [roleGuard],
-        data: {
-          roles: ALL_USERS,
-        },
-      },
+
       {
         path: 'billing/print/:id',
-        component: PrintInvoiceComponent,
+
+        loadComponent: () =>
+          import('./features/billing/pages/print-invoice/print-invoice.component')
+            .then(m => m.PrintInvoiceComponent),
+
         canActivate: [roleGuard],
+
         data: {
           roles: ALL_USERS,
         },
       },
+
+      {
+        path: 'billing/:id',
+
+        loadComponent: () =>
+          import('./features/billing/pages/invoice-details/invoice-details.component')
+            .then(m => m.InvoiceDetailsComponent),
+
+        canActivate: [roleGuard],
+
+        data: {
+          roles: ALL_USERS,
+        },
+      },
+
+
+      // =========================
+      // PRESCRIPTIONS
+      // =========================
+
       {
         path: 'prescriptions/add',
-        component: AddPrescriptionComponent,
+
+        loadComponent: () =>
+          import('./features/prescriptions/pages/add-prescription/add-prescription.component')
+            .then(m => m.AddPrescriptionComponent),
+
         canActivate: [roleGuard],
+
         data: {
-          // roles: DOCTOR_RECEPTION,
           roles: ALL_USERS,
         },
       },
+
       {
         path: 'prescriptions/edit',
-        component: EditPrescriptionComponent,
+
+        loadComponent: () =>
+          import('./features/prescriptions/pages/edit-prescription/edit-prescription.component')
+            .then(m => m.EditPrescriptionComponent),
+
         canActivate: [roleGuard],
+
         data: {
-          // roles: DOCTOR_RECEPTION,
           roles: ALL_USERS,
         },
       },
+
       {
         path: 'prescriptions/print/:id',
-        component: PrintPrescriptionComponent,
+
+        loadComponent: () =>
+          import('./features/prescriptions/pages/print-prescription/print-prescription.component')
+            .then(m => m.PrintPrescriptionComponent),
+
         canActivate: [roleGuard],
+
         data: {
           roles: ALL_USERS,
         },
       },
+
+
+      // =========================
+      // REPORTS
+      // =========================
+
       {
         path: 'reports',
-        component: ReportsDashboardComponent,
+
+        loadComponent: () =>
+          import('./features/reports/pages/reports-dashboard/reports-dashboard.component')
+            .then(m => m.ReportsDashboardComponent),
+
         canActivate: [roleGuard],
+
         data: {
-          roles: [UserRole.ADMIN],
+          roles: ADMIN,
         },
       },
+
       {
         path: 'reports/revenue',
-        component: RevenueReportComponent,
+
+        loadComponent: () =>
+          import('./features/reports/pages/revenue-report/revenue-report.component')
+            .then(m => m.RevenueReportComponent),
+
         canActivate: [roleGuard],
+
         data: {
-          roles: [UserRole.ADMIN],
+          roles: ADMIN,
         },
       },
+
       {
         path: 'reports/appointments',
-        component: AppointmentReportComponent,
+
+        loadComponent: () =>
+          import('./features/reports/pages/appointment-report/appointment-report.component')
+            .then(m => m.AppointmentReportComponent),
+
         canActivate: [roleGuard],
+
         data: {
-          roles: [UserRole.ADMIN],
+          roles: ADMIN,
         },
       },
+
       {
         path: 'reports/doctors',
-        component: DoctorPerformanceReportComponent,
+
+        loadComponent: () =>
+          import('./features/reports/pages/doctor-performance-report/doctor-performance-report.component')
+            .then(m => m.DoctorPerformanceReportComponent),
+
         canActivate: [roleGuard],
+
         data: {
-          roles: [UserRole.ADMIN],
+          roles: ADMIN,
         },
       },
+
       {
         path: 'reports/revenue/print',
-        component: RevenueReportPrintComponent,
+
+        loadComponent: () =>
+          import('./features/reports/pages/revenue-report-print/revenue-report-print.component')
+            .then(m => m.RevenueReportPrintComponent),
+
         canActivate: [roleGuard],
+
         data: {
-          roles: [UserRole.ADMIN],
+          roles: ADMIN,
         },
       },
+
       {
         path: 'reports/appointments/print',
-        component: AppointmentReportPrintComponent,
+
+        loadComponent: () =>
+          import('./features/reports/pages/appointment-report-print/appointment-report-print.component')
+            .then(m => m.AppointmentReportPrintComponent),
+
         canActivate: [roleGuard],
+
         data: {
-          roles: [UserRole.ADMIN],
+          roles: ADMIN,
         },
       },
+
+
+      // =========================
+      // SETTINGS
+      // =========================
+
       {
         path: 'settings',
-        component: SettingsComponent,
+
+        loadComponent: () =>
+          import('./features/settings/pages/settings/settings.component')
+            .then(m => m.SettingsComponent),
+
         canActivate: [roleGuard],
+
         data: {
           roles: ALL_USERS,
         },
       },
-       {
+
+
+      // =========================
+      // PROFILE
+      // =========================
+
+      {
         path: 'profile',
-        component: ProfileComponent,
+
+        loadComponent: () =>
+          import('./features/auth/pages/profile/profile.component')
+            .then(m => m.ProfileComponent),
+
         canActivate: [roleGuard],
+
         data: {
           roles: ALL_USERS,
           title: 'My Profile',
         },
       },
+
     ],
   },
+
+
+  // =========================
+  // 404
+  // =========================
 
   {
     path: '**',

@@ -21,7 +21,6 @@ import { StorageService } from '../../../../core/services/storage/storage.servic
 @Component({
   selector: 'app-login',
   imports: [
-    MatCard,
     MatFormFieldModule,
     MatCheckboxModule,
     MatDivider,
