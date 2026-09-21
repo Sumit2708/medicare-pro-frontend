@@ -1,5 +1,5 @@
 export const CLINIC_INFO = {
-  name: 'ABC Clinic',
+  name: 'Gajanan Hospital',
   tagline: 'Healthcare Management System',
   address: 'Pune, Maharashtra',
   phone: '+91 98765 43210',

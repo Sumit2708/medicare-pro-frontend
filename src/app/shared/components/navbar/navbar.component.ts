@@ -28,6 +28,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { SidebarService } from '../sidebar/service/sidebar.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { CLINIC_INFO } from '../../../core/constants/clinic-info'
 
 const MOBILE_BREAKPOINT = 640;
 
@@ -42,6 +43,7 @@ const MOBILE_BREAKPOINT = 640;
     MatButtonModule,
     FormsModule,
     CommonModule,
+    
   ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
@@ -58,6 +60,7 @@ export class NavbarComponent implements OnInit {
   mobileSearchInput?: ElementRef<HTMLInputElement>;
 
   private searchTerm$ = new Subject<string>();
+  clinic_info = CLINIC_INFO;
 
   constructor(
     private authService: AuthService,
