@@ -51,35 +51,69 @@
       @for (doctor of pagedDoctors; track doctor.id) {
         <div class="doctor-card">
           <div class="card-wash">
-            <button mat-icon-button class="card-menu-trigger" [matMenuTriggerFor]="cardMenu">
-              <mat-icon>more_vert</mat-icon>
+            <button
+              mat-icon-button
+              class="card-menu-trigger"
+              [matMenuTriggerFor]="cardMenu"
+            >
+              <mat-icon class="mb-3">more_vert</mat-icon>
             </button>
 
-            <mat-menu #cardMenu="matMenu" xPosition="before">
-              <button mat-menu-item (click)="navToEditDoctor(doctor)">
-                <mat-icon>edit</mat-icon>
-                <span>Edit Doctor</span>
-              </button>
-              <button mat-menu-item (click)="deleteDoctor(doctor.id)">
-                <mat-icon>delete_outline</mat-icon>
-                <span>Delete Doctor</span>
-              </button>
+            <mat-menu
+              #cardMenu="matMenu"
+              xPosition="before"
+              class="doctor-card-menu"
+            >
+              <div class="card-actions">
+                <button
+                  mat-menu-item
+                   color="primary"
+                  class="action-btn edit-btn"
+                  (click)="navToEditDoctor(doctor)"
+                  matTooltip="Edit Doctor"
+                >
+                  <mat-icon>edit</mat-icon>
+                </button>
+
+                <div class="action-divider"></div>
+
+                <button
+                  mat-menu-item
+                  class="action-btn delete-btn"
+                  color="warn"
+                  (click)="deleteDoctor(doctor.id)"
+                  matTooltip="Delete Doctor"
+                >
+                  <mat-icon>delete_outline</mat-icon>
+                </button>
+              </div>
             </mat-menu>
 
             <div class="avatar-wrap">
               @if (doctor.photoUrl) {
-                <img [src]="doctor.photoUrl" [alt]="doctor.name" class="avatar-photo">
+                <img
+                  [src]="doctor.photoUrl"
+                  [alt]="doctor.name"
+                  class="avatar-photo"
+                />
               } @else {
-                <span class="avatar-initials">{{ getInitials(doctor.name) }}</span>
+                <span class="avatar-initials">{{
+                  getInitials(doctor.name)
+                }}</span>
               }
             </div>
 
-            <span class="status-pill" [class.inactive]="doctor.status !== 'Active'">
+            <span
+              class="status-pill"
+              [class.inactive]="doctor.status !== 'Active'"
+            >
               <span class="dot"></span>
               {{ doctor.status }}
             </span>
 
-            <span class="doctor-id">#DOC{{ doctor.id.toString().padStart(3, '0') }}</span>
+            <span class="doctor-id"
+              >#DOC{{ doctor.id.toString().padStart(3, "0") }}</span
+            >
             <h4 class="doctor-name">{{ doctor.name }}</h4>
 
             <div class="specialization-row">
@@ -92,7 +126,9 @@
             <div class="card-meta">
               <div class="meta-item">
                 <span class="meta-label">Experience</span>
-                <span class="meta-value">{{ doctor.experience ? doctor.experience + ' yrs' : '—' }}</span>
+                <span class="meta-value">{{
+                  doctor.experience ? doctor.experience + " yrs" : "—"
+                }}</span>
               </div>
               <div class="meta-divider"></div>
               <div class="meta-item">
@@ -117,7 +153,7 @@
       <mat-paginator
         [length]="dataSource.filteredData.length"
         [pageSize]="4"
-        [pageSizeOptions]="[4,8,12]"
+        [pageSizeOptions]="[4, 8, 12]"
         showFirstLastButtons
       ></mat-paginator>
     </div>

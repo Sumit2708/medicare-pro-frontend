@@ -682,3 +682,70 @@
     gap: 20px;
   }
 }
+/* Menu container */
+::ng-deep .doctor-card-menu {
+  padding: 0 !important;
+  min-width: auto !important;
+}
+
+/* Two action buttons */
+.card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+}
+
+/* Individual buttons */
+.action-btn {
+  width: 38px !important;
+  height: 38px !important;
+  min-width: 38px !important;
+  padding: 0 !important;
+  border: none !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  border-radius: 8px !important;
+  transition: all 0.2s ease;
+}
+
+/* Small sophisticated icons */
+.action-btn mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+  line-height: 18px;
+}
+
+/* Vertical separator */
+.action-divider {
+  width: 1px;
+  height: 22px;
+  background: #e5e7eb;
+  margin: 0 3px;
+}
+
+/* Edit */
+.edit-btn {
+  color: var(--color-primary);
+  background: var(--color-primary-light);
+}
+
+.edit-btn:hover {
+  color: var(--color-primary-dark) !important;
+  // background: var(--color-bg);
+}
+
+/* Delete */
+.delete-btn {
+  color: var(--color-primary);
+  background: var(--color-primary-light);
+}
+
+.delete-btn:hover {
+  color: var(--color-danger) !important;
+  // background: var(--color-bg);
+}
